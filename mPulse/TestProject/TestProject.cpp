@@ -12,19 +12,95 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 
+//#include <stdio.h>
+
+//Physics Stuff
+#include "NxPhysics.h"	//Vectors
+#include "NxVec3.h"
+//#include "ErrorStream.h"
+
+//Physics
+static NxPhysicsSDK*	gPhysicsSDK = NULL;
+static NxScene*			gScene = NULL;
+//static PrefRenderer		gPrefRenderer;
+
+//Rendering
+static NxVec3	gEye(50.0f, 50.0f, 50.0f);
+static NxVec3	gDir(-0.6f,-0.2f,-0.7f);
+
 
 
 
 ///Game Variables
 bool FrameRateLimiter = true;
 float testVal = 0.0f;
-enum MyGameStates { INTRO, MAINMENU, GAMEPLAY, EXIT };
+enum MyGameStates { INTRO, MAINMENU, GAMEPLAY, GAMEPLAY_INIT, EXIT };
 MyGameStates curState = INTRO;
 
 float zRot = 0.0f;
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
+
+///**
+//PhysX
+static bool InitNx()
+{
+	//Initialize PhysicSDK
+	NxPhysicsSDKDesc desc;
+	NxSDKCreateError errorCode = NXCE_NO_ERROR;
+	gPhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION, NULL, NULL);
+		if(gPhysicsSDK == NULL) 
+	{
+		printf("\nSDK create error (%d).\nUnable to initialize the PhysX SDK, exiting the sample.\n\n", errorCode);
+		return false;
+	}
+#if SAMPLES_USE_VRD
+	// The settings for the VRD host and port are found in SampleCommonCode/SamplesVRDSettings.h
+	if (gPhysicsSDK->getFoundationSDK().getRemoteDebugger())
+		gPhysicsSDK->getFoundationSDK().getRemoteDebugger()->connect(SAMPLES_VRD_HOST, SAMPLES_VRD_PORT, SAMPLES_VRD_EVENTMASK);
+#endif
+
+	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, 0.05f);
+
+	// Create a scene
+	NxSceneDesc sceneDesc;
+	sceneDesc.gravity				= NxVec3(0.0f, -9.81f, 0.0f);
+	gScene = gPhysicsSDK->createScene(sceneDesc);
+	if(gScene == NULL) 
+	{
+		printf("\nError: Unable to create a PhysX scene, exiting the sample.\n\n");
+		return false;
+	}
+
+	// Set default material
+	NxMaterial* defaultMaterial = gScene->getMaterialFromIndex(0);
+	defaultMaterial->setRestitution(0.0f);
+	defaultMaterial->setStaticFriction(0.5f);
+	defaultMaterial->setDynamicFriction(0.5f);
+
+	// Create ground plane
+	NxPlaneShapeDesc planeDesc;
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&planeDesc);
+	gScene->createActor(actorDesc);
+
+	return true;
+
+}
+
+//PhysX
+static void ExitNx()
+{
+	if(gPhysicsSDK != NULL)
+	{
+		if(gScene != NULL) gPhysicsSDK->releaseScene(*gScene);
+		gScene = NULL;
+		NxReleasePhysicsSDK(gPhysicsSDK);
+		gPhysicsSDK = NULL;
+	}
+}
+//**/
 
 ///Custom Draw Functions
 void drawIE2Cylinder(float x, float y, float z, float rotX, float rotY, float rotZ, float inAngle, float inHeight)
@@ -45,6 +121,69 @@ void drawIE2Cylinder(float x, float y, float z, float rotX, float rotY, float ro
 	int stacks = 2;
 	
 	gluCylinder (quad, base, top, height, slices, stacks);
+	
+	glPopMatrix();
+
+}
+
+
+
+void drawCube(float x, float y, float z, float size)
+{
+	glPushMatrix();
+	
+	glTranslatef(	x, y, z);
+	
+	
+	float d = size / 2;
+
+		glBegin(GL_POLYGON);
+		//Bottom
+		glVertex3f( d, -d, -d);
+		glVertex3f( d, -d,  d);
+		glVertex3f(-d, -d,  d);
+		glVertex3f(-d, -d, -d);
+		glEnd();
+
+		glBegin(GL_POLYGON);
+				//Left
+		glVertex3f(-d, -d,  d);
+		glVertex3f(-d,  d,  d);
+		glVertex3f(-d,  d, -d);
+		glVertex3f(-d, -d, -d);
+		glEnd();
+
+		glBegin(GL_POLYGON);
+				//Right
+		glVertex3f( d, -d, -d);
+		glVertex3f( d,  d, -d);
+		glVertex3f( d,  d,  d);
+		glVertex3f( d, -d,  d);
+		glEnd();
+
+		glBegin(GL_POLYGON);
+				//Front
+		glVertex3f(-d, -d, -d);
+		glVertex3f(d, -d, -d);
+		glVertex3f(d, d, -d);
+		glVertex3f(-d, d, -d);
+		glEnd();
+
+		glBegin(GL_POLYGON);
+				//Back
+		glVertex3f( d, -d,  d);
+		glVertex3f( d,  d,  d);
+		glVertex3f(-d,  d,  d);
+		glVertex3f(-d, -d,  d);
+		glEnd();
+
+		glBegin(GL_POLYGON);
+				//Top
+		glVertex3f( d,  d,  d);
+		glVertex3f( d,  d, -d);
+		glVertex3f(-d,  d, -d);
+		glVertex3f(-d,  d,  d);
+		glEnd();
 	
 	glPopMatrix();
 
@@ -115,13 +254,15 @@ void setUpPerpView()
 		if (w > h) {
 			// In this case the w/h ratio is > 1
 		        float ratio = (float)w/(float)h;
-				gluPerspective(60.0, ratio, 0.01, 800.0);
+				//gluPerspective(60.0, ratio, 0.01, 800.0);
+				gluPerspective(60.0, ratio, 1.0f, 10000.0f);
 				//glOrtho (-ratio, ratio, -1, 1, -10, 10);
 		}
 		else {
 			// In this case the h/w ratio is > 1
 		        float ratio = (float)h/(float)w;
-				gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
+				//gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
+				gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
 				//glOrtho (-ratio, ratio, -1, 1, -10, 10);
 		}
 
@@ -176,6 +317,70 @@ int drawIntro(){
 }
 
 
+static void CreateCube(const NxVec3& pos, int size=2, const NxVec3* initialVelocity=NULL)
+{
+	if(gScene == NULL) return;	
+
+	// Create body
+	NxBodyDesc bodyDesc;
+	bodyDesc.angularDamping	= 0.5f;
+	if(initialVelocity) bodyDesc.linearVelocity = *initialVelocity;
+
+	NxBoxShapeDesc boxDesc;
+	boxDesc.dimensions = NxVec3((float)size, (float)size, (float)size);
+
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&boxDesc);
+	actorDesc.body			= &bodyDesc;
+	actorDesc.density		= 10.0f;
+	actorDesc.globalPose.t  = pos;
+	gScene->createActor(actorDesc)->userData = (void*)size_t(size);
+	//printf("Total: %d actors\n", gScene->getNbActors());
+}
+
+static void CreateTower(int size)
+{
+	const float cubeSize = 2.0f;
+	const float spacing = 0.01f;
+	NxVec3 pos(0.0f, cubeSize, 0.0f);
+	while(size)
+	{
+		CreateCube(pos, (int)cubeSize);
+		pos.y += (cubeSize * 2.0f + spacing);
+		size--;
+	}
+}
+
+
+static void CreateStack(int size)
+{
+	const float cubeSize = 2.0f;
+	const float spacing = -2.0f*gPhysicsSDK->getParameter(NX_SKIN_WIDTH);
+	NxVec3 pos(0.0f, cubeSize, 0.0f);
+	float offset = -size * (cubeSize * 2.0f + spacing) * 0.5f;
+	while(size)
+	{
+		for(int i=0;i<size;i++)
+		{
+			pos.x = offset + (float)i * (cubeSize * 2.0f + spacing);
+			CreateCube(pos, (int)cubeSize);
+		}
+
+		offset += cubeSize;
+		pos.y += (cubeSize * 2.0f + spacing);
+		size--;
+	}
+}
+
+static void CreateCubeFromEye(int size)
+{
+	NxVec3 t = gEye;
+	NxVec3 vel = gDir;
+	vel.normalize();
+	vel*=200.0f;
+	CreateCube(t, size, &vel);
+}
+
 /**
 	Possible research material
 **/
@@ -186,11 +391,13 @@ void draw(float &testF){
 	glLoadIdentity ();			////////
 	
 	
+	/**
 	//Cameras
 	gluLookAt(0.0,0.0,2.0,  // Eye/camera position
 	0.0,0.0,0.0,		// Look-at position 
 	0.0,1.0,0.0); 		// "Up" vector
-	
+	**/
+	gluLookAt(gEye.x, gEye.y, gEye.z, gEye.x + gDir.x, gEye.y + gDir.y, gEye.z + gDir.z, 0.0f, 1.0f, 0.0f);
 	//set view
 	setUpPerpView();
 
@@ -200,8 +407,10 @@ void draw(float &testF){
 	if (zRot > 360.0f)
 	{zRot = 0.0f;}
 
+
+	glRotatef (10.0f, 10.0f, 0, 1);
 	//Scene transformations
-	glRotatef (zRot, zRot, 0, 1);	///////				//The objects will rotate about the z-axis
+	//glRotatef (zRot, zRot, 0, 1);	///////				//The objects will rotate about the z-axis
 	
 
 	glColor3f(0.75f, 0.75f, 0.75f);
@@ -215,12 +424,14 @@ void draw(float &testF){
 
 	//for (int i=0;i<4;i++){
 
-	 drawIE2Cylinder(testVal, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	 //drawIE2Cylinder(testVal, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
-	 drawIE2Cylinder(testVal, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	 //drawIE2Cylinder(testVal, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
-	 drawIE2Cylinder(testVal, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	 //drawIE2Cylinder(testVal, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
+
+	//Draws a checkboard Ground
 	 glBegin(GL_QUADS);	
 		glColor3f(0.0f, 1.0f, 0.0f);
 		glVertex3f(-1.0,0.0,-1.0);
@@ -247,6 +458,48 @@ void draw(float &testF){
 		glVertex3f(0.0,0.0,1.0);
 	 glEnd();
 
+
+
+	 // Render all actors
+	int nbActors = gScene->getNbActors();
+	NxActor** actors = gScene->getActors();
+	while(nbActors--)
+	{
+		NxActor* actor = *actors++;
+		if(!actor->userData) continue;
+
+		float glMat[16];
+		///**
+		// Render actor
+		glPushMatrix();
+		actor->getGlobalPose().getColumnMajor44(glMat);
+		glMultMatrixf(glMat);
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
+		glPopMatrix();
+		//**/
+
+		///**
+		// Render shadow
+		glPushMatrix();
+		const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
+		glMultMatrixf(shadowMat);
+		glMultMatrixf(glMat);
+		glDisable(GL_LIGHTING);
+		glColor4f(0.1f, 0.2f, 0.3f, 1.0f);
+		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
+		//**/
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+	}
+
+
+
+
+
+
 	 glFlush();
 
 
@@ -269,7 +522,8 @@ int drawIntro2()
 	SDL_WM_SetCaption("SDL TEST", "SDL_TEST");
 
 
-	screen = SDL_SetVideoMode( 640, 480, 32, SDL_SWSURFACE | SDL_FULLSCREEN );
+	//screen = SDL_SetVideoMode( 640, 480, 32, SDL_SWSURFACE | SDL_FULLSCREEN );
+	screen = SDL_SetVideoMode( 640, 480, 32, SDL_SWSURFACE );
 
 	//Load image
 	inImg = SDL_LoadBMP( "./img/loadScreen.bmp" );
@@ -310,7 +564,7 @@ int drawIntro2()
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-	drawIntro2();
+	drawIntro2();		//Displays Loading Screen
 
 	Uint32 start;	//For framerate
 
@@ -323,7 +577,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 	//Start SDL
-	SDL_Init( SDL_INIT_EVERYTHING );
+	//SDL_Init( SDL_INIT_EVERYTHING );
 	//init();
 	initializeGL();
 
@@ -332,7 +586,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	SDL_WM_SetCaption("SDL TEST", "SDL_TEST");
 
 	////Set Up a OpenGL Display
-	if ((screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL | SDL_FULLSCREEN)) == NULL) {
+	//if ((screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL | SDL_FULLSCREEN)) == NULL) {
+	if ((screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)) == NULL) {
 		printf("Failed to initize graphics\n");
 		return false;	
 	}
@@ -389,8 +644,21 @@ int _tmain(int argc, _TCHAR* argv[])
 			case SDL_JOYBUTTONDOWN:
 				switch (event.jbutton.button) {
 					case 0:
-						printf("ButtonHit!\n");
+						CreateCubeFromEye(8);
+						printf("ButtonHit0!\n");
 						testVal = testVal + 0.01f;
+						break;
+					case 1:
+						CreateCube(NxVec3(0.0f, 20.0f, 0.0f),1); 
+						printf("ButtonHit1!\n");
+						break;
+					case 2:
+						CreateStack(10);
+						printf("ButtonHit2!\n");
+						break;
+					case 3:
+						CreateTower(30);
+						printf("ButtonHit3!\n");
 						break;
 				}
 			break;
@@ -405,16 +673,29 @@ int _tmain(int argc, _TCHAR* argv[])
 				case INTRO:
 					drawIntro();
 					//SDL_Flip ( screen );
-					curState = MAINMENU;
+					curState = GAMEPLAY_INIT;
 					break;
 
 				case MAINMENU:
-					draw(testF);
+					break;
+				case GAMEPLAY_INIT:
+					InitNx();
+					curState = GAMEPLAY;
+					break;
 				case GAMEPLAY:
-
+					gScene->simulate(1.0f/60.0f);
+					draw(testF);
+					gScene->flushStream();
+					gScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
+					break;
 				case EXIT:
 					break;
 			}
+
+
+		// Fetch simulation results
+		//gScene->flushStream();
+		//gScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
 
 		//glFlush();
 		//glFinish();
@@ -435,6 +716,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 	//Free Up stuff
+	ExitNx();
 	SDL_Quit();
 
 	return 0;
