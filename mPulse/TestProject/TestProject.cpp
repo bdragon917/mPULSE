@@ -2,15 +2,24 @@
 //
 
 #include "stdafx.h"
+
 #define NOMINMAX
+#define NO_SDL_GLEXT
+
 #include <windows.h>
-#include "gl/GL.h"
+
+#include "Shader.h"
+
+#include "gl/glew.h"	//DONT MESS THIS ORDER!!!!
 #include "gl/GLU.h"
+#include "gl/GL.h"
+
 #include <NxPhysics.h>
 #include <stdio.h>
 
 #include <SDL.h>
 #include <SDL_opengl.h>
+
 
 //#include <stdio.h>
 
@@ -28,6 +37,8 @@ static NxScene*			gScene = NULL;
 static NxVec3	gEye(50.0f, 50.0f, 50.0f);
 static NxVec3	gDir(-0.6f,-0.2f,-0.7f);
 
+//Shaders
+Shader* aShader;
 
 
 
@@ -40,6 +51,11 @@ MyGameStates curState = INTRO;
 float zRot = 0.0f;
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+
+const float GRAVITY = (-9.81f)*(20.0f);
+
+//TextureStuff
+GLuint textureid_P1;
 
 
 ///**
@@ -65,7 +81,7 @@ static bool InitNx()
 
 	// Create a scene
 	NxSceneDesc sceneDesc;
-	sceneDesc.gravity				= NxVec3(0.0f, -9.81f, 0.0f);
+	sceneDesc.gravity				= NxVec3(0.0f, GRAVITY, 0.0f);
 	gScene = gPhysicsSDK->createScene(sceneDesc);
 	if(gScene == NULL) 
 	{
@@ -114,8 +130,10 @@ void drawIE2Cylinder(float x, float y, float z, float rotX, float rotY, float ro
 	
 	GLUquadricObj* quad = gluNewQuadric();
 
-	float base = 0.1f;
-	float top = 0.1f;
+	//float base = 0.1f;
+	//float top = 0.1f;
+	float base = inHeight;
+	float top = inHeight;
 	float height = inHeight;
 	int slices = 12;
 	int stacks = 2;
@@ -193,6 +211,45 @@ void drawCube(float x, float y, float z, float size)
 
 
 
+
+/**
+BYTE* LoadRawImgTexture(int width, int height, const char * filename)
+{
+	FILE * file;
+	BYTE * data;
+
+	 // open texture data
+    file = fopen( filename, "rb" );
+    if ( file == NULL ) return 0;
+
+    // allocate buffer
+    width = 256;
+    height = 256;
+    data = malloc( width * height * 3 );
+
+    // read texture data
+    fread( data, width * height * 3, 1, file );
+    fclose( file );
+}
+**/
+
+void initializeTexture()
+{
+	BYTE * data;
+
+
+
+	glGenTextures(1, &textureid_P1);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1);
+	//LoadPicture(data);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, your_data);
+
+
+	//Unallocation data
+}
+
+
+
 void initializeGL()
 {
 	glShadeModel (GL_SMOOTH);
@@ -216,19 +273,25 @@ void createLight()
 		GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0};
 		GLfloat mat_shininess[] = {50.0};
 		GLfloat light_position[] = {1.0,1.0,1.0,0.0};
-		//GLfloat light_ambient[] = {0.0,0.0,0.0,0.1};
-		//GLfloat light_diffuse[] = {0.0,0.0,0.0,1.0};
-		//GLfloat light_specular[] = {0.0,0.0,0.0,1.0};
+		//GLfloat light_position[] = {100.0,100.0,0.0,0.0};
+		GLfloat light_ambient[] = {0.0,0.0,0.0,0.3};
+		GLfloat light_diffuse[] = {0.0,0.0,0.0,0.3};
+		GLfloat light_specular[] = {0.0,0.0,0.0,0.3};
 		glClearColor(0.0,0.0,0.0,0.0);
 		glShadeModel (GL_SMOOTH);
 		
 		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-		//glLightfv(GL_LIGHT0, GL_AMBIENT, light_position);
+		glLightfv(GL_LIGHT0, GL_AMBIENT, light_position);
 		//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_position);
+		//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 		//glLightfv(GL_LIGHT0, GL_SPECULAR, light_position);
-		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+		//glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 		
+		// OpenGL provides a global ambient light component - we don't want this so set to zero
+		//GLfloat global_ambient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		//glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
+
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 		glEnable(GL_DEPTH_TEST);
@@ -459,7 +522,7 @@ void draw(float &testF){
 	 glEnd();
 
 
-
+	 aShader->on();	///SHADER
 	 // Render all actors
 	int nbActors = gScene->getNbActors();
 	NxActor** actors = gScene->getActors();
@@ -473,14 +536,19 @@ void draw(float &testF){
 		// Render actor
 		glPushMatrix();
 		actor->getGlobalPose().getColumnMajor44(glMat);
+
+		//Debug
+		//aShader->off();
+		glEnable(GL_LIGHTING);
+
 		glMultMatrixf(glMat);
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
-		drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
+		drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		//drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
 		glPopMatrix();
 		//**/
 
-		///**
+		/**
 		// Render shadow
 		glPushMatrix();
 		const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
@@ -492,8 +560,9 @@ void draw(float &testF){
 		drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
 		//**/
 		glEnable(GL_LIGHTING);
-		glPopMatrix();
+		//glPopMatrix();
 	}
+	//aShader->off();
 
 
 
@@ -564,6 +633,9 @@ int drawIntro2()
 int _tmain(int argc, _TCHAR* argv[])
 {
 
+	initializeGL();
+
+
 	drawIntro2();		//Displays Loading Screen
 
 	Uint32 start;	//For framerate
@@ -579,7 +651,12 @@ int _tmain(int argc, _TCHAR* argv[])
 	//Start SDL
 	//SDL_Init( SDL_INIT_EVERYTHING );
 	//init();
-	initializeGL();
+	
+
+	
+	
+
+	
 
 
 	//Create Main Window
@@ -591,6 +668,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		printf("Failed to initize graphics\n");
 		return false;	
 	}
+
 
 
 	//This has to be after screen initialization
@@ -665,6 +743,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 		}
 
+		GLenum err;
 
 		//Manage different drawing schemes for different states
 		//Drawing calls
@@ -680,6 +759,17 @@ int _tmain(int argc, _TCHAR* argv[])
 					break;
 				case GAMEPLAY_INIT:
 					InitNx();
+						///COPFSKDFJLS
+						err = glewInit();
+						if (err == GLEW_OK)
+						{printf("AFKSdljSd");}
+						printf("%i\n",err);
+
+						fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+
+
+						aShader = new Shader("toon.frag", "toon.vert");
+						//aShader->on();
 					curState = GAMEPLAY;
 					break;
 				case GAMEPLAY:
@@ -711,7 +801,8 @@ int _tmain(int argc, _TCHAR* argv[])
 			{SDL_Delay(1000/60-(SDL_GetTicks()-start));}
 		}
 
-		printf("Tick Rate: %i \n",SDL_GetTicks()-start);
+		//printf("Tick Rate: %i \n",SDL_GetTicks()-start);
+		//printf("FameRate: %f \n",(16.0f/(SDL_GetTicks()-start)*60.0f));
 	}
 
 
