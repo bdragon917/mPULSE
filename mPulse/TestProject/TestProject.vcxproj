@@ -86,6 +86,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BMP.h" />
     <ClInclude Include="Object_OBJ.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />

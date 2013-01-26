@@ -28,6 +28,10 @@
 #include "NxVec3.h"
 //#include "ErrorStream.h"
 
+//Texture Loading
+#include "BMP.h"
+
+
 //Physics
 static NxPhysicsSDK*	gPhysicsSDK = NULL;
 static NxScene*			gScene = NULL;
@@ -157,50 +161,56 @@ void drawCube(float x, float y, float z, float size)
 
 		glBegin(GL_POLYGON);
 		//Bottom
-		glVertex3f( d, -d, -d);
-		glVertex3f( d, -d,  d);
-		glVertex3f(-d, -d,  d);
-		glVertex3f(-d, -d, -d);
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( d, -d, -d);
+		glTexCoord2d(1.0,0.0); glVertex3f( d, -d,  d);
+		glTexCoord2d(1.0,1.0); glVertex3f(-d, -d,  d);
+		glTexCoord2d(0.0,1.0); glVertex3f(-d, -d, -d);
 		glEnd();
 
 		glBegin(GL_POLYGON);
 				//Left
-		glVertex3f(-d, -d,  d);
-		glVertex3f(-d,  d,  d);
-		glVertex3f(-d,  d, -d);
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f(-d, -d,  d);
+		glTexCoord2d(1.0,0.0); glVertex3f(-d,  d,  d);
+		glTexCoord2d(1.0,1.0); glVertex3f(-d,  d, -d);
 		glVertex3f(-d, -d, -d);
 		glEnd();
 
 		glBegin(GL_POLYGON);
 				//Right
-		glVertex3f( d, -d, -d);
-		glVertex3f( d,  d, -d);
-		glVertex3f( d,  d,  d);
-		glVertex3f( d, -d,  d);
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( d, -d, -d);
+		glTexCoord2d(1.0,0.0); glVertex3f( d,  d, -d);
+		glTexCoord2d(1.0,1.0); glVertex3f( d,  d,  d);
+		glTexCoord2d(0.0,1.0); glVertex3f( d, -d,  d);
 		glEnd();
 
 		glBegin(GL_POLYGON);
 				//Front
-		glVertex3f(-d, -d, -d);
-		glVertex3f(d, -d, -d);
-		glVertex3f(d, d, -d);
-		glVertex3f(-d, d, -d);
+		glNormal3f(0.0f, 0.0f, -1.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f(-d, -d, -d);
+		glTexCoord2d(1.0,0.0); glVertex3f(d, -d, -d);
+		glTexCoord2d(1.0,1.0) ;glVertex3f(d, d, -d);
+		glTexCoord2d(0.0,1.0); glVertex3f(-d, d, -d);
 		glEnd();
 
 		glBegin(GL_POLYGON);
 				//Back
-		glVertex3f( d, -d,  d);
-		glVertex3f( d,  d,  d);
-		glVertex3f(-d,  d,  d);
-		glVertex3f(-d, -d,  d);
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( d, -d,  d);
+		glTexCoord2d(1.0,0.0); glVertex3f( d,  d,  d);
+		glTexCoord2d(1.0,1.0) ;glVertex3f(-d,  d,  d);
+		glTexCoord2d(0.0,1.0); glVertex3f(-d, -d,  d);
 		glEnd();
 
 		glBegin(GL_POLYGON);
 				//Top
-		glVertex3f( d,  d,  d);
-		glVertex3f( d,  d, -d);
-		glVertex3f(-d,  d, -d);
-		glVertex3f(-d,  d,  d);
+		glNormal3f(0.0f, 1.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( d,  d,  d);
+		glTexCoord2d(1.0,0.0); glVertex3f( d,  d, -d);
+		glTexCoord2d(1.0,1.0); glVertex3f(-d,  d, -d);
+		glTexCoord2d(0.0,1.0); glVertex3f(-d,  d,  d);
 		glEnd();
 	
 	glPopMatrix();
@@ -235,17 +245,46 @@ BYTE* LoadRawImgTexture(int width, int height, const char * filename)
 
 void initializeTexture()
 {
-	BYTE * data;
+	unsigned char *data = 0;
+	BMPImg aBMPImg;
+	int width;
+	int height;
 
+	//"/img/textureTest.bmp"
 
-
-	glGenTextures(1, &textureid_P1);
-	glBindTexture(GL_TEXTURE_2D, textureid_P1);
+	int err = aBMPImg.Load("./img/textureTest.bmp");
+	if (!(err == 1))
+	{printf("Error: Loading Texture: %i\n", err);}
+	data = aBMPImg.GetImg();
+	width = aBMPImg.GetWidth();
+	height = aBMPImg.GetHeight();
+	//aBMPImg.GetImg
 	//LoadPicture(data);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, your_data);
 
+	//glEnable (GL_TEXTURE_2D);		//Don't need this, since shader programs will control texture usage
+	glGenTextures(1, &textureid_P1);
 
+	glBindTexture(GL_TEXTURE_2D, textureid_P1);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	//Unallocation data
+
+
+	// select modulate to mix texture with color for shading
+	//glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+
+	// when texture area is small, bilinear filter the closest mipmap
+	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	//				 GL_LINEAR_MIPMAP_NEAREST );
+	// when texture area is large, bilinear filter the original
+	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+	// the texture wraps over at the edges (repeat)
+	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+
 }
 
 
@@ -282,7 +321,7 @@ void createLight()
 		
 		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-		glLightfv(GL_LIGHT0, GL_AMBIENT, light_position);
+		//glLightfv(GL_LIGHT0, GL_AMBIENT, light_position);
 		//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_position);
 		//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 		//glLightfv(GL_LIGHT0, GL_SPECULAR, light_position);
@@ -522,12 +561,16 @@ void draw(float &testF){
 	 glEnd();
 
 
-	 aShader->on();	///SHADER
+	 //aShader->on();	///SHADER
 	 // Render all actors
 	int nbActors = gScene->getNbActors();
 	NxActor** actors = gScene->getActors();
 	while(nbActors--)
 	{
+		aShader->on();		//Use shader
+		//aShader->off();		//Dont Use shader
+
+
 		NxActor* actor = *actors++;
 		if(!actor->userData) continue;
 
@@ -536,19 +579,19 @@ void draw(float &testF){
 		// Render actor
 		glPushMatrix();
 		actor->getGlobalPose().getColumnMajor44(glMat);
-
 		//Debug
 		//aShader->off();
 		glEnable(GL_LIGHTING);
-
 		glMultMatrixf(glMat);
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
-		//drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
+		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
 		glPopMatrix();
 		//**/
 
-		/**
+
+		///**
+		aShader->off();
 		// Render shadow
 		glPushMatrix();
 		const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
@@ -560,7 +603,7 @@ void draw(float &testF){
 		drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
 		//**/
 		glEnable(GL_LIGHTING);
-		//glPopMatrix();
+		glPopMatrix();
 	}
 	//aShader->off();
 
@@ -768,7 +811,10 @@ int _tmain(int argc, _TCHAR* argv[])
 						fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 
 
-						aShader = new Shader("toon.frag", "toon.vert");
+						//aShader = new Shader("toon.frag", "toon.vert");
+						initializeTexture();
+						aShader = new Shader("texture.frag", "texture.vert");
+						
 						//aShader->on();
 					curState = GAMEPLAY;
 					break;
