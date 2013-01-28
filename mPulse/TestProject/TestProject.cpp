@@ -31,6 +31,9 @@
 //Texture Loading
 #include "BMP.h"
 
+//MainMenu
+#include "MainMenu.h"
+
 
 //Physics
 static NxPhysicsSDK*	gPhysicsSDK = NULL;
@@ -48,6 +51,7 @@ Shader* aShader;
 
 ///Game Variables
 bool FrameRateLimiter = true;
+bool isPause = false;
 float testVal = 0.0f;
 enum MyGameStates { INTRO, MAINMENU, GAMEPLAY, GAMEPLAY_INIT, EXIT };
 MyGameStates curState = INTRO;
@@ -243,6 +247,11 @@ BYTE* LoadRawImgTexture(int width, int height, const char * filename)
 }
 **/
 
+
+/**
+	To-be moved to Render Initialization Method
+	requires openGL,  BMP.h, 
+**/
 void initializeTexture()
 {
 	unsigned char *data = 0;
@@ -288,7 +297,10 @@ void initializeTexture()
 }
 
 
-
+/**
+	To-be moved to Render Initialization Method
+	requires openGL
+**/
 void initializeGL()
 {
 	glShadeModel (GL_SMOOTH);
@@ -306,7 +318,10 @@ void initializeGL()
 	glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-
+/**
+	To-be moved to Render Initialization Method
+	requires openGL
+**/
 void createLight()
 	{
 		GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0};
@@ -341,6 +356,11 @@ void createLight()
 		glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	}
 
+
+/**
+	To-be moved to Render Method
+	requires openGL, 
+**/
 void setUpPerpView()
 	{
 		// Switch to the projection matrix
@@ -672,76 +692,10 @@ int drawIntro2()
 }
 
 
-//Main
-int _tmain(int argc, _TCHAR* argv[])
+
+void processInput(SDL_Event event)
 {
-
-	initializeGL();
-
-
-	drawIntro2();		//Displays Loading Screen
-
-	Uint32 start;	//For framerate
-
-	curState = INTRO;
-
-	//Images
-	SDL_Surface* inImg = NULL;		//Used to load the image into the memory
-	SDL_Surface* Optimized = NULL;	//Used to change the format to the native display format for faster display
-	SDL_Surface* screen = NULL;
-
-
-	//Start SDL
-	//SDL_Init( SDL_INIT_EVERYTHING );
-	//init();
-	
-
-	
-	
-
-	
-
-
-	//Create Main Window
-	SDL_WM_SetCaption("SDL TEST", "SDL_TEST");
-
-	////Set Up a OpenGL Display
-	//if ((screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL | SDL_FULLSCREEN)) == NULL) {
-	if ((screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)) == NULL) {
-		printf("Failed to initize graphics\n");
-		return false;	
-	}
-
-
-
-	//This has to be after screen initialization
-	createLight();
-	setUpPerpView();
-
-	//Initalize Controls
-	SDL_Event event;
-
-	//JoyStick initialize
-	SDL_Joystick *joystick;
-
-	SDL_JoystickEventState(SDL_ENABLE);
-	joystick = SDL_JoystickOpen(0);
-
-
-
-	float testF = 0.1f;
-
-	//Main Program Loop
-	while (!(curState == EXIT))
-	{
-		start=SDL_GetTicks();	//Framerate
-
-		//AI and physic movement stuff
-		moveStuff(testF);
-
-
-		//Check Inputs
-		if (SDL_PollEvent(&event)) {
+	//if (SDL_PollEvent(&event)) {
 			switch (event.type) {
 				//Close
 			case SDL_QUIT:
@@ -751,15 +705,19 @@ int _tmain(int argc, _TCHAR* argv[])
 			//Keyboard
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym) {
-				case SDLK_ESCAPE:
+				//case SDLK_ESCAPE:
 				case SDLK_q:
 					curState = EXIT;
 					break;
 				case SDLK_F2:
 					if (FrameRateLimiter){FrameRateLimiter=false;}else{FrameRateLimiter=true;};
 					break;
+				case SDLK_p:
+					if (isPause){isPause=false;}else{isPause=true;}
+					break;
 
 				}
+				break;
 
 			//Joystick
 			case SDL_JOYBUTTONDOWN:
@@ -784,7 +742,82 @@ int _tmain(int argc, _TCHAR* argv[])
 				}
 			break;
 			}
-		}
+		//}
+}
+
+
+
+//Main
+int _tmain(int argc, _TCHAR* argv[])
+{
+
+	initializeGL();
+
+
+	drawIntro2();		//Displays Loading Screen
+
+	Uint32 start;	//For framerate
+
+	curState = INTRO;
+
+	//Images
+	SDL_Surface* inImg = NULL;		//Used to load the image into the memory
+	SDL_Surface* Optimized = NULL;	//Used to change the format to the native display format for faster display
+	SDL_Surface* screen = NULL;
+
+
+	//Start SDL
+	//SDL_Init( SDL_INIT_EVERYTHING );
+	//init();
+
+	
+
+
+	//Create Main Window
+	SDL_WM_SetCaption("SDL TEST", "SDL_TEST");
+
+	////Set Up a OpenGL Display
+	//if ((screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL | SDL_FULLSCREEN)) == NULL) {
+	if ((screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)) == NULL) {
+		printf("Failed to initize graphics\n");
+		return false;	
+	}
+
+
+
+	//This has to be after screen initialization
+	createLight();
+	setUpPerpView();
+
+	//JoyStick initialize
+	SDL_Joystick *joystick;
+
+	SDL_JoystickEventState(SDL_ENABLE);
+	joystick = SDL_JoystickOpen(0);
+
+
+
+	float testF = 0.1f;
+
+
+	MainMenu aMainMenu;
+	aMainMenu.setBackground(false);
+
+
+
+	//Main Program Loop
+	while (!(curState == EXIT))
+	{
+	
+		//Initalize Controls
+		SDL_Event event;
+		SDL_PollEvent(&event);
+
+		start=SDL_GetTicks();	//Framerate
+
+		//AI and physic movement stuff
+		moveStuff(testF);
+		
 
 		GLenum err;
 
@@ -793,19 +826,21 @@ int _tmain(int argc, _TCHAR* argv[])
 			switch(curState){
 
 				case INTRO:
+					processInput(event);
 					drawIntro();
 					//SDL_Flip ( screen );
 					curState = GAMEPLAY_INIT;
 					break;
 
 				case MAINMENU:
+					processInput(event);
 					break;
 				case GAMEPLAY_INIT:
 					InitNx();
 						///COPFSKDFJLS
 						err = glewInit();
 						if (err == GLEW_OK)
-						{printf("AFKSdljSd");}
+						{printf("glewInit is successful!");}
 						printf("%i\n",err);
 
 						fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
@@ -819,10 +854,19 @@ int _tmain(int argc, _TCHAR* argv[])
 					curState = GAMEPLAY;
 					break;
 				case GAMEPLAY:
-					gScene->simulate(1.0f/60.0f);
-					draw(testF);
-					gScene->flushStream();
-					gScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
+					if (isPause)
+					{
+						if (aMainMenu.acceptInput(event) == 1){isPause=false;};
+						aMainMenu.drawOverLay();
+					}
+					else
+					{
+						processInput(event);
+						gScene->simulate(1.0f/60.0f);
+						draw(testF);
+						gScene->flushStream();
+						gScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
+					}
 					break;
 				case EXIT:
 					break;

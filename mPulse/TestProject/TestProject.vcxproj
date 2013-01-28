@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BMP.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Object_OBJ.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
@@ -94,6 +95,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Object_OBJ.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
