@@ -74,8 +74,9 @@ int MainMenu::drawButton(int index, int texture)
 	const float button_width = 0.33f;
 	const float button_height = 0.125f;
 	const float bottom_pad = 0.2f;
+	const float right_pad = 0.05f;
 	//1 = offset //using index as offset
-	float LocOffset = index * button_width;
+	float LocOffset = index * (button_width + right_pad);
 
 
 		glBegin(GL_QUADS);
@@ -179,11 +180,28 @@ int MainMenu::acceptInput(SDL_Event aEvent)
 							//curState = EXIT;
 							break;
 						case SDLK_LEFT:
-							if (curSelect > 1){curSelect = curSelect - 1;}else{curSelect = maxSelect;};printf("curSelected:%i\n",curSelect);
+							if (curSelect > 0){curSelect = curSelect - 1;}else{curSelect = maxSelect;};printf("curSelected:%i\n",curSelect);
 							break;
 					
 						case SDLK_RIGHT:
 							if (curSelect < maxSelect){curSelect = curSelect + 1;}else{curSelect = 0;};printf("curSelected:%i\n",curSelect);
+							break;
+						case SDLK_KP_ENTER:
+						case SDLK_KP_ENTER:		//!!!!! TODO:   THIS NEEDS TO BE SET FOR KEYBOARD ENTER
+							switch (curSelect)		//Currently needs to be manually refreshed if menu gets changed
+							{
+								case 0:
+									break;
+								case 1:
+									break;
+								case 2:
+									break;
+								case 3:
+									break;
+								case 4:			//"Quit" atm....
+									ret = 1;
+									break;
+							}
 							break;
 					}
 

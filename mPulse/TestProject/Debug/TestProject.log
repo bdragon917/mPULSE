@@ -1,4 +1,4 @@
-﻿Build started 1/28/2013 3:42:30 PM.
+﻿Build started 1/28/2013 3:53:59 PM.
      1>Project "\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\mPULSE\mPulse\TestProject\TestProject.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\mPulse.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -8,14 +8,14 @@
          MainMenu.cpp
      1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(25): warning C4244: 'argument' : conversion from 'float' to 'GLsizei', possible loss of data
      1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(25): warning C4244: 'argument' : conversion from 'float' to 'GLsizei', possible loss of data
-     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(93): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(93): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(97): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(97): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(101): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(101): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(105): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(105): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(94): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(94): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(98): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(98): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(102): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(102): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(106): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mpulse\mpulse\testproject\mainmenu.cpp(106): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
        ManifestResourceCompile:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\mPulse.exe.embed.manifest.res" Debug\mPulse_manifest.rc 
        Link:
@@ -45,4 +45,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.61
+Time Elapsed 00:00:05.00
