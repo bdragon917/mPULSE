@@ -71,7 +71,7 @@ void MainMenu::setBackground(bool val)
 int MainMenu::drawButton(int index, int texture)
 {
 
-	const float button_width = 0.33f;
+	const float button_width = 0.45f;
 	const float button_height = 0.125f;
 	const float bottom_pad = 0.2f;
 	const float right_pad = 0.05f;
@@ -89,19 +89,19 @@ int MainMenu::drawButton(int index, int texture)
 		
 
 		//tl, tr, br, bl 
-		glVertex3f(	-1.0 + LocOffset,
+		glVertex3f(	-1.25 + LocOffset,
 					-1.0 + button_height + bottom_pad,
 					0);
 
-		glVertex3f(	-1.0 + LocOffset + button_width,
+		glVertex3f(	-1.25 + LocOffset + button_width,
 					-1.0 + button_height + bottom_pad,
 					0);
 
-		glVertex3f(	-1.0 + LocOffset + button_width,
+		glVertex3f(	-1.25 + LocOffset + button_width,
 					-1.0 + bottom_pad,
 					0);
 
-		glVertex3f(	-1.0 + LocOffset,
+		glVertex3f(	-1.25 + LocOffset,
 					-1.0 + bottom_pad,
 					0);
 
@@ -187,7 +187,7 @@ int MainMenu::acceptInput(SDL_Event aEvent)
 							if (curSelect < maxSelect){curSelect = curSelect + 1;}else{curSelect = 0;};printf("curSelected:%i\n",curSelect);
 							break;
 						case SDLK_KP_ENTER:
-						case SDLK_KP_ENTER:		//!!!!! TODO:   THIS NEEDS TO BE SET FOR KEYBOARD ENTER
+						//case SDLK_KP_ENTER:		//!!!!! TODO:   THIS NEEDS TO BE SET FOR KEYBOARD ENTER
 							switch (curSelect)		//Currently needs to be manually refreshed if menu gets changed
 							{
 								case 0:
