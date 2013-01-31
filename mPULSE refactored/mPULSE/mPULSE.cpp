@@ -14,7 +14,7 @@ int frameRate = 60;
 Game game;
 XboxController* players[MAX_PLAYERS];
 Clock gameClock(frameRate);
-float deltaTime = 0;
+unsigned int deltaTime = 0;
 SDL_Event KeyboardMouseState;    
 XINPUT_STATE XboxState;
  

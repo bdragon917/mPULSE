@@ -1,6 +1,7 @@
 #pragma once
 #include "GameState.h"
-#include "RenderingEngine.h"
+#include "../Util/Clock.h"
+#include "../RenderingEngine/RenderingEngine.h"
 
 class InitState : public GameState
 {
@@ -13,4 +14,7 @@ public:
 private:
     InitState();
     RenderingEngine* renderer;
+    Clock clock;
+    unsigned int time;
+    static const int TIMEOUT = 3000;
 };

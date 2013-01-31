@@ -19,12 +19,12 @@ public:
     virtual void render() = 0;
     virtual bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents) = 0;
 
-    virtual StateType pollStateChange()
+    StateType pollStateChange()
     {
         return stateType;
     }
 
-    virtual void changeStateType(StateType type)
+    void changeState(StateType type)
     {
         stateType = type;
     }

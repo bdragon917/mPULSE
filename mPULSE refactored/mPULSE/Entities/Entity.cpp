@@ -1,5 +1,6 @@
-#pragma once
-class Entity
+#include "Entity.h"
+
+Entity::Entity()
 {
 
-};
+}
