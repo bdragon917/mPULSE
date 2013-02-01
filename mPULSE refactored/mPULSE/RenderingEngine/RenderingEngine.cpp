@@ -3,10 +3,14 @@
 
 RenderingEngine::RenderingEngine()
 {
-    initializeGL();
     zRot = 0.0f;
     SCREEN_WIDTH = 640;
     SCREEN_HEIGHT = 480;
+	setUpPerpView();
+	createLight();
+	initializeGL();
+
+	
 }
 
 RenderingEngine* RenderingEngine::getInstance()
@@ -16,6 +20,34 @@ RenderingEngine* RenderingEngine::getInstance()
 }
 
 ///Custom Draw Functions
+
+/**
+*	This draws a string on screen
+**/
+void RenderingEngine::prints(char* s)
+{
+
+	/*  Fonts
+	  GLUT_BITMAP_9_BY_15,
+      GLUT_BITMAP_8_BY_13,
+      GLUT_BITMAP_TIMES_ROMAN_10,
+      GLUT_BITMAP_TIMES_ROMAN_24,
+      GLUT_BITMAP_HELVETICA_10,
+      GLUT_BITMAP_HELVETICA_12,
+      GLUT_BITMAP_HELVETICA_18  
+	  */
+
+	 glDisable(GL_TEXTURE_2D);
+
+	   if (s && strlen(s)) {
+      while (*s) {
+         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, *s);
+         s++;
+      }
+   }
+
+}
+
 void RenderingEngine::drawIE2Cylinder(float x, float y, float z, float rotX, float rotY, float rotZ, float inAngle, float inHeight)
 {
 	glPushMatrix();
@@ -158,8 +190,11 @@ void RenderingEngine::setUpPerpView()
 		glMatrixMode (GL_PROJECTION);
 		glLoadIdentity ();
 
-		int w = SCREEN_WIDTH;
-		int h = SCREEN_HEIGHT;
+		//int w = SCREEN_WIDTH;
+		//int h = SCREEN_HEIGHT;
+
+		int w = 640;
+		int h = 480;
 
 		// Set drawing to take up the entire window
 		glViewport (0, 0, w, h);
@@ -223,22 +258,21 @@ void RenderingEngine::draw(){
 	glPushMatrix ();			////////
 	glLoadIdentity ();			////////
 	
-	
-	/**
+	///**
 	//Cameras
 	gluLookAt(0.0,0.0,2.0,  // Eye/camera position
 	0.0,0.0,0.0,		// Look-at position 
 	0.0,1.0,0.0); 		// "Up" vector
-	**/
+	//**/
 	
 	//set view
 	setUpPerpView();
 
 	
 	//scene calculations
-	zRot = zRot + 0.1f;
-	if (zRot > 360.0f)
-	{zRot = 0.0f;}
+//	zRot = zRot + 0.1f;		//Changing this variable seems to cause problems. Also seen in WIDTH and HEIGHT
+//	if (zRot > 360.0f)
+//	{zRot = 0.0f;}
 
 
 	glRotatef (10.0f, 10.0f, 0, 1);
@@ -291,8 +325,23 @@ void RenderingEngine::draw(){
 		glVertex3f(0.0,0.0,1.0);
 	 glEnd();
 
+	 glRasterPos3f(0.0f ,0.0f , 0.0f);
+	 glColor3f(1.0f,1.0f,1.0f);
+	 prints("LETE THERE BE TEXT!!!!!!!!! %i \n DALKJDSLJDKLASDJSKj");
 
+	 /**
+	 glRasterPos2i(300,0);
+	 glColor3f(1.0f,1.0f,1.0f);
+	 prints("3, 0 LETE THERE BE TEXT!!!!!!!!! %i \n DALKJDSLJDKLASDJSKj");
 
+	 glRasterPos2i(0,200);
+	 glColor3f(1.0f,1.0f,1.0f);
+	 prints("0, 2 LETE THERE BE TEXT!!!!!!!!! %i \n DALKJDSLJDKLASDJSKj");
+
+	 glRasterPos2i(300,200);
+	 glColor3f(1.0f,1.0f,1.0f);
+	 prints("3, 2 LETE THERE BE TEXT!!!!!!!!! %i \n DALKJDSLJDKLASDJSKj");
+	 **/
 	 // Render all actors
 	//int nbActors = gScene->getNbActors();
 	//NxActor** actors = gScene->getActors();

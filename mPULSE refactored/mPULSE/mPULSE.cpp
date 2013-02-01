@@ -39,15 +39,27 @@ int main(int argc, char *argv[])
         }
 
         //physics simulations
-        game.update(deltaTime);
+        try{
+			game.update(deltaTime);
+		}
+		catch(int e)
+		{printf("Exception in game.update()\n");}
+
+		//Updates game's FPS info
+		game.curFPS = (1000/deltaTime);
 
         //openGL calls
-        game.render();  
+		try{
+			game.render(); 
+		}
+		catch(int e)
+		{printf("Exception in game.render()\n");}
+         
 
         //Display to screen
         SDL_GL_SwapBuffers();
-        printf("FPS: %f\n",(1000/deltaTime));
-    }
+        //printf("FPS: %f\n",(1000/deltaTime));
+		}
 
     SDL_Quit();
     return 0;

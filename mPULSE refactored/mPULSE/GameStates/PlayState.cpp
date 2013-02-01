@@ -10,6 +10,7 @@ PlayState::PlayState()
     //cars.addPhysics(new Appearance("some physics data"))
     //physicsEngine = PhysicsEngine::getInstance();
     //renderingEngine = RenderingEngine::getInstance();
+	renderingEngine->initializeGL();
 }
 
 void PlayState::update(float dt)
@@ -20,6 +21,8 @@ void PlayState::update(float dt)
 void PlayState::render()
 {
     //renderingEngine->Render(&cars[0]->getAppearance())
+	
+	renderingEngine->draw();
 }
 
 bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)

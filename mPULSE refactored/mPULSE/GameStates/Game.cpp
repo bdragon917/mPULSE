@@ -20,7 +20,7 @@
         if(KeyboardMouseEvents.type == SDL_QUIT)
             return false;
 
-        state->handleKeyboardMouseEvents(KeyboardMouseEvents);
+		state->handleKeyboardMouseEvents(KeyboardMouseEvents);
         return true;
     }
 

@@ -18,6 +18,8 @@ public:
     void handleXboxEvents(int player,XINPUT_STATE* state);
     void checkStateChange();
 
+	float curFPS;		//Used by mPULSE to rely fps info to renderer
+
 private:
     GameState* state;
     GameState::StateType stateType;

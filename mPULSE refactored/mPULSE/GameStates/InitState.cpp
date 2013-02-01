@@ -5,7 +5,7 @@ InitState::InitState()
     stateType = INIT;
     renderer = RenderingEngine::getInstance();
     renderer->initializeGL();
-    renderer->drawIntro2();    
+    //renderer->drawIntro2();    
     time = clock.getCurrentTime();
     printf("init state");
 }
@@ -20,6 +20,7 @@ void InitState::render()
 {
     
 }
+
 bool InitState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
     return true;

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
+#include "GL\glut.h"			//For text
 #include "Appearance.h"
 
 class RenderingEngine
@@ -13,6 +14,7 @@ float zRot;
 int SCREEN_WIDTH;
 int SCREEN_HEIGHT;
 ///Custom Draw Functions
+void prints(char* s);
 void drawCube(float x, float y, float z, float size);
 void initializeGL();
 void createLight();
