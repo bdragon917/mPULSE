@@ -1,3 +1,8 @@
+#define NOMINMAX
+#define NO_SDL_GLEXT
+
+
+#include <GL/glew.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include "GameStates\Game.h"
@@ -39,21 +44,13 @@ int main(int argc, char *argv[])
         }
 
         //physics simulations
-        try{
 			game.update(deltaTime);
-		}
-		catch(int e)
-		{printf("Exception in game.update()\n");}
 
 		//Updates game's FPS info
 		game.curFPS = (1000/deltaTime);
 
         //openGL calls
-		try{
 			game.render(); 
-		}
-		catch(int e)
-		{printf("Exception in game.render()\n");}
          
 
         //Display to screen

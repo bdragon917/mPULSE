@@ -28,9 +28,6 @@
     <Filter Include="Header Files\Input">
       <UniqueIdentifier>{fd344d32-e5d1-4f69-a63c-a06deb310ecc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\PhysicsEngine">
-      <UniqueIdentifier>{881419f6-5690-4019-ba80-06f50a44ccf5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\PhysicsEngine">
       <UniqueIdentifier>{01ca3b72-b696-4c32-8e8c-393ef77223a5}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,9 @@
     </Filter>
     <Filter Include="Source Files\ModelLoader">
       <UniqueIdentifier>{efa21aac-2e65-4383-b114-83cc0bbfd6a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PhysicsEngine">
+      <UniqueIdentifier>{881419f6-5690-4019-ba80-06f50a44ccf5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +99,9 @@
     <ClCompile Include="ModelLoader\ObjModel.cpp">
       <Filter>Source Files\ModelLoader</Filter>
     </ClCompile>
+    <ClCompile Include="RenderingEngine\Shader.cpp">
+      <Filter>Source Files\RenderingEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -139,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="ModelLoader\ObjModel.h">
       <Filter>Header Files\ModelLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine\Shader.h">
+      <Filter>Header Files\RenderingEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

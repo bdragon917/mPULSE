@@ -1,9 +1,24 @@
 #pragma once
+
+#define NOMINMAX
+#define NO_SDL_GLEXT
+
+
+
+#include "gl/glew.h"	//DONT MESS THIS ORDER!!!!
+#include "gl/GLU.h"
+#include "gl/GL.h"
+
+#include "Shader.h"
+
 #include <stdio.h>
+
 #include <SDL.h>
 #include <SDL_opengl.h>
+
 #include "GL\glut.h"			//For text
 #include "Appearance.h"
+
 
 class RenderingEngine
 {
@@ -27,7 +42,19 @@ void draw();
 int drawIntro2();
 void moveStuff(float &testF);
 
+
+    Shader* aShader;
 private:
     RenderingEngine();
+
+//    int loadShaders();
+        //Used to generate a list of shaders
+ //       typedef enum {
+ //       CAR
+ //   } ShaderType;
+    
+ //   CONST int ShaderTypeNum = 1;
+
+
 
 };

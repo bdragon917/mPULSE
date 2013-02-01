@@ -37,10 +37,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\CPSC585\SDL-1.2.15\include;C:\SDL\SDL-1.2.15\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\CPSC585\glew-1.9.0\include;C:\CPSC585\SDL-1.2.15\include;C:\SDL\SDL-1.2.15\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\CPSC585\SDL-1.2.15\lib\x86;C:\SDL\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\CPSC585\glew-1.9.0\lib;C:\CPSC585\SDL-1.2.15\lib\x86;C:\SDL\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\SDL\SDL-1.2.15\include;$(IncludePath)</IncludePath>
@@ -57,8 +57,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>PhysXLoader.lib;NxCharacter.lib;NxCooking.lib;SDL.lib;SDLmain.lib;opengl32.lib;glu32.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\lib\win32\glut;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Bin\win32;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;PhysXLoader.lib;NxCharacter.lib;NxCooking.lib;SDL.lib;SDLmain.lib;opengl32.lib;glu32.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\CPSC585\glew-1.9.0\lib;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\lib\win32\glut;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Bin\win32;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -91,6 +91,7 @@
     <ClCompile Include="PhysicsEngine\PhysicsEngine.cpp" />
     <ClCompile Include="RenderingEngine\Appearance.cpp" />
     <ClCompile Include="RenderingEngine\RenderingEngine.cpp" />
+    <ClCompile Include="RenderingEngine\Shader.cpp" />
     <ClCompile Include="Util\Clock.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +107,7 @@
     <ClInclude Include="PhysicsEngine\PhysicsEngine.h" />
     <ClInclude Include="RenderingEngine\Appearance.h" />
     <ClInclude Include="RenderingEngine\RenderingEngine.h" />
+    <ClInclude Include="RenderingEngine\Shader.h" />
     <ClInclude Include="Util\Clock.h" />
   </ItemGroup>
   <ItemGroup>

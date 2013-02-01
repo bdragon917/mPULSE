@@ -10,6 +10,10 @@ RenderingEngine::RenderingEngine()
 	createLight();
 	initializeGL();
 
+
+
+
+    //aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");
 	
 }
 
@@ -41,7 +45,8 @@ void RenderingEngine::prints(char* s)
 
 	   if (s && strlen(s)) {
       while (*s) {
-         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, *s);
+         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *s);
+         //glutStrokeCharacter(GLUT_STROKE_ROMAN, *s);
          s++;
       }
    }
@@ -153,6 +158,13 @@ void RenderingEngine::initializeGL()
 	glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
 	glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
 	glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+    int err = glewInit();               //Needs a window to execute successfully
+	if (err == GLEW_OK)
+		{printf("glewInit is successful!");}
+	printf("%i\n",err);
+    fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 }
 
 
@@ -190,11 +202,11 @@ void RenderingEngine::setUpPerpView()
 		glMatrixMode (GL_PROJECTION);
 		glLoadIdentity ();
 
-		//int w = SCREEN_WIDTH;
-		//int h = SCREEN_HEIGHT;
+		int w = SCREEN_WIDTH;
+		int h = SCREEN_HEIGHT;
 
-		int w = 640;
-		int h = 480;
+		//int w = 640;
+		//int h = 480;
 
 		// Set drawing to take up the entire window
 		glViewport (0, 0, w, h);
@@ -324,6 +336,12 @@ void RenderingEngine::draw(){
 		glVertex3f(1.0,0.0,1.0);
 		glVertex3f(0.0,0.0,1.0);
 	 glEnd();
+
+     //aShader->on();
+     glColor3f(1.0f, 1.0f, 1.0f);
+     drawCube(0.0f,0.0f,0.0f,1.0f);
+    // aShader->off();
+
 
 	 glRasterPos3f(0.0f ,0.0f , 0.0f);
 	 glColor3f(1.0f,1.0f,1.0f);

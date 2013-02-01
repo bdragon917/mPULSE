@@ -8,7 +8,7 @@ PlayState::PlayState()
     //cars.addAppearance(new Appearance("some appearance data"))
     //cars.addPhysics(new Appearance("some physics data"))
     //physicsEngine = PhysicsEngine::getInstance();
-    //renderingEngine = RenderingEngine::getInstance();
+    renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
 }
 
