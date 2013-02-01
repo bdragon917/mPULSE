@@ -25,21 +25,73 @@ RenderingEngine* RenderingEngine::getInstance()
 
 ///Custom Draw Functions
 
+
+//This function converts an int into a string
+string RenderingEngine::FloatToString(float input)
+{
+	stringstream stream;
+	stream << input;
+	return stream.str();
+}
+
 /**
 *	This draws a string on screen
 **/
-void RenderingEngine::prints(char* s)
+void RenderingEngine::prints(string s)
 {
+glMatrixMode(GL_PROJECTION);
+glLoadIdentity();
+gluPerspective(70, 1, 1, 100);
+glMatrixMode(GL_MODELVIEW);
+glLoadIdentity();
+//gluLookAt(2, 2, 10, 2, 0, 0, 0, 1, 0);
 
-	/*  Fonts
-	  GLUT_BITMAP_9_BY_15,
-      GLUT_BITMAP_8_BY_13,
-      GLUT_BITMAP_TIMES_ROMAN_10,
-      GLUT_BITMAP_TIMES_ROMAN_24,
-      GLUT_BITMAP_HELVETICA_10,
-      GLUT_BITMAP_HELVETICA_12,
-      GLUT_BITMAP_HELVETICA_18  
-	  */
+    //(x,y) is from the bottom left of the window
+///**
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glPushAttrib(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    glScalef(0.1, 0.1, 0.1);
+
+    float x = 10;
+    float y = SCREEN_HEIGHT - 20;
+    glTranslatef(x*10.0f, y*10.0f, 0.0f);
+    //glRasterPos2i(10,10);     //not important i guess??
+
+
+     for (int i=0; i<s.size(); i++)
+    {
+        glutStrokeCharacter(GLUT_STROKE_ROMAN, s[i]);
+    }
+
+    glPopAttrib();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+
+    /**
+    glPushMatrix ();			////////
+	glLoadIdentity ();			////////
+
+    setUpOrthoView();
+	//  Fonts
+	//  GLUT_BITMAP_9_BY_15,
+    //  GLUT_BITMAP_8_BY_13,
+    //  GLUT_BITMAP_TIMES_ROMAN_10,
+     // GLUT_BITMAP_TIMES_ROMAN_24,
+    //  GLUT_BITMAP_HELVETICA_10,
+    //  GLUT_BITMAP_HELVETICA_12,
+     // GLUT_BITMAP_HELVETICA_18  
+
 
 	 glDisable(GL_TEXTURE_2D);
 
@@ -50,6 +102,9 @@ void RenderingEngine::prints(char* s)
          s++;
       }
    }
+
+       glPopMatrix();
+       */
 
 }
 
@@ -230,6 +285,42 @@ void RenderingEngine::setUpPerpView()
 		glMatrixMode (GL_MODELVIEW);
 	}
 
+
+void RenderingEngine::setUpOrthoView()
+	{
+		// Switch to the projection matrix
+		//glMatrixMode (GL_PROJECTION);
+        glMatrixMode (GL_MODELVIEW);
+		glLoadIdentity ();
+
+		int w = SCREEN_WIDTH;
+		int h = SCREEN_HEIGHT;
+
+		//int w = 640;
+		//int h = 480;
+
+		// Set drawing to take up the entire window
+		glViewport (0, 0, w, h);
+
+		if (w > h) {
+			// In this case the w/h ratio is > 1
+		        float ratio = (float)w/(float)h;
+				//gluPerspective(60.0, ratio, 0.01, 800.0);
+				//gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+				glOrtho (-ratio, ratio, -1, 1, -10, 10);
+		}
+		else {
+			// In this case the h/w ratio is > 1
+		        float ratio = (float)h/(float)w;
+				//gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
+				//gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+				glOrtho (-ratio, ratio, -1, 1, -10, 10);
+		}
+
+		//Switch back to modelview matrix
+		glMatrixMode (GL_MODELVIEW);
+	}
+
 //Draw Functions
 int RenderingEngine::drawIntro(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -294,12 +385,13 @@ void RenderingEngine::draw(){
 
 	glColor3f(0.75f, 0.75f, 0.75f);
 
+    ///*
 	glBegin(GL_TRIANGLES);
 		glVertex3f(0,0,0);
 		glVertex3f(0.1,0,0);
 		glVertex3f(0,0.1,0);
 	glEnd();
-
+   //*/
 
 	//for (int i=0;i<4;i++){
 
@@ -309,7 +401,7 @@ void RenderingEngine::draw(){
 
 	 //drawIE2Cylinder(testVal, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
-
+    //*
 	//Draws a checkboard Ground
 	 glBegin(GL_QUADS);	
 		glColor3f(0.0f, 1.0f, 0.0f);
@@ -336,14 +428,16 @@ void RenderingEngine::draw(){
 		glVertex3f(1.0,0.0,1.0);
 		glVertex3f(0.0,0.0,1.0);
 	 glEnd();
+     //*/
 
      //aShader->on();
      glColor3f(1.0f, 1.0f, 1.0f);
-     drawCube(0.0f,0.0f,0.0f,1.0f);
+     //drawCube(0.0f,0.0f,0.0f,1.0f);
     // aShader->off();
 
 
-	 glRasterPos3f(0.0f ,0.0f , 0.0f);
+
+	 //glRasterPos3f(0.0f ,0.0f , 0.0f);
 	 glColor3f(1.0f,1.0f,1.0f);
 	 prints("LETE THERE BE TEXT!!!!!!!!! %i \n DALKJDSLJDKLASDJSKj");
 
@@ -409,6 +503,80 @@ void RenderingEngine::draw(){
 //}
 ////
 
+
+void RenderingEngine::drawTest(float deltaTime)
+    {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix ();			////////
+	glLoadIdentity ();			////////
+	
+	///**
+	//Cameras
+	gluLookAt(0.0,0.0,2.0,  // Eye/camera position
+	0.0,0.0,0.0,		// Look-at position 
+	0.0,1.0,0.0); 		// "Up" vector
+	//**/
+	
+	//set view
+	setUpPerpView();
+
+	glRotatef (10.0f, 10.0f, 0, 1);
+	//Scene transformations
+	//glRotatef (zRot, zRot, 0, 1);	///////				//The objects will rotate about the z-axis
+	
+
+	glColor3f(0.75f, 0.75f, 0.75f);
+
+    ///*
+	glBegin(GL_TRIANGLES);
+		glVertex3f(0,0,0);
+		glVertex3f(0.1,0,0);
+		glVertex3f(0,0.1,0);
+	glEnd();
+
+	//Draws a checkboard Ground
+	 glBegin(GL_QUADS);	
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(-1.0,0.0,-1.0);
+		glVertex3f(0.0,0.0,-1.0);
+		glVertex3f(0.0,0.0,0.0);
+		glVertex3f(-1.0,0.0,0.0);
+
+		glColor3f(0.0f, 0.5f, 0.0f);
+		glVertex3f(0.0,0.0,-1.0);
+		glVertex3f(1.0,0.0,-1.0);
+		glVertex3f(1.0,0.0,0.0);
+		glVertex3f(0.0,0.0,0.0);
+
+		glColor3f(0.0f, 0.5f, 0.0f);
+		glVertex3f(-1.0,0.0,0.0);
+		glVertex3f(0.0,0.0,0.0);
+		glVertex3f(0.0,0.0,1.0);
+		glVertex3f(-1.0,0.0,1.0);
+
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(0.0,0.0,0.0);
+		glVertex3f(1.0,0.0,0.0);
+		glVertex3f(1.0,0.0,1.0);
+		glVertex3f(0.0,0.0,1.0);
+	 glEnd();
+     //*/
+
+     glColor3f(1.0f, 1.0f, 1.0f);
+
+
+
+	 //glRasterPos3f(0.0f ,0.0f , 0.0f);
+	 glColor3f(1.0f,1.0f,1.0f);
+
+     string disStr = "Current FPS: " + FloatToString(deltaTime);
+
+	 prints(disStr);
+
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+    }
 
 int RenderingEngine::drawIntro2()
 {

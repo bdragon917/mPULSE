@@ -22,9 +22,6 @@
     <Filter Include="Source Files\GameStates">
       <UniqueIdentifier>{41227906-0eec-49e8-9de3-d439de923fd5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Input">
-      <UniqueIdentifier>{02248efd-d4bf-4c85-a909-1f8af361fe4b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Input">
       <UniqueIdentifier>{fd344d32-e5d1-4f69-a63c-a06deb310ecc}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,9 @@
     </Filter>
     <Filter Include="Header Files\PhysicsEngine">
       <UniqueIdentifier>{881419f6-5690-4019-ba80-06f50a44ccf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Input">
+      <UniqueIdentifier>{02248efd-d4bf-4c85-a909-1f8af361fe4b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

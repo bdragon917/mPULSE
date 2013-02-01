@@ -18,5 +18,6 @@ private:
     std::vector<Entity*> cars;
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
+    float curFPS;
 };
 
