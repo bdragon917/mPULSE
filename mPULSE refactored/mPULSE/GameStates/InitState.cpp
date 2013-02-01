@@ -3,11 +3,10 @@
 InitState::InitState()
 {
     stateType = INIT;
-    renderer = RenderingEngine::getInstance();
-    renderer->initializeGL();
+    renderingEngine = RenderingEngine::getInstance();
+    renderingEngine->initializeGL();
     //renderer->drawIntro2();    
     time = clock.getCurrentTime();
-    printf("init state");
 }
 
 void InitState::update(float dt)
@@ -18,7 +17,7 @@ void InitState::update(float dt)
 }
 void InitState::render()
 {
-    
+    //renderingEngine->drawIntro2();
 }
 
 bool InitState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
@@ -28,6 +27,8 @@ bool InitState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 InitState* InitState::getInstance()
 {
-    static InitState initState;    
+    printf("init state\n");
+    static InitState initState;
+    initState.changeState(INIT);
     return &initState;
 }

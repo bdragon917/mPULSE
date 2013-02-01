@@ -41,12 +41,10 @@
             switch(stateType)
             {
             case GameState::StateType::INIT:
-                state = InitState::getInstance();
-                state->changeState(GameState::StateType::INIT);
+                state = InitState::getInstance();                
                 break;
             case GameState::StateType::PLAY:
-                state = PlayState::getInstance();
-                state->changeState(GameState::StateType::PLAY);
+                state = PlayState::getInstance();                
                 break;
             }
         }

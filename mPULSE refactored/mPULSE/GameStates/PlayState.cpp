@@ -3,8 +3,7 @@
 
 PlayState::PlayState()
 {
-    printf("play state");
-    changeState(PLAY);
+    changeState(PLAY);    
     cars.push_back(new Entity);
     //cars.addAppearance(new Appearance("some appearance data"))
     //cars.addPhysics(new Appearance("some physics data"))
@@ -20,8 +19,7 @@ void PlayState::update(float dt)
 
 void PlayState::render()
 {
-    //renderingEngine->Render(&cars[0]->getAppearance())
-	
+    //renderingEngine->Render(&cars[0]->getAppearance())	
 	renderingEngine->draw();
 }
 
@@ -32,6 +30,8 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 PlayState* PlayState::getInstance()
 {    
-    static PlayState playState;    
+    printf("play state\n");
+    static PlayState playState;
+    playState.changeState(PLAY);
     return &playState;
 }

@@ -13,7 +13,7 @@ public:
 
 private:
     InitState();
-    RenderingEngine* renderer;
+    RenderingEngine* renderingEngine;
     Clock clock;
     unsigned int time;
     static const int TIMEOUT = 3000;
