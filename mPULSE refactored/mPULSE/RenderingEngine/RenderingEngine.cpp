@@ -567,6 +567,9 @@ void RenderingEngine::drawTest(float deltaTime)
 
 
 
+     drawCube(0,0,0,3.0f);
+
+
 	 //glRasterPos3f(0.0f ,0.0f , 0.0f);
 	 glColor3f(1.0f,1.0f,1.0f);
 
