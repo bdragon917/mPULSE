@@ -106,6 +106,7 @@
     <ClInclude Include="PhysicsEngine\Physics.h" />
     <ClInclude Include="PhysicsEngine\PhysicsEngine.h" />
     <ClInclude Include="RenderingEngine\Appearance.h" />
+    <ClInclude Include="RenderingEngine\BMP.h" />
     <ClInclude Include="RenderingEngine\RenderingEngine.h" />
     <ClInclude Include="RenderingEngine\Shader.h" />
     <ClInclude Include="Util\Clock.h" />

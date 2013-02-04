@@ -13,8 +13,11 @@ RenderingEngine::RenderingEngine()
 
 
 
-    //aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");
-	
+
+
+
+    testVal = 0.0f;
+
 }
 
 RenderingEngine* RenderingEngine::getInstance()
@@ -22,6 +25,87 @@ RenderingEngine* RenderingEngine::getInstance()
     static RenderingEngine renderer;
     return &renderer;
 }
+
+
+
+
+//Texture Stuff
+void RenderingEngine::bindBMPtoTexture(char* filename, GLuint *textures)
+{
+	unsigned char *data = 0;
+	BMPImg aBMPImg;
+	int width;
+	int height;
+
+	//"/img/textureTest.bmp"
+
+	int err = aBMPImg.Load(filename);
+	if (!(err == 1))
+	{printf("Error: Loading Texture: %i\n", err);}
+	data = aBMPImg.GetImg();
+	width = aBMPImg.GetWidth();
+	height = aBMPImg.GetHeight();
+
+	glGenTextures(1, &textureid_P1);
+
+	glBindTexture(GL_TEXTURE_2D, textureid_P1);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+}
+/**
+	To-be moved to Render Initialization Method
+	requires openGL,  BMP.h, 
+**/
+
+void RenderingEngine::initializeTexture()
+{
+	//bindBMPtoTexture("./img/textureTest.bmp", textureid_P1);
+	///**
+	unsigned char *data = 0;
+	BMPImg aBMPImg;
+	int width;
+	int height;
+
+	//"/img/textureTest.bmp"
+
+	int err = aBMPImg.Load("./img/textureTest.bmp");
+	if (!(err == 1))
+	{printf("Error: Loading Texture: %i\n", err);}
+	data = aBMPImg.GetImg();
+	width = aBMPImg.GetWidth();
+	height = aBMPImg.GetHeight();
+	//aBMPImg.GetImg
+	//LoadPicture(data);
+
+	//glEnable (GL_TEXTURE_2D);		//Don't need this, since shader programs will control texture usage
+	glGenTextures(1, &textureid_P1);
+
+	glBindTexture(GL_TEXTURE_2D, textureid_P1);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	//**/
+
+
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//Unallocation data
+
+
+	// select modulate to mix texture with color for shading
+	//glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+
+	// when texture area is small, bilinear filter the closest mipmap
+	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	//				 GL_LINEAR_MIPMAP_NEAREST );
+	// when texture area is large, bilinear filter the original
+	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+	// the texture wraps over at the edges (repeat)
+	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+
+}
+
+
 
 ///Custom Draw Functions
 
@@ -39,6 +123,9 @@ string RenderingEngine::FloatToString(float input)
 **/
 void RenderingEngine::prints(string s)
 {
+
+     glDisable(GL_LIGHTING);
+
 glMatrixMode(GL_PROJECTION);
 glLoadIdentity();
 gluPerspective(70, 1, 1, 100);
@@ -66,7 +153,7 @@ glLoadIdentity();
     //glRasterPos2i(10,10);     //not important i guess??
 
 
-     for (int i=0; i<s.size(); i++)
+     for (int i=0; i < s.size(); i++)
     {
         glutStrokeCharacter(GLUT_STROKE_ROMAN, s[i]);
     }
@@ -77,6 +164,8 @@ glLoadIdentity();
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 
+
+     glEnable(GL_LIGHTING);
 
     /**
     glPushMatrix ();			////////
@@ -137,57 +226,63 @@ void RenderingEngine::drawCube(float x, float y, float z, float size)
 {
 	glPushMatrix();
 	
-	glTranslatef(x, y, z);
+	glTranslatef(	x, y, z);
 	
 	
 	float d = size / 2;
 
 		glBegin(GL_POLYGON);
 		//Bottom
-		glVertex3f( d, -d, -d);
-		glVertex3f( d, -d,  d);
-		glVertex3f(-d, -d,  d);
-		glVertex3f(-d, -d, -d);
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( d, -d, -d);
+		glTexCoord2d(1.0,0.0); glVertex3f( d, -d,  d);
+		glTexCoord2d(1.0,1.0); glVertex3f(-d, -d,  d);
+		glTexCoord2d(0.0,1.0); glVertex3f(-d, -d, -d);
 		glEnd();
 
 		glBegin(GL_POLYGON);
 				//Left
-		glVertex3f(-d, -d,  d);
-		glVertex3f(-d,  d,  d);
-		glVertex3f(-d,  d, -d);
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f(-d, -d,  d);
+		glTexCoord2d(1.0,0.0); glVertex3f(-d,  d,  d);
+		glTexCoord2d(1.0,1.0); glVertex3f(-d,  d, -d);
 		glVertex3f(-d, -d, -d);
 		glEnd();
 
 		glBegin(GL_POLYGON);
 				//Right
-		glVertex3f( d, -d, -d);
-		glVertex3f( d,  d, -d);
-		glVertex3f( d,  d,  d);
-		glVertex3f( d, -d,  d);
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( d, -d, -d);
+		glTexCoord2d(1.0,0.0); glVertex3f( d,  d, -d);
+		glTexCoord2d(1.0,1.0); glVertex3f( d,  d,  d);
+		glTexCoord2d(0.0,1.0); glVertex3f( d, -d,  d);
 		glEnd();
 
 		glBegin(GL_POLYGON);
 				//Front
-		glVertex3f(-d, -d, -d);
-		glVertex3f(d, -d, -d);
-		glVertex3f(d, d, -d);
-		glVertex3f(-d, d, -d);
+		glNormal3f(0.0f, 0.0f, -1.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f(-d, -d, -d);
+		glTexCoord2d(1.0,0.0); glVertex3f(d, -d, -d);
+		glTexCoord2d(1.0,1.0) ;glVertex3f(d, d, -d);
+		glTexCoord2d(0.0,1.0); glVertex3f(-d, d, -d);
 		glEnd();
 
 		glBegin(GL_POLYGON);
 				//Back
-		glVertex3f( d, -d,  d);
-		glVertex3f( d,  d,  d);
-		glVertex3f(-d,  d,  d);
-		glVertex3f(-d, -d,  d);
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( d, -d,  d);
+		glTexCoord2d(1.0,0.0); glVertex3f( d,  d,  d);
+		glTexCoord2d(1.0,1.0) ;glVertex3f(-d,  d,  d);
+		glTexCoord2d(0.0,1.0); glVertex3f(-d, -d,  d);
 		glEnd();
 
 		glBegin(GL_POLYGON);
 				//Top
-		glVertex3f( d,  d,  d);
-		glVertex3f( d,  d, -d);
-		glVertex3f(-d,  d, -d);
-		glVertex3f(-d,  d,  d);
+		glNormal3f(0.0f, 1.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( d,  d,  d);
+		glTexCoord2d(1.0,0.0); glVertex3f( d,  d, -d);
+		glTexCoord2d(1.0,1.0); glVertex3f(-d,  d, -d);
+		glTexCoord2d(0.0,1.0); glVertex3f(-d,  d,  d);
 		glEnd();
 	
 	glPopMatrix();
@@ -215,11 +310,21 @@ void RenderingEngine::initializeGL()
 	glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
+    
+    initializeTexture();
+
     int err = glewInit();               //Needs a window to execute successfully
-	if (err == GLEW_OK)
-		{printf("glewInit is successful!");}
-	printf("%i\n",err);
-    fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+	
+    if (err == GLEW_OK)
+		{printf("glewInit is successful!\n");aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");}
+    else
+    {fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
+    }
+    
+    
+    
+    
+
 }
 
 
@@ -523,8 +628,10 @@ void RenderingEngine::drawTest(float deltaTime)
 
 	glRotatef (10.0f, 10.0f, 0, 1);
 	//Scene transformations
-	//glRotatef (zRot, zRot, 0, 1);	///////				//The objects will rotate about the z-axis
+	glRotatef (testVal, 0, 0, 1);	///////				//The objects will rotate about the z-axis
 	
+    testVal = testVal + 0.5f;
+
 
 	glColor3f(0.75f, 0.75f, 0.75f);
 
@@ -565,17 +672,25 @@ void RenderingEngine::drawTest(float deltaTime)
 
      glColor3f(1.0f, 1.0f, 1.0f);
 
+     char shaded = 'f';
 
+     if (!(aShader == NULL))
+     {aShader->on();shaded = 't';}
 
-     drawCube(0,0,0,3.0f);
+     drawCube(0,0,0,1.0f);
+
+     if (!(aShader == NULL))
+     {aShader->off();}
 
 
 	 //glRasterPos3f(0.0f ,0.0f , 0.0f);
 	 glColor3f(1.0f,1.0f,1.0f);
 
-     string disStr = "Current FPS: " + FloatToString(deltaTime);
+     string disStr = "Current FPS: " + FloatToString(deltaTime) + " Shader:" + shaded;
 
+    
 	 prints(disStr);
+
 
 		glEnable(GL_LIGHTING);
 		glPopMatrix();

@@ -22,6 +22,9 @@
 #include <sstream>	//String stream //for float convertion
 
 
+#include "BMP.h"
+
+
 class RenderingEngine
 {
 public:
@@ -52,6 +55,15 @@ private:
     RenderingEngine();
 
     string FloatToString(float input);
+
+    float testVal;
+
+
+    //Texture Stuff
+    GLuint textureid_P1;
+
+    void bindBMPtoTexture(char* filename, GLuint *textures);
+    void initializeTexture();
 
 //    int loadShaders();
         //Used to generate a list of shaders

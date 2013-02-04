@@ -146,6 +146,9 @@
     <ClInclude Include="RenderingEngine\Shader.h">
       <Filter>Header Files\RenderingEngine</Filter>
     </ClInclude>
+    <ClInclude Include="RenderingEngine\BMP.h">
+      <Filter>Header Files\RenderingEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ModelLoader\ModelList.txt" />
