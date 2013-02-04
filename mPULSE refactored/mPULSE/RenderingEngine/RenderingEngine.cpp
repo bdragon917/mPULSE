@@ -68,7 +68,7 @@ void RenderingEngine::initializeTexture()
 
 	//"/img/textureTest.bmp"
 
-	int err = aBMPImg.Load("./img/textureTest.bmp");
+	int err = aBMPImg.Load("./img/testT.bmp");
 	if (!(err == 1))
 	{printf("Error: Loading Texture: %i\n", err);}
 	data = aBMPImg.GetImg();
@@ -82,7 +82,7 @@ void RenderingEngine::initializeTexture()
 
 	glBindTexture(GL_TEXTURE_2D, textureid_P1);
 	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
 	//**/
 
 
