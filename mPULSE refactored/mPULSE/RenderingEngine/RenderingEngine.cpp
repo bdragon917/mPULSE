@@ -10,12 +10,6 @@ RenderingEngine::RenderingEngine()
 	createLight();
 	initializeGL();
 
-
-
-
-
-
-
     testVal = 0.0f;
 
 }
@@ -313,13 +307,13 @@ void RenderingEngine::initializeGL()
     
     initializeTexture();
 
-    int err = glewInit();               //Needs a window to execute successfully
+    //int err = glewInit();               //Needs a window to execute successfully
 	
-    if (err == GLEW_OK)
-		{printf("glewInit is successful!\n");aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");}
-    else
-    {fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
-    }
+   // if (err == GLEW_OK)
+	//	{printf("glewInit is successful!\n");aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");}
+    //else
+    //{fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
+    //}
     
     
     

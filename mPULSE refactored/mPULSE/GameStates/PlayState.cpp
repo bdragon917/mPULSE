@@ -33,6 +33,11 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
     return true;
 }
 
+void PlayState::handleXboxEvents(int player,XboxController* state)
+{
+
+}
+
 PlayState* PlayState::getInstance()
 {    
     printf("play state\n");

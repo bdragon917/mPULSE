@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
         //Handle xbox events
         for(int player=0;player<numPlayers;player++)
         {
-            if(players[player]->getState(&XboxState))
-                game.handleXboxEvents(player,&XboxState);
+            players[player]->update();
+            game.handleXboxEvents(player,players[player]);
         }
 
         //physics simulations

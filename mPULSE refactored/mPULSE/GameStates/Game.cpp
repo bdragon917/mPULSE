@@ -24,7 +24,7 @@
         return true;
     }
 
-    void Game::handleXboxEvents(int player,XINPUT_STATE* state)
+    void Game::handleXboxEvents(int player,XboxController* controller)
     {
 
     }

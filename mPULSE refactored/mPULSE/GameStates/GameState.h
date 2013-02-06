@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <Xinput.h>
 #include <SDL.h>
+#include "../Input/XboxController.h"
 
 class GameState
 {
@@ -18,6 +19,7 @@ public:
     virtual void update(float dt) = 0;
     virtual void render() = 0;
     virtual bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents) = 0;
+    virtual void handleXboxEvents(int player,XboxController* state) = 0;
 
     StateType pollStateChange()
     {

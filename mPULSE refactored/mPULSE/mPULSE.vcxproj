@@ -37,10 +37,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\CPSC585\glew-1.9.0\include;C:\CPSC585\SDL-1.2.15\include;C:\SDL\SDL-1.2.15\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\CPSC585\glew-1.9.0\include;C:\CPSC585\SDL-1.2.15\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\CPSC585\glew-1.9.0\lib;C:\CPSC585\SDL-1.2.15\lib\x86;C:\SDL\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\CPSC585\glew-1.9.0\lib;C:\CPSC585\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\SDL\SDL-1.2.15\include;$(IncludePath)</IncludePath>
