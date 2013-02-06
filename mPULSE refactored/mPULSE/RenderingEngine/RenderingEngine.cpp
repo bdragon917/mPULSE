@@ -696,6 +696,7 @@ void RenderingEngine::drawTest(float deltaTime)
 		glPopMatrix();
     }
 
+
 int RenderingEngine::drawIntro2()
 {
 	SDL_Surface* inImg = NULL;		//Used to load the image into the memory
@@ -743,4 +744,231 @@ int RenderingEngine::drawIntro2()
 	//SDL_Quit();
 
 	return 1;
+}
+
+
+
+void RenderingEngine::drawScene(NxScene* scene)
+{
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix ();			////////
+	glLoadIdentity ();			////////
+	
+	//Cameras
+	gluLookAt(0.0,0.0,10.0,  // Eye/camera position
+	0.0,0.0,0.0,		// Look-at position 
+	0.0,1.0,0.0); 		// "Up" vector
+	
+	//set view
+	setUpPerpView();
+
+	glRotatef (10.0f, 10.0f, 0, 1);
+	//Scene transformations
+	//glRotatef (testVal, 0, 0, 1);	///////				//The objects will rotate about the z-axis
+	
+    testVal = testVal + 0.5f;
+
+
+	glColor3f(0.75f, 0.75f, 0.75f);
+
+	//Draws a checkboard Ground
+	 glBegin(GL_QUADS);	
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(-1.0,0.0,-1.0);
+		glVertex3f(0.0,0.0,-1.0);
+		glVertex3f(0.0,0.0,0.0);
+		glVertex3f(-1.0,0.0,0.0);
+
+		glColor3f(0.0f, 0.5f, 0.0f);
+		glVertex3f(0.0,0.0,-1.0);
+		glVertex3f(1.0,0.0,-1.0);
+		glVertex3f(1.0,0.0,0.0);
+		glVertex3f(0.0,0.0,0.0);
+
+		glColor3f(0.0f, 0.5f, 0.0f);
+		glVertex3f(-1.0,0.0,0.0);
+		glVertex3f(0.0,0.0,0.0);
+		glVertex3f(0.0,0.0,1.0);
+		glVertex3f(-1.0,0.0,1.0);
+
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(0.0,0.0,0.0);
+		glVertex3f(1.0,0.0,0.0);
+		glVertex3f(1.0,0.0,1.0);
+		glVertex3f(0.0,0.0,1.0);
+	 glEnd();
+
+     glColor3f(1.0f, 1.0f, 1.0f);
+
+     char shaded = 'f';
+
+     if (!(aShader == NULL))
+     {aShader->on();shaded = 't';}
+
+			// Render all actors
+	int nbActors = scene->getNbActors();
+	NxActor** actors = scene->getActors();
+	while(nbActors--)
+	{
+		//printf("Hello!");
+		NxActor* actor = *actors++;
+		//if(!actor->userData) continue;
+
+		float glMat[16];
+
+		// Render actor
+		glPushMatrix();
+		printf("X Position: %f", actor->getGlobalPosition().x);
+		printf("  Y Position: %f", actor->getGlobalPosition().y);
+		printf("  Z Position: %f\n", actor->getGlobalPosition().z);
+		actor->getGlobalPose().getColumnMajor44(glMat);
+		
+		glMultMatrixf(glMat);
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		glPopMatrix();
+
+		drawCube(0, 0, 0, 0.5f*2.0f);
+
+		// Render shadow
+		glPushMatrix();
+		const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
+		glMultMatrixf(shadowMat);
+		glMultMatrixf(glMat);
+		glDisable(GL_LIGHTING);
+		glColor4f(0.1f, 0.2f, 0.3f, 1.0f);
+		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
+
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+	}
+
+     if (!(aShader == NULL))
+     {aShader->off();}
+
+
+	 //glRasterPos3f(0.0f ,0.0f , 0.0f);
+	 glColor3f(1.0f,1.0f,1.0f);
+
+
+
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
+
+
+
+
+
+
+
+
+
+/*
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix ();			////////
+	glLoadIdentity ();			////////
+	
+
+	//Cameras
+	gluLookAt(0.0,0.0,2.0,  // Eye/camera position
+	0.0,0.0,0.0,		// Look-at position 
+	0.0,1.0,0.0); 		// "Up" vector
+
+	
+	//set view
+	setUpPerpView();
+
+	glRotatef (10.0f, 10.0f, 0, 1);
+	//Scene transformations
+	//glRotatef (zRot, zRot, 0, 1);	///////				//The objects will rotate about the z-axis
+	
+	glColor3f(0.75f, 0.75f, 0.75f);
+
+	//Draws a checkboard Ground
+	 glBegin(GL_QUADS);	
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(-1.0,0.0,-1.0);
+		glVertex3f(0.0,0.0,-1.0);
+		glVertex3f(0.0,0.0,0.0);
+		glVertex3f(-1.0,0.0,0.0);
+
+		glColor3f(0.0f, 0.5f, 0.0f);
+		glVertex3f(0.0,0.0,-1.0);
+		glVertex3f(1.0,0.0,-1.0);
+		glVertex3f(1.0,0.0,0.0);
+		glVertex3f(0.0,0.0,0.0);
+
+		glColor3f(0.0f, 0.5f, 0.0f);
+		glVertex3f(-1.0,0.0,0.0);
+		glVertex3f(0.0,0.0,0.0);
+		glVertex3f(0.0,0.0,1.0);
+		glVertex3f(-1.0,0.0,1.0);
+
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(0.0,0.0,0.0);
+		glVertex3f(1.0,0.0,0.0);
+		glVertex3f(1.0,0.0,1.0);
+		glVertex3f(0.0,0.0,1.0);
+	 glEnd();
+     //
+
+     //aShader->on();
+     glColor3f(1.0f, 1.0f, 1.0f);
+     //drawCube(0.0f,0.0f,0.0f,1.0f);
+    // aShader->off();
+
+
+
+	 //glRasterPos3f(0.0f ,0.0f , 0.0f);
+	 glColor3f(1.0f,1.0f,1.0f);
+	 prints("LETE THERE BE TEXT!!!!!!!!! %i \n DALKJDSLJDKLASDJSKj");
+
+	// Render all actors
+	int nbActors = scene->getNbActors();
+	NxActor** actors = scene->getActors();
+	while(nbActors--)
+	{
+		NxActor* actor = *actors++;
+		if(!actor->userData) continue;
+
+		float glMat[16];
+
+		// Render actor
+		glPushMatrix();
+		actor->getGlobalPose().getColumnMajor44(glMat);
+		glMultMatrixf(glMat);
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		
+		if (!(aShader == NULL))
+			{aShader->on();}
+
+		drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
+
+
+		if (!(aShader == NULL))
+			{aShader->off();}
+
+		glPopMatrix();
+
+
+
+		// Render shadow
+		glPushMatrix();
+		const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
+		glMultMatrixf(shadowMat);
+		glMultMatrixf(glMat);
+		glDisable(GL_LIGHTING);
+		glColor4f(0.1f, 0.2f, 0.3f, 1.0f);
+		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
+
+		glEnable(GL_LIGHTING);
+		glPopMatrix();
+	}
+	*/
 }

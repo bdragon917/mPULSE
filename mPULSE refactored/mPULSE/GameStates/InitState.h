@@ -1,4 +1,6 @@
 #pragma once
+
+#define NOMINMAX
 #include "GameState.h"
 #include "../Util/Clock.h"
 #include "../RenderingEngine/RenderingEngine.h"

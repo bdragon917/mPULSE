@@ -21,6 +21,7 @@
 
 #include <sstream>	//String stream //for float convertion
 
+#include <NxPhysics.h>
 
 #include "BMP.h"
 
@@ -48,7 +49,7 @@ void draw();
 void drawTest(float deltaTime);
 int drawIntro2();
 void moveStuff(float &testF);
-
+void drawScene(NxScene* scene);
 
     Shader* aShader;
 private:

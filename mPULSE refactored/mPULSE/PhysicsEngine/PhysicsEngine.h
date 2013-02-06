@@ -20,6 +20,7 @@ private:
 
 public:
     PhysicsEngine();
+	static PhysicsEngine* getInstance();
 	void sceneSetup();
     void simulate(float dt, Physics* physData);
 

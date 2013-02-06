@@ -7,7 +7,7 @@ PlayState::PlayState()
     cars.push_back(new Entity);
     //cars.addAppearance(new Appearance("some appearance data"))
     //cars.addPhysics(new Appearance("some physics data"))
-    //physicsEngine = PhysicsEngine::getInstance();
+    physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
     curFPS = 0.0f;
@@ -16,13 +16,16 @@ PlayState::PlayState()
 void PlayState::update(float dt)
 {    
     curFPS = (1000/dt);
-    //physicsEngine->Simulate(dt,&cars[0]->getPhysData());
+    physicsEngine->startPhysics();
 }
 
 void PlayState::render()
 {
     //renderingEngine->Render(&cars[0]->getAppearance())	
-	renderingEngine->drawTest(curFPS);
+	//renderingEngine->drawTest(curFPS);
+	physicsEngine->startPhysics();
+	NxScene* scene = physicsEngine->getScene();
+	renderingEngine->drawScene(scene);
 }
 
 bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)

@@ -10,6 +10,13 @@ PhysicsEngine::PhysicsEngine()
 }
 
 
+PhysicsEngine* PhysicsEngine::getInstance()
+{
+    static PhysicsEngine physics;
+    return &physics;
+}
+
+
 void PhysicsEngine::sceneSetup()
 {
 	NxSceneDesc sceneDesc;
