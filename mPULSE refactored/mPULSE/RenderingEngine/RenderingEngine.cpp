@@ -628,7 +628,7 @@ void RenderingEngine::drawTest(float deltaTime)
 
 	glRotatef (10.0f, 10.0f, 0, 1);
 	//Scene transformations
-	glRotatef (testVal, 0, 0, 1);	///////				//The objects will rotate about the z-axis
+	//glRotatef (testVal, 0, 0, 1);	///////				//The objects will rotate about the z-axis
 	
     testVal = testVal + 0.5f;
 
@@ -677,7 +677,7 @@ void RenderingEngine::drawTest(float deltaTime)
      if (!(aShader == NULL))
      {aShader->on();shaded = 't';}
 
-     drawCube(0,0,0,1.0f);
+     drawCube(0,0.5,0,1.0f);
 
      if (!(aShader == NULL))
      {aShader->off();}

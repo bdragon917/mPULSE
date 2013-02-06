@@ -1,4 +1,6 @@
 #pragma once
+
+#define NOMINMAX
 #include <SDL.h>
 #include <windows.h>
 #include <Xinput.h>

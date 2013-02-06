@@ -1,4 +1,6 @@
 #pragma once
+
+#define NOMINMAX
 #include <vector>
 #include "GameState.h"
 #include "../RenderingEngine/RenderingEngine.h"
