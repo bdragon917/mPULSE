@@ -60,6 +60,9 @@ private:
     float testVal;
 
 
+    void drawGroundPlane();
+    void drawCheckerBoard(float x, float y);
+
     //Texture Stuff
     GLuint textureid_P1;
 

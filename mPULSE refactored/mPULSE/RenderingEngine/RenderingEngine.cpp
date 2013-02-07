@@ -191,6 +191,52 @@ glLoadIdentity();
 
 }
 
+
+void RenderingEngine::drawGroundPlane()
+{    //*
+	//Draws a checkboard Ground
+
+    int size = 30;  //size of the ground, or at least half of the length of the plane
+
+	 for (int x = -size;x<size;x=x+2)
+         for (int y = -size;y<size;y=y+2)
+            drawCheckerBoard(x,y);
+     //*/
+}
+
+void RenderingEngine::drawCheckerBoard(float x, float y)
+{    //*
+	//Draws a checkboard Ground
+    float gz = 0.0f;
+
+	 glBegin(GL_QUADS);	
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(x-1.0,gz,y+-1.0);
+		glVertex3f(x+0.0,gz,y+-1.0);
+		glVertex3f(x+0.0,gz,y+0.0);
+		glVertex3f(x+-1.0,gz,y+0.0);
+
+		glColor3f(0.0f, 0.5f, 0.0f);
+		glVertex3f(x+0.0,gz,y+-1.0);
+		glVertex3f(x+1.0,gz,y+-1.0);
+		glVertex3f(x+1.0,gz,y+0.0);
+		glVertex3f(x+0.0,gz,y+0.0);
+
+		glColor3f(0.0f, 0.5f, 0.0f);
+		glVertex3f(x+-1.0,gz,y+0.0);
+		glVertex3f(x+0.0,gz,y+0.0);
+		glVertex3f(x+0.0,gz,y+1.0);
+		glVertex3f(x+-1.0,gz,y+1.0);
+
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glVertex3f(x+0.0,gz,y+0.0);
+		glVertex3f(x+1.0,gz,y+0.0);
+		glVertex3f(x+1.0,gz,y+1.0);
+		glVertex3f(x+0.0,gz,y+1.0);
+	 glEnd();
+     //*/
+}
+
 void RenderingEngine::drawIE2Cylinder(float x, float y, float z, float rotX, float rotY, float rotZ, float inAngle, float inHeight)
 {
 	glPushMatrix();
@@ -768,31 +814,7 @@ void RenderingEngine::drawScene(NxScene* scene)
 	glColor3f(0.75f, 0.75f, 0.75f);
 
 	//Draws a checkboard Ground
-	 glBegin(GL_QUADS);	
-		glColor3f(0.0f, 1.0f, 0.0f);
-		glVertex3f(-1.0,0.0,-1.0);
-		glVertex3f(0.0,0.0,-1.0);
-		glVertex3f(0.0,0.0,0.0);
-		glVertex3f(-1.0,0.0,0.0);
-
-		glColor3f(0.0f, 0.5f, 0.0f);
-		glVertex3f(0.0,0.0,-1.0);
-		glVertex3f(1.0,0.0,-1.0);
-		glVertex3f(1.0,0.0,0.0);
-		glVertex3f(0.0,0.0,0.0);
-
-		glColor3f(0.0f, 0.5f, 0.0f);
-		glVertex3f(-1.0,0.0,0.0);
-		glVertex3f(0.0,0.0,0.0);
-		glVertex3f(0.0,0.0,1.0);
-		glVertex3f(-1.0,0.0,1.0);
-
-		glColor3f(0.0f, 1.0f, 0.0f);
-		glVertex3f(0.0,0.0,0.0);
-		glVertex3f(1.0,0.0,0.0);
-		glVertex3f(1.0,0.0,1.0);
-		glVertex3f(0.0,0.0,1.0);
-	 glEnd();
+	 drawGroundPlane();
 
      glColor3f(1.0f, 1.0f, 1.0f);
 
