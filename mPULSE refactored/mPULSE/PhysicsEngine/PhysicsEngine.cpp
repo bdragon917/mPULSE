@@ -2,10 +2,6 @@
 
 PhysicsEngine::PhysicsEngine()
 {
-	deltaTime = 1.0f/60.0f;
-	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
-	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01);
-
 	sceneSetup();
 }
 
@@ -19,6 +15,10 @@ PhysicsEngine* PhysicsEngine::getInstance()
 
 void PhysicsEngine::sceneSetup()
 {
+	deltaTime = 1.0f/60.0f;
+	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
+	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01);
+
 	NxSceneDesc sceneDesc;
 	sceneDesc.simType = NX_SIMULATION_SW;
 	NxVec3 defaultGravity(0,-9.8f*(10.0f),0);
@@ -41,6 +41,24 @@ void PhysicsEngine::step()//float dt, Physics* physData)
 	scene->simulate(deltaTime);
 	scene->flushStream();
 	scene->fetchResults(NX_RIGID_BODY_FINISHED, true);
+}
+
+
+void PhysicsEngine::releaseNx() 
+{
+	if(scene)
+	{
+		while(!scene->fetchResults(NX_RIGID_BODY_FINISHED, false));
+		physicsSDK->releaseScene(*scene);
+	}
+	if(physicsSDK) physicsSDK->release();
+}
+
+
+void PhysicsEngine::resetNx()
+{
+	releaseNx();
+	sceneSetup();
 }
 
 
@@ -93,6 +111,13 @@ NxActor* PhysicsEngine::createBox()
 	actor->userData = (void*)size_t(0.5f);
 
 	return actor;
+}
+
+
+void PhysicsEngine::resetBox()
+{
+	box->setGlobalPosition(NxVec3(0,3.5,0));
+	scene->flushCaches();
 }
 
 
