@@ -94,7 +94,11 @@ XboxController::analogInfo XboxController::calculateAnalogInfo(XINPUT_STATE cons
             info.magnitude = MAX_STICK_MAG;
     }
     else
+    {
         info.magnitude = 0.0;
+        info.x = 0;
+        info.y = 0;
+    }
     
     return info;
 }
