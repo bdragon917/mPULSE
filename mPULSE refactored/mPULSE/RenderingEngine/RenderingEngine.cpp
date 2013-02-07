@@ -820,7 +820,6 @@ void RenderingEngine::drawScene(NxScene* scene)
 		glMultMatrixf(glMat);
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
-		glPopMatrix();
 
 		drawCube(0, 0, 0, 0.5f*2.0f);
 
