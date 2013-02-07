@@ -12,6 +12,27 @@ PhysicsEngine* PhysicsEngine::getInstance()
     return &physics;
 }
 
+void PhysicsEngine::setupPlayScene(vector<Entity*> cars)
+{
+	deltaTime = 1.0f/60.0f;
+	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
+	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01f);
+
+	NxSceneDesc sceneDesc;
+	sceneDesc.simType = NX_SIMULATION_SW;
+	NxVec3 defaultGravity(0,-9.8f*(10.0f),0);
+	sceneDesc.gravity = defaultGravity;
+	scene = physicsSDK->createScene(sceneDesc);
+
+	//Create the default material
+	NxMaterial* defaultMaterial = scene->getMaterialFromIndex(0);
+	//defaultMaterial->setRestitution(0.5);
+	defaultMaterial->setStaticFriction(0.5);
+	defaultMaterial->setDynamicFriction(0.5);
+
+	groundPlane = createGroundPlane();
+	box = createBox();
+}
 
 void PhysicsEngine::sceneSetup()
 {

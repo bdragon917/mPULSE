@@ -25,6 +25,7 @@
 
 #include "BMP.h"
 #include "..\GameStates\Console.h"
+#include <vector>
 
 
 class RenderingEngine
@@ -55,10 +56,13 @@ void drawScene(NxScene* scene);
     Console aConsole;
 
     Shader* aShader;
+
+    string FloatToString(float input);
+
 private:
     RenderingEngine();
 
-    string FloatToString(float input);
+    
 
     float testVal;
 

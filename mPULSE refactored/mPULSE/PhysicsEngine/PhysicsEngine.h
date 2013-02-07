@@ -6,6 +6,11 @@
 #include "PhysXLoader.h"
 #include <NxPhysicsSDK.h>
 #include <NxActor.h>
+#include "../Entities/Entity.h"
+
+#include <vector>
+
+using std::vector;
 
 class PhysicsEngine
 {
@@ -25,6 +30,8 @@ public:
     void step();//float dt, Physics* physData);
 	void releaseNx();
 	void resetNx();
+
+    void setupPlayScene(vector<Entity*> cars);      //Use this to initalize the physicScene for playState
 
 	NxVec3 ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength);
 	NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);

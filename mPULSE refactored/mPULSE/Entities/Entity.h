@@ -9,5 +9,6 @@ public:
     
 private:
     std::vector<EntityComponent*> components;
+    //Vec force
     
 };
