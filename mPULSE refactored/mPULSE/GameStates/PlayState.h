@@ -19,6 +19,7 @@ public:
 private:
     PlayState();
     std::vector<Entity*> cars;
+    std::vector<Entity*> obstacles;
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
     float curFPS;
