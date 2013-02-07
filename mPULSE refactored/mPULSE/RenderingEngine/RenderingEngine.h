@@ -59,6 +59,8 @@ void drawScene(NxScene* scene);
 
     string FloatToString(float input);
 
+    bool debugPhysX;
+
 private:
     RenderingEngine();
 
@@ -70,6 +72,8 @@ private:
     void drawGroundPlane();
     void drawCheckerBoard(float x, float y);
 
+    void RenderDebugPhysic(const NxDebugRenderable* ndr);
+    
     //Console Variables
     bool showConsole;
     void displayConsole();

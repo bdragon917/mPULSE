@@ -16,7 +16,7 @@ RenderingEngine::RenderingEngine()
 	initializeGL();
 
     testVal = 0.0f;
-
+    debugPhysX = false;
 }
 
 RenderingEngine* RenderingEngine::getInstance()
@@ -334,6 +334,84 @@ void RenderingEngine::drawCube(float x, float y, float z, float size)
 
 }
 ///
+
+void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
+{
+    int nLines = 0;
+    int nTriangles = 0;
+    int nPoints = 0;
+
+    if (ndr == NULL)
+    { printf("Physic DebugRenderable is NULL");}
+    else
+    {
+        nLines =        ndr->getNbLines();
+        nTriangles =    ndr->getNbTriangles();
+        nPoints =       ndr->getNbPoints();
+    }
+
+
+    glPushMatrix();
+
+    if (nLines)
+    {
+        const NxDebugLine* nxDebugLines = ndr->getLines();
+        while (nLines--)
+        {
+            int color = nxDebugLines->color;
+            float blue = color & 255;
+            float green = (color >> 8) & 255;
+            float red = (color >> 16) & 255;
+
+            glBegin(GL_LINE);
+            glColor3f(red, green, blue);
+            glVertex3f(nxDebugLines->p0.x, nxDebugLines->p0.y, nxDebugLines->p0.z);
+            glVertex3f(nxDebugLines->p1.x, nxDebugLines->p1.y, nxDebugLines->p1.z);
+            glEnd();
+            nxDebugLines++;
+        }
+    }
+
+    if (nTriangles)
+    {
+        const NxDebugTriangle* nxDebugTris = ndr->getTriangles();
+        while (nTriangles--)
+        {
+            int color = nxDebugTris->color;
+            float blue = color & 255;
+            float green = (color >> 8) & 255;
+            float red = (color >> 16) & 255;
+
+            glBegin(GL_TRIANGLES);
+            glColor3f(red, green, blue);
+            glVertex3f(nxDebugTris->p0.x, nxDebugTris->p0.y, nxDebugTris->p0.z);
+            glVertex3f(nxDebugTris->p1.x, nxDebugTris->p1.y, nxDebugTris->p1.z);
+            glVertex3f(nxDebugTris->p2.x, nxDebugTris->p2.y, nxDebugTris->p2.z);
+            glEnd();
+            nxDebugTris++;
+        }
+    }
+
+    if (nPoints)
+    {
+        const NxDebugPoint* nxDebugPts = ndr->getPoints();
+        while (nLines--)
+        {
+            int color = nxDebugPts->color;
+            float blue = color & 255;
+            float green = (color >> 8) & 255;
+            float red = (color >> 16) & 255;
+
+            glBegin(GL_LINE);
+            glColor3f(red, green, blue);
+            glVertex3f(nxDebugPts->p.x, nxDebugPts->p.y, nxDebugPts->p.z);
+            glEnd();
+            nxDebugPts++;
+        }
+    }
+
+    glPopMatrix();
+}
 
 void RenderingEngine::displayConsole()
 {
@@ -823,67 +901,80 @@ void RenderingEngine::drawScene(NxScene* scene)
 	//set view
 	setUpPerpView();
 
+
 	glRotatef (10.0f, 10.0f, 0, 1);
 	//Scene transformations
 	//glRotatef (testVal, 0, 0, 1);	///////				//The objects will rotate about the z-axis
 	
-    testVal = testVal + 0.5f;
+    if (debugPhysX) //If debugPhyX then
+    {
+         RenderDebugPhysic(scene->getDebugRenderable());
+    }
+    else    //draw normally
+    {
 
 
-	glColor3f(0.75f, 0.75f, 0.75f);
 
-	//Draws a checkboard Ground
-	 drawGroundPlane();
+        testVal = testVal + 0.5f;
 
-     glColor3f(1.0f, 1.0f, 1.0f);
 
-     char shaded = 'f';
+	    glColor3f(0.75f, 0.75f, 0.75f);
 
-     if (!(aShader == NULL))
-     {aShader->on();shaded = 't';}
+	    //Draws a checkboard Ground
+	     drawGroundPlane();
 
-			// Render all actors
-	int nbActors = scene->getNbActors();
-	NxActor** actors = scene->getActors();
-	while(nbActors--)
-	{
-		//printf("Hello!");
-		NxActor* actor = *actors++;
-		//if(!actor->userData) continue;
+         glColor3f(1.0f, 1.0f, 1.0f);
 
-		float glMat[16];
+         char shaded = 'f';
 
-		// Render actor
-		glPushMatrix();
+         if (!(aShader == NULL))
+         {aShader->on();shaded = 't';}
 
-		actor->getGlobalPose().getColumnMajor44(glMat);
+			    // Render all actors
+	    int nbActors = scene->getNbActors();
+	    NxActor** actors = scene->getActors();
+	    while(nbActors--)
+	    {
+		    //printf("Hello!");
+		    NxActor* actor = *actors++;
+		    //if(!actor->userData) continue;
+
+		    float glMat[16];
+
+		    // Render actor
+		    glPushMatrix();
+
+		    actor->getGlobalPose().getColumnMajor44(glMat);
 		
-		glMultMatrixf(glMat);
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		    glMultMatrixf(glMat);
+		    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		    //drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
 
-		drawCube(0, 0, 0, 0.5f*2.0f);
+		    drawCube(0, 0, 0, 0.5f*2.0f);
 
-		glPopMatrix();
-/*
-		// Render shadow
-		glPushMatrix();
-		const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
-		glMultMatrixf(shadowMat);
-		glMultMatrixf(glMat);
-		glDisable(GL_LIGHTING);
-		glColor4f(0.1f, 0.2f, 0.3f, 1.0f);
-		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
-		drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
+		    glPopMatrix();
+    /*
+		    // Render shadow
+		    glPushMatrix();
+		    const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
+		    glMultMatrixf(shadowMat);
+		    glMultMatrixf(glMat);
+		    glDisable(GL_LIGHTING);
+		    glColor4f(0.1f, 0.2f, 0.3f, 1.0f);
+		    //drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		    drawCube(0, 0, 0, float(size_t(actor->userData))*2.0f);
 
-		glEnable(GL_LIGHTING);
-		glPopMatrix();
-*/
-	}
+		    glEnable(GL_LIGHTING);
+		    glPopMatrix();
+    */
+	    }
 
 
-    //if debug
-    //scene->getDebugRenderable()   //This provides points, lines and triangles for debugging the scene!!!! Should be implimented
+        //if debug
+        //scene->getDebugRenderable()   //This provides points, lines and triangles for debugging the scene!!!! Should be implimented
+    
+   
+    }
 
      if (!(aShader == NULL))
      {aShader->off();}

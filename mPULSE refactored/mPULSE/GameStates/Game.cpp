@@ -20,8 +20,7 @@
         if(KeyboardMouseEvents.type == SDL_QUIT)
             return false;
 
-		state->handleKeyboardMouseEvents(KeyboardMouseEvents);
-        return true;
+		return state->handleKeyboardMouseEvents(KeyboardMouseEvents);
     }
 
     void Game::handleXboxEvents(int player,XboxController* controller)

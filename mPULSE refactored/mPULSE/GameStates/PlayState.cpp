@@ -37,18 +37,46 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
          {
             SDLKey keyPressed = KeyboardMouseEvents.key.keysym.sym;
 
-            if (keyPressed == SDLK_RETURN)
+            if (keyPressed == SDLK_BACKSPACE)
             {
+                renderingEngine->aConsole.consoleString = renderingEngine->aConsole.consoleString.substr(0, renderingEngine->aConsole.consoleString.size() - 1);
+            }
+            else if (keyPressed == SDLK_RETURN)
+            {
+                //process command
+
+                //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")
                 {renderingEngine->aConsole.consoleString = "Number of elements in cars: " + renderingEngine->FloatToString(cars.size());}
 
                 if (renderingEngine->aConsole.consoleString == "num actors")
                 {renderingEngine->aConsole.consoleString = "Number of actors in scene: " + renderingEngine->FloatToString(physicsEngine->getScene()->getNbActors());}
-                //process command
-                //renderingEngine->aConsole
-                
-                renderingEngine->aConsole.propragateMsg();
 
+                if (renderingEngine->aConsole.consoleString == "num debugphysic")
+                {
+                    renderingEngine->aConsole.consoleString = "Number of Lines in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbLines());
+                    renderingEngine->aConsole.propragateMsg();
+                    renderingEngine->aConsole.consoleString = "Number of Points in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbPoints());
+                    renderingEngine->aConsole.propragateMsg();
+                    renderingEngine->aConsole.consoleString = "Number of Triangles in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbTriangles());
+                }
+                
+                //tog Commands
+                if (renderingEngine->aConsole.consoleString == "tog debugphysic")
+                {
+                    if (renderingEngine->debugPhysX){renderingEngine->debugPhysX=false;}else{renderingEngine->debugPhysX=true;}; 
+                }
+
+                
+                //master Commands
+                if (renderingEngine->aConsole.consoleString == "quit")
+                {
+                    renderingEngine->aConsole.consoleString = "Trying to Quit...";
+                    return false;
+                }
+
+
+                renderingEngine->aConsole.propragateMsg();
 
             }
             else if ((keyPressed >= SDLK_SPACE) && (keyPressed <= SDLK_z ))
