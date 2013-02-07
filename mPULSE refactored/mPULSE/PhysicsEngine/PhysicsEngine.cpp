@@ -21,13 +21,13 @@ void PhysicsEngine::sceneSetup()
 {
 	NxSceneDesc sceneDesc;
 	sceneDesc.simType = NX_SIMULATION_SW;
-	NxVec3 defaultGravity(0,-9.8,0);
+	NxVec3 defaultGravity(0,-9.8f*(10.0f),0);
 	sceneDesc.gravity = defaultGravity;
 	scene = physicsSDK->createScene(sceneDesc);
 
 	//Create the default material
 	NxMaterial* defaultMaterial = scene->getMaterialFromIndex(0);
-	defaultMaterial->setRestitution(0.5);
+	//defaultMaterial->setRestitution(0.5);
 	defaultMaterial->setStaticFriction(0.5);
 	defaultMaterial->setDynamicFriction(0.5);
 
