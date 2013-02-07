@@ -22,13 +22,12 @@ public:
     PhysicsEngine();
 	static PhysicsEngine* getInstance();
 	void sceneSetup();
-    void simulate(float dt, Physics* physData);
+    void step();//float dt, Physics* physData);
 
 	NxVec3 ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength);
 	NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);
 	NxActor* createGroundPlane();
 	NxActor* createBox();
-	void startPhysics();
 
 	NxScene* getScene();
 };

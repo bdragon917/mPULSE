@@ -16,14 +16,13 @@ PlayState::PlayState()
 void PlayState::update(float dt)
 {    
     curFPS = (1000/dt);
-    physicsEngine->startPhysics();
+    physicsEngine->step();
 }
 
 void PlayState::render()
 {
     //renderingEngine->Render(&cars[0]->getAppearance())	
 	//renderingEngine->drawTest(curFPS);
-	physicsEngine->startPhysics();
 	NxScene* scene = physicsEngine->getScene();
 	renderingEngine->drawScene(scene);
 }

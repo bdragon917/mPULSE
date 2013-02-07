@@ -809,10 +809,10 @@ void RenderingEngine::drawScene(NxScene* scene)
 
 			// Render all actors
 	int nbActors = scene->getNbActors();
+	//printf("Number of actors: %i", nbActors);
 	NxActor** actors = scene->getActors();
 	while(nbActors--)
 	{
-		//printf("Hello!");
 		NxActor* actor = *actors++;
 		//if(!actor->userData) continue;
 
@@ -820,18 +820,15 @@ void RenderingEngine::drawScene(NxScene* scene)
 
 		// Render actor
 		glPushMatrix();
-		printf("X Position: %f", actor->getGlobalPosition().x);
-		printf("  Y Position: %f", actor->getGlobalPosition().y);
-		printf("  Z Position: %f\n", actor->getGlobalPosition().z);
+
 		actor->getGlobalPose().getColumnMajor44(glMat);
 		
 		glMultMatrixf(glMat);
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+
+		drawCube(0,0,0, 0.5f*2.0f);
 		glPopMatrix();
-
-		drawCube(0, 0, 0, 0.5f*2.0f);
-
+/*
 		// Render shadow
 		glPushMatrix();
 		const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
@@ -844,6 +841,7 @@ void RenderingEngine::drawScene(NxScene* scene)
 
 		glEnable(GL_LIGHTING);
 		glPopMatrix();
+*/
 	}
 
      if (!(aShader == NULL))

@@ -2,7 +2,7 @@
 
 PhysicsEngine::PhysicsEngine()
 {
-	deltaTime = 1.0/60.0;
+	deltaTime = 1.0f/60.0f;
 	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
 	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01);
 
@@ -36,9 +36,11 @@ void PhysicsEngine::sceneSetup()
 }
 
 
-void PhysicsEngine::simulate(float dt, Physics* physData)
+void PhysicsEngine::step()//float dt, Physics* physData)
 {
-
+	scene->simulate(deltaTime);
+	scene->flushStream();
+	scene->fetchResults(NX_RIGID_BODY_FINISHED, true);
 }
 
 
@@ -70,33 +72,27 @@ NxActor* PhysicsEngine::createGroundPlane()
 NxActor* PhysicsEngine::createBox() 
 {
 	//Set the box starting height
-	NxReal boxStartHeight = 3.5;
+	NxVec3 position(0.0, 3.5, 0.0);
 
 	//Add single shape actor to the scene
-	NxActorDesc actorDesc;
 	NxBodyDesc bodyDesc;
+	bodyDesc.angularDamping	= 0.5f;
 
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions.set(0.5,0.5,0.5);
-	boxDesc.localPose.t = NxVec3(0,0,0);
-	actorDesc.shapes.pushBack(&boxDesc);
+	//boxDesc.localPose.t = position;
 
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&boxDesc);
 	actorDesc.body = &bodyDesc;
 	actorDesc.density = 10.0f;
-	actorDesc.globalPose.t = NxVec3(0,boxStartHeight,0);
-	assert(actorDesc.isValid());
+	actorDesc.globalPose.t = position;
+
 	NxActor *actor = scene->createActor(actorDesc);
-	assert(actor);
+	actor->userData = (void*)size_t(0.5f);
 
 	return actor;
-}
-
-
-void PhysicsEngine::startPhysics()
-{
-	scene->simulate(deltaTime);
-	scene->flushStream();
 }
 
 

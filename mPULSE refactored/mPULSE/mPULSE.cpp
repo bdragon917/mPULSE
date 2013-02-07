@@ -44,13 +44,13 @@ int main(int argc, char *argv[])
         }
 
         //physics simulations
-			game.update(deltaTime);
+		game.update(deltaTime);
 
 		//Updates game's FPS info
 		game.curFPS = (1000/deltaTime);
 
         //openGL calls
-			game.render(); 
+		game.render(); 
          
 
         //Display to screen
