@@ -17,7 +17,7 @@ public:
     void render();
 
     bool handleKeyboardMouseEvents(SDL_Event& KeyboardMouseState);
-    void handleXboxEvents(int player,XINPUT_STATE* state);
+    void handleXboxEvents(int player,XboxController* controller);
     void checkStateChange();
 
 	float curFPS;		//Used by mPULSE to rely fps info to renderer

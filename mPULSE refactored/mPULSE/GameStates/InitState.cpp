@@ -25,6 +25,11 @@ bool InitState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
     return true;
 }
 
+void InitState::handleXboxEvents(int player,XboxController* state)
+{
+
+}
+
 InitState* InitState::getInstance()
 {
     printf("init state\n");

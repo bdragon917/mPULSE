@@ -24,9 +24,12 @@
         return true;
     }
 
-    void Game::handleXboxEvents(int player,XINPUT_STATE* state)
+    void Game::handleXboxEvents(int player,XboxController* controller)
     {
-
+        if(controller->a)
+        {
+            printf("player pressed a");
+        }
     }
 
     void Game::checkStateChange()
@@ -40,10 +43,10 @@
             stateType = tmpType;
             switch(stateType)
             {
-            case GameState::StateType::INIT:
+            case GameState::INIT:
                 state = InitState::getInstance();                
                 break;
-            case GameState::StateType::PLAY:
+            case GameState::PLAY:
                 state = PlayState::getInstance();                
                 break;
             }

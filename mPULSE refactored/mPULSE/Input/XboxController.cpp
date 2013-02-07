@@ -98,3 +98,89 @@ XboxController::analogInfo XboxController::calculateAnalogInfo(XINPUT_STATE cons
     
     return info;
 }
+
+void XboxController::update()
+{    
+    if(getState(&state))
+    {                
+        //D-PAD Button checks
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)
+            dpadUp = true;
+        else
+            dpadUp = false;
+
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
+            dpadDown = true;
+        else
+            dpadDown = false;
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)
+            dpadLeft = true;
+        else
+            dpadLeft = false;
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)
+            dpadRight = true;
+        else
+            dpadRight = false;
+                             
+        //A,B,X,Y Button Checks
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A)
+            a = true;
+        else
+            a = false;                 
+                
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B)
+            b = true;
+        else
+            b = false;                 
+				
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_X)
+            x = true;
+        else
+            x = false;                 
+
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_Y)
+            y = true;
+        else
+            y = false;                 
+
+        //Shoulder Button Checks
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)
+            lb = true;
+        else
+            lb = false;                 
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)
+            rb = true;
+        else
+            rb = false;                 
+
+        //Misc button checks
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_START)
+            start = true;
+        else
+            start = false;                 
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_BACK)
+            back = true;
+        else
+            back = false;                 
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB)
+            ls = true;
+        else
+            ls = false;                 
+        if (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB)
+            rs = true;
+        else
+            rs = false;                 
+                
+        rightStick = calculateAnalogInfo(state, LEFT_STICK);
+        leftStick = calculateAnalogInfo(state, RIGHT_STICK);
+
+        if(leftStick.magnitude > 0)
+            printf("Left Thumb x %f y %f mag %f\n",leftStick.x,leftStick.y,leftStick.magnitude);
+
+        if(rightStick.magnitude > 0)
+            printf("right Thumb x %f y %f mag %f\n",rightStick.x,rightStick.y,rightStick.magnitude);
+
+        lTrigger = state.Gamepad.bLeftTrigger;
+        rTrigger = state.Gamepad.bRightTrigger;                    
+    }
+}

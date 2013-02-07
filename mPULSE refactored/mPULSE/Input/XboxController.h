@@ -56,11 +56,14 @@ public:
     *param: stick: An enumerated type indicating which stick to calculate for.
     */
     analogInfo calculateAnalogInfo(XINPUT_STATE const &state, analogType stick);
+    void update();
 
     static const int MAX_VIB = 65535;
     static const int MAX_STICK_MAG = 24000; 
     static const int MAX_TRIGGER_MAG = 255;    
-
+    bool a,b,x,y,rb,lb,rs,ls,start,back,dpadUp,dpadLeft,dpadRight,dpadDown;
+    analogInfo leftStick, rightStick;
+    int lTrigger, rTrigger;
 private:    
     XINPUT_STATE state;
     int controllerIndex;

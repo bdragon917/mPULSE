@@ -14,6 +14,7 @@ public:
     void update(float dt);
     void render();
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);
+    void handleXboxEvents(int player,XboxController* state);
 
 private:
     PlayState();

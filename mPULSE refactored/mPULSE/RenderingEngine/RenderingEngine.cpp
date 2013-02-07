@@ -10,12 +10,6 @@ RenderingEngine::RenderingEngine()
 	createLight();
 	initializeGL();
 
-
-
-
-
-
-
     testVal = 0.0f;
 
 }
@@ -153,7 +147,7 @@ glLoadIdentity();
     //glRasterPos2i(10,10);     //not important i guess??
 
 
-     for (int i=0; i < s.size(); i++)
+     for (unsigned int i=0; i < s.size(); i++)
     {
         glutStrokeCharacter(GLUT_STROKE_ROMAN, s[i]);
     }
@@ -315,7 +309,7 @@ void RenderingEngine::initializeGL()
 
     int err = glewInit();               //Needs a window to execute successfully
 	
-    if (err == GLEW_OK)
+   if (err == GLEW_OK)
 		{printf("glewInit is successful!\n");aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");}
     else
     {fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
@@ -809,10 +803,10 @@ void RenderingEngine::drawScene(NxScene* scene)
 
 			// Render all actors
 	int nbActors = scene->getNbActors();
-	//printf("Number of actors: %i", nbActors);
 	NxActor** actors = scene->getActors();
 	while(nbActors--)
 	{
+		//printf("Hello!");
 		NxActor* actor = *actors++;
 		//if(!actor->userData) continue;
 
@@ -825,8 +819,11 @@ void RenderingEngine::drawScene(NxScene* scene)
 		
 		glMultMatrixf(glMat);
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		//drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
+		glPopMatrix();
 
-		drawCube(0,0,0, 0.5f*2.0f);
+		drawCube(0, 0, 0, 0.5f*2.0f);
+
 		glPopMatrix();
 /*
 		// Render shadow

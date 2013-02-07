@@ -6,7 +6,7 @@ PlayState::PlayState()
     changeState(PLAY);    
     cars.push_back(new Entity);
     //cars.addAppearance(new Appearance("some appearance data"))
-    //cars.addPhysics(new Appearance("some physics data"))
+    //cars.addPhysics(new PhysicsData("some physics data"))
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
@@ -30,6 +30,11 @@ void PlayState::render()
 bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
     return true;
+}
+
+void PlayState::handleXboxEvents(int player,XboxController* state)
+{
+
 }
 
 PlayState* PlayState::getInstance()
