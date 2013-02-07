@@ -171,14 +171,8 @@ void XboxController::update()
         else
             rs = false;                 
                 
-        rightStick = calculateAnalogInfo(state, LEFT_STICK);
-        leftStick = calculateAnalogInfo(state, RIGHT_STICK);
-
-        if(leftStick.magnitude > 0)
-            printf("Left Thumb x %f y %f mag %f\n",leftStick.x,leftStick.y,leftStick.magnitude);
-
-        if(rightStick.magnitude > 0)
-            printf("right Thumb x %f y %f mag %f\n",rightStick.x,rightStick.y,rightStick.magnitude);
+        rightStick = calculateAnalogInfo(state, RIGHT_STICK);
+        leftStick = calculateAnalogInfo(state, LEFT_STICK);
 
         lTrigger = state.Gamepad.bLeftTrigger;
         rTrigger = state.Gamepad.bRightTrigger;                    

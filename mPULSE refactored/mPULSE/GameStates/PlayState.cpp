@@ -57,9 +57,9 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
-	if(state->leftStick.magnitude > 0) {
-		physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->leftStick.magnitude*5);
-	} else if(state->lb == true) {
+	
+    physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->rTrigger*250);
+	if(state->lb) {
 		physicsEngine->resetBox();
 	}
 }
