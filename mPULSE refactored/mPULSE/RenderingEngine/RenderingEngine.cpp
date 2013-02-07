@@ -147,7 +147,7 @@ glLoadIdentity();
     //glRasterPos2i(10,10);     //not important i guess??
 
 
-     for (int i=0; i < s.size(); i++)
+     for (unsigned int i=0; i < s.size(); i++)
     {
         glutStrokeCharacter(GLUT_STROKE_ROMAN, s[i]);
     }
@@ -307,13 +307,13 @@ void RenderingEngine::initializeGL()
     
     initializeTexture();
 
-    //int err = glewInit();               //Needs a window to execute successfully
+    int err = glewInit();               //Needs a window to execute successfully
 	
-   // if (err == GLEW_OK)
-	//	{printf("glewInit is successful!\n");aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");}
-    //else
-    //{fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
-    //}
+   if (err == GLEW_OK)
+		{printf("glewInit is successful!\n");aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");}
+    else
+    {fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
+    }
     
     
     
@@ -814,9 +814,9 @@ void RenderingEngine::drawScene(NxScene* scene)
 
 		// Render actor
 		glPushMatrix();
-		printf("X Position: %f", actor->getGlobalPosition().x);
-		printf("  Y Position: %f", actor->getGlobalPosition().y);
-		printf("  Z Position: %f\n", actor->getGlobalPosition().z);
+		//printf("X Position: %f", actor->getGlobalPosition().x);
+		//printf("  Y Position: %f", actor->getGlobalPosition().y);
+		//printf("  Z Position: %f\n", actor->getGlobalPosition().z);
 		actor->getGlobalPose().getColumnMajor44(glMat);
 		
 		glMultMatrixf(glMat);

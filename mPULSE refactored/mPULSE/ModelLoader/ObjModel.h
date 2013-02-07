@@ -8,15 +8,15 @@ public:
     
     typedef struct
     {
-        float x;
-        float y;
-        float z;
+        double x;
+        double y;
+        double z;
     } vertex3d;
 
     typedef struct
     {
-        float x;
-        float y;        
+        double x;
+        double y;        
     } vertex2d;
 
     typedef struct
@@ -27,11 +27,11 @@ public:
     } vertElements;
 
     ObjModel(int ind);
-    void addVertexV(std::vector<float> textureVertex);
-    void addVertexVT(std::vector<float> textureVertex);
-    void addVertexVN(std::vector<float> vertexNormal);
-    void addPointP(std::vector<float> point);
-    void addLineL(std::vector<float> line);
+    void addVertexV(std::vector<double> textureVertex);
+    void addVertexVT(std::vector<double> textureVertex);
+    void addVertexVN(std::vector<double> vertexNormal);
+    void addPointP(std::vector<double> point);
+    void addLineL(std::vector<double> line);
     void addFaceF(std::vector<std::vector<int>> face);
     void finalize();
 

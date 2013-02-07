@@ -14,7 +14,7 @@ public:
     int LoadModel(std::string fileName);
     void parseLine(std::string line,ObjModel* model);
     ObjModel* getModel(int handle); //FIXME: return a const reference?
-    std::vector<float> parseFloats(std::string line, int startIndex);
+    std::vector<double> parseFloats(std::string line, int startIndex);
     std::vector<std::vector<int>> parseFaceElements(std::string line, int startIndex);
 
 private:

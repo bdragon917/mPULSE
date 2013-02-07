@@ -23,7 +23,7 @@
 	    }
 	    file.close();
 
-        for(int i=0;i<modelFileNames.size();i++)
+        for(unsigned int i=0;i<modelFileNames.size();i++)
             LoadModel(modelFileNames[i]);
     }
 
@@ -57,8 +57,8 @@
     void ModelManager::parseLine(std::string lineString, ObjModel* model)
     {	
         std::string heading = "";
-	    int i = 0;
-        int j = 0;
+	    unsigned int i = 0;
+        unsigned int j = 0;
 	    int startFlag = 0;
         char ch = '\0';
 	    bool parsing = true;
@@ -79,7 +79,7 @@
                 startFlag = i;
             }
 
-            if(ch == '\n' | ch == '\0')
+            if(ch == '\n' || ch == '\0')
                 parsing = false;
 
             i++;
@@ -90,19 +90,19 @@
         
         if(heading.compare("v") == 0) 
         {
-            std::vector<float> vertex = parseFloats(lineString,i);
+            std::vector<double> vertex = parseFloats(lineString,i);
             model->addVertexV(vertex);            
         }
         // texture vertices 
         else if(heading.compare("vt") == 0)
         {
-            std::vector<float> vertex = parseFloats(lineString,i);
+            std::vector<double> vertex = parseFloats(lineString,i);
             model->addVertexVT(vertex);
         }
         // vertex normals
         else if(heading.compare("vn") == 0) 
         {
-            std::vector<float> vertex = parseFloats(lineString,i);
+            std::vector<double> vertex = parseFloats(lineString,i);
             model->addVertexVN(vertex);
         }
         // parameter space vertices
@@ -283,17 +283,17 @@
             
     }
 
-    std::vector<float> ModelManager::parseFloats(std::string line, int startIndex)
+    std::vector<double> ModelManager::parseFloats(std::string line, int startIndex)
     {
-        int i = startIndex;
-        int j = 0;
+        unsigned int i = startIndex;
+        unsigned int j = 0;
         int startFlag = startIndex;
         char ch = '\0';
         bool parsing = true;
         bool startSeen = false;
         bool exponentSeen = false;         
 
-        std::vector<float> vertex(3);
+        std::vector<double> vertex(3);
         while((parsing || j < 4) && i < line.size())
 	    {
             ch = line.at(i);
@@ -333,8 +333,8 @@
 
     std::vector<std::vector<int>> ModelManager::parseFaceElements(std::string line, int startIndex)
     {
-        int i = startIndex;
-        int j = 0;
+        unsigned int i = startIndex;
+        unsigned int j = 0;
         int startFlag = startIndex;
         char ch = '\0';
         bool parsing = true;

@@ -6,7 +6,7 @@ ObjModel::ObjModel(int ind)
     index = ind;
 }
 
-void ObjModel::addVertexV(std::vector<float> geometricVertex)
+void ObjModel::addVertexV(std::vector<double> geometricVertex)
 {    
     vertex3d vert;
     vert.x = geometricVertex[0];
@@ -15,7 +15,7 @@ void ObjModel::addVertexV(std::vector<float> geometricVertex)
     v.push_back(vert);
 }
 
-void ObjModel::addVertexVT(std::vector<float> textureVertex)
+void ObjModel::addVertexVT(std::vector<double> textureVertex)
 {
     vertex2d vert;
     vert.x = textureVertex[0];
@@ -23,7 +23,7 @@ void ObjModel::addVertexVT(std::vector<float> textureVertex)
     vt.push_back(vert);
 }    
 
-void ObjModel::addVertexVN(std::vector<float> vertexNormal)
+void ObjModel::addVertexVN(std::vector<double> vertexNormal)
 {
     vertex3d vert;
     vert.x = vertexNormal[0];
@@ -32,12 +32,12 @@ void ObjModel::addVertexVN(std::vector<float> vertexNormal)
     vn.push_back(vert);
 }    
 
-void ObjModel::addPointP(std::vector<float> point)
+void ObjModel::addPointP(std::vector<double> point)
 {
 
 }
 
-void ObjModel::addLineL(std::vector<float> line)
+void ObjModel::addLineL(std::vector<double> line)
 {
 
 }
@@ -53,7 +53,7 @@ void ObjModel::addFaceF(std::vector<std::vector<int>> face)
 
     for(unsigned int i=0;i<face.size();i++)
     {   
-        for(int j=0;j<face[i].size();j++)
+        for(unsigned int j=0;j<face[i].size();j++)
         {
             if(j==0)
                 vertexE.vertIndex = face[i][j];
