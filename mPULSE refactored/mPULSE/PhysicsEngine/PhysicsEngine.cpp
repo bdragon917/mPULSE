@@ -17,7 +17,7 @@ void PhysicsEngine::sceneSetup()
 {
 	deltaTime = 1.0f/60.0f;
 	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
-	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01);
+	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01f);
 
 	NxSceneDesc sceneDesc;
 	sceneDesc.simType = NX_SIMULATION_SW;
