@@ -35,7 +35,7 @@ float zRot;
 int SCREEN_WIDTH;
 int SCREEN_HEIGHT;
 ///Custom Draw Functions
-void prints(string s);
+void prints(float inX, float inY, string s);
 void drawCube(float x, float y, float z, float size);
 void initializeGL();
 void createLight();
@@ -51,6 +51,8 @@ int drawIntro2();
 void moveStuff(float &testF);
 void drawScene(NxScene* scene);
 
+
+
     Shader* aShader;
 private:
     RenderingEngine();
@@ -62,6 +64,11 @@ private:
 
     void drawGroundPlane();
     void drawCheckerBoard(float x, float y);
+
+    //Console Variables
+    bool displayConsole;
+
+
 
     //Texture Stuff
     GLuint textureid_P1;

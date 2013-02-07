@@ -3,6 +3,11 @@
 
 RenderingEngine::RenderingEngine()
 {
+    displayConsole = false;
+//    consoleString = "";
+    
+    
+    
     zRot = 0.0f;
     SCREEN_WIDTH = 640;
     SCREEN_HEIGHT = 480;
@@ -115,17 +120,17 @@ string RenderingEngine::FloatToString(float input)
 /**
 *	This draws a string on screen
 **/
-void RenderingEngine::prints(string s)
+void RenderingEngine::prints(float inX, float inY, string s)
 {
+    glRasterPos3f(0.0f ,0.0f , 0.0f);
+    glDisable(GL_LIGHTING);
 
-     glDisable(GL_LIGHTING);
-
-glMatrixMode(GL_PROJECTION);
-glLoadIdentity();
-gluPerspective(70, 1, 1, 100);
-glMatrixMode(GL_MODELVIEW);
-glLoadIdentity();
-//gluLookAt(2, 2, 10, 2, 0, 0, 0, 1, 0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(70, 1, 1, 100);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    //gluLookAt(2, 2, 10, 2, 0, 0, 0, 1, 0);
 
     //(x,y) is from the bottom left of the window
 ///**
@@ -141,8 +146,8 @@ glLoadIdentity();
 
     glScalef(0.1, 0.1, 0.1);
 
-    float x = 10;
-    float y = SCREEN_HEIGHT - 20;
+    float x = 10 + inX;
+    float y = SCREEN_HEIGHT - 20 + inY;
     glTranslatef(x*10.0f, y*10.0f, 0.0f);
     //glRasterPos2i(10,10);     //not important i guess??
 
@@ -584,7 +589,7 @@ void RenderingEngine::draw(){
 
 	 //glRasterPos3f(0.0f ,0.0f , 0.0f);
 	 glColor3f(1.0f,1.0f,1.0f);
-	 prints("LETE THERE BE TEXT!!!!!!!!! %i \n DALKJDSLJDKLASDJSKj");
+	 prints(0, 0, "LETE THERE BE TEXT!!!!!!!!! %i \n DALKJDSLJDKLASDJSKj");
 
 	 /**
 	 glRasterPos2i(300,0);
@@ -729,7 +734,7 @@ void RenderingEngine::drawTest(float deltaTime)
      string disStr = "Current FPS: " + FloatToString(deltaTime) + " Shader:" + shaded;
 
     
-	 prints(disStr);
+	 prints(0, 0, disStr);
 
 
 		glEnable(GL_LIGHTING);
@@ -862,13 +867,24 @@ void RenderingEngine::drawScene(NxScene* scene)
 */
 	}
 
+
+    //if debug
+    //scene->getDebugRenderable()   //This provides points, lines and triangles for debugging the scene!!!! Should be implimented
+
      if (!(aShader == NULL))
      {aShader->off();}
 
 
-	 //glRasterPos3f(0.0f ,0.0f , 0.0f);
 	 glColor3f(1.0f,1.0f,1.0f);
 
+     //prints(0,  0,      consoleOut[5]);
+     //prints(0,  -20,    consoleOut[4]);
+     //prints(0,  -40,    consoleOut[3]);
+     //prints(0,  -60,    consoleOut[2]);
+     //prints(0,  -80,    consoleOut[1]);
+     //prints(0,  -100,    consoleOut[0]);
+     //prints(0,  -140,    consoleString);
+     //prints(0,  -200,      debugOut);
 
 
 	glEnable(GL_LIGHTING);

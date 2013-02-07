@@ -29,6 +29,25 @@ void PlayState::render()
 
 bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
+
+
+    //Console implimentation
+        if (KeyboardMouseEvents.type == SDL_KEYDOWN)
+         {
+            SDLKey keyPressed = KeyboardMouseEvents.key.keysym.sym;
+
+            if (keyPressed == SDLK_RETURN)
+            {
+                //process command
+//                renderingEngine->consoleString = "";
+            }
+            else
+            {
+                char c = keyPressed;
+ //              renderingEngine->consoleString = renderingEngine->consoleString + c;
+            }
+         }
+    
     return true;
 }
 
