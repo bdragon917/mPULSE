@@ -3,7 +3,7 @@
 
 RenderingEngine::RenderingEngine()
 {
-    displayConsole = false;
+    showConsole = true;
 //    consoleString = "";
     
     
@@ -335,6 +335,20 @@ void RenderingEngine::drawCube(float x, float y, float z, float size)
 }
 ///
 
+void RenderingEngine::displayConsole()
+{
+
+    	 glColor3f(1.0f,1.0f,1.0f);
+
+     prints(0,  0,      aConsole.consoleOut[5]);
+     prints(0,  -20,    aConsole.consoleOut[4]);
+     prints(0,  -40,    aConsole.consoleOut[3]);
+     prints(0,  -60,    aConsole.consoleOut[2]);
+     prints(0,  -80,    aConsole.consoleOut[1]);
+     prints(0,  -100,   aConsole.consoleOut[0]);
+     prints(0,  -140,   aConsole.consoleString);
+     //prints(0,  -200,   debugOut);
+}
 
 
 
@@ -875,16 +889,8 @@ void RenderingEngine::drawScene(NxScene* scene)
      {aShader->off();}
 
 
-	 glColor3f(1.0f,1.0f,1.0f);
-
-     //prints(0,  0,      consoleOut[5]);
-     //prints(0,  -20,    consoleOut[4]);
-     //prints(0,  -40,    consoleOut[3]);
-     //prints(0,  -60,    consoleOut[2]);
-     //prints(0,  -80,    consoleOut[1]);
-     //prints(0,  -100,    consoleOut[0]);
-     //prints(0,  -140,    consoleString);
-     //prints(0,  -200,      debugOut);
+    if (showConsole)
+    {displayConsole();}
 
 
 	glEnable(GL_LIGHTING);

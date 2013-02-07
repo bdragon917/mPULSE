@@ -102,7 +102,7 @@
     <ClCompile Include="RenderingEngine\Shader.cpp">
       <Filter>Source Files\RenderingEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Console.cpp">
+    <ClCompile Include="GameStates\Console.cpp">
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
   </ItemGroup>
@@ -152,7 +152,7 @@
     <ClInclude Include="RenderingEngine\BMP.h">
       <Filter>Header Files\RenderingEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Console.h">
+    <ClInclude Include="GameStates\Console.h">
       <Filter>Header Files\GameStates</Filter>
     </ClInclude>
   </ItemGroup>

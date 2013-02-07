@@ -24,6 +24,7 @@
 #include <NxPhysics.h>
 
 #include "BMP.h"
+#include "..\GameStates\Console.h"
 
 
 class RenderingEngine
@@ -51,7 +52,7 @@ int drawIntro2();
 void moveStuff(float &testF);
 void drawScene(NxScene* scene);
 
-
+    Console aConsole;
 
     Shader* aShader;
 private:
@@ -66,7 +67,8 @@ private:
     void drawCheckerBoard(float x, float y);
 
     //Console Variables
-    bool displayConsole;
+    bool showConsole;
+    void displayConsole();
 
 
 

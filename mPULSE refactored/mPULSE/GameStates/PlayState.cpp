@@ -39,12 +39,16 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             if (keyPressed == SDLK_RETURN)
             {
                 //process command
-//                renderingEngine->consoleString = "";
+                //renderingEngine->aConsole
+                
+                renderingEngine->aConsole.propragateMsg();
+
+
             }
-            else
+            else if ((keyPressed >= SDLK_SPACE) && (keyPressed <= SDLK_z ))
             {
                 char c = keyPressed;
- //              renderingEngine->consoleString = renderingEngine->consoleString + c;
+                renderingEngine->aConsole.consoleString = renderingEngine->aConsole.consoleString + c;
             }
          }
     
