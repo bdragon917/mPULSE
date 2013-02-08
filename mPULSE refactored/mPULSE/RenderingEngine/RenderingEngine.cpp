@@ -363,8 +363,9 @@ void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
             float green = (color >> 8) & 255;
             float red = (color >> 16) & 255;
 
-            glBegin(GL_LINE);
+            glBegin(GL_LINES);
             glColor3f(red, green, blue);
+            //glColor3f(1.0f, 1.0f, 1.0f);
             glVertex3f(nxDebugLines->p0.x, nxDebugLines->p0.y, nxDebugLines->p0.z);
             glVertex3f(nxDebugLines->p1.x, nxDebugLines->p1.y, nxDebugLines->p1.z);
             glEnd();
@@ -906,11 +907,11 @@ void RenderingEngine::drawScene(NxScene* scene)
 	//Scene transformations
 	//glRotatef (testVal, 0, 0, 1);	///////				//The objects will rotate about the z-axis
 	
-    if (debugPhysX) //If debugPhyX then
-    {
-         RenderDebugPhysic(scene->getDebugRenderable());
-    }
-    else    //draw normally
+    //if (debugPhysX) //If debugPhyX then
+   // {
+   //      RenderDebugPhysic(scene->getDebugRenderable());
+    //}
+    //else    //draw normally
     {
 
 
@@ -953,6 +954,13 @@ void RenderingEngine::drawScene(NxScene* scene)
 		    drawCube(0, 0, 0, 0.5f*2.0f);
 
 		    glPopMatrix();
+
+
+
+            if (debugPhysX) //If debugPhyX then
+            {
+                 RenderDebugPhysic(scene->getDebugRenderable());
+            }
     /*
 		    // Render shadow
 		    glPushMatrix();

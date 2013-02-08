@@ -18,6 +18,14 @@ void PhysicsEngine::setupPlayScene(vector<Entity*> cars)
 	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
 	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01f);
 
+    physicsSDK->setParameter(NX_VISUALIZATION_SCALE, 1);
+    physicsSDK->setParameter(NX_VISUALIZE_BODY_ANG_VELOCITY, 1);
+    physicsSDK->setParameter(NX_VISUALIZE_BODY_LIN_VELOCITY, 1);
+    physicsSDK->setParameter(NX_VISUALIZE_ACTIVE_VERTICES, 1);
+    physicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES, 1);
+    physicsSDK->setParameter(NX_VISUALIZE_CONTACT_NORMAL, 1);
+    physicsSDK->setParameter(NX_VISUALIZATION_SCALE, 1);
+
 	NxSceneDesc sceneDesc;
 	sceneDesc.simType = NX_SIMULATION_SW;
 	NxVec3 defaultGravity(0,-9.8f*(10.0f),0);
