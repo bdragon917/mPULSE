@@ -17,3 +17,8 @@ void Console::propragateMsg()
 
     consoleString = "";
 }
+
+void Console::goUp()
+{
+        consoleString = consoleOut[0];
+}

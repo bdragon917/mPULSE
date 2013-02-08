@@ -17,7 +17,7 @@ public:
         std::string consoleOut[5];
 
         void propragateMsg();
-
+        void goUp();
 private:
 
 

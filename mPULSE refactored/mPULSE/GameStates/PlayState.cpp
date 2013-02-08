@@ -5,10 +5,9 @@ PlayState::PlayState()
 {
     changeState(PLAY);    
     cars.push_back(new Entity);
-    //cars.addAppearance(new Appearance("some appearance data"))
-    //cars.addPhysics(new PhysicsData("some physics data"))
+
     physicsEngine = PhysicsEngine::getInstance();
-    physicsEngine->setupPlayScene(cars,  theCar);
+    physicsEngine->setupPlayScene(&cars);
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
     curFPS = 0.0f;
@@ -89,6 +88,8 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 renderingEngine->aConsole.propragateMsg();
 
             }
+            else if(keyPressed == SDLK_UP)
+                renderingEngine->aConsole.goUp();
             else if ((keyPressed >= SDLK_SPACE) && (keyPressed <= SDLK_z ))
             {
                 char c = keyPressed;
@@ -105,21 +106,21 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     //physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->rTrigger*25000);
 
     float trig = state->rTrigger*25000.0f;
-    NxVec3 v3 = NxVec3(0, 25000.0f,0);
+    NxVec3 v3 = NxVec3(0, 250000.0f,0);
     NxVec3 v0 = NxVec3(0, 0,0);
 
 
-    //PROBLEM IS THAT ENTITY DOESN"T ACTUALLY HAVE A POINTER TO THE CAR!!!!!!
+    //PROBLEM IS THAT ENTITY DOESN"T ACTUALLY HAVE A POINTER TO THE CAR!!!!!! - fixed
     //
     //theCar is another variable used to transmit the point, but this doesn't work (can delete this)
     //
     //The cars and theCar should have pointers added in setupPlayScene in physicsEngine.cpp
     if (state->a)
     {
-        if (!(theCar->aWheel1 ==NULL))
-        {theCar->aWheel1->getActor().addTorque(v3);}
+        if (!(cars[0]->aWheel1 == NULL))
+            cars[0]->aWheel1->getActor().addTorque(v3);
         else
-        {printf("NULL WHEEL0 at Cars[0]\n");}
+            printf("NULL WHEEL0 at Cars[0]\n");
     }
 
     if (state->b)

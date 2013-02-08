@@ -12,8 +12,9 @@ PhysicsEngine* PhysicsEngine::getInstance()
     return &physics;
 }
 
-void PhysicsEngine::setupPlayScene(vector<Entity*> cars, Entity* theCar)
+void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 {
+    std::vector<Entity*>* tmpCars =  cars;
 	deltaTime = 1.0f/60.0f;
 	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
 	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01f);
@@ -44,24 +45,19 @@ void PhysicsEngine::setupPlayScene(vector<Entity*> cars, Entity* theCar)
     NxActor* box = createCarChassis();              //create a Chassis
     NxWheelShape* wheel = AddWheelToActor(box);     //Create a wheel, and attach it to the Chassis
 
-    Entity entityCar1;
-    EntityComponent ec_car;
-    ec_car.setActor(box);
-    entityCar1.setWheel1(wheel);
+    Entity* entityCar1 = new Entity();    
+    EntityComponent* ec_car = new EntityComponent();
+    ec_car->setActor(box);
+    entityCar1->setWheel1(wheel);
 
    // wheel->getActor().addTorque(NxVec3(0,10000000000.0f,0));
    // entityCar1.aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
     int a = 1;
 
    // entityCar1.components.push_back( &ec_car );
-    entityCar1.addComponent( &ec_car );
-
-    theCar = &entityCar1;
-
-    cars.at(0) = &entityCar1;
-    //cars.push_back( &entityCar1 );
-
-    cars.at(0)->aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
+    entityCar1->addComponent( ec_car );    
+    tmpCars->at(0) = entityCar1;    
+    tmpCars->at(0)->aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
 }
 
 void PhysicsEngine::sceneSetup()
