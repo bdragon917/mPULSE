@@ -52,6 +52,9 @@ void drawTest(float deltaTime);
 int drawIntro2();
 void moveStuff(float &testF);
 void drawScene(NxScene* scene);
+void drawActor(NxActor* actor);
+void drawShape(NxShape* shape);
+void drawBox(NxBoxShape* box);
 
     Console aConsole;
 

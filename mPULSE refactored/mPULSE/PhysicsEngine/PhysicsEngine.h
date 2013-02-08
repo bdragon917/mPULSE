@@ -9,7 +9,7 @@
 #include "../Entities/Entity.h"
 
 #include <vector>
-#include "NxWheelDesc.h"
+//#include "NxWheelDesc.h"
 
 using std::vector;
 
@@ -39,7 +39,7 @@ public:
 	NxActor* createGroundPlane();
 	NxActor* createBox();
     NxActor* createCarChassis();
-    NxWheelShape* AddWheelToActor(NxActor* actor, NxWheelDesc* wheelDesc);
+//    NxWheelShape* AddWheelToActor(NxActor* actor, NxWheelDesc* wheelDesc);
     void resetBox();
 
 	NxScene* getScene();

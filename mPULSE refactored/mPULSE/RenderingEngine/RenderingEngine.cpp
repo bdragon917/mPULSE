@@ -896,7 +896,6 @@ int RenderingEngine::drawIntro2()
 
 void RenderingEngine::drawScene(NxScene* scene)
 {
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glPushMatrix ();			////////
@@ -910,19 +909,13 @@ void RenderingEngine::drawScene(NxScene* scene)
 	//set view
 	setUpPerpView();
 
-
 	glRotatef (10.0f, 10.0f, 0, 1);
 	//Scene transformations
 	//glRotatef (testVal, 0, 0, 1);	///////				//The objects will rotate about the z-axis
 	
-
     if (showScene)
     {
-
-
-
         testVal = testVal + 0.5f;
-
 
 	    glColor3f(0.75f, 0.75f, 0.75f);
 
@@ -936,15 +929,15 @@ void RenderingEngine::drawScene(NxScene* scene)
          if (!(aShader == NULL))
          {aShader->on();shaded = 't';}
 
-			    // Render all actors
+		// Render all actors
 	    int nbActors = scene->getNbActors();
 	    NxActor** actors = scene->getActors();
 	    while(nbActors--)
 	    {
-		    //printf("Hello!");
 		    NxActor* actor = *actors++;
 		    //if(!actor->userData) continue;
-
+			drawActor(actor);
+			/*
 		    float glMat[16];
 
 		    // Render actor
@@ -954,11 +947,11 @@ void RenderingEngine::drawScene(NxScene* scene)
 		
 		    glMultMatrixf(glMat);
 		    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		    //drawIE2Cylinder(0, 0, 0, 0, 0, 0, 0, float(size_t(actor->userData))*2.0f);
 
 		    drawCube(0, 0, 0, 0.5f*2.0f);
 
 		    glPopMatrix();
+			*/
         }
 
 
@@ -999,13 +992,6 @@ void RenderingEngine::drawScene(NxScene* scene)
 
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
-
-
-
-
-
-
-
 
 
 /*
@@ -1114,3 +1100,106 @@ void RenderingEngine::drawScene(NxScene* scene)
 	}
 	*/
 }
+
+
+void RenderingEngine::drawActor(NxActor* actor)
+{
+	NxShape* const* shapes = actor->getShapes();
+	NxU32 nShapes = actor->getNbShapes();
+
+	while(nShapes--)
+	{
+		drawShape(shapes[nShapes]);
+	}
+}
+
+
+void RenderingEngine::drawShape(NxShape* shape)
+{
+	int type = shape-> getType();
+
+	switch(type)
+	{
+	case(NX_SHAPE_BOX):
+		drawBox(shape->isBox());
+		break;
+	}
+}
+
+
+void RenderingEngine::drawBox(NxBoxShape* box)
+{
+	NxMat34 pose = box->getGlobalPose();
+	float mat[16];
+
+	pose.getColumnMajor44(mat);
+
+	NxVec3 boxDim = box->getDimensions();
+
+	glPushMatrix();
+
+		glMultMatrixf(mat);
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		
+		// (boxDim.x ) (boxDim.y ) (boxDim.z )
+
+		glBegin(GL_POLYGON);
+		//Bottom
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( (boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f( (boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,1.0); glVertex3f(-(boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(0.0,1.0); glVertex3f(-(boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		glEnd();
+
+		glBegin(GL_POLYGON);
+		//Left
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f(-(boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f(-(boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,1.0); glVertex3f(-(boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,1.0); glVertex3f(-(boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		//glVertex3f(-d, -d, -d);
+		glEnd();
+
+		glBegin(GL_POLYGON);
+		//Right
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( (boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f( (boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,1.0); glVertex3f( (boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(0.0,1.0); glVertex3f( (boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glEnd();
+
+		glBegin(GL_POLYGON);
+		//Front
+		glNormal3f(0.0f, 0.0f, -1.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f(-(boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f( (boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,1.0) ;glVertex3f( (boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(0.0,1.0); glVertex3f(-(boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glEnd();
+
+		glBegin(GL_POLYGON);
+		//Back
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( (boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f( (boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,1.0) ;glVertex3f(-(boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(0.0,1.0); glVertex3f(-(boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glEnd();
+
+		glBegin(GL_POLYGON);
+		//Top
+		glNormal3f(0.0f, 1.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( (boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f( (boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,1.0); glVertex3f(-(boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(0.0,1.0); glVertex3f(-(boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glEnd();
+
+		//
+
+	glPopMatrix();
+}
+

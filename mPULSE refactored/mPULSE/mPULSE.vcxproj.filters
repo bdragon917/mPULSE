@@ -108,9 +108,6 @@
     <ClCompile Include="Entities\EntityComponent.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsEngine\NxWheelDesc.cpp">
-      <Filter>Source Files\PhysicsEngine</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -163,9 +160,6 @@
     </ClInclude>
     <ClInclude Include="Entities\EntityComponent.h">
       <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsEngine\NxWheelDesc.h">
-      <Filter>Header Files\PhysicsEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

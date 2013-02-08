@@ -102,7 +102,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
 	
-    //physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->rTrigger*250);
+    physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->rTrigger*25000);
 
     //cars.at(0)->aWheel1->setMotorTorque(trig);
     //cars.at(0)->aWheel1->setAxleSpeed(trig);
