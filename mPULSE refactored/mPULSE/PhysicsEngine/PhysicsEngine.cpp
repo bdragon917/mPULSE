@@ -32,6 +32,11 @@ void PhysicsEngine::setupPlayScene(vector<Entity*> cars)
 
 	groundPlane = createGroundPlane();
 	box = createBox();
+    //Entity aCar;
+    //EntityComponent aCC;
+    //aCC.setActor( createCar() );
+    //aCar.components.push_back ( &aCC );
+    //cars.push_back( &aCar );
 }
 
 void PhysicsEngine::sceneSetup()
@@ -131,6 +136,49 @@ NxActor* PhysicsEngine::createBox()
 	NxActor *actor = scene->createActor(actorDesc);
 	actor->userData = (void*)size_t(0.5f);
 
+	return actor;
+}
+
+
+NxActor* PhysicsEngine::createCar() 
+{
+	//Set the box starting height
+	NxVec3 position(0.0, 3.5, 0.0);
+
+	//Add single shape actor to the scene
+	NxBodyDesc bodyDesc;
+    bodyDesc.mass = 500;
+    bodyDesc.sleepEnergyThreshold = 0.05f;
+
+    //actorDesc.body = STUFF!
+	
+	//The actor has one shape, a box, 1m on a side
+	NxBoxShapeDesc boxDesc;
+	boxDesc.dimensions.set(0.5,0.5,0.5);
+	//boxDesc.localPose.t = position;
+
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&boxDesc);
+	actorDesc.body = &bodyDesc;
+	actorDesc.density = 10.0f;
+	actorDesc.globalPose.t = position;
+
+
+	NxActor *actor = scene->createActor(actorDesc);
+
+    //Binding wheels
+    NxWheelShapeDesc wShapeDesc;
+    //wShapeDesc.localPose.t = location?
+    wShapeDesc.suspension.spring = 2.0f;//(suspension * wheelRadius / suspension)
+    wShapeDesc.suspension.damper = 0.0f;
+    wShapeDesc.suspension.targetValue = 1.0f;
+
+    wShapeDesc.radius = 1.0f;
+    wShapeDesc.suspensionTravel = 1.0f; // 
+	wShapeDesc.inverseWheelMass = 0.1f;
+	//actor->userData = (void*)size_t(0.5f);
+
+    actor->createShape (wShapeDesc);
 	return actor;
 }
 

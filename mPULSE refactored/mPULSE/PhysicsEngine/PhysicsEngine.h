@@ -37,7 +37,8 @@ public:
 	NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);
 	NxActor* createGroundPlane();
 	NxActor* createBox();
-	void resetBox();
+    NxActor* createCar();	
+    void resetBox();
 
 	NxScene* getScene();
 };
