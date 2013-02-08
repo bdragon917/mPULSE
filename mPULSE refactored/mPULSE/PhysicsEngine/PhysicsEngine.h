@@ -9,6 +9,7 @@
 #include "../Entities/Entity.h"
 
 #include <vector>
+#include "NxWheelDesc.h"
 
 using std::vector;
 
@@ -37,7 +38,8 @@ public:
 	NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);
 	NxActor* createGroundPlane();
 	NxActor* createBox();
-    NxActor* createCar();	
+    NxActor* createCarChassis();
+    NxWheelShape* AddWheelToActor(NxActor* actor, NxWheelDesc* wheelDesc);
     void resetBox();
 
 	NxScene* getScene();

@@ -40,11 +40,101 @@ void PhysicsEngine::setupPlayScene(vector<Entity*> cars)
 
 	groundPlane = createGroundPlane();
 	box = createBox();
+
+    NxActor* car1 = createCarChassis();
+
+    
+
+
+   // NxWheelShapeDesc* wheel1 = createCarWheel(car1);
+    Entity entityCar1;
+    EntityComponent ec_car;
+    ec_car.setActor(car1);
+
+
+
+    // Steering wheel           //Currently this code doesn't work, when the controller tries to use this, there is null values which crashes the system when read....
+    NxWheelDesc wheelDesc1;
+   // wheelDesc1.wheelAxis.set(0,0,1);
+    //wheelDesc1.downAxis.set(0,-1,0);
+    wheelDesc1.wheelApproximation = 10;
+    wheelDesc1.wheelRadius = 0.5;
+    wheelDesc1.wheelWidth = 0.1;
+    wheelDesc1.wheelSuspension = 0.5;
+    wheelDesc1.springRestitution = 7000;
+    wheelDesc1.springDamping = 0;
+    wheelDesc1.springBias = 0;
+    wheelDesc1.maxBrakeForce = 1;
+    wheelDesc1.frictionToFront = 0.1;
+    wheelDesc1.frictionToSide = 0.99;
+    wheelDesc1.position = NxVec3(0,1.5f,0);
+    wheelDesc1.wheelFlags = NX_WF_USE_WHEELSHAPE | NX_WF_BUILD_LOWER_HALF | NX_WF_ACCELERATED | NX_WF_AFFECTED_BY_HANDBRAKE | NX_WF_STEERABLE_INPUT;
+
+    entityCar1.aWheel1 = AddWheelToActor(car1, &wheelDesc1);
+
+    //left wheel
+    NxWheelDesc wheelDesc2;
+   // wheelDesc2.wheelAxis.set(0,0,1);
+    //wheelDesc2.downAxis.set(0,-1,0);
+    wheelDesc2.wheelApproximation = 10;
+    wheelDesc2.wheelRadius = 0.5;
+    wheelDesc2.wheelWidth = 0.1;
+    wheelDesc2.wheelSuspension = 0.5;
+    wheelDesc2.springRestitution = 7000;
+    wheelDesc2.springDamping = 0;
+    wheelDesc2.springBias = 0;
+    wheelDesc2.maxBrakeForce = 1;
+    wheelDesc2.frictionToFront = 0.1;
+    wheelDesc2.frictionToSide = 0.99;
+    wheelDesc2.position = NxVec3(1.5,0.5,0);
+    wheelDesc2.wheelFlags = NX_WF_USE_WHEELSHAPE | NX_WF_BUILD_LOWER_HALF | NX_WF_ACCELERATED | NX_WF_AFFECTED_BY_HANDBRAKE | NX_WF_STEERABLE_INPUT;
+
+    entityCar1.aWheel2 = AddWheelToActor(car1, &wheelDesc2);
+
+
+
+        // Right wheel
+    NxWheelDesc wheelDesc3;
+    //wheelDesc3.wheelAxis.set(0,0,1);
+   // wheelDesc3.downAxis.set(0,-1,0);
+    wheelDesc3.wheelApproximation = 10;
+    wheelDesc3.wheelRadius = 0.5;
+    wheelDesc3.wheelWidth = 0.1;
+    wheelDesc3.wheelSuspension = 0.5;
+    wheelDesc3.springRestitution = 7000;
+    wheelDesc3.springDamping = 0;
+    wheelDesc3.springBias = 0;
+    wheelDesc3.maxBrakeForce = 1;
+    wheelDesc3.frictionToFront = 0.1;
+    wheelDesc3.frictionToSide = 0.99;
+    wheelDesc3.position = NxVec3(-1.5,0.5,0);
+    wheelDesc3.wheelFlags = NX_WF_USE_WHEELSHAPE | NX_WF_BUILD_LOWER_HALF | NX_WF_ACCELERATED | NX_WF_AFFECTED_BY_HANDBRAKE | NX_WF_STEERABLE_INPUT;
+
+    entityCar1.aWheel3 = AddWheelToActor(car1, &wheelDesc3);
+
+
+
+
+    //entityCar1.aWheel1 = //createCarWheel(NxActor* Chassis);   //AddWheelToCar
+
+   // //EntityComponent ec_wheel;
+  //  //ec_wheel.setActor(wheel1);
+
+
+    entityCar1.components.push_back( &ec_car );
+   // //entityCar1.components.push_back( &ec_wheel );
+    
+
+   // entityCar1.aWheel = wheel1;
+   // //cars.push_back( &entityCar1 );
+    
+    
+    
     //Entity aCar;
     //EntityComponent aCC;
     //aCC.setActor( createCar() );
     //aCar.components.push_back ( &aCC );
-    //cars.push_back( &aCar );
+    cars.push_back( &entityCar1 );
 }
 
 void PhysicsEngine::sceneSetup()
@@ -148,15 +238,14 @@ NxActor* PhysicsEngine::createBox()
 }
 
 
-NxActor* PhysicsEngine::createCar() 
+NxActor* PhysicsEngine::createCarChassis() 
 {
 	//Set the box starting height
 	NxVec3 position(0.0, 3.5, 0.0);
 
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
-    bodyDesc.mass = 500;
-    bodyDesc.sleepEnergyThreshold = 0.05f;
+	bodyDesc.angularDamping	= 0.5f;
 
     //actorDesc.body = STUFF!
 	
@@ -174,21 +263,50 @@ NxActor* PhysicsEngine::createCar()
 
 	NxActor *actor = scene->createActor(actorDesc);
 
-    //Binding wheels
-    NxWheelShapeDesc wShapeDesc;
-    //wShapeDesc.localPose.t = location?
-    wShapeDesc.suspension.spring = 2.0f;//(suspension * wheelRadius / suspension)
-    wShapeDesc.suspension.damper = 0.0f;
-    wShapeDesc.suspension.targetValue = 1.0f;
 
-    wShapeDesc.radius = 1.0f;
-    wShapeDesc.suspensionTravel = 1.0f; // 
-	wShapeDesc.inverseWheelMass = 0.1f;
-	//actor->userData = (void*)size_t(0.5f);
-
-    actor->createShape (wShapeDesc);
 	return actor;
 }
+
+NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, NxWheelDesc* wheelDesc)
+{
+   NxWheelShapeDesc wheelShapeDesc;
+
+    // Create a shared car wheel material to be used by all wheels
+    static NxMaterial* wsm = 0;
+    if (!wsm)
+    {
+        NxMaterialDesc m;
+        m.flags |= NX_MF_DISABLE_FRICTION;
+        wsm = scene->createMaterial(m);
+    }
+    wheelShapeDesc.materialIndex = wsm->getMaterialIndex();
+
+    wheelShapeDesc.localPose.t = wheelDesc->position;
+    NxQuat q;
+    q.fromAngleAxis(90, NxVec3(0,1,0));
+    wheelShapeDesc.localPose.M.fromQuat(q);
+
+    NxReal heightModifier = (wheelDesc->wheelSuspension + wheelDesc->wheelRadius) / wheelDesc->wheelSuspension;
+
+    wheelShapeDesc.suspension.spring = wheelDesc->springRestitution*heightModifier;
+    wheelShapeDesc.suspension.damper = wheelDesc->springDamping*heightModifier;
+    wheelShapeDesc.suspension.targetValue = wheelDesc->springBias*heightModifier;
+
+    wheelShapeDesc.radius = wheelDesc->wheelRadius;
+    wheelShapeDesc.suspensionTravel = wheelDesc->wheelSuspension; 
+    wheelShapeDesc.inverseWheelMass = 0.1;	//not given!? TODO
+
+    //wheelShapeDesc.longitudalTireForceFunction = wheelDesc->longitudalTireForceFunction;
+   // wheelShapeDesc.lateralTireForceFunction = wheelDesc->lateralTireForceFunction;
+
+    NxWheelShape* wheelShape = NULL;
+    wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));
+    return wheelShape;
+}
+
+
+
+
 
 
 void PhysicsEngine::resetBox()

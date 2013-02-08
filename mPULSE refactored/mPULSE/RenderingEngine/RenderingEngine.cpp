@@ -17,6 +17,7 @@ RenderingEngine::RenderingEngine()
 
     testVal = 0.0f;
     debugPhysX = false;
+    showScene = true;
 }
 
 RenderingEngine* RenderingEngine::getInstance()
@@ -337,6 +338,9 @@ void RenderingEngine::drawCube(float x, float y, float z, float size)
 
 void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
 {
+    glDisable(GL_NORMALIZE);
+    glDisable(GL_LIGHTING);
+
     int nLines = 0;
     int nTriangles = 0;
     int nPoints = 0;
@@ -412,6 +416,9 @@ void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
     }
 
     glPopMatrix();
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_NORMALIZE);
 }
 
 void RenderingEngine::displayConsole()
@@ -427,6 +434,7 @@ void RenderingEngine::displayConsole()
      prints(0,  -100,   aConsole.consoleOut[0]);
      prints(0,  -140,   aConsole.consoleString);
      //prints(0,  -200,   debugOut);
+
 }
 
 
@@ -907,11 +915,8 @@ void RenderingEngine::drawScene(NxScene* scene)
 	//Scene transformations
 	//glRotatef (testVal, 0, 0, 1);	///////				//The objects will rotate about the z-axis
 	
-    //if (debugPhysX) //If debugPhyX then
-   // {
-   //      RenderDebugPhysic(scene->getDebugRenderable());
-    //}
-    //else    //draw normally
+
+    if (showScene)
     {
 
 
@@ -954,13 +959,10 @@ void RenderingEngine::drawScene(NxScene* scene)
 		    drawCube(0, 0, 0, 0.5f*2.0f);
 
 		    glPopMatrix();
+        }
 
 
 
-            if (debugPhysX) //If debugPhyX then
-            {
-                 RenderDebugPhysic(scene->getDebugRenderable());
-            }
     /*
 		    // Render shadow
 		    glPushMatrix();
@@ -975,7 +977,6 @@ void RenderingEngine::drawScene(NxScene* scene)
 		    glEnable(GL_LIGHTING);
 		    glPopMatrix();
     */
-	    }
 
 
         //if debug
@@ -987,6 +988,10 @@ void RenderingEngine::drawScene(NxScene* scene)
      if (!(aShader == NULL))
      {aShader->off();}
 
+     if (debugPhysX) //If debugPhyX then
+     {
+          RenderDebugPhysic(scene->getDebugRenderable());
+     }
 
     if (showConsole)
     {displayConsole();}
