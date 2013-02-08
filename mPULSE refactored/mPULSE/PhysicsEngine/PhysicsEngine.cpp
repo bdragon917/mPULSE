@@ -31,7 +31,7 @@ void PhysicsEngine::setupPlayScene(vector<Entity*> cars)
 	defaultMaterial->setDynamicFriction(0.5);
 
 	groundPlane = createGroundPlane();
-	box = createBox();
+	box = createCar();
     //Entity aCar;
     //EntityComponent aCC;
     //aCC.setActor( createCar() );
@@ -58,7 +58,7 @@ void PhysicsEngine::sceneSetup()
 	defaultMaterial->setDynamicFriction(0.5);
 
 	groundPlane = createGroundPlane();
-	box = createBox();
+	box = createCar();
 }
 
 
@@ -142,30 +142,30 @@ NxActor* PhysicsEngine::createBox()
 
 NxActor* PhysicsEngine::createCar() 
 {
-	//Set the box starting height
+	NxBodyDesc bodyDesc;
+	NxBoxShapeDesc boxShapes[2];
+
+	boxShapes[0].dimensions.set(2.5f, 0.4f, 1.2f);
+	boxShapes[1].dimensions.set(1.f, 0.3f, 1.1f);
+	boxShapes[1].localPose.t.set(-0.3f, 0.7f, 0.f);
+
+	NxActorDesc actorDesc;
+
+	actorDesc.body = &bodyDesc;
+    bodyDesc.mass = 5;
+    bodyDesc.sleepEnergyThreshold = 0.05f;
+
+	actorDesc.shapes.pushBack(&boxShapes[0]);
+	actorDesc.shapes.pushBack(&boxShapes[1]);
+
+	//Set the car starting height
 	NxVec3 position(0.0, 3.5, 0.0);
 
 	//Add single shape actor to the scene
-	NxBodyDesc bodyDesc;
-    bodyDesc.mass = 500;
-    bodyDesc.sleepEnergyThreshold = 0.05f;
 
-    //actorDesc.body = STUFF!
-	
-	//The actor has one shape, a box, 1m on a side
-	NxBoxShapeDesc boxDesc;
-	boxDesc.dimensions.set(0.5,0.5,0.5);
-	//boxDesc.localPose.t = position;
-
-	NxActorDesc actorDesc;
-	actorDesc.shapes.pushBack(&boxDesc);
-	actorDesc.body = &bodyDesc;
-	actorDesc.density = 10.0f;
 	actorDesc.globalPose.t = position;
-
-
 	NxActor *actor = scene->createActor(actorDesc);
-
+	/*
     //Binding wheels
     NxWheelShapeDesc wShapeDesc;
     //wShapeDesc.localPose.t = location?
@@ -179,6 +179,7 @@ NxActor* PhysicsEngine::createCar()
 	//actor->userData = (void*)size_t(0.5f);
 
     actor->createShape (wShapeDesc);
+	*/
 	return actor;
 }
 
