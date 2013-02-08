@@ -59,7 +59,9 @@ void drawScene(NxScene* scene);
 
     string FloatToString(float input);
 
+    //used for scene display
     bool debugPhysX;
+    bool showScene;
 
 private:
     RenderingEngine();

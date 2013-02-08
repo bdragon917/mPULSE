@@ -61,11 +61,21 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     renderingEngine->aConsole.consoleString = "Number of Triangles in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbTriangles());
                 }
                 
+                //Get Commands
+                //if (renderingEngine->aConsole.consoleString == "get testwheel")
+                //{renderingEngine->aConsole.consoleString = "Test Wheel Torgue: " + renderingEngine->FloatToString(cars.at(0)->aWheel1->getMotorTorque());renderingEngine->aConsole.propragateMsg();}
+
                 //tog Commands
                 if (renderingEngine->aConsole.consoleString == "tog debugphysic")
                 {
                     if (renderingEngine->debugPhysX){renderingEngine->debugPhysX=false;}else{renderingEngine->debugPhysX=true;}; 
                 }
+                if (renderingEngine->aConsole.consoleString == "tog showscene")
+                {
+                    if (renderingEngine->showScene){renderingEngine->showScene=false;}else{renderingEngine->showScene=true;}; 
+                }
+
+                //set Commands
 
                 
                 //master Commands
@@ -92,7 +102,11 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
 	
-    physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->rTrigger*250);
+    //physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->rTrigger*250);
+
+    //cars.at(0)->aWheel1->setMotorTorque(trig);
+    //cars.at(0)->aWheel1->setAxleSpeed(trig);
+    //cars.at(0)->aWheel->motorTorque.setMotorTorque(trig);
 	if(state->lb) {
 		physicsEngine->resetBox();
 	}

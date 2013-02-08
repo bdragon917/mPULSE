@@ -17,6 +17,7 @@ RenderingEngine::RenderingEngine()
 
     testVal = 0.0f;
     debugPhysX = false;
+    showScene = true;
 }
 
 RenderingEngine* RenderingEngine::getInstance()
@@ -337,6 +338,9 @@ void RenderingEngine::drawCube(float x, float y, float z, float size)
 
 void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
 {
+    glDisable(GL_NORMALIZE);
+    glDisable(GL_LIGHTING);
+
     int nLines = 0;
     int nTriangles = 0;
     int nPoints = 0;
@@ -363,8 +367,9 @@ void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
             float green = (color >> 8) & 255;
             float red = (color >> 16) & 255;
 
-            glBegin(GL_LINE);
+            glBegin(GL_LINES);
             glColor3f(red, green, blue);
+            //glColor3f(1.0f, 1.0f, 1.0f);
             glVertex3f(nxDebugLines->p0.x, nxDebugLines->p0.y, nxDebugLines->p0.z);
             glVertex3f(nxDebugLines->p1.x, nxDebugLines->p1.y, nxDebugLines->p1.z);
             glEnd();
@@ -411,6 +416,9 @@ void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
     }
 
     glPopMatrix();
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_NORMALIZE);
 }
 
 void RenderingEngine::displayConsole()
@@ -426,6 +434,7 @@ void RenderingEngine::displayConsole()
      prints(0,  -100,   aConsole.consoleOut[0]);
      prints(0,  -140,   aConsole.consoleString);
      //prints(0,  -200,   debugOut);
+
 }
 
 
@@ -906,11 +915,8 @@ void RenderingEngine::drawScene(NxScene* scene)
 	//Scene transformations
 	//glRotatef (testVal, 0, 0, 1);	///////				//The objects will rotate about the z-axis
 	
-    if (debugPhysX) //If debugPhyX then
-    {
-         RenderDebugPhysic(scene->getDebugRenderable());
-    }
-    else    //draw normally
+
+    if (showScene)
     {
 
 
@@ -953,6 +959,10 @@ void RenderingEngine::drawScene(NxScene* scene)
 		    drawCube(0, 0, 0, 0.5f*2.0f);
 
 		    glPopMatrix();
+        }
+
+
+
     /*
 		    // Render shadow
 		    glPushMatrix();
@@ -967,7 +977,6 @@ void RenderingEngine::drawScene(NxScene* scene)
 		    glEnable(GL_LIGHTING);
 		    glPopMatrix();
     */
-	    }
 
 
         //if debug
@@ -979,6 +988,10 @@ void RenderingEngine::drawScene(NxScene* scene)
      if (!(aShader == NULL))
      {aShader->off();}
 
+     if (debugPhysX) //If debugPhyX then
+     {
+          RenderDebugPhysic(scene->getDebugRenderable());
+     }
 
     if (showConsole)
     {displayConsole();}
