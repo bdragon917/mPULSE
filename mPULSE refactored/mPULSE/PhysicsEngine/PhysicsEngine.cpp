@@ -12,7 +12,7 @@ PhysicsEngine* PhysicsEngine::getInstance()
     return &physics;
 }
 
-void PhysicsEngine::setupPlayScene(vector<Entity*> cars)
+void PhysicsEngine::setupPlayScene(vector<Entity*> cars, Entity* theCar)
 {
 	deltaTime = 1.0f/60.0f;
 	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
@@ -24,7 +24,7 @@ void PhysicsEngine::setupPlayScene(vector<Entity*> cars)
     physicsSDK->setParameter(NX_VISUALIZE_ACTIVE_VERTICES, 1);
     physicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES, 1);
     physicsSDK->setParameter(NX_VISUALIZE_CONTACT_NORMAL, 1);
-    physicsSDK->setParameter(NX_VISUALIZATION_SCALE, 1);
+    physicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, 1);
 
 	NxSceneDesc sceneDesc;
 	sceneDesc.simType = NX_SIMULATION_SW;
@@ -41,21 +41,27 @@ void PhysicsEngine::setupPlayScene(vector<Entity*> cars)
 	groundPlane = createGroundPlane();
 	//box = createBox();
 
-    NxActor* box = createCarChassis();
+    NxActor* box = createCarChassis();              //create a Chassis
+    NxWheelShape* wheel = AddWheelToActor(box);     //Create a wheel, and attach it to the Chassis
 
-    
-
-
-   // NxWheelShapeDesc* wheel1 = createCarWheel(car1);
     Entity entityCar1;
     EntityComponent ec_car;
     ec_car.setActor(box);
+    entityCar1.setWheel1(wheel);
 
+   // wheel->getActor().addTorque(NxVec3(0,10000000000.0f,0));
+   // entityCar1.aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
+    int a = 1;
 
+   // entityCar1.components.push_back( &ec_car );
+    entityCar1.addComponent( &ec_car );
 
-    entityCar1.components.push_back( &ec_car );
+    theCar = &entityCar1;
 
-    cars.push_back( &entityCar1 );
+    cars.at(0) = &entityCar1;
+    //cars.push_back( &entityCar1 );
+
+    cars.at(0)->aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
 }
 
 void PhysicsEngine::sceneSetup()
@@ -183,9 +189,69 @@ NxActor* PhysicsEngine::createCarChassis()
 
 	NxActor *actor = scene->createActor(actorDesc);
 
+    
+
+   
+    
+
 	return actor;
 }
 
+
+NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor)
+{
+	NxWheelShapeDesc wheelShapeDesc;
+
+	// Create a shared car wheel material to be used by all wheels
+	if (!wsm)
+	{
+		NxMaterialDesc m;
+		m.flags |= NX_MF_DISABLE_FRICTION;
+		wsm = scene->createMaterial(m);
+	}
+	wheelShapeDesc.materialIndex = wsm->getMaterialIndex();
+
+
+	wheelShapeDesc.localPose.t = NxVec3(0,    -0.3f,   0);//wheelDesc->position;
+
+	NxQuat q;
+	q.fromAngleAxis(90, NxVec3(0,1,0));
+	wheelShapeDesc.localPose.M.fromQuat(q);
+
+	NxReal heightModifier = 0.01f;  //??    //(wheelDesc->wheelSuspension + wheelDesc->wheelRadius) / wheelDesc->wheelSuspension;
+
+	wheelShapeDesc.suspension.spring = 1.0f;    //??     //wheelDesc->springRestitution*heightModifier;
+	wheelShapeDesc.suspension.damper = 0;  //wheelDesc->springDamping*heightModifier;
+	wheelShapeDesc.suspension.targetValue = 0.02f;  //wheelDesc->springBias*heightModifier;
+
+	wheelShapeDesc.radius = 0.25f;  //wheelDesc->wheelRadius;
+	wheelShapeDesc.suspensionTravel =  0.1f; //wheelDesc->wheelSuspension; 
+	wheelShapeDesc.inverseWheelMass = 0.1;	//not given!? TODO
+
+
+
+    NxTireFunctionDesc latff;
+    latff.asymptoteSlip = 2.0f;
+    latff.asymptoteValue = 0.01f;
+    latff.extremumSlip = 1.0f;
+    latff.extremumValue = 0.02f;
+    latff.stiffnessFactor = 1000000.0f;
+
+    NxTireFunctionDesc lotff;
+    lotff.asymptoteSlip = 2.0f;
+    lotff.asymptoteValue = 0.01f;
+    lotff.extremumSlip = 1.0f;
+    lotff.extremumValue = 0.02f;
+    lotff.stiffnessFactor = 1000000.0f;
+
+    wheelShapeDesc.lateralTireForceFunction = latff;	//TODO
+	wheelShapeDesc.longitudalTireForceFunction = lotff;	//TODO
+
+    NxWheelShape* wheelShape;
+	wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));
+
+    return wheelShape;
+}
 
 void PhysicsEngine::resetBox()
 {

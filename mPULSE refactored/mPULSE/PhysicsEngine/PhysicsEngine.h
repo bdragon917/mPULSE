@@ -24,6 +24,10 @@ private:
 
 	NxReal deltaTime;
 
+    NxMaterial* wsm;
+
+    NxWheelShape* AddWheelToActor(NxActor* actor);
+
 public:
     PhysicsEngine();
 	static PhysicsEngine* getInstance();
@@ -32,7 +36,7 @@ public:
 	void releaseNx();
 	void resetNx();
 
-    void setupPlayScene(vector<Entity*> cars);      //Use this to initalize the physicScene for playState
+    void setupPlayScene(vector<Entity*> cars, Entity* theCar);      //Use this to initalize the physicScene for playState
 
 	NxVec3 ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength);
 	NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);

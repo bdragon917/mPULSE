@@ -8,7 +8,7 @@ PlayState::PlayState()
     //cars.addAppearance(new Appearance("some appearance data"))
     //cars.addPhysics(new PhysicsData("some physics data"))
     physicsEngine = PhysicsEngine::getInstance();
-    physicsEngine->setupPlayScene(cars);
+    physicsEngine->setupPlayScene(cars,  theCar);
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
     curFPS = 0.0f;
@@ -102,7 +102,47 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
 	
-    physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->rTrigger*25000);
+    //physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->rTrigger*25000);
+
+    float trig = state->rTrigger*25000.0f;
+    NxVec3 v3 = NxVec3(0, 25000.0f,0);
+    NxVec3 v0 = NxVec3(0, 0,0);
+
+
+    //PROBLEM IS THAT ENTITY DOESN"T ACTUALLY HAVE A POINTER TO THE CAR!!!!!!
+    //
+    //theCar is another variable used to transmit the point, but this doesn't work (can delete this)
+    //
+    //The cars and theCar should have pointers added in setupPlayScene in physicsEngine.cpp
+    if (state->a)
+    {
+        if (!(theCar->aWheel1 ==NULL))
+        {theCar->aWheel1->getActor().addTorque(v3);}
+        else
+        {printf("NULL WHEEL0 at Cars[0]\n");}
+    }
+
+    if (state->b)
+    {
+        if (!(cars.at(0)->aWheel1 ==NULL))
+        {cars.at(0)->aWheel1->getActor().addForce(v3);}
+        else
+        {printf("NULL WHEEL0 at Cars[0]\n");}
+    }
+    if (state->x)
+    {
+        if (!(cars.at(0)->components.at(0) == NULL))
+        {cars.at(0)->components.at(0)->getActor()->addForce(v3);}
+        else
+        {printf("NULL Cars[0]\n");}
+    }
+    if (state->y)
+    {
+        if (!(cars.at(0)->components.at(0) == NULL))
+        {cars.at(0)->components.at(0)->getActor()->moveGlobalPosition(v0);}
+        else
+        {printf("NULL Cars[0]\n");}
+    }
 
     //cars.at(0)->aWheel1->setMotorTorque(trig);
     //cars.at(0)->aWheel1->setAxleSpeed(trig);
