@@ -73,7 +73,7 @@ private:
     RenderingEngine();
 
 
-    void drawGroundPlane();
+    void drawGroundPlane(float xoffset, float yoffset);
     void drawCheckerBoard(float x, float y);
 
     void RenderDebugPhysic(const NxDebugRenderable* ndr);

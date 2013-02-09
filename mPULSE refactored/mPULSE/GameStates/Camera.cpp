@@ -18,6 +18,7 @@ Camera::Camera(void)
 {
         EquilbriumSpeed = 0.5f;
         targetDistance = 15.0f;
+        maxDistance = 40.0f;
         curCamLoc = NxVec3(0,0,-1.0f);
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
@@ -30,6 +31,7 @@ Camera::Camera(NxActor* aActor)
         AttachtoCar(aActor);
         EquilbriumSpeed = 0.5f;
         targetDistance = 15.0f;
+        maxDistance = 40.0f;
         curCamLoc = NxVec3(0,0,-1.0f);
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
@@ -101,6 +103,7 @@ void Camera::updateCamera()
     //movementVector = movementVector - targetActor->getGlobalPose().t;           //Gives a vector to that location
     movementVector = movementVector - curCamLoc;           //Gives a vector to that location
 
+    float movMag = movementVector.magnitude();      //magnitude
 
     if (movementVector.magnitude() > 1.0f)
     {movementVector.normalize();}
@@ -110,8 +113,16 @@ void Camera::updateCamera()
 
     printf("CamLocation: %f %f %f\n", curCamLoc.x, curCamLoc.y, curCamLoc.z);
 
+
+    float catchUpSpd = 1.0f;
+
+    if (movMag > (maxDistance / 2))
+    {
+        catchUpSpd = movMag - (maxDistance / 2);
+    }
+
     
-    curCamLoc = curCamLoc + movementVector * EquilbriumSpeed;
+    curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd;
 
 
     //curCamLoc.x = movementVector.x;
@@ -120,8 +131,9 @@ void Camera::updateCamera()
 
     curCamLookAt = ActLoc;
 
-    if ((curCamLoc - targetActor->getGlobalPose().t).distance(NxVec3(0,0,0)) > maxDistance)
+    if (movMag > (maxDistance / 2))
     {
+
  //       printf("Camera is more than MaxDistance!!!");
         //Move camera towards point faster!
     }

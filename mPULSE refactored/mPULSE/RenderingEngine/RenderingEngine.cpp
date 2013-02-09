@@ -190,15 +190,15 @@ void RenderingEngine::prints(float inX, float inY, string s)
 }
 
 
-void RenderingEngine::drawGroundPlane()
+void RenderingEngine::drawGroundPlane(float xoffset, float yoffset)
 {    //*
 	//Draws a checkboard Ground
 
-    int size = 200;  //size of the ground, or at least half of the length of the plane
+    int size = 50;  //size of the ground, or at least half of the length of the plane
 
-	 for (int x = -size;x<size;x=x+2)
-         for (int y = -size;y<size;y=y+2)
-            drawCheckerBoard(x,y);
+	 for (int x = -size  ;x<size;x=x+2)
+         for (int y = -size ;y<size;y=y+2)
+            drawCheckerBoard(x + xoffset,y + yoffset);
      //*/
 }
 
@@ -475,8 +475,24 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	
     entities->cars.at(0)->aCam->updateCamera();
 
+    //Infinite Plane!
+    int groundxoffset = (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x) - (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x));
+    int groundyoffset = (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.z));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.z) - );
+
+    float gxo = groundxoffset;
+    float gyo = groundyoffset;
+
+    if ((groundxoffset % 2) == 0)
+    {gxo = (groundxoffset) - 1.0f;}
+    if ((groundyoffset % 2) == 0)
+    {gyo = (groundyoffset) - 1.0f;}
+    //
+
     NxVec3 pos = entities->cars.at(0)->aCam->getCamLoc();
     NxVec3 at = entities->cars.at(0)->aCam->getLookAt();
+
+
+
 
 	//Cameras
 	gluLookAt(pos.x, pos.y, pos.z,  // Eye/camera position
@@ -494,7 +510,7 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
     {
 	    glColor3f(0.75f, 0.75f, 0.75f);
 	    //Draws a checkboard Ground
-	     drawGroundPlane();
+	     drawGroundPlane(gxo, gyo);
          glColor3f(1.0f, 1.0f, 1.0f);
 
          char shaded = 'f';
