@@ -194,7 +194,7 @@ void RenderingEngine::drawGroundPlane()
 {    //*
 	//Draws a checkboard Ground
 
-    int size = 30;  //size of the ground, or at least half of the length of the plane
+    int size = 200;  //size of the ground, or at least half of the length of the plane
 
 	 for (int x = -size;x<size;x=x+2)
          for (int y = -size;y<size;y=y+2)

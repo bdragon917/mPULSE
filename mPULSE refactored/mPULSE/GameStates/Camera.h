@@ -1,6 +1,7 @@
 #pragma once
 
 #include <NxPhysics.h>
+#include <stdio.h>
 
 class Camera
 {

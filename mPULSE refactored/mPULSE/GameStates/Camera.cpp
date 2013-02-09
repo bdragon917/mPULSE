@@ -16,8 +16,8 @@ private:
         **/
 Camera::Camera(void)
 {
-        EquilbriumSpeed = 0.1f;
-        targetDistance = 2.0f;
+        EquilbriumSpeed = 0.5f;
+        targetDistance = 15.0f;
         curCamLoc = NxVec3(0,0,-1.0f);
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
@@ -28,8 +28,8 @@ Camera::Camera(void)
 Camera::Camera(NxActor* aActor)
 {
         AttachtoCar(aActor);
-        EquilbriumSpeed = 0.1f;
-        targetDistance = 2.0f;
+        EquilbriumSpeed = 0.5f;
+        targetDistance = 15.0f;
         curCamLoc = NxVec3(0,0,-1.0f);
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
@@ -67,7 +67,7 @@ void Camera::setMaxDistance(float inDistance)
 void Camera::updateCamera()
 {
     //Camera should be targetDistance away, in negative targetActor.orientation direction
-   // NxVec3 movementVector = NxVec3(0,0,-targetDistance);      //Where the camera should end up at in local space
+    //NxVec3 movementVector = NxVec3(0,0,-targetDistance);      //Where the camera should end up at in local space
 
     //targetActor->getGlobalPosition();
    // movementVector = (targetActor->getGlobalOrientation() * movementVector);    //This is now the location where the camera should be
@@ -80,8 +80,42 @@ void Camera::updateCamera()
 
 
     NxVec3 ActLoc = targetActor->getGlobalPose().t;
-    curCamLoc.x = ActLoc.x;
-    curCamLoc.z = ActLoc.z + 15.0f;
+
+
+   // NxVec3 movementVector = NxVec3(ActLoc.x,0,ActLoc.z + 15.0f);      //Where the camera should end up at in local space
+
+     //NxVec3 movementVector = NxVec3(-1.0f,0,0.0f);      //Where the camera should end up at in local space
+     NxVec3 movementVector = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
+    NxMat33 actOri = targetActor->getGlobalOrientation();
+
+
+    movementVector = targetActor->getGlobalOrientation() * movementVector;
+    //movementVector = movementVector * targetDistance;
+
+    movementVector = movementVector + ActLoc;
+    movementVector.y = 3.5f;                    //This is the correct camera location target!!!
+
+
+    printf("TargetLocation: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
+    
+    //movementVector = movementVector - targetActor->getGlobalPose().t;           //Gives a vector to that location
+    movementVector = movementVector - curCamLoc;           //Gives a vector to that location
+
+
+    if (movementVector.magnitude() > 1.0f)
+    {movementVector.normalize();}
+
+   
+    printf("Vector: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
+
+    printf("CamLocation: %f %f %f\n", curCamLoc.x, curCamLoc.y, curCamLoc.z);
+
+    
+    curCamLoc = curCamLoc + movementVector * EquilbriumSpeed;
+
+
+    //curCamLoc.x = movementVector.x;
+    //curCamLoc.z = movementVector.z;
     curCamLoc.y = 3.5f;
 
     curCamLookAt = ActLoc;
