@@ -4,10 +4,9 @@
 PlayState::PlayState()
 {
     changeState(PLAY);    
-    cars.push_back(new Entity);
-
+    entities.cars.push_back(new Entity);
     physicsEngine = PhysicsEngine::getInstance();
-    physicsEngine->setupPlayScene(&cars);
+    physicsEngine->setupPlayScene(&entities.cars);
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
     curFPS = 0.0f;
@@ -20,11 +19,9 @@ void PlayState::update(float dt)
 }
 
 void PlayState::render()
-{
-    //renderingEngine->Render(&cars[0]->getAppearance())	
-	//renderingEngine->drawTest(curFPS);
+{    	    
 	NxScene* scene = physicsEngine->getScene();
-	renderingEngine->drawScene(scene);
+	renderingEngine->drawScene(scene, &entities);
 }
 
 bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
@@ -46,7 +43,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")
-                {renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->FloatToString(cars.size()));}
+                {renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->FloatToString(entities.cars.size()));}
 
                 if (renderingEngine->aConsole.consoleString == "num actors")
                 {renderingEngine->aConsole.propragateMsg("Number of actors in scene: " + renderingEngine->FloatToString(physicsEngine->getScene()->getNbActors()));}
@@ -110,8 +107,8 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
 	if (state->rTrigger > 128)
 	{
-		cars[0]->aWheel1->getActor().setLinearVelocity(v3);
-		cars[0]->aWheel2->getActor().setLinearVelocity(v3);
+		entities.cars[0]->aWheel1->getActor().setLinearVelocity(v3);
+		entities.cars[0]->aWheel2->getActor().setLinearVelocity(v3);
 	}
 
 
@@ -122,7 +119,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     //The cars and theCar should have pointers added in setupPlayScene in physicsEngine.cpp
     if (state->a)
     {
-        if (!(cars[0]->aWheel1 == NULL))
+        if (!(entities.cars[0]->aWheel1 == NULL))
 		{
             //cars[0]->aWheel1->getActor().setLinearVelocity(v3);
 			//cars[0]->aWheel2->getActor().setLinearVelocity(v3);
@@ -136,22 +133,22 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
     if (state->b)
     {
-        if (!(cars.at(0)->aWheel1 ==NULL))
-        {cars.at(0)->aWheel1->getActor().addForce(v3);}
+        if (!(entities.cars.at(0)->aWheel1 ==NULL))
+        {entities.cars.at(0)->aWheel1->getActor().addForce(v3);}
         else
         {printf("NULL WHEEL0 at Cars[0]\n");}
     }
     if (state->x)
     {
-        if (!(cars.at(0)->components.at(0) == NULL))
-        {cars.at(0)->components.at(0)->getActor()->addForce(v3);}
+        if (!(entities.cars.at(0)->components.at(0) == NULL))
+        {entities.cars.at(0)->components.at(0)->getActor()->addForce(v3);}
         else
         {printf("NULL Cars[0]\n");}
     }
     if (state->y)
     {
-        if (!(cars.at(0)->components.at(0) == NULL))
-        {cars.at(0)->components.at(0)->getActor()->moveGlobalPosition(v0);}
+        if (!(entities.cars.at(0)->components.at(0) == NULL))
+        {entities.cars.at(0)->components.at(0)->getActor()->moveGlobalPosition(v0);}
         else
         {printf("NULL Cars[0]\n");}
     }
