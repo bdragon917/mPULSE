@@ -1,0 +1,58 @@
+﻿Build started 2/8/2013 8:04:26 PM.
+     1>Project "C:\Users\Lee\Documents\GitHub\mPULSE\mPULSE refactored\mPULSE\mPULSE.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\mPULSE.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\PhysXLoader\include" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\include\win32" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Physics\include" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\NxCharacter\include" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Cooking\include" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Foundation\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _MBCS /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Entities\Entity.cpp Entities\EntityComponent.cpp GameStates\Console.cpp GameStates\Game.cpp GameStates\GameState.cpp GameStates\InitState.cpp GameStates\PlayState.cpp Input\XboxController.cpp ModelLoader\ModelManager.cpp ModelLoader\ObjModel.cpp mPULSE.cpp PhysicsEngine\Physics.cpp PhysicsEngine\PhysicsEngine.cpp RenderingEngine\Appearance.cpp RenderingEngine\RenderingEngine.cpp RenderingEngine\Shader.cpp Util\Clock.cpp
+         Clock.cpp
+         Shader.cpp
+     1>c:\users\lee\documents\github\mpulse\mpulse refactored\mpulse\renderingengine\shader.cpp(65): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(234) : see declaration of 'fopen'
+         RenderingEngine.cpp
+         Appearance.cpp
+         PhysicsEngine.cpp
+     1>c:\users\lee\documents\github\mpulse\mpulse refactored\mpulse\physicsengine\physicsengine.cpp(214): warning C4305: 'argument' : truncation from 'double' to 'NxReal'
+     1>c:\users\lee\documents\github\mpulse\mpulse refactored\mpulse\physicsengine\physicsengine.cpp(228): warning C4305: '=' : truncation from 'double' to 'NxReal'
+         Physics.cpp
+         mPULSE.cpp
+         ObjModel.cpp
+         ModelManager.cpp
+         XboxController.cpp
+         PlayState.cpp
+         InitState.cpp
+         GameState.cpp
+         Game.cpp
+         Console.cpp
+     1>c:\users\lee\documents\github\mpulse\mpulse refactored\mpulse\gamestates\console.cpp(112): warning C4018: '<' : signed/unsigned mismatch
+         EntityComponent.cpp
+         Entity.cpp
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Lee\Documents\GitHub\mPULSE\mPULSE refactored\Debug\mPULSE.exe" /NOLOGO /LIBPATH:"C:\CPSC585\glew-1.9.0\lib" /LIBPATH:"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\lib\win32\glut" /LIBPATH:"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Bin\win32" /LIBPATH:"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32" glew32.lib PhysXLoader.lib NxCharacter.lib NxCooking.lib SDL.lib SDLmain.lib opengl32.lib glu32.lib XInput.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\mPULSE.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Lee\Documents\GitHub\mPULSE\mPULSE refactored\Debug\mPULSE.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Lee\Documents\GitHub\mPULSE\mPULSE refactored\Debug\mPULSE.lib" /MACHINE:X86 Debug\Entity.obj
+         Debug\EntityComponent.obj
+         Debug\Console.obj
+         Debug\Game.obj
+         Debug\GameState.obj
+         Debug\InitState.obj
+         Debug\PlayState.obj
+         Debug\XboxController.obj
+         Debug\ModelManager.obj
+         Debug\ObjModel.obj
+         Debug\mPULSE.obj
+         Debug\Physics.obj
+         Debug\PhysicsEngine.obj
+         Debug\Appearance.obj
+         Debug\RenderingEngine.obj
+         Debug\Shader.obj
+         Debug\Clock.obj
+         mPULSE.vcxproj -> C:\Users\Lee\Documents\GitHub\mPULSE\mPULSE refactored\Debug\mPULSE.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Lee\Documents\GitHub\mPULSE\mPULSE refactored\Debug\mPULSE.exe;#1" /manifest Debug\mPULSE.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Debug\mPULSE.unsuccessfulbuild".
+         Touching "Debug\mPULSE.lastbuildstate".
+     1>Done Building Project "C:\Users\Lee\Documents\GitHub\mPULSE\mPULSE refactored\mPULSE\mPULSE.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:15.83
