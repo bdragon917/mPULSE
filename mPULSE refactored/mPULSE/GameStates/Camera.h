@@ -17,7 +17,7 @@ public:
         NxVec3 getCamLoc();
         void setDistance(float inDistance);
         void setMaxDistance(float inDistance);
-        void updateCamera();
+        void updateCamera(float dt);
 
 private:
         float EquilbriumSpeed;  //Should be between 0 and 1

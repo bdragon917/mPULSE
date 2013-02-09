@@ -14,6 +14,7 @@ PlayState::PlayState()
 void PlayState::update(float dt)
 {    
     physicsEngine->step(dt/1000);
+    entities.cars[0]->aCam->updateCamera(dt/16);
 }
 
 void PlayState::render()

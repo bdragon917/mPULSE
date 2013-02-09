@@ -66,7 +66,7 @@ void Camera::setMaxDistance(float inDistance)
     maxDistance = inDistance;
 }
 
-void Camera::updateCamera()
+void Camera::updateCamera(float dt)
 {
     //Camera should be targetDistance away, in negative targetActor.orientation direction
     //NxVec3 movementVector = NxVec3(0,0,-targetDistance);      //Where the camera should end up at in local space
@@ -122,7 +122,7 @@ void Camera::updateCamera()
     }
 
     
-    curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd;
+    curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd * dt;
 
 
     //curCamLoc.x = movementVector.x;
