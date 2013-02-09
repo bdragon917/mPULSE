@@ -63,9 +63,9 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 //{renderingEngine->aConsole.consoleString = "Test Wheel Torgue: " + renderingEngine->FloatToString(cars.at(0)->aWheel1->getMotorTorque());renderingEngine->aConsole.propragateMsg();}
 
                 //tog Commands
-                if (renderingEngine->aConsole.consoleString == "tog debugphysic")
+                if ((renderingEngine->aConsole.consoleString == "tog debugphysic") || (renderingEngine->aConsole.consoleString == "tog dp"))
                 {
-                    if (renderingEngine->debugPhysX){renderingEngine->debugPhysX=false;}else{renderingEngine->debugPhysX=true;}; 
+                    if (renderingEngine->debugPhysX){renderingEngine->debugPhysX=false;renderingEngine->showScene=true;}else{renderingEngine->debugPhysX=true;renderingEngine->showScene=false;}; 
                 }
                 if (renderingEngine->aConsole.consoleString == "tog showscene")
                 {
@@ -116,7 +116,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     if (state->a)
     {
         if (!(cars[0]->aWheel1 == NULL))
-            cars[0]->aWheel1->getActor().addTorque(v3);
+            cars[0]->aWheel1->getActor().setAngularVelocity(v3);
         else
             printf("NULL WHEEL0 at Cars[0]\n");
     }
