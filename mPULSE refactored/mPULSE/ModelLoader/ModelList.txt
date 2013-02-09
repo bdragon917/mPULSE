@@ -1,1 +1,1 @@
-sphere.obj
+C:\\Users\\Lee\\Documents\\GitHub\\mPULSE\\mPULSE refactored\\mPULSE\\ModelLoader\\Models\\Sphere.obj

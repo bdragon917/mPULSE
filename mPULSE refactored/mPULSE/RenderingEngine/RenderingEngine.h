@@ -27,6 +27,8 @@
 #include "..\GameStates\Console.h"
 #include <vector>
 #include "..\Entities\Entity.h"
+#include "..\ModelLoader\ModelManager.h"
+#include "..\ModelLoader\ObjModel.h"
 
 class RenderingEngine
 {
@@ -58,6 +60,7 @@ void drawScene(NxScene* scene, Entities* entities);
 void drawActor(NxActor* actor);
 void drawShape(NxShape* shape);
 void drawBox(NxBoxShape* box);
+void drawModel(ObjModel* model);
 
     Console aConsole;
 

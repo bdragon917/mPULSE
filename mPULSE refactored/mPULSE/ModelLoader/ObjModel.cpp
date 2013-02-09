@@ -12,7 +12,7 @@ void ObjModel::addVertexV(std::vector<double> geometricVertex)
     vert.x = geometricVertex[0];
     vert.y = geometricVertex[1];
     vert.z = geometricVertex[2];
-    v.push_back(vert);
+    verticies.push_back(vert);
 }
 
 void ObjModel::addVertexVT(std::vector<double> textureVertex)
@@ -20,7 +20,7 @@ void ObjModel::addVertexVT(std::vector<double> textureVertex)
     vertex2d vert;
     vert.x = textureVertex[0];
     vert.y = textureVertex[1];
-    vt.push_back(vert);
+    vertexTextureCoords.push_back(vert);
 }    
 
 void ObjModel::addVertexVN(std::vector<double> vertexNormal)
@@ -29,7 +29,7 @@ void ObjModel::addVertexVN(std::vector<double> vertexNormal)
     vert.x = vertexNormal[0];
     vert.y = vertexNormal[1];
     vert.z = vertexNormal[2];
-    vn.push_back(vert);
+    vertexNormals.push_back(vert);
 }    
 
 void ObjModel::addPointP(std::vector<double> point)
@@ -56,23 +56,51 @@ void ObjModel::addFaceF(std::vector<std::vector<int>> face)
         for(unsigned int j=0;j<face[i].size();j++)
         {
             if(j==0)
-                vertexE.vertIndex = face[i][j];
+                vertexE.vertIndex = face[i][j]-1;
             else if(j==1)
-                vertexE.vertNormalIndex = face[i][j];
+                vertexE.vertTextureIndex = face[i][j]-1;
             else if(j==2)
-                vertexE.vertTextureIndex = face[i][j];
+                vertexE.vertNormalIndex = face[i][j]-1;
         }
         vertexElements.push_back(vertexE);        
     }
-    f.push_back(vertexElements);        
+    faces.push_back(vertexElements);        
+}
+
+std::vector<ObjModel::vertex3d>* ObjModel::getVerticies()
+{
+    return &verticies;
+}
+std::vector<ObjModel::vertex2d>* ObjModel::getVertexTextureCoords()
+{
+    return &vertexTextureCoords;
+}
+std::vector<ObjModel::vertex3d>* ObjModel::getVertexNormals()
+{
+    return &vertexNormals;
+}
+
+std::vector<ObjModel::vertex3d>* ObjModel::getPoints()
+{
+    return &points;
+}
+
+std::vector<ObjModel::vertex3d>* ObjModel::getLines()
+{
+    return &lines;
+}
+
+std::vector<std::vector<ObjModel::vertElements>>* ObjModel::getFaces()
+{
+    return &faces;
 }
 
 void ObjModel::finalize()
 {    
-    v.shrink_to_fit();
-    vt.shrink_to_fit();
-    vn.shrink_to_fit();
-    p.shrink_to_fit();
-    l.shrink_to_fit();
-    f.shrink_to_fit();
+    verticies.shrink_to_fit();
+    vertexTextureCoords.shrink_to_fit();
+    vertexNormals.shrink_to_fit();
+    points.shrink_to_fit();
+    lines.shrink_to_fit();
+    faces.shrink_to_fit();
 }

@@ -16,12 +16,12 @@ public:
     ObjModel* getModel(int handle); //FIXME: return a const reference?
     std::vector<double> parseFloats(std::string line, int startIndex);
     std::vector<std::vector<int>> parseFaceElements(std::string line, int startIndex);
+    std::string MODEL_LIST_FILENAME;
+    int numOfModels;
 
 private:
     std::vector<int> handles;
     std::vector<ObjModel*> models;
-    std::string MODEL_LIST_FILENAME;
-
     int lineNum;
     int currentModelNum;   
 };
