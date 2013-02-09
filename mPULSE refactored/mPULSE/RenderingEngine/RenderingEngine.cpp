@@ -550,7 +550,7 @@ void RenderingEngine::drawActor(NxActor* actor)
 	NxShape* const* shapes = actor->getShapes();
 	NxU32 nShapes = actor->getNbShapes();
 
-	while(nShapes--)
+    while(nShapes--)
 	{
 		drawShape(shapes[nShapes]);
 	}

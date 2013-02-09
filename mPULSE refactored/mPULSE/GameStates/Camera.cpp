@@ -111,7 +111,7 @@ void Camera::updateCamera(float dt)
     movementVector.y = 3.5f;                    //This is the correct camera location target!!!
 
 
-    printf("TargetLocation: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
+    //printf("TargetLocation: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
     
     //movementVector = movementVector - targetActor->getGlobalPose().t;           //Gives a vector to that location
     movementVector = movementVector - curCamLoc;           //Gives a vector to that location
@@ -122,9 +122,9 @@ void Camera::updateCamera(float dt)
     {movementVector.normalize();}               //Might not do any thing, look at later...
 
    
-    printf("Vector: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
+   // printf("Vector: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
 
-    printf("CamLocation: %f %f %f\n", curCamLoc.x, curCamLoc.y, curCamLoc.z);
+    //printf("CamLocation: %f %f %f\n", curCamLoc.x, curCamLoc.y, curCamLoc.z);
 
 
     float catchUpSpd = 1.0f;
@@ -141,13 +141,13 @@ void Camera::updateCamera(float dt)
     if (userCamControl.magnitude() > 0.2f)
     {
 
-        printf("UserControlRaw: %f %f %f\n",userCamControl.x,userCamControl.y,userCamControl.z);
+        //printf("UserControlRaw: %f %f %f\n",userCamControl.x,userCamControl.y,userCamControl.z);
         //movementVector = (targetActor->getGlobalOrientation() * (uControl * targetDistance));
         movementVector = (userCamControl * -targetDistance);
         movementVector = targetActor->getGlobalOrientation() * movementVector;
         movementVector = movementVector + ActLoc;
 
-        printf("UserControl: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
+        //printf("UserControl: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
 
         curCamLoc = movementVector;
     }

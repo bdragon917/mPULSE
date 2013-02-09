@@ -72,6 +72,60 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
                 //set Commands
 
+                if (renderingEngine->aConsole.consoleString == "spawn obstacles")
+                {
+                    for (int x=0;x<20;x++)
+                    {
+
+                        float newX = (rand() % 40) - 20.0f;//rand() + 1;
+                        float newZ = (rand() % 40) - 20.0f;//rand() + 1;
+
+                        printf ("CreateBox: %f, %f, %f\n", newX, 3.5f, newZ );
+
+                        NxActor* aBox = physicsEngine->createBox(
+                                                                    newX,
+                                                                    3.5f,
+                                                                    newZ
+                                                                    
+                                                                   // 0,
+                                                                   // 3.5f,
+                                                                   // 0
+                                                                    );
+                        Entity aEntity;
+                        EntityComponent aEC;
+                        aEC.setActor(aBox);
+                        aEntity.addComponent(&aEC);
+                        entities.obstacles.push_back(&aEntity);
+                    }
+                     renderingEngine->aConsole.propragateMsg("Created 20 Boxes");
+                }
+
+                if (renderingEngine->aConsole.consoleString == "spawn static obs")
+                {
+                    for (int x=0;x<20;x++)
+                    {
+
+                        float newX = (rand() % 40) - 20.0f;//rand() + 1;
+                        float newZ = (rand() % 40) - 20.0f;//rand() + 1;
+
+
+                        NxActor* aBox = physicsEngine->createStaticBox(
+                                                                    newX,
+                                                                    -0.05f,
+                                                                    newZ
+                                                                    
+                                                                   // 0,
+                                                                   // 3.5f,
+                                                                   // 0
+                                                                    );
+                        Entity aEntity;
+                        EntityComponent aEC;
+                        aEC.setActor(aBox);
+                        aEntity.addComponent(&aEC);
+                        entities.obstacles.push_back(&aEntity);
+                    }
+                     renderingEngine->aConsole.propragateMsg("Created 20 static Boxes");
+                }
                 
                 //master Commands
                 if (renderingEngine->aConsole.consoleString == "quit")

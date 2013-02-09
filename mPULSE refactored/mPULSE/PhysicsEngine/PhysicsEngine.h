@@ -38,7 +38,8 @@ public:
 	//NxVec3 ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength);
 	//NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);
 	NxActor* createGroundPlane();
-	NxActor* createBox();
+	NxActor* createBox(float x, float y, float z);
+    NxActor* createStaticBox(float x, float y, float z);
     NxActor* createCarChassis();
 //    NxWheelShape* AddWheelToActor(NxActor* actor, NxWheelDesc* wheelDesc);
     void resetBox();

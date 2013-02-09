@@ -82,7 +82,7 @@ void PhysicsEngine::sceneSetup()
 	defaultMaterial->setDynamicFriction(0.5);
 
 	groundPlane = createGroundPlane();
-	box = createBox();
+	box = createBox(0,0,0);
 }
 
 
@@ -137,10 +137,10 @@ NxActor* PhysicsEngine::createGroundPlane()
 }
 
 
-NxActor* PhysicsEngine::createBox() 
+NxActor* PhysicsEngine::createBox(float x, float y, float z) 
 {
 	//Set the box starting height
-	NxVec3 position(0.0, 3.5, 0.0);
+	NxVec3 position(x, y, z);
 
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
@@ -163,6 +163,27 @@ NxActor* PhysicsEngine::createBox()
 	return actor;
 }
 
+NxActor* PhysicsEngine::createStaticBox(float x, float y, float z) 
+{
+	//Set the box starting height
+	NxVec3 position(x, y, z);
+
+	//The actor has one shape, a box, 1m on a side
+	NxBoxShapeDesc boxDesc;
+	boxDesc.dimensions.set(0.5,0.5,0.5);
+	//boxDesc.localPose.t = position;
+
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&boxDesc);
+	actorDesc.body = NULL;                  //Set as static
+	actorDesc.density = 10.0f;
+	actorDesc.globalPose.t = position;
+
+	NxActor *actor = scene->createActor(actorDesc);
+	actor->userData = (void*)size_t(0.5f);
+
+	return actor;
+}
 
 NxActor* PhysicsEngine::createCarChassis() 
 {
