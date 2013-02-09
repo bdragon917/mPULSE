@@ -473,9 +473,17 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	glPushMatrix ();
 	glLoadIdentity ();
 	
+//    entities->cars.at(0)->aCamera->updateCamera();
+
+//    NxVec3 pos = entities->cars.at(0)->aCamera->getCamLoc();
+//    NxVec3 at = entities->cars.at(0)->aCamera->getLookAt();
+
 	//Cameras
-	gluLookAt(0.0,0.0,10.0,  // Eye/camera position
-	0.0,0.0,0.0,		// Look-at position 
+//	gluLookAt(pos.x, pos.y, pos.z,  // Eye/camera position
+//	at.x ,at.y,at.z,		// Look-at position 
+
+    	gluLookAt(0, 0, 0,  // Eye/camera position
+	0 ,0,-2.0f,		// Look-at position 
 	0.0,1.0,0.0); 		// "Up" vector
 	
 	//set view

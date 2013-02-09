@@ -6,6 +6,8 @@ class Camera
 {
 public:
     Camera();
+    Camera(NxActor* aActor);
+    
     ~Camera();
 
 

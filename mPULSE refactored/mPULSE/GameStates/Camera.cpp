@@ -24,6 +24,11 @@ Camera::Camera(void)
         targetActor = NULL;
 }
 
+Camera::Camera(NxActor* aActor)
+{
+        AttachtoCar(aActor);
+        Camera();
+}
 
 Camera::~Camera(void)
 {

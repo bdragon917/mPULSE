@@ -51,6 +51,8 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
     ec_car->setActor(box);
     entityCar1->setWheel1(wheel);
 	entityCar1->setWheel2(wheel2);
+    //Camera newCamera = Camera(box);
+ //   entityCar1->aCamera = &newCamera;
 
    // wheel->getActor().addTorque(NxVec3(0,10000000000.0f,0));
    // entityCar1.aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
