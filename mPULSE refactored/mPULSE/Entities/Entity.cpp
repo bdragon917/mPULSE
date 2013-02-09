@@ -22,3 +22,8 @@ void Entity::setWheel2(NxWheelShape* wheel2)
 {
 	aWheel2 = wheel2;
 }
+
+void Entity::setWheel3(NxWheelShape* wheel3)
+{
+	aWheel3 = wheel3;
+}

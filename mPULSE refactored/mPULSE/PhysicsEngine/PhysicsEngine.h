@@ -22,23 +22,21 @@ private:
 	NxActor* groundPlane;
 	NxActor* box;
 
-	NxReal deltaTime;
-
     NxMaterial* wsm;
 
-    NxWheelShape* AddWheelToActor(NxActor* actor, float exe);
+    NxWheelShape* AddWheelToActor(NxActor* actor, float x,float y, float z);
 
 public:
     PhysicsEngine();
 	static PhysicsEngine* getInstance();
 	void sceneSetup();
-    void step();//float dt, Physics* physData);
+    void step(float deltaTime);//float dt, Physics* physData);
 	void releaseNx();
 	void resetNx();
     void setupPlayScene(vector<Entity*>* cars);      //Use this to initalize the physicScene for playState
 
-	NxVec3 ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength);
-	NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);
+	//NxVec3 ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength);
+	//NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);
 	NxActor* createGroundPlane();
 	NxActor* createBox();
     NxActor* createCarChassis();

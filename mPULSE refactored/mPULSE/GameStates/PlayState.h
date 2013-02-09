@@ -22,6 +22,5 @@ private:
     RenderingEngine::Entities entities;
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
-    float curFPS;
 };
 

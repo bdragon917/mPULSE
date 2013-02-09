@@ -9,13 +9,11 @@ PlayState::PlayState()
     physicsEngine->setupPlayScene(&entities.cars);
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
-    curFPS = 0.0f;
 }
 
 void PlayState::update(float dt)
 {    
-    curFPS = (1000/dt);
-    physicsEngine->step();
+    physicsEngine->step(dt/1000);
 }
 
 void PlayState::render()
@@ -97,26 +95,19 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
-	
-    //physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->rTrigger*25000);
+    int rTriggMag = state->rTrigger / 60;
+    int lTriggMag = state->lTrigger / 60;
+    int torque = state->leftStick.x * (state->leftStick.magnitude/-5);
 
-	NxVec3 v3 = NxVec3(0, 0, -20.0);
-    NxVec3 v0 = NxVec3(0, 0,0);
+	NxVec3 v0 = NxVec3(rTriggMag*1000,0,0);
+    NxVec3 v1 = NxVec3(lTriggMag*-1000,0,0);
+    NxVec3 v2 = NxVec3(0,torque,0);
+    //NxVec3 dir = NxVec3(state->leftStick.x,0,0);    
+        
+    entities.cars[0]->aWheel1->getActor().addLocalForce(v0);
+    entities.cars[0]->aWheel1->getActor().addLocalForce(v1);
+    entities.cars[0]->aWheel1->getActor().addTorque(v2);
 
-    //float trig = state->rTrigger*25000.0f;
-
-	if (state->rTrigger > 128)
-	{
-		entities.cars[0]->aWheel1->getActor().setLinearVelocity(v3);
-		entities.cars[0]->aWheel2->getActor().setLinearVelocity(v3);
-	}
-
-
-    //PROBLEM IS THAT ENTITY DOESN"T ACTUALLY HAVE A POINTER TO THE CAR!!!!!! - fixed
-    //
-    //theCar is another variable used to transmit the point, but this doesn't work (can delete this)
-    //
-    //The cars and theCar should have pointers added in setupPlayScene in physicsEngine.cpp
     if (state->a)
     {
         if (!(entities.cars[0]->aWheel1 == NULL))
@@ -131,27 +122,27 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
             printf("NULL WHEEL0 at Cars[0]\n");
     }
 
-    if (state->b)
-    {
-        if (!(entities.cars.at(0)->aWheel1 ==NULL))
-        {entities.cars.at(0)->aWheel1->getActor().addForce(v3);}
-        else
-        {printf("NULL WHEEL0 at Cars[0]\n");}
-    }
-    if (state->x)
-    {
-        if (!(entities.cars.at(0)->components.at(0) == NULL))
-        {entities.cars.at(0)->components.at(0)->getActor()->addForce(v3);}
-        else
-        {printf("NULL Cars[0]\n");}
-    }
-    if (state->y)
-    {
-        if (!(entities.cars.at(0)->components.at(0) == NULL))
-        {entities.cars.at(0)->components.at(0)->getActor()->moveGlobalPosition(v0);}
-        else
-        {printf("NULL Cars[0]\n");}
-    }
+    //if (state->b)
+    //{
+    //    if (!(entities.cars.at(0)->aWheel1 ==NULL))
+    //    {entities.cars.at(0)->aWheel1->getActor().addForce(v3);}
+    //    else
+    //    {printf("NULL WHEEL0 at Cars[0]\n");}
+    //}
+    //if (state->x)
+    //{
+    //    if (!(entities.cars.at(0)->components.at(0) == NULL))
+    //    {entities.cars.at(0)->components.at(0)->getActor()->addForce(v3);}
+    //    else
+    //    {printf("NULL Cars[0]\n");}
+    //}
+    //if (state->y)
+    //{
+    //    if (!(entities.cars.at(0)->components.at(0) == NULL))
+    //    {entities.cars.at(0)->components.at(0)->getActor()->moveGlobalPosition(v0);}
+    //    else
+    //    {printf("NULL Cars[0]\n");}
+    //}
 
     //cars.at(0)->aWheel1->setMotorTorque(trig);
     //cars.at(0)->aWheel1->setAxleSpeed(trig);

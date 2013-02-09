@@ -474,7 +474,7 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	glLoadIdentity ();
 	
 	//Cameras
-	gluLookAt(0.0,0.0,10.0,  // Eye/camera position
+	gluLookAt(0.0,0.0,15.0,  // Eye/camera position
 	0.0,0.0,0.0,		// Look-at position 
 	0.0,1.0,0.0); 		// "Up" vector
 	
