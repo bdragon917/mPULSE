@@ -105,9 +105,16 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 	
     //physicsEngine->ApplyForceToBox(NxVec3(state->leftStick.x,0.0,-(state->leftStick.y)), state->rTrigger*25000);
 
-    float trig = state->rTrigger*25000.0f;
-    NxVec3 v3 = NxVec3(0, 250000.0f,0);
+	NxVec3 v3 = NxVec3(0, 0, -20.0);
     NxVec3 v0 = NxVec3(0, 0,0);
+
+    //float trig = state->rTrigger*25000.0f;
+
+	if (state->rTrigger > 128)
+	{
+		cars[0]->aWheel1->getActor().setLinearVelocity(v3);
+		cars[0]->aWheel2->getActor().setLinearVelocity(v3);
+	}
 
 
     //PROBLEM IS THAT ENTITY DOESN"T ACTUALLY HAVE A POINTER TO THE CAR!!!!!! - fixed
@@ -118,7 +125,13 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     if (state->a)
     {
         if (!(cars[0]->aWheel1 == NULL))
-            cars[0]->aWheel1->getActor().addTorque(v3);
+		{
+            //cars[0]->aWheel1->getActor().setLinearVelocity(v3);
+			//cars[0]->aWheel2->getActor().setLinearVelocity(v3);
+			//cars[0]->aWheel2->getActor().addTorque(v3);
+			//cars[0]->aWheel1->setAxleSpeed(1);
+			//cars[0]->aWheel2->setAxleSpeed(1);
+		}	
         else
             printf("NULL WHEEL0 at Cars[0]\n");
     }

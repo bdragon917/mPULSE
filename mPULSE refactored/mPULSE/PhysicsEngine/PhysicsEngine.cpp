@@ -43,12 +43,14 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	//box = createBox();
 
     NxActor* box = createCarChassis();              //create a Chassis
-    NxWheelShape* wheel = AddWheelToActor(box);     //Create a wheel, and attach it to the Chassis
+    NxWheelShape* wheel = AddWheelToActor(box, 0.5f);     //Create a wheel, and attach it to the Chassis
+	NxWheelShape* wheel2 = AddWheelToActor(box, -0.5f);
 
     Entity* entityCar1 = new Entity();    
     EntityComponent* ec_car = new EntityComponent();
     ec_car->setActor(box);
     entityCar1->setWheel1(wheel);
+	entityCar1->setWheel2(wheel2);
 
    // wheel->getActor().addTorque(NxVec3(0,10000000000.0f,0));
    // entityCar1.aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
@@ -58,6 +60,7 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
     entityCar1->addComponent( ec_car );    
     tmpCars->at(0) = entityCar1;    
     tmpCars->at(0)->aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
+	tmpCars->at(0)->aWheel2->getActor().addTorque(NxVec3(0,10000000000.0f,0));
 }
 
 void PhysicsEngine::sceneSetup()
@@ -194,7 +197,7 @@ NxActor* PhysicsEngine::createCarChassis()
 }
 
 
-NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor)
+NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float exe)
 {
 	NxWheelShapeDesc wheelShapeDesc;
 
@@ -208,7 +211,7 @@ NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor)
 	wheelShapeDesc.materialIndex = wsm->getMaterialIndex();
 
 
-	wheelShapeDesc.localPose.t = NxVec3(0,    -0.3f,   0);//wheelDesc->position;
+	wheelShapeDesc.localPose.t = NxVec3(exe, 0.05,   0);//wheelDesc->position;
 
 	NxQuat q;
 	q.fromAngleAxis(90, NxVec3(0,1,0));

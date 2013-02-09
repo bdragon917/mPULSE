@@ -17,3 +17,8 @@ void Entity::setWheel1(NxWheelShape* wheel1)
 {
     aWheel1 = wheel1;
 }
+
+void Entity::setWheel2(NxWheelShape* wheel2)
+{
+	aWheel2 = wheel2;
+}

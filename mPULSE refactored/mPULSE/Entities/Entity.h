@@ -14,6 +14,7 @@ public:
     
     void addComponent(EntityComponent* com);
     void setWheel1(NxWheelShape* wheel1);
+	void setWheel2(NxWheelShape* wheel2);
 
 private:
     //std::vector<EntityComponent*> components;
