@@ -15,6 +15,7 @@ public:
         void AttachtoCar(NxActor* aActor);
         NxVec3 getLookAt();
         NxVec3 getCamLoc();
+        void setUserCamControl(NxVec3 userControl);
         void setDistance(float inDistance);
         void setMaxDistance(float inDistance);
         void updateCamera(float dt);
@@ -27,6 +28,8 @@ private:
         NxVec3 curCamLookAt;
         NxVec3 curOrientation;
         NxActor* targetActor;
+
+        NxVec3 userCamControl;
 
 
 };

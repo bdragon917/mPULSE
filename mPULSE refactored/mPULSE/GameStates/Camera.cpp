@@ -22,6 +22,7 @@ Camera::Camera(void)
         curCamLoc = NxVec3(0,0,-1.0f);
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
+        userCamControl = NxVec3(0,0,0);
         targetActor = NULL;
 }
 
@@ -35,6 +36,7 @@ Camera::Camera(NxActor* aActor)
         curCamLoc = NxVec3(0,0,-1.0f);
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
+        userCamControl = NxVec3(0,0,0);
 }
 
 Camera::~Camera(void)
@@ -64,6 +66,17 @@ void Camera::setDistance(float inDistance)
 void Camera::setMaxDistance(float inDistance)
 {
     maxDistance = inDistance;
+}
+
+void Camera::setUserCamControl(NxVec3 uControl)
+{
+
+    //userCamControl = uControl;
+    userCamControl = uControl;
+    //userCamControl.setx( uControl.x);
+    //userCamControl.sety(uControl.y);
+    //userCamControl.setz( uControl.z);
+    //printf("UserControlInput: %f %f %f\n", uControl.x, uControl.y, uControl.z);
 }
 
 void Camera::updateCamera(float dt)
@@ -106,7 +119,7 @@ void Camera::updateCamera(float dt)
     float movMag = movementVector.magnitude();      //magnitude
 
     if (movementVector.magnitude() > 1.0f)
-    {movementVector.normalize();}
+    {movementVector.normalize();}               //Might not do any thing, look at later...
 
    
     printf("Vector: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
@@ -123,6 +136,21 @@ void Camera::updateCamera(float dt)
 
     
     curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd * dt;
+
+
+    if (userCamControl.magnitude() > 0.2f)
+    {
+
+        printf("UserControlRaw: %f %f %f\n",userCamControl.x,userCamControl.y,userCamControl.z);
+        //movementVector = (targetActor->getGlobalOrientation() * (uControl * targetDistance));
+        movementVector = (userCamControl * -targetDistance);
+        movementVector = targetActor->getGlobalOrientation() * movementVector;
+        movementVector = movementVector + ActLoc;
+
+        printf("UserControl: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
+
+        curCamLoc = movementVector;
+    }
 
 
     //curCamLoc.x = movementVector.x;

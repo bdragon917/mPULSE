@@ -14,7 +14,9 @@ PlayState::PlayState()
 void PlayState::update(float dt)
 {    
     physicsEngine->step(dt/1000);
-    entities.cars[0]->aCam->updateCamera(dt/16);
+    
+//    entities.cars[0]->aCam->updateCamera(dt/16);
+    entities.cars[0]->aCam->updateCamera(1.0f);
 }
 
 void PlayState::render()
@@ -96,6 +98,15 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
+    //UserCamControl
+    //entities.cars[0]->aCam->updateCamera(1.0f,NxVec3 ((state->rightStick.y), 0,( state->rightStick.x)) );
+
+    {
+        entities.cars[0]->aCam->updateCamera(1.0f);
+        entities.cars[0]->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
+    }
+    
+    
     int rTriggMag = state->rTrigger / 60;
     int lTriggMag = state->lTrigger / 60;
     int torque = state->leftStick.x * (state->leftStick.magnitude/-5);
@@ -108,6 +119,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     entities.cars[0]->aWheel1->getActor().addLocalForce(v0);
     entities.cars[0]->aWheel1->getActor().addLocalForce(v1);
     entities.cars[0]->aWheel1->getActor().addTorque(v2);
+
 
     if (state->a)
     {
