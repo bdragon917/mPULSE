@@ -46,18 +46,16 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")
-                {renderingEngine->aConsole.consoleString = "Number of elements in cars: " + renderingEngine->FloatToString(cars.size());}
+                {renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->FloatToString(cars.size()));}
 
                 if (renderingEngine->aConsole.consoleString == "num actors")
-                {renderingEngine->aConsole.consoleString = "Number of actors in scene: " + renderingEngine->FloatToString(physicsEngine->getScene()->getNbActors());}
+                {renderingEngine->aConsole.propragateMsg("Number of actors in scene: " + renderingEngine->FloatToString(physicsEngine->getScene()->getNbActors()));}
 
                 if (renderingEngine->aConsole.consoleString == "num debugphysic")
                 {
-                    renderingEngine->aConsole.consoleString = "Number of Lines in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbLines());
-                    renderingEngine->aConsole.propragateMsg();
-                    renderingEngine->aConsole.consoleString = "Number of Points in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbPoints());
-                    renderingEngine->aConsole.propragateMsg();
-                    renderingEngine->aConsole.consoleString = "Number of Triangles in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbTriangles());
+                    renderingEngine->aConsole.propragateMsg("Number of Lines in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbLines()));
+                    renderingEngine->aConsole.propragateMsg("Number of Points in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbPoints()));
+                    renderingEngine->aConsole.propragateMsg("Number of Triangles in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbTriangles()));
                 }
                 
                 //Get Commands
@@ -65,9 +63,9 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 //{renderingEngine->aConsole.consoleString = "Test Wheel Torgue: " + renderingEngine->FloatToString(cars.at(0)->aWheel1->getMotorTorque());renderingEngine->aConsole.propragateMsg();}
 
                 //tog Commands
-                if (renderingEngine->aConsole.consoleString == "tog debugphysic")
+                if ((renderingEngine->aConsole.consoleString == "tog debugphysic") || (renderingEngine->aConsole.consoleString == "tog dp"))
                 {
-                    if (renderingEngine->debugPhysX){renderingEngine->debugPhysX=false;}else{renderingEngine->debugPhysX=true;}; 
+                    if (renderingEngine->debugPhysX){renderingEngine->debugPhysX=false;renderingEngine->showScene=true;}else{renderingEngine->debugPhysX=true;renderingEngine->showScene=false;}; 
                 }
                 if (renderingEngine->aConsole.consoleString == "tog showscene")
                 {
@@ -80,7 +78,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 //master Commands
                 if (renderingEngine->aConsole.consoleString == "quit")
                 {
-                    renderingEngine->aConsole.consoleString = "Trying to Quit...";
+                    renderingEngine->aConsole.propragateMsg("Trying to Quit...");
                     return false;
                 }
 

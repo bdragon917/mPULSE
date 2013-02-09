@@ -6,6 +6,13 @@
 #include <stdio.h>
 #include <sstream>
 
+#include <vector>
+
+//files
+#include <iostream>
+#include <stdio.h>
+#include <fstream>
+
 class Console
 {
 public:
@@ -16,9 +23,14 @@ public:
         std::string consoleString;
         std::string consoleOut[5];
 
+        void propragateMsg(std::string feedbackMsg);
         void propragateMsg();
         void goUp();
 private:
+        int logPointer;
+        void appendExcessLog();
+        void appendLog();
+        std::vector<std::string> log;
 
 
 };
