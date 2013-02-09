@@ -122,6 +122,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
             printf("NULL WHEEL0 at Cars[0]\n");
     }
 
+
     //if (state->b)
     //{
     //    if (!(entities.cars.at(0)->aWheel1 ==NULL))
@@ -149,6 +150,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     //cars.at(0)->aWheel->motorTorque.setMotorTorque(trig);
 	if(state->lb) {
 		physicsEngine->resetBox();
+        entities.cars[0]->components[0]->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
 	}
 }
 

@@ -188,7 +188,8 @@ NxActor* PhysicsEngine::createCarChassis()
 
 	NxActor *actor = scene->createActor(actorDesc);
 
-    
+    actor->raiseBodyFlag(NX_BF_FROZEN_ROT_X);
+	actor->raiseBodyFlag(NX_BF_FROZEN_ROT_Z);
 
    
     
