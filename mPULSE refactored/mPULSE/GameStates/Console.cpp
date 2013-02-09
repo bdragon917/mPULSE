@@ -53,7 +53,7 @@ void Console::goUp()
         if (!(log.at(logPointer).empty()))      //check to see if valid?
             consoleString = log.at(logPointer);
         
-        if ( (logPointer - 1) > 0 )
+        if ( (logPointer - 1) >= 0 )
         {logPointer = logPointer - 1;}
         else
         {logPointer = log.size() - 1;}
