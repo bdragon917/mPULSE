@@ -1,7 +1,6 @@
 #define NOMINMAX
 #define NO_SDL_GLEXT
 
-
 #include <GL/glew.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -9,29 +8,24 @@
 #include "Util\Clock.h"
 #include "Input\XboxController.h"
 
+//Methods
 bool init();
 
+//Variables
 SDL_Surface* screen = NULL;
-bool gameRunning = true;
 const int MAX_PLAYERS = 4;
 int numPlayers = 0;
-int frameRate = 60;
-Game game;
 XboxController* players[MAX_PLAYERS];
-Clock gameClock(frameRate);
-float deltaTime = 0;
-SDL_Event KeyboardMouseState;    
-XINPUT_STATE XboxState;
  
 int main(int argc, char *argv[])
 {
-    if (!init())
-        gameRunning = false;
+    Game game;
+    SDL_Event KeyboardMouseState;    
+    bool gameRunning = true;
 
+    gameRunning = init();
     while(gameRunning)
     {
-        deltaTime = gameClock.getDeltaTime();
-
         //Handle window events
         while(SDL_PollEvent(&KeyboardMouseState))
             gameRunning = game.handleKeyboardMouseEvents(KeyboardMouseState);
@@ -42,21 +36,13 @@ int main(int argc, char *argv[])
             players[player]->update();
             game.handleXboxEvents(player,players[player]);
         }
-
-        //physics simulations
-		game.update(deltaTime);
-
-		//Updates game's FPS info
-		game.curFPS = (1000/deltaTime);
-
-        //openGL calls
-		game.render(); 
-         
+        
+		game.update();  //physics simulations
+		game.render();  //openGL calls          
 
         //Display to screen
         SDL_GL_SwapBuffers();
-        //printf("FPS: %f\n",(1000/deltaTime));
-		}
+	}
 
     SDL_Quit();
     return 0;

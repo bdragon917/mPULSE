@@ -15,7 +15,6 @@ PhysicsEngine* PhysicsEngine::getInstance()
 void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 {
     std::vector<Entity*>* tmpCars =  cars;
-	deltaTime = 1.0f/60.0f;
 	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
 	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01f);
 
@@ -43,31 +42,30 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	//box = createBox();
 
     NxActor* box = createCarChassis();              //create a Chassis
-    NxWheelShape* wheel = AddWheelToActor(box, 0.5f);     //Create a wheel, and attach it to the Chassis
-	NxWheelShape* wheel2 = AddWheelToActor(box, -0.5f);
+    NxWheelShape* wheel = AddWheelToActor(box, 1.0f,-0.5,1.2);     //Create a wheel, and attach it to the Chassis
+	NxWheelShape* wheel2 = AddWheelToActor(box, 1.0f,-0.5,-1.2);
+    NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f,-0.5,0.0);
+    //NxWheelShape* wheel3 = AddWheelToActor(box, -0.5f,0.05);
 
     Entity* entityCar1 = new Entity();    
     EntityComponent* ec_car = new EntityComponent();
     ec_car->setActor(box);
     entityCar1->setWheel1(wheel);
 	entityCar1->setWheel2(wheel2);
+    entityCar1->setWheel3(wheel3);
     //Camera newCamera = Camera(box);
  //   entityCar1->aCamera = &newCamera;
-
-   // wheel->getActor().addTorque(NxVec3(0,10000000000.0f,0));
-   // entityCar1.aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
-    int a = 1;
 
    // entityCar1.components.push_back( &ec_car );
     entityCar1->addComponent( ec_car );    
     tmpCars->at(0) = entityCar1;    
     tmpCars->at(0)->aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
 	tmpCars->at(0)->aWheel2->getActor().addTorque(NxVec3(0,10000000000.0f,0));
+    tmpCars->at(0)->aWheel3->getActor().addTorque(NxVec3(0,10000000000.0f,0));
 }
 
 void PhysicsEngine::sceneSetup()
 {
-	deltaTime = 1.0f/60.0f;
 	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
 	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01f);
 
@@ -88,7 +86,7 @@ void PhysicsEngine::sceneSetup()
 }
 
 
-void PhysicsEngine::step()//float dt, Physics* physData)
+void PhysicsEngine::step(float deltaTime)
 {
 	scene->simulate(deltaTime);
 	scene->flushStream();
@@ -113,21 +111,21 @@ void PhysicsEngine::resetNx()
 	sceneSetup();
 }
 
+//Needs deltaTime from gameClock in the Game class
+//NxVec3 PhysicsEngine::ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength)
+//{
+//	NxVec3 forceVec = forceStrength*forceDir*deltaTime;
+//	actor->addForce(forceVec);
+//	return forceVec;
+//}
 
-NxVec3 PhysicsEngine::ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength)
-{
-	NxVec3 forceVec = forceStrength*forceDir*deltaTime;
-	actor->addForce(forceVec);
-	return forceVec;
-}
-
-
-NxVec3 PhysicsEngine::ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength)
-{
-	NxVec3 forceVec = forceStrength*forceDir*deltaTime;
-	box->addForce(forceVec);
-	return forceVec;
-}
+//Needs deltaTime from gameClock in the Game class
+//NxVec3 PhysicsEngine::ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength)
+//{
+//	NxVec3 forceVec = forceStrength*forceDir*deltaTime;
+//	box->addForce(forceVec);
+//	return forceVec;
+//}
 
 
 NxActor* PhysicsEngine::createGroundPlane()
@@ -199,7 +197,7 @@ NxActor* PhysicsEngine::createCarChassis()
 }
 
 
-NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float exe)
+NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, float z)
 {
 	NxWheelShapeDesc wheelShapeDesc;
 
@@ -213,7 +211,7 @@ NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float exe)
 	wheelShapeDesc.materialIndex = wsm->getMaterialIndex();
 
 
-	wheelShapeDesc.localPose.t = NxVec3(exe, 0.05,   0);//wheelDesc->position;
+	wheelShapeDesc.localPose.t = NxVec3(x, y, z);//wheelDesc->position;
 
 	NxQuat q;
 	q.fromAngleAxis(90, NxVec3(0,1,0));
