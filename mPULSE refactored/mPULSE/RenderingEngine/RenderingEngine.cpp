@@ -1,8 +1,9 @@
 #include "RenderingEngine.h"
 
-
+ModelManager mm;
 RenderingEngine::RenderingEngine()
 {
+    mm.loadModelsFromList(mm.MODEL_LIST_FILENAME);
     showConsole = true;
     zRot = 0.0f;
     SCREEN_WIDTH = 640;
@@ -108,6 +109,32 @@ string RenderingEngine::FloatToString(float input)
 	stringstream stream;
 	stream << input;
 	return stream.str();
+}
+
+void RenderingEngine::drawModel(ObjModel* model)
+{
+    std::vector<std::vector<ObjModel::vertElements>>* faces = model->getFaces();
+    std::vector<ObjModel::vertex3d>* verticies = model->getVerticies();
+    std::vector<ObjModel::vertex3d>* norms = model->getVertexNormals();
+
+    ObjModel::vertElements face;
+    ObjModel::vertex3d  vert;
+    ObjModel::vertex3d  norm;
+
+    glColor3f(1,1,1);
+    glBegin(GL_TRIANGLES);
+    for(int i=0;i<faces->size();i++)
+    {
+        for(int j=0;j<faces->at(i).size();j++)
+        {
+            face = faces    ->  at(i).at(j);
+            vert = verticies->  at(face.vertIndex);
+            norm = norms    ->  at(face.vertNormalIndex);
+            glNormal3f(norm.x,norm.y,norm.z);
+            glVertex3f(vert.x*5,vert.y*5,vert.z*5);
+        }
+    }
+    glEnd();
 }
 
 /**
@@ -506,7 +533,10 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	//glRotatef (10.0f, 10.0f, 0.0, 0.0);
 	
     if (showScene)
-    {
+    {       
+        for(int i=0;i<mm.numOfModels;i++)
+            drawModel(mm.getModel(i));
+
 	    glColor3f(0.75f, 0.75f, 0.75f);
 	    //Draws a checkboard Ground
 	     drawGroundPlane(gxo, gyo);

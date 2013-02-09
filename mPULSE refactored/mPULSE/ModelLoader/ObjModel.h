@@ -21,9 +21,9 @@ public:
 
     typedef struct
     {
-        int vertIndex;
-        int vertNormalIndex;        
+        int vertIndex;             
         int vertTextureIndex;
+        int vertNormalIndex;   
     } vertElements;
 
     ObjModel(int ind);
@@ -35,13 +35,20 @@ public:
     void addFaceF(std::vector<std::vector<int>> face);
     void finalize();
 
+    std::vector<vertex3d>* getVerticies();
+    std::vector<vertex2d>* getVertexTextureCoords();
+    std::vector<vertex3d>* getVertexNormals();
+    std::vector<vertex3d>* getPoints();
+    std::vector<vertex3d>* getLines();
+    std::vector<std::vector<vertElements>>* getFaces();
+
 private:
-    std::vector<vertex3d> v;
-    std::vector<vertex2d> vt;
-    std::vector<vertex3d> vn;
-    std::vector<vertex3d> p;
-    std::vector<vertex3d> l;
-    std::vector<std::vector<vertElements>> f;
+    std::vector<vertex3d> verticies;
+    std::vector<vertex2d> vertexTextureCoords;
+    std::vector<vertex3d> vertexNormals;
+    std::vector<vertex3d> points;
+    std::vector<vertex3d> lines;
+    std::vector<std::vector<vertElements>> faces;
     int index;
 };
 

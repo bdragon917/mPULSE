@@ -1,10 +1,13 @@
 #include "ModelManager.h"
-        
+     
+static int faceCount = 0;
+
     ModelManager::ModelManager()
-    {
+    {        
         lineNum = 0;
         currentModelNum = 0;
-        MODEL_LIST_FILENAME = "ModelList.txt";
+        numOfModels = 0;
+        MODEL_LIST_FILENAME = "ModelLoader\\ModelList.txt";
     }
 
     void ModelManager::loadModelsFromList(std::string modelListFilename)
@@ -15,16 +18,20 @@
         std::string tmpName;
 
 	    file.open(modelListFilename);	
-	    while(!file.eof())
-	    {
-            file.getline(charArray,1024);
-            tmpName = charArray;
-            modelFileNames.push_back(tmpName);
-	    }
-	    file.close();
 
-        for(unsigned int i=0;i<modelFileNames.size();i++)
-            LoadModel(modelFileNames[i]);
+        if(file.is_open())
+        {
+	        while(!file.eof())
+	        {
+                file.getline(charArray,1024);
+                tmpName = charArray;
+                modelFileNames.push_back(tmpName);
+	        }
+	        file.close();
+
+            for(unsigned int i=0;i<modelFileNames.size();i++)
+                LoadModel(modelFileNames[i]);
+        }
     }
 
     int ModelManager::LoadModel(std::string fileName)
@@ -37,16 +44,21 @@
         models.push_back(new ObjModel(currentModelNum));
 
 	    file.open(fileName);	
-	    while(!file.eof())
-	    {
-            file.getline(charArray,1024);
-            lineNum++;
-            tmpLine = charArray;
-		    parseLine(tmpLine,models[currentModelNum]);		    		
-	    }
-	    file.close();                
-        models[currentModelNum]->finalize();
-        return currentModelNum++;
+        if(file.is_open())
+        {
+	        while(!file.eof())
+	        {
+                file.getline(charArray,1024);
+                lineNum++;
+                tmpLine = charArray;
+		        parseLine(tmpLine,models[currentModelNum]);		    		
+	        }
+	        file.close();                
+            models[currentModelNum]->finalize();
+            numOfModels++;
+            return currentModelNum++;
+        }
+        return -1;
     }
 
     ObjModel* ModelManager::getModel(int index)
@@ -340,6 +352,12 @@
         bool parsing = true;
         bool startSeen = false;
 
+        faceCount++;
+        if(faceCount == 110)
+        {
+            printf(line.data());
+            printf("\n");
+        }
         std::vector<std::vector<int>> faceElements;
         std::vector<int> elements;
         while(parsing && i < line.size())
