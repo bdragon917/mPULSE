@@ -26,7 +26,7 @@ private:
 
     NxMaterial* wsm;
 
-    NxWheelShape* AddWheelToActor(NxActor* actor);
+    NxWheelShape* AddWheelToActor(NxActor* actor, float exe);
 
 public:
     PhysicsEngine();
