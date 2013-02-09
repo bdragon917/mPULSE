@@ -13,7 +13,7 @@ public:
     NxWheelShape* aWheel2;
     NxWheelShape* aWheel3;
 
-    //Camera aCam;
+    Camera* aCam;
     
     void addComponent(EntityComponent* com);
     void setWheel1(NxWheelShape* wheel1);

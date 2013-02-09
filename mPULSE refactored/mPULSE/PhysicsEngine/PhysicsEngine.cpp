@@ -54,7 +54,7 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	entityCar1->setWheel2(wheel2);
     entityCar1->setWheel3(wheel3);
     //Camera newCamera = Camera(box);
- //   entityCar1->aCamera = &newCamera;
+    entityCar1->aCam = new Camera(box);
 
    // entityCar1.components.push_back( &ec_car );
     entityCar1->addComponent( ec_car );    

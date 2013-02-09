@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Entities/Entity.h"
+#include <NxPhysics.h>
 
 class Camera
 {
