@@ -22,7 +22,7 @@ RenderingEngine* RenderingEngine::getInstance()
 }
 
 //Texture Stuff
-void RenderingEngine::bindBMPtoTexture(char* filename, GLuint *textures)
+void RenderingEngine::bindBMPtoTexture(char* filename, GLuint textures)
 {
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
@@ -38,11 +38,15 @@ void RenderingEngine::bindBMPtoTexture(char* filename, GLuint *textures)
 	width = aBMPImg.GetWidth();
 	height = aBMPImg.GetHeight();
 
-	glGenTextures(1, &textureid_P1);
+	//glGenTextures(1, &textures);
 
-	glBindTexture(GL_TEXTURE_2D, textureid_P1);
+	glBindTexture(GL_TEXTURE_2D, textures);
+
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+
 	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
 }
 /**
 	To-be moved to Render Initialization Method
@@ -58,23 +62,29 @@ void RenderingEngine::initializeTexture()
 	int width;
 	int height;
 
+    textureid_P1 = new GLuint[3];
+    glGenTextures(3, textureid_P1);
+
+    bindBMPtoTexture("./img/testT.bmp", textureid_P1[0]);
+    bindBMPtoTexture("./img/loadScreen.bmp", textureid_P1[1]);
+    bindBMPtoTexture("./img/hello.bmp", textureid_P1[2]);
 	//"/img/textureTest.bmp"
 
-	int err = aBMPImg.Load("./img/testT.bmp");
-	if (!(err == 1))
-	{printf("Error: Loading Texture: %i\n", err);}
-	data = aBMPImg.GetImg();
-	width = aBMPImg.GetWidth();
-	height = aBMPImg.GetHeight();
-	//aBMPImg.GetImg
-	//LoadPicture(data);
+	//int err = aBMPImg.Load("./img/testT.bmp");
+	//if (!(err == 1))
+	//{printf("Error: Loading Texture: %i\n", err);}
+	//data = aBMPImg.GetImg();
+	//width = aBMPImg.GetWidth();
+	//height = aBMPImg.GetHeight();
+	////aBMPImg.GetImg
+	////LoadPicture(data);
 
-	//glEnable (GL_TEXTURE_2D);		//Don't need this, since shader programs will control texture usage
-	glGenTextures(1, &textureid_P1);
+	////glEnable (GL_TEXTURE_2D);		//Don't need this, since shader programs will control texture usage
+	//glGenTextures(1, &textureid_P1);
 
-	glBindTexture(GL_TEXTURE_2D, textureid_P1);
+	//glBindTexture(GL_TEXTURE_2D, textureid_P1);
 	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+	//glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
 	//**/
 
 
@@ -548,9 +558,7 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	
     if (showScene)
     {
-   //     drawGroundPlane(gxo, gyo);
-    //    for(int i=0;i<modelManager.numOfModels;i++)
-    //        drawModel(modelManager.getModel(i),0,10,0,1);
+
 
 	    glColor3f(0.75f, 0.75f, 0.75f);          
 
@@ -558,9 +566,18 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 
          if (aShader != NULL)
          {
+            glEnable(GL_TEXTURE_2D);
             aShader->on();
             shaded = 't';
          }
+
+                // glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+                 drawGroundPlane(gxo, gyo);
+
+       // glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+        for(int i=0;i<modelManager.numOfModels;i++)
+            drawModel(modelManager.getModel(i),0,10,0,1);
+
 
 		// Render all actors
 	    int nbActors = scene->getNbActors();
@@ -579,6 +596,8 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
      if (debugPhysX) //If debugPhyX then
           RenderDebugPhysic(scene->getDebugRenderable());
 
+
+     glDisable(GL_TEXTURE_2D);
     if (showConsole)
         displayConsole();
 

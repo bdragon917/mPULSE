@@ -69,6 +69,9 @@ void drawModel(ObjModel* model,int x,int y, int z, int scale);
     bool debugPhysX;
     bool showScene;
 
+    //Texture Stuff
+    GLuint* textureid_P1;
+
 private:
     RenderingEngine();
     ModelManager modelManager;
@@ -84,10 +87,9 @@ private:
 
 
 
-    //Texture Stuff
-    GLuint textureid_P1;
 
-    void bindBMPtoTexture(char* filename, GLuint *textures);
+
+    void bindBMPtoTexture(char* filename, GLuint textures);
     void initializeTexture();
 
 //    int loadShaders();

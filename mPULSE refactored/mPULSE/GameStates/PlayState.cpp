@@ -93,6 +93,24 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     if (renderingEngine->showScene){renderingEngine->showScene=false;}else{renderingEngine->showScene=true;}; 
                 }
 
+                if (renderingEngine->aConsole.consoleString == "tog text0")
+                {
+                    glBindTexture(GL_TEXTURE_2D, renderingEngine->textureid_P1[0]);
+                }
+                if (renderingEngine->aConsole.consoleString == "tog text1")
+                {
+                    glBindTexture(GL_TEXTURE_2D, renderingEngine->textureid_P1[1]);
+                }
+                if (renderingEngine->aConsole.consoleString == "tog text2")
+                {
+                    glBindTexture(GL_TEXTURE_2D, renderingEngine->textureid_P1[2]);
+                }
+                if (renderingEngine->aConsole.consoleString == "tog text3")
+                {
+                    glBindTexture(GL_TEXTURE_2D, renderingEngine->textureid_P1[3]);
+                }
+                
+
                 //set Commands
 
                 if (renderingEngine->aConsole.consoleString == "spawn obstacles")
