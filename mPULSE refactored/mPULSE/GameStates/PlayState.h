@@ -18,7 +18,6 @@ public:
 
 private:
     PlayState();
-
     RenderingEngine::Entities entities;
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;

@@ -3,8 +3,8 @@
 InitState::InitState()
 {
     stateType = INIT;
-    renderingEngine = RenderingEngine::getInstance();
-    renderingEngine->initializeGL();
+    //renderingEngine = RenderingEngine::getInstance();
+    //renderingEngine->initializeGL();
     //renderer->drawIntro2();    
     time = clock.getCurrentTime();
 }

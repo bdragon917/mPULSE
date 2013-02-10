@@ -20,6 +20,7 @@ public:
     int numOfModels;
 
 private:
+    bool DebugMode;
     std::vector<int> handles;
     std::vector<ObjModel*> models;
     int lineNum;

@@ -1,9 +1,9 @@
 #include "ModelManager.h"
      
-static int faceCount = 0;
 
     ModelManager::ModelManager()
     {        
+        DebugMode = false;
         lineNum = 0;
         currentModelNum = 0;
         numOfModels = 0;
@@ -41,11 +41,10 @@ static int faceCount = 0;
         std::ifstream file;
         lineNum = 0;
 
-        models.push_back(new ObjModel(currentModelNum));
-
 	    file.open(fileName);	
         if(file.is_open())
         {
+            models.push_back(new ObjModel(currentModelNum));
 	        while(!file.eof())
 	        {
                 file.getline(charArray,1024);
@@ -290,7 +289,7 @@ static int faceCount = 0;
         { 
         
         }*/
-        else 
+        else if(DebugMode)
             printf("%s not defined. Unsupported or bad format. Line:   %d\n",lineString.data(),lineNum);
             
     }
@@ -352,12 +351,6 @@ static int faceCount = 0;
         bool parsing = true;
         bool startSeen = false;
 
-        faceCount++;
-        if(faceCount == 110)
-        {
-            printf(line.data());
-            printf("\n");
-        }
         std::vector<std::vector<int>> faceElements;
         std::vector<int> elements;
         while(parsing && i < line.size())

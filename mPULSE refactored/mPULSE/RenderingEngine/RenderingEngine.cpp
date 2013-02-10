@@ -1,9 +1,8 @@
 #include "RenderingEngine.h"
 
-ModelManager mm;
 RenderingEngine::RenderingEngine()
 {
-    mm.loadModelsFromList(mm.MODEL_LIST_FILENAME);
+    modelManager.loadModelsFromList(modelManager.MODEL_LIST_FILENAME);
     showConsole = true;
     zRot = 0.0f;
     SCREEN_WIDTH = 640;
@@ -534,8 +533,8 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	
     if (showScene)
     {       
-        for(int i=0;i<mm.numOfModels;i++)
-            drawModel(mm.getModel(i));
+        for(int i=0;i<modelManager.numOfModels;i++)
+            drawModel(modelManager.getModel(i));
 
 	    glColor3f(0.75f, 0.75f, 0.75f);
 	    //Draws a checkboard Ground

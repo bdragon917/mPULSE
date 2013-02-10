@@ -93,7 +93,6 @@
     <ClCompile Include="mPULSE.cpp" />
     <ClCompile Include="PhysicsEngine\Physics.cpp" />
     <ClCompile Include="PhysicsEngine\PhysicsEngine.cpp" />
-    <ClCompile Include="RenderingEngine\Appearance.cpp" />
     <ClCompile Include="RenderingEngine\RenderingEngine.cpp" />
     <ClCompile Include="RenderingEngine\Shader.cpp" />
     <ClCompile Include="Util\Clock.cpp" />
@@ -112,7 +111,6 @@
     <ClInclude Include="ModelLoader\ObjModel.h" />
     <ClInclude Include="PhysicsEngine\Physics.h" />
     <ClInclude Include="PhysicsEngine\PhysicsEngine.h" />
-    <ClInclude Include="RenderingEngine\Appearance.h" />
     <ClInclude Include="RenderingEngine\BMP.h" />
     <ClInclude Include="RenderingEngine\RenderingEngine.h" />
     <ClInclude Include="RenderingEngine\Shader.h" />

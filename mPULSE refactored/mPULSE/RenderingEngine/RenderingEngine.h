@@ -17,7 +17,6 @@
 #include <SDL_opengl.h>
 
 #include "GL\glut.h"			//For text
-#include "Appearance.h"
 
 #include <sstream>	//String stream //for float convertion
 
@@ -54,7 +53,6 @@ void setUpPerpView();
 void setUpOrthoView();
 //Draw Functions
 int drawIntro();
-void render(Appearance* appearance);
 void moveStuff(float &testF);
 void drawScene(NxScene* scene, Entities* entities);
 void drawActor(NxActor* actor);
@@ -74,7 +72,7 @@ void drawModel(ObjModel* model);
 
 private:
     RenderingEngine();
-
+    ModelManager modelManager;
 
     void drawGroundPlane(float xoffset, float yoffset);
     void drawCheckerBoard(float x, float y);
