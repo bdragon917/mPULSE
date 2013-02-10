@@ -9,6 +9,8 @@ PlayState::PlayState()
     physicsEngine->setupPlayScene(&entities.cars);
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
+
+    InitializeConsoleCommands();    //Initalize Commands
 }
 
 void PlayState::update(float dt)
@@ -24,6 +26,23 @@ void PlayState::render()
 	NxScene* scene = physicsEngine->getScene();
 	renderingEngine->drawScene(scene, &entities);
 }
+
+
+
+//Console Commands, you should make sure that this has been linked to the console, via InitializeConsoleCommands
+void PlayState::InitializeConsoleCommands()
+{
+    renderingEngine->aConsole.commands["foo"] = foo;
+}
+
+int foo(int a) {
+    std::cout << "foo executed " << a << std::endl;
+    return 0;
+}
+
+
+
+
 
 bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
@@ -41,6 +60,10 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             else if (keyPressed == SDLK_RETURN)
             {
                 //process command
+                //if (renderingEngine->aConsole.commands has command
+                if (renderingEngine->aConsole.commands[renderingEngine->aConsole.consoleString] != NULL)
+                {renderingEngine->aConsole.commands[renderingEngine->aConsole.consoleString](0);}
+
 
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")

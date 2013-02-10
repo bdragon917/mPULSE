@@ -6,6 +6,12 @@ Console::Console()
     logPointer = 0;
 }
 
+
+//void Console::addCommand(std::string cmdStr, int(*)(int aFunc))
+///{
+//    commands[cmdStr] = int(*) aFunc;
+//}
+
 void Console::propragateMsg(std::string feedbackMsg)
 {
   

@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <fstream>
 
+#include <map>
+
 class Console
 {
 public:
@@ -26,11 +28,16 @@ public:
         void propragateMsg(std::string feedbackMsg);
         void propragateMsg();
         void goUp();
+
+        //void addCommand(std::string cmdStr, int(*)(int aFunc));
+        std::map<std::string, int(*)(int)> commands;
 private:
         int logPointer;
         void appendExcessLog();
         void appendLog();
         std::vector<std::string> log;
+
+        //std::map<std::string, int(*)(int)> commands;
 
 
 };

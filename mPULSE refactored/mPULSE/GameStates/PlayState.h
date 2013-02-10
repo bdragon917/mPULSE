@@ -6,6 +6,7 @@
 #include "../RenderingEngine/RenderingEngine.h"
 #include "../PhysicsEngine/PhysicsEngine.h"
 #include "../Entities/Entity.h"
+#include <map>
 
 class PlayState : public GameState
 {
@@ -16,10 +17,17 @@ public:
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);
     void handleXboxEvents(int player,XboxController* state);
 
+
+    void InitializeConsoleCommands();
 private:
     PlayState();
+
     RenderingEngine::Entities entities;
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
+
+    std::map<std::string, int(*)(int)> commands;
+
+    //Console Command Stuff!!!!// ADD commands here!
 };
 
