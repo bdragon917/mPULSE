@@ -270,9 +270,9 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
         float m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
         float d = 0.1f * m;
 
-        NxMat33 yrotMat = (NxVec3(cos(d), 0, sin(d)),
-                            NxVec3(0,1,0),
-                            NxVec3(-sin(d),0,cos(d)));
+//        NxMat33 yrotMat = (NxVec3(cos(d), 0, sin(d)),
+//                            NxVec3(0,1,0),
+//                            NxVec3(-sin(d),0,cos(d)));
         if (physicsEngine->w1->getSteerAngle() > -0.5f)
         {
             physicsEngine->w1->setSteerAngle( (physicsEngine->w1->getSteerAngle() - d) );

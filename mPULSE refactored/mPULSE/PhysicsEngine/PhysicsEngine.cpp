@@ -43,10 +43,10 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	//box = createBox();
 
     NxActor* box = createCarChassis();              //create a Chassis
-    NxWheelShape* wheel =  AddWheelToActor(box, 1.0f,-0.5,1.2) ;     //Create a wheel, and attach it to the Chassis
-	NxWheelShape* wheel2 = AddWheelToActor(box, 1.0f,-0.5,-1.2);
-    NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f,-0.5,1.2);
-	NxWheelShape* wheel4 = AddWheelToActor(box, -1.0f,-0.5,-1.2);
+    NxWheelShape* wheel =  AddWheelToActor(box, 1.0f,0,1.2) ;     //Create a wheel, and attach it to the Chassis
+	NxWheelShape* wheel2 = AddWheelToActor(box, 1.0f,0,-1.2);
+    NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f,0,1.2);
+	NxWheelShape* wheel4 = AddWheelToActor(box, -1.0f,0,-1.2);
 
     //NxWheelShape* wheel3 = AddWheelToActor(box, -0.5f,0.05);
 
@@ -308,7 +308,6 @@ NxActor* PhysicsEngine::createCarChassis()
 	//bodyDesc.angularDamping	= 0.5f;
 	bodyDesc.angularDamping	= 20.0f;
 
-
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxShapes[2];
 	boxShapes[0].dimensions.set(2.5f, 0.4f, 1.2f);
@@ -323,6 +322,7 @@ NxActor* PhysicsEngine::createCarChassis()
 	actorDesc.globalPose.t = position;
 
 	NxActor *actor = scene->createActor(actorDesc);
+	//actor->setCMassOffsetLocalPosition(NxVec3(0,-10,0));
 
     //actor->raiseBodyFlag(NX_BF_FROZEN_ROT_X);
 	//actor->raiseBodyFlag(NX_BF_FROZEN_ROT_Z);
@@ -402,19 +402,19 @@ NxScene* PhysicsEngine::getScene()
 
 void PhysicsEngine::accel()
 {
-	w1->setMotorTorque(1000);
-	w2->setMotorTorque(1000);
-	w3->setMotorTorque(1000);
-	w4->setMotorTorque(1000);
+	w1->setMotorTorque(2000);
+	w2->setMotorTorque(2000);
+	//w3->setMotorTorque(1000);
+	//w4->setMotorTorque(1000);
 	//box->wakeUp();
 }
 
 void PhysicsEngine::rev()
 {
-	w1->setMotorTorque(-1000);
-	w2->setMotorTorque(-1000);
-	w3->setMotorTorque(-1000);
-	w4->setMotorTorque(-1000);
+	w1->setMotorTorque(-2000);
+	w2->setMotorTorque(-2000);
+	//w3->setMotorTorque(-1000);
+	//w4->setMotorTorque(-1000);
 	//box->wakeUp();
 }
 
@@ -431,4 +431,3 @@ void PhysicsEngine::steer(int mag)
 // Work on getting braking done
 // Make sure actor doesn't go to sleep (already done), but remeber to do it.
 // Find a way to get this working through the entity class
-// Figure out how the steering works....
