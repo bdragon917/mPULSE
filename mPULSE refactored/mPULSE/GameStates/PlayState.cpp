@@ -10,6 +10,9 @@ PlayState::PlayState()
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
 
+    ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
+    physicsEngine->createTriMesh(0,0,0,*aModel);
+
     InitializeConsoleCommands();    //Initalize Commands
 }
 

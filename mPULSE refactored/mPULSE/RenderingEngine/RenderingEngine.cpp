@@ -580,8 +580,9 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
          }
 
                 // glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
-                 drawGroundPlane(gxo, gyo);
-
+                 //drawGroundPlane(gxo, gyo);
+                 glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
+                 drawModel(modelManager.getModel(2),0,0,0,1);
        // glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
        // for(int i=0;i<modelManager.numOfModels;i++)
        //     drawModel(modelManager.getModel(i),0,10,0,1);

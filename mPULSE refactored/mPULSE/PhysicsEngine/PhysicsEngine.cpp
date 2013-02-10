@@ -38,7 +38,7 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	defaultMaterial->setStaticFriction(0.5);
 	defaultMaterial->setDynamicFriction(0.5);
 
-	groundPlane = createGroundPlane();
+	//groundPlane = createGroundPlane();
 	//box = createBox();
 
     NxActor* box = createCarChassis();              //create a Chassis
