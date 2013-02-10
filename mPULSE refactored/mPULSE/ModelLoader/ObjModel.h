@@ -26,7 +26,8 @@ public:
         int vertNormalIndex;   
     } vertElements;
 
-    ObjModel(int ind);
+    ObjModel(int ind, std::string tmpName);
+
     void addVertexV(std::vector<double> textureVertex);
     void addVertexVT(std::vector<double> textureVertex);
     void addVertexVN(std::vector<double> vertexNormal);
@@ -41,15 +42,23 @@ public:
     std::vector<vertex3d>* getPoints();
     std::vector<vertex3d>* getLines();
     std::vector<std::vector<vertElements>>* getFaces();
+    std::string getName();
+
+    bool getTextureCoordsEnabled();
+    bool getNormalsEnabled();
 
 private:
+
+    int index;
+    bool textureCoordsEnabled;
+    bool normalsEnabled;
+    std::string name;
     std::vector<vertex3d> verticies;
     std::vector<vertex2d> vertexTextureCoords;
     std::vector<vertex3d> vertexNormals;
     std::vector<vertex3d> points;
     std::vector<vertex3d> lines;
     std::vector<std::vector<vertElements>> faces;
-    int index;
 };
 
 /*  geometric vertices (v)

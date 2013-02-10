@@ -1,1 +1,1 @@
-ModelLoader\\Models\\sphere.obj
+ModelLoader\\Models\\dchair_obj.obj

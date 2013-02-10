@@ -44,7 +44,7 @@
 	    file.open(fileName);	
         if(file.is_open())
         {
-            models.push_back(new ObjModel(currentModelNum));
+            models.push_back(new ObjModel(currentModelNum,fileName));
 	        while(!file.eof())
 	        {
                 file.getline(charArray,1024);

@@ -110,27 +110,39 @@ string RenderingEngine::FloatToString(float input)
 	return stream.str();
 }
 
-void RenderingEngine::drawModel(ObjModel* model)
+void RenderingEngine::drawModel(ObjModel* model,int x,int y, int z, int scale)
 {
     std::vector<std::vector<ObjModel::vertElements>>* faces = model->getFaces();
     std::vector<ObjModel::vertex3d>* verticies = model->getVerticies();
     std::vector<ObjModel::vertex3d>* norms = model->getVertexNormals();
+    std::vector<ObjModel::vertex2d>* texs = model->getVertexTextureCoords();
 
     ObjModel::vertElements face;
     ObjModel::vertex3d  vert;
     ObjModel::vertex3d  norm;
+    ObjModel::vertex2d  tex;
 
     glColor3f(1,1,1);
     glBegin(GL_TRIANGLES);
     for(int i=0;i<faces->size();i++)
     {
         for(int j=0;j<faces->at(i).size();j++)
-        {
-            face = faces    ->  at(i).at(j);
-            vert = verticies->  at(face.vertIndex);
-            norm = norms    ->  at(face.vertNormalIndex);
-            glNormal3f(norm.x,norm.y,norm.z);
-            glVertex3f(vert.x*5,vert.y*5,vert.z*5);
+        {            
+            face = faces->at(i).at(j);
+            vert = verticies->at(face.vertIndex);
+
+            if(model->getNormalsEnabled())            
+            {
+                norm = norms->at(face.vertNormalIndex);
+                glNormal3f(norm.x,norm.y,norm.z);
+            }
+            if(model->getTextureCoordsEnabled())
+            {
+                tex = texs->at(face.vertTextureIndex);
+                glTexCoord2d(tex.x,tex.y);
+            }
+
+            glVertex3f(x+(vert.x*scale),y+(vert.y*scale),z+(vert.z*scale));
         }
     }
     glEnd();
@@ -534,7 +546,7 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
     if (showScene)
     {       
         for(int i=0;i<modelManager.numOfModels;i++)
-            drawModel(modelManager.getModel(i));
+            drawModel(modelManager.getModel(i),0,0,0,1);
 
 	    glColor3f(0.75f, 0.75f, 0.75f);
 	    //Draws a checkboard Ground

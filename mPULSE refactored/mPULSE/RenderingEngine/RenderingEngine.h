@@ -58,8 +58,7 @@ void drawScene(NxScene* scene, Entities* entities);
 void drawActor(NxActor* actor);
 void drawShape(NxShape* shape);
 void drawBox(NxBoxShape* box);
-void drawModel(ObjModel* model);
-
+void drawModel(ObjModel* model,int x,int y, int z, int scale);
     Console aConsole;
 
     Shader* aShader;

@@ -1,9 +1,12 @@
 #include "ObjModel.h"
 
 
-ObjModel::ObjModel(int ind)
+ObjModel::ObjModel(int ind, std::string tmpName)
 {
+    name = tmpName;
     index = ind;
+    textureCoordsEnabled = true;
+    normalsEnabled = true;
 }
 
 void ObjModel::addVertexV(std::vector<double> geometricVertex)
@@ -43,7 +46,17 @@ void ObjModel::addLineL(std::vector<double> line)
 }
 
 void ObjModel::addFaceF(std::vector<std::vector<int>> face)
-{    
+{   
+    if(face[0].size() < 2)
+    {
+        textureCoordsEnabled = false;
+        normalsEnabled = false;
+    }
+    else if(face[0].size() < 3)
+    {
+        normalsEnabled = false;
+    }
+
     std::vector<vertElements> vertexElements;
     vertElements vertexE;
 
@@ -93,6 +106,22 @@ std::vector<ObjModel::vertex3d>* ObjModel::getLines()
 std::vector<std::vector<ObjModel::vertElements>>* ObjModel::getFaces()
 {
     return &faces;
+}
+
+bool ObjModel::getTextureCoordsEnabled()
+{
+
+    return textureCoordsEnabled;
+}
+
+bool ObjModel::getNormalsEnabled()
+{
+    return normalsEnabled;
+}
+
+std::string ObjModel::getName()
+{
+    return name;
 }
 
 void ObjModel::finalize()
