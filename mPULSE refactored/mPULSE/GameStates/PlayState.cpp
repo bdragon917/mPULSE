@@ -11,7 +11,7 @@ PlayState::PlayState()
 	renderingEngine->initializeGL();
 
     ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
-    physicsEngine->createTriMesh(0,0,0,*aModel);
+    physicsEngine->createTriMesh(0,-0.5f,0,*aModel);
 
     InitializeConsoleCommands();    //Initalize Commands
 }
@@ -241,15 +241,67 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 	}
 	if(torque > 0)
 	{
-		physicsEngine->steer(110);
+        //printf("torque:%f\n", state->leftStick.magnitude);
+
+        float m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
+        float d = 0.1f * m;
+
+        NxMat33 yrotMat = (NxVec3(cos(d), 0, sin(d)),
+                            NxVec3(0,1,0),
+                            NxVec3(-sin(d),0,cos(d)));
+
+       if (physicsEngine->w1->getSteerAngle() < 0.5f)
+       {
+            physicsEngine->w1->setSteerAngle( (physicsEngine->w1->getSteerAngle() + d) );
+            physicsEngine->w2->setSteerAngle( (physicsEngine->w1->getSteerAngle() + d) );
+       }
+       printf("SteerAngle:%f\n",physicsEngine->w1->getSteerAngle()); 
+
+        //physicsEngine->w1->setLocalOrientation( physicsEngine->w1->getLocalOrientation() * yrotMat );
+       // physicsEngine->w2->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
+       // physicsEngine->w3->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
+        //physicsEngine->w4->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
+        //physicsEngine->steer(physicsEngine->w1->getSteerAngle());    //should be in rads
+		//physicsEngine->steer(110);
 	}
 	if(torque < 0)
 	{
-		physicsEngine->steer(70);
+        const float pi = 3.14159265359f;      
+        float m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
+        float d = 0.1f * m;
+
+        NxMat33 yrotMat = (NxVec3(cos(d), 0, sin(d)),
+                            NxVec3(0,1,0),
+                            NxVec3(-sin(d),0,cos(d)));
+        if (physicsEngine->w1->getSteerAngle() > -0.5f)
+        {
+            physicsEngine->w1->setSteerAngle( (physicsEngine->w1->getSteerAngle() - d) );
+            physicsEngine->w2->setSteerAngle( (physicsEngine->w1->getSteerAngle() - d) );
+        }
+        printf("SteerAngle:%f\n",physicsEngine->w1->getSteerAngle()); 
+
+        //physicsEngine->w1->setLocalOrientation( physicsEngine->w1->getLocalOrientation() * yrotMat );
+        //physicsEngine->w2->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
+        //physicsEngine->w3->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
+        //physicsEngine->w4->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
+        //physicsEngine->steer(physicsEngine->w1->getSteerAngle() - 0.2f);    //should be in rads
+		//physicsEngine->steer(70);
 	}
-	if(torque == 0)
+	if((state->leftStick.x < 0.01f) && (state->leftStick.x > -0.01f))
 	{
-		physicsEngine->steer(90);
+    //    printf("state->leftStick.x:%f\n",state->leftStick.x); 
+    //    const float pi = 3.14159265359f;      
+    //    float m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
+    //    float d = 0.1f * m;
+
+     //   NxMat33 yrotMat = (NxVec3(cos(d), 0, sin(d)),
+    //                        NxVec3(0,1,0),
+     //                       NxVec3(-sin(d),0,cos(d)));
+     //       physicsEngine->w1->setSteerAngle( (physicsEngine->w1->getSteerAngle() * (0.25f) ) );
+     //       physicsEngine->w2->setSteerAngle( (physicsEngine->w1->getSteerAngle() * (0.25f) ) );
+     //   //printf("SteerAngle:%f\n",physicsEngine->w1->getSteerAngle()); 
+     //   //physicsEngine->w1->setSteerAngle( (physicsEngine->w1->getSteerAngle() * 0.5) );
+	//	//physicsEngine->steer(90);
 	}
 	
 
@@ -304,6 +356,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 	if(state->lb) {
 		physicsEngine->resetBox();
         entities.cars[0]->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
+        entities.cars[0]->getActor()->setGlobalOrientation(NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)));
 	}
 }
 

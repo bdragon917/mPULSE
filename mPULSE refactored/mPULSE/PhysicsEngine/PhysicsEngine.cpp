@@ -39,7 +39,7 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	defaultMaterial->setStaticFriction(0.5);
 	defaultMaterial->setDynamicFriction(0.5);
 
-	//groundPlane = createGroundPlane();
+	groundPlane = createGroundPlane();
 	//box = createBox();
 
     NxActor* box = createCarChassis();              //create a Chassis
@@ -261,18 +261,17 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
     NxInitCooking();
 
      MemoryWriteBuffer buf;
-        NxCookingParams params;  
-        params.targetPlatform = PLATFORM_PC;  
-        params.skinWidth = 0.1f;  
-        params.hintCollisionSpeed = false;  
-        NxSetCookingParams(params);  
+ //       NxCookingParams params;  
+  //      params.targetPlatform = PLATFORM_PC;  
+   //     params.skinWidth = 0.1f;  
+    //    params.hintCollisionSpeed = false;  
+     //   NxSetCookingParams(params);  
      bool status = NxCookTriangleMesh(triMeshDesc, buf); 
 
   	MemoryReadBuffer readBuffer(buf.data);
 
 
   	triMeshShapeDesc.meshData = physicsSDK->createTriangleMesh(readBuffer);
-
 
 	//
 	// Please note about the created Triangle Mesh, user needs to release it when no one uses it to save memory. It can be detected
@@ -282,14 +281,19 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
 	actorDesc.shapes.pushBack(&triMeshShapeDesc);
 
     actorDesc.body = NULL;                  //Set as static
-	actorDesc.density = 10.0f;
+	actorDesc.density = 1000.0f;
 
     actorDesc.globalPose.t = position;
 	NxActor *actor = scene->createActor(actorDesc);
 	actor->userData = (void*)0;
+
+
+     //actor->setRigidDynamicFlag(PxRigidDynamicFlag::eKINEMATIC,true);
+
 	NxCloseCooking();
     return actor;
 
+    //actor->setSleepEnergyThreshold(0);          //Testing
     //return scene->createActor(actorDesc);
 }
 
@@ -301,8 +305,10 @@ NxActor* PhysicsEngine::createCarChassis()
 
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
-	bodyDesc.angularDamping	= 0.5f;
-	
+	//bodyDesc.angularDamping	= 0.5f;
+	bodyDesc.angularDamping	= 20.0f;
+
+
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxShapes[2];
 	boxShapes[0].dimensions.set(2.5f, 0.4f, 1.2f);
@@ -320,8 +326,6 @@ NxActor* PhysicsEngine::createCarChassis()
 
     //actor->raiseBodyFlag(NX_BF_FROZEN_ROT_X);
 	//actor->raiseBodyFlag(NX_BF_FROZEN_ROT_Z);
-
-   
     
 
 	return actor;
@@ -417,6 +421,10 @@ void PhysicsEngine::rev()
 void PhysicsEngine::steer(int mag)
 {
 	//w1->setSteerAngle(-30);
+    w1->setSteerAngle(mag);
+    w2->setSteerAngle(mag);
+    w3->setSteerAngle(mag);
+    w4->setSteerAngle(mag);
 }
 
 
