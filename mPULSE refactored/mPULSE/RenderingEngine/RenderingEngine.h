@@ -72,6 +72,8 @@ void drawModel(ObjModel* model,int x,int y, int z, int scale);
     //Texture Stuff
     GLuint* textureid_P1;
 
+    ModelManager getModelManger();
+
 private:
     RenderingEngine();
     ModelManager modelManager;

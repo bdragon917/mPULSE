@@ -167,6 +167,19 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     }
                      renderingEngine->aConsole.propragateMsg("Created 20 static Boxes");
                 }
+                if (renderingEngine->aConsole.consoleString == "spawn saruk")
+                {
+                    for (int x=0;x<20;x++)
+                    {
+                        
+                        ObjModel* aModel = renderingEngine->getModelManger().getModel(1);
+                        physicsEngine->createTriMesh(0, 0, 0, 
+                                                    *aModel
+                                                    );
+                    }
+                     renderingEngine->aConsole.propragateMsg("Created Saruk");
+                }
+                 
                 
                 //master Commands
                 if (renderingEngine->aConsole.consoleString == "quit")

@@ -185,6 +185,105 @@ NxActor* PhysicsEngine::createStaticBox(float x, float y, float z)
 	return actor;
 }
 
+
+/**
+This Method doesn't work
+**/
+NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel) 
+{
+	NxVec3 position(x, y, z);
+
+    NxVec3* gVerts;
+    NxVec3* gNormals;
+    NxU32* gFaces;
+
+    //aModel.getVerticies()->size();
+    gVerts = new NxVec3 [aModel.getVerticies()->size()];
+
+
+    for (int v = 0; v < aModel.getVerticies()->size(); v++)
+    {
+        gVerts[v] = ( NxVec3(aModel.getVerticies()->at(v).x, aModel.getVerticies()->at(v).y, aModel.getVerticies()->at(v).z) );
+    }
+
+
+   // aModel.getVerticies()->size();
+    gFaces = new NxU32[(aModel.getFaces()->size()*3)];
+    //for (int f = 0; f < aModel.getFaces()->size(); f++)
+    //{
+    //    gFaces[f]
+    //}
+
+
+    for (int v = 0; v < aModel.getFaces()->size(); v=v+3)
+    {
+        gFaces[v*3] = ( NxU32(aModel.getFaces()->at(v).at(0).vertIndex) );
+        gFaces[(v*3)+1] = ( NxU32(aModel.getFaces()->at(v).at(1).vertIndex) );
+        gFaces[(v*3)+2] = ( NxU32(aModel.getFaces()->at(v).at(2).vertIndex) );
+    }
+
+    //aModel.getVertexNormals()->size();
+    gNormals = new NxVec3[aModel.getVertexNormals()->size()];
+
+    for (int n = 0; n < aModel.getVertexNormals()->size(); n++)
+    {
+        gNormals[n] = ( NxVec3(aModel.getVertexNormals()->at(n).x, aModel.getVertexNormals()->at(n).y, aModel.getVertexNormals()->at(n).z) );
+    }
+
+	// Build physical model
+	NxTriangleMeshDesc triMeshDesc;
+	triMeshDesc.numVertices					= aModel.getVerticies()->size();
+	triMeshDesc.numTriangles				= aModel.getFaces()->size();
+	triMeshDesc.pointStrideBytes			= sizeof(NxVec3);
+	triMeshDesc.triangleStrideBytes			= 3*sizeof(NxU32);
+	triMeshDesc.points						= gVerts;
+	triMeshDesc.triangles					= gFaces;							
+	triMeshDesc.flags						= 0;
+	//add the mesh material data:
+	//triMeshDesc.materialIndexStride			= sizeof(NxMaterialIndex);
+	//triMeshDesc.materialIndices				= gTerrainMaterials;
+
+	//triMeshDesc.heightFieldVerticalAxis		= NX_Y;
+	//triMeshDesc.heightFieldVerticalExtent	= -1000.0f;
+
+	NxTriangleMeshShapeDesc triMeshShapeDesc;
+
+    NxInitCooking();
+
+     MemoryWriteBuffer buf;
+        NxCookingParams params;  
+        params.targetPlatform = PLATFORM_PC;  
+        params.skinWidth = 0.1f;  
+        params.hintCollisionSpeed = false;  
+        NxSetCookingParams(params);  
+     bool status = NxCookTriangleMesh(triMeshDesc, buf); 
+
+  	MemoryReadBuffer readBuffer(buf.data);
+
+
+  	triMeshShapeDesc.meshData = physicsSDK->createTriangleMesh(readBuffer);
+
+
+	//
+	// Please note about the created Triangle Mesh, user needs to release it when no one uses it to save memory. It can be detected
+	// by API "meshData->getReferenceCount() == 0". And, the release API is "gPhysicsSDK->releaseTriangleMesh(*meshData);"
+	//
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&triMeshShapeDesc);
+
+    actorDesc.body = NULL;                  //Set as static
+	actorDesc.density = 10.0f;
+
+    actorDesc.globalPose.t = position;
+	NxActor *actor = scene->createActor(actorDesc);
+	actor->userData = (void*)0;
+	NxCloseCooking();
+    return actor;
+
+    //return scene->createActor(actorDesc);
+}
+
+
 NxActor* PhysicsEngine::createCarChassis() 
 {
 	//Set the box starting height

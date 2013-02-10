@@ -21,6 +21,13 @@ RenderingEngine* RenderingEngine::getInstance()
     return &renderer;
 }
 
+
+ModelManager RenderingEngine::getModelManger()
+{
+    return modelManager;
+}
+
+
 //Texture Stuff
 void RenderingEngine::bindBMPtoTexture(char* filename, GLuint textures)
 {

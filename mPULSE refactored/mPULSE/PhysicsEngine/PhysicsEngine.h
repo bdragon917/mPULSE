@@ -8,7 +8,14 @@
 #include <NxActor.h>
 #include "../Entities/Entity.h"
 
+#include "stream.h"
+#include <cstdlib>
+
+#include <NxCooking.h>
+
 #include <vector>
+
+//#include <iostream>
 //#include "NxWheelDesc.h"
 
 using std::vector;
@@ -40,6 +47,7 @@ public:
 	NxActor* createGroundPlane();
 	NxActor* createBox(float x, float y, float z);
     NxActor* createStaticBox(float x, float y, float z);
+    NxActor* createTriMesh(float x, float y, float z, ObjModel aModel);
     NxActor* createCarChassis();
 //    NxWheelShape* AddWheelToActor(NxActor* actor, NxWheelDesc* wheelDesc);
     void resetBox();
