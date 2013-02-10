@@ -30,7 +30,7 @@ public:
         void goUp();
 
         //void addCommand(std::string cmdStr, int(*)(int aFunc));
-        std::map<std::string, int(*)(int)> commands;
+        //std::map<std::string, int(*)(int)> commands;
 private:
         int logPointer;
         void appendExcessLog();

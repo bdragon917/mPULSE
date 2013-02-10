@@ -61,8 +61,8 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             {
                 //process command
                 //if (renderingEngine->aConsole.commands has command
-                if (renderingEngine->aConsole.commands[renderingEngine->aConsole.consoleString] != NULL)
-                {renderingEngine->aConsole.commands[renderingEngine->aConsole.consoleString](0);}
+  //              if (renderingEngine->aConsole.commands.find(renderingEngine->aConsole.consoleString) ==renderingEngine->aConsole.commands.end() )
+ //               {renderingEngine->aConsole.commands[renderingEngine->aConsole.consoleString](0);}
 
 
                 //Num Commands

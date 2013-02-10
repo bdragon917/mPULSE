@@ -368,7 +368,7 @@ void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
 void RenderingEngine::displayConsole()
 {
 
-    	 glColor3f(1.0f,1.0f,1.0f);
+     glColor3f(1.0f,1.0f,1.0f);
 
      prints(0,  0,      aConsole.consoleOut[5]);
      prints(0,  -20,    aConsole.consoleOut[4]);
@@ -548,9 +548,9 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	
     if (showScene)
     {
-        drawGroundPlane(gxo, gyo);
-        for(int i=0;i<modelManager.numOfModels;i++)
-            drawModel(modelManager.getModel(i),0,10,0,1);
+   //     drawGroundPlane(gxo, gyo);
+    //    for(int i=0;i<modelManager.numOfModels;i++)
+    //        drawModel(modelManager.getModel(i),0,10,0,1);
 
 	    glColor3f(0.75f, 0.75f, 0.75f);          
 
