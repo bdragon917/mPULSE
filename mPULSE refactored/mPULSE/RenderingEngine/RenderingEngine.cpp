@@ -231,8 +231,15 @@ void RenderingEngine::prints(float inX, float inY, string s)
 void RenderingEngine::drawGroundPlane(float xoffset, float yoffset)
 {    //*
 	//Draws a checkboard Ground
+    int size = 200;
+    glBegin(GL_QUADS);	
+    glTexCoord2d(-1,-1);    glNormal3d(0,1,0);      glVertex3f(-1*size,0,-1*size);
+    glTexCoord2d(-1, 1);    glNormal3d(0,1,0);      glVertex3f(-1*size,0,size);
+    glTexCoord2d(1, 1);     glNormal3d(0,1,0);      glVertex3f(size,0,size);
+    glTexCoord2d(1,-1);     glNormal3d(0,1,0);      glVertex3f(size,0,-1*size);
+    glEnd();
 
-    int size = 50;  //size of the ground, or at least half of the length of the plane
+    /*int size = 50;  //size of the ground, or at least half of the length of the plane
 
 	 for (int x = -size  ;x<size;x=x+2)
          for (int y = -size ;y<size;y=y+2)
@@ -523,13 +530,9 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
     {gxo = (groundxoffset) - 1.0f;}
     if ((groundyoffset % 2) == 0)
     {gyo = (groundyoffset) - 1.0f;}
-    //
 
     NxVec3 pos = entities->cars.at(0)->aCam->getCamLoc();
     NxVec3 at = entities->cars.at(0)->aCam->getLookAt();
-
-
-
 
 	//Cameras
 	gluLookAt(pos.x, pos.y, pos.z,  // Eye/camera position
@@ -544,14 +547,12 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	//glRotatef (10.0f, 10.0f, 0.0, 0.0);
 	
     if (showScene)
-    {       
+    {
+        drawGroundPlane(gxo, gyo);
         for(int i=0;i<modelManager.numOfModels;i++)
-            drawModel(modelManager.getModel(i),0,0,0,1);
+            drawModel(modelManager.getModel(i),0,10,0,1);
 
-	    glColor3f(0.75f, 0.75f, 0.75f);
-	    //Draws a checkboard Ground
-	     drawGroundPlane(gxo, gyo);
-         glColor3f(1.0f, 1.0f, 1.0f);
+	    glColor3f(0.75f, 0.75f, 0.75f);          
 
          char shaded = 'f';
 
@@ -573,6 +574,7 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 
      if (aShader != NULL)
         aShader->off();
+
 
      if (debugPhysX) //If debugPhyX then
           RenderDebugPhysic(scene->getDebugRenderable());

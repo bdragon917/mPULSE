@@ -32,7 +32,7 @@ void PlayState::render()
 //Console Commands, you should make sure that this has been linked to the console, via InitializeConsoleCommands
 void PlayState::InitializeConsoleCommands()
 {
-    renderingEngine->aConsole.commands["foo"] = foo;
+   // renderingEngine->aConsole.commands["foo"] = foo;
 }
 
 int foo(int a) {
