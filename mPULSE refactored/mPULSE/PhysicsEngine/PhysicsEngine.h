@@ -24,6 +24,11 @@ private:
 
     NxMaterial* wsm;
 
+	NxWheelShape* w1;
+	NxWheelShape* w2;
+	NxWheelShape* w3;
+	NxWheelShape* w4;
+
     NxWheelShape* AddWheelToActor(NxActor* actor, float x,float y, float z);
 
 public:
@@ -45,5 +50,8 @@ public:
     void resetBox();
 
 	NxScene* getScene();
+	void accel();
+	void rev();
+	void steer(int);
 };
 

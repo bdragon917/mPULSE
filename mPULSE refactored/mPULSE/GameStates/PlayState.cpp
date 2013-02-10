@@ -133,9 +133,9 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                                                                    // 0
                                                                     );
                         Entity aEntity;
-                        EntityComponent aEC;
-                        aEC.setActor(aBox);
-                        aEntity.addComponent(&aEC);
+                        //EntityComponent aEC;
+                        aEntity.setActor(aBox);
+                        //aEntity.addComponent(&aEC);
                         entities.obstacles.push_back(&aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created 20 Boxes");
@@ -160,9 +160,9 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                                                                    // 0
                                                                     );
                         Entity aEntity;
-                        EntityComponent aEC;
-                        aEC.setActor(aBox);
-                        aEntity.addComponent(&aEC);
+                        //EntityComponent aEC;
+                        aEntity.setActor(aBox);
+                        //aEntity.addComponent(&aEC);
                         entities.obstacles.push_back(&aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created 20 static Boxes");
@@ -211,14 +211,43 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     NxVec3 v2 = NxVec3(0,torque,0);
     //NxVec3 dir = NxVec3(state->leftStick.x,0,0);    
         
-    entities.cars[0]->aWheel1->getActor().addLocalForce(v0);
-    entities.cars[0]->aWheel1->getActor().addLocalForce(v1);
-    entities.cars[0]->aWheel1->getActor().addTorque(v2);
+    //entities.cars[0]->aWheel1->getActor().addLocalForce(v0);
+    //entities.cars[0]->aWheel1->getActor().addLocalForce(v1);
+    //entities.cars[0]->getWheel1()->getActor().addTorque(v2);
+
+	if(rTriggMag > 0)
+	{
+		physicsEngine->accel();
+	}
+	if(lTriggMag > 0)
+	{
+		physicsEngine->rev();
+	}
+	if(torque > 0)
+	{
+		physicsEngine->steer(110);
+	}
+	if(torque < 0)
+	{
+		physicsEngine->steer(70);
+	}
+	if(torque == 0)
+	{
+		physicsEngine->steer(90);
+	}
+	
+
+	//entities.cars[0]->getWheel1()->setMotorTorque(rTriggMag*1000);
+	//entities.cars[0]->getWheel2()->setMotorTorque(rTriggMag*1000);
+	//entities.cars[0]->getWheel3()->setMotorTorque(rTriggMag*1000);
+	//entities.cars[0]->getWheel4()->setMotorTorque(rTriggMag*1000);
+	//entities.cars[0]->getActor()->wakeUp();
+	
 
 
     if (state->a)
     {
-        if (!(entities.cars[0]->aWheel1 == NULL))
+        if (!(entities.cars[0]->getWheel1() == NULL))
 		{
             //cars[0]->aWheel1->getActor().setLinearVelocity(v3);
 			//cars[0]->aWheel2->getActor().setLinearVelocity(v3);
@@ -258,7 +287,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     //cars.at(0)->aWheel->motorTorque.setMotorTorque(trig);
 	if(state->lb) {
 		physicsEngine->resetBox();
-        entities.cars[0]->components[0]->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
+        entities.cars[0]->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
 	}
 }
 

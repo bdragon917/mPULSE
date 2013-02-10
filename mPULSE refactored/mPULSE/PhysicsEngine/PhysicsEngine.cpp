@@ -26,6 +26,7 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
     physicsSDK->setParameter(NX_VISUALIZE_CONTACT_NORMAL, 1);
     physicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, 1);
 
+
 	NxSceneDesc sceneDesc;
 	sceneDesc.simType = NX_SIMULATION_SW;
 	NxVec3 defaultGravity(0,-9.8f*(10.0f),0);
@@ -42,26 +43,35 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	//box = createBox();
 
     NxActor* box = createCarChassis();              //create a Chassis
-    NxWheelShape* wheel = AddWheelToActor(box, 1.0f,-0.5,1.2);     //Create a wheel, and attach it to the Chassis
+    NxWheelShape* wheel =  AddWheelToActor(box, 1.0f,-0.5,1.2) ;     //Create a wheel, and attach it to the Chassis
 	NxWheelShape* wheel2 = AddWheelToActor(box, 1.0f,-0.5,-1.2);
-    NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f,-0.5,0.0);
+    NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f,-0.5,1.2);
+	NxWheelShape* wheel4 = AddWheelToActor(box, -1.0f,-0.5,-1.2);
+
     //NxWheelShape* wheel3 = AddWheelToActor(box, -0.5f,0.05);
 
     Entity* entityCar1 = new Entity();    
-    EntityComponent* ec_car = new EntityComponent();
-    ec_car->setActor(box);
+    //EntityComponent* ec_car = new EntityComponent();
+    //ec_car->setActor(box);
     entityCar1->setWheel1(wheel);
 	entityCar1->setWheel2(wheel2);
     entityCar1->setWheel3(wheel3);
+	entityCar1->setWheel4(wheel4);
+	w1 = wheel;
+	w2 = wheel2;
+	w3 = wheel3;
+	w4 = wheel4;
     //Camera newCamera = Camera(box);
     entityCar1->aCam = new Camera(box);
 
    // entityCar1.components.push_back( &ec_car );
-    entityCar1->addComponent( ec_car );    
+    //entityCar1->addComponent( ec_car );    
+	entityCar1->setActor( box);
     tmpCars->at(0) = entityCar1;    
-    tmpCars->at(0)->aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
-	tmpCars->at(0)->aWheel2->getActor().addTorque(NxVec3(0,10000000000.0f,0));
-    tmpCars->at(0)->aWheel3->getActor().addTorque(NxVec3(0,10000000000.0f,0));
+    //tmpCars->at(0)->aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
+	//tmpCars->at(0)->aWheel2->getActor().addTorque(NxVec3(0,10000000000.0f,0));
+    //tmpCars->at(0)->aWheel3->getActor().addTorque(NxVec3(0,10000000000.0f,0));
+	box->setSleepEnergyThreshold(0);
 }
 
 void PhysicsEngine::sceneSetup()
@@ -209,8 +219,8 @@ NxActor* PhysicsEngine::createCarChassis()
 
 	NxActor *actor = scene->createActor(actorDesc);
 
-    actor->raiseBodyFlag(NX_BF_FROZEN_ROT_X);
-	actor->raiseBodyFlag(NX_BF_FROZEN_ROT_Z);
+    //actor->raiseBodyFlag(NX_BF_FROZEN_ROT_X);
+	//actor->raiseBodyFlag(NX_BF_FROZEN_ROT_Z);
 
    
     
@@ -239,14 +249,14 @@ NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, fl
 	q.fromAngleAxis(90, NxVec3(0,1,0));
 	wheelShapeDesc.localPose.M.fromQuat(q);
 
-	NxReal heightModifier = 0.01f;  //??    //(wheelDesc->wheelSuspension + wheelDesc->wheelRadius) / wheelDesc->wheelSuspension;
+	NxReal heightModifier = 2.0f;  //??    //(wheelDesc->wheelSuspension + wheelDesc->wheelRadius) / wheelDesc->wheelSuspension;
 
-	wheelShapeDesc.suspension.spring = 1.0f;    //??     //wheelDesc->springRestitution*heightModifier;
-	wheelShapeDesc.suspension.damper = 0;  //wheelDesc->springDamping*heightModifier;
-	wheelShapeDesc.suspension.targetValue = 0.02f;  //wheelDesc->springBias*heightModifier;
+	wheelShapeDesc.suspension.spring = 7000.0f * heightModifier;    //??     //wheelDesc->springRestitution*heightModifier;
+	wheelShapeDesc.suspension.damper = 0 * heightModifier;  //wheelDesc->springDamping*heightModifier;
+	wheelShapeDesc.suspension.targetValue = 0 * heightModifier;  //wheelDesc->springBias*heightModifier;
 
-	wheelShapeDesc.radius = 0.25f;  //wheelDesc->wheelRadius;
-	wheelShapeDesc.suspensionTravel =  0.1f; //wheelDesc->wheelSuspension; 
+	wheelShapeDesc.radius = 0.5f;  //wheelDesc->wheelRadius;
+	wheelShapeDesc.suspensionTravel =  0.5f; //wheelDesc->wheelSuspension; 
 	wheelShapeDesc.inverseWheelMass = 0.1;	//not given!? TODO
 
 
@@ -285,3 +295,33 @@ NxScene* PhysicsEngine::getScene()
 {
 	return scene;
 }
+
+
+void PhysicsEngine::accel()
+{
+	w1->setMotorTorque(1000);
+	w2->setMotorTorque(1000);
+	w3->setMotorTorque(1000);
+	w4->setMotorTorque(1000);
+	//box->wakeUp();
+}
+
+void PhysicsEngine::rev()
+{
+	w1->setMotorTorque(-1000);
+	w2->setMotorTorque(-1000);
+	w3->setMotorTorque(-1000);
+	w4->setMotorTorque(-1000);
+	//box->wakeUp();
+}
+
+void PhysicsEngine::steer(int mag)
+{
+	//w1->setSteerAngle(-30);
+}
+
+
+// Work on getting braking done
+// Make sure actor doesn't go to sleep (already done), but remeber to do it.
+// Find a way to get this working through the entity class
+// Figure out how the steering works....

@@ -531,8 +531,8 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	
 
     //Infinite Plane!
-    int groundxoffset = (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x) - (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x));
-    int groundyoffset = (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.z));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.z) - );
+    int groundxoffset = (int(entities->cars.at(0)->getActor()->getGlobalPose().t.x));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x) - (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x));
+    int groundyoffset = (int(entities->cars.at(0)->getActor()->getGlobalPose().t.z));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.z) - );
 
     float gxo = groundxoffset;
     float gyo = groundyoffset;
