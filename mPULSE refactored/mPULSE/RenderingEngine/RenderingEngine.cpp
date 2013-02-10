@@ -62,12 +62,13 @@ void RenderingEngine::initializeTexture()
 	int width;
 	int height;
 
-    textureid_P1 = new GLuint[3];
-    glGenTextures(3, textureid_P1);
+    textureid_P1 = new GLuint[4];
+    glGenTextures(4, textureid_P1);
 
     bindBMPtoTexture("./img/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./img/loadScreen.bmp", textureid_P1[1]);
     bindBMPtoTexture("./img/hello.bmp", textureid_P1[2]);
+    bindBMPtoTexture("./img/Saruk.bmp", textureid_P1[3]);
 	//"/img/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -575,8 +576,11 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
                  drawGroundPlane(gxo, gyo);
 
        // glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
-        for(int i=0;i<modelManager.numOfModels;i++)
-            drawModel(modelManager.getModel(i),0,10,0,1);
+       // for(int i=0;i<modelManager.numOfModels;i++)
+       //     drawModel(modelManager.getModel(i),0,10,0,1);
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
+        drawModel(modelManager.getModel(1),0,10,0,1);
 
 
 		// Render all actors
@@ -607,10 +611,12 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 }
 
 
+
 void RenderingEngine::drawActor(NxActor* actor)
 {
 	NxShape* const* shapes = actor->getShapes();
 	NxU32 nShapes = actor->getNbShapes();
+
 
     while(nShapes--)
 	{

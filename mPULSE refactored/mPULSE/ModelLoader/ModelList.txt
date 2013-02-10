@@ -1,1 +1,2 @@
 ModelLoader\\Models\\sphere.obj
+ModelLoader\\Models\\Saruk.obj
