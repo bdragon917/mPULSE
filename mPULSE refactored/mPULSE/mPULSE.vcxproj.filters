@@ -108,6 +108,9 @@
     <ClCompile Include="GameStates\Camera.cpp">
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsEngine\Stream.cpp">
+      <Filter>Source Files\PhysicsEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="GameStates\Camera.h">
       <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsEngine\stream.h">
+      <Filter>Header Files\PhysicsEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
