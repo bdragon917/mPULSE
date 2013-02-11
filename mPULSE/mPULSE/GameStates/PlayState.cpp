@@ -1,5 +1,6 @@
 #include "PlayState.h"
 
+float deg = 0.1;
 
 PlayState::PlayState()
 {
@@ -101,6 +102,16 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     renderingEngine->aConsole.propragateMsg("Number of Triangles in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbTriangles()));
                 }
                 
+                if(renderingEngine->aConsole.consoleString == "a")
+                {
+                    deg+=0.1;
+                    renderingEngine->aConsole.propragateMsg(renderingEngine->FloatToString(deg));
+                }
+                if(renderingEngine->aConsole.consoleString == "b")
+                {
+                    deg-=0.1;
+                    renderingEngine->aConsole.propragateMsg(renderingEngine->FloatToString(deg));
+                }
                 //Get Commands
                 //if (renderingEngine->aConsole.consoleString == "get testwheel")
                 //{renderingEngine->aConsole.consoleString = "Test Wheel Torgue: " + renderingEngine->FloatToString(cars.at(0)->aWheel1->getMotorTorque());renderingEngine->aConsole.propragateMsg();}
@@ -260,21 +271,39 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
-    //UserCamControl   
-    entities.cars[0]->aCam->updateCamera(1.0f);
-    entities.cars[0]->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
-        
-    int rTriggMag = state->rTrigger;
-    int lTriggMag = state->lTrigger;    
+    //state->vibrate(((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB,((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB);
 
-    entities.cars[0]->addTorque(rTriggMag - lTriggMag);        
-    entities.cars[0]->addSteeringAngle(state->leftStick.x   *   -0.1);
+    if(player < entities.cars.size())
+    {
+        //UserCamControl  
+        Entity* car = entities.cars[player];
+        car->aCam->updateCamera(1.0f);
+        car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
+    
+        NxVec3 a = car->getActor()->getLinearVelocity();
+        //printf("x: %f y: %f z: %f \n",a.x,a.y,a.z);
+        int rTriggMag = state->rTrigger;
+        int lTriggMag = state->lTrigger;    
+        static int count = 0;
 
-	if(state->lb) {
-		physicsEngine->resetBox();
-        entities.cars[0]->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
-        entities.cars[0]->getActor()->setGlobalOrientation(NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)));
-	}
+        car->addTorque(rTriggMag - lTriggMag);        
+        car->addSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
+
+        //printf("mag: %f x: %f ang: %f\n",state->leftStick.magnitude,state->leftStick.x,(state->leftStick.magnitude/24000.0) * -state->leftStick.x * deg);
+
+
+        if(state->b)
+            car->brake(5000);
+        else
+            car->brake(0);
+
+        if(state->lb) {
+		    physicsEngine->resetBox();
+            car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
+            car->getActor()->setGlobalOrientation(NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)));
+            car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+	    }
+    }
 }
 
 PlayState* PlayState::getInstance()

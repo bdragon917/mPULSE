@@ -4,10 +4,13 @@ Entity::Entity()
 {
     torque = 0;
     steeringAngle = 0;
-    maxSteeringLeft = -0.35;
-    maxSteeringRight = 0.35;
-    maxTorque = 2000;
-    minTorque = -2000;
+    
+    maxSteeringAngle = 0.01;
+
+    maxSteeringLeft = -0.85;
+    maxSteeringRight = 0.85;
+    maxTorque = 3000;
+    minTorque = -3000;
 }
 
 void Entity::addDriveWheel(NxWheelShape* wheel)
@@ -44,9 +47,11 @@ void Entity::brake(int tmpTorque)
         driveWheels[i]->setBrakeTorque(tmpTorque);
 }
 
-void Entity::addSteeringAngle(float angle)
-{
-    if(angle == 0)
+void Entity::addSteeringAngle(float percent)
+{   
+    float maxDeltaAngle = 0;
+
+    if(percent == 0)
     {
         if (0.1 - steeringAngle < 0.1)
             steeringAngle = 0;
@@ -54,17 +59,65 @@ void Entity::addSteeringAngle(float angle)
             steeringAngle -= 0.1;
         else if(steeringAngle < 0)
             steeringAngle += 0.1;
+    }  
 
-        for(int i=0;i<driveWheels.size();i++)
-            driveWheels[i]->setSteerAngle(steeringAngle);
-    }
-
-    else if(((steeringAngle+angle) >= maxSteeringLeft) && ((steeringAngle+angle) <= maxSteeringRight))
+    if(getActor()->getLinearVelocity().magnitude() < 30)
     {
-        steeringAngle += angle;
-        for(int i=0;i<driveWheels.size();i++)
-            driveWheels[i]->setSteerAngle(steeringAngle);
+        maxDeltaAngle = 0.2;
     }
+    else if(getActor()->getLinearVelocity().magnitude() < 60)
+    {
+        maxDeltaAngle = 0.01;
+    }
+    else
+    {
+        maxDeltaAngle = 0.005;
+    }
+
+    float deltaAngle = maxDeltaAngle * percent;
+    printf("angle: %f\n", deltaAngle);
+
+    if(((steeringAngle+deltaAngle) >= maxSteeringLeft) && ((steeringAngle+deltaAngle) <= maxSteeringRight))
+        steeringAngle += deltaAngle;
+
+    for(int i=0;i<driveWheels.size();i++)
+    {
+        driveWheels[i]->setSteerAngle(steeringAngle);
+    }
+
+  
+
+    //maxSteeringAngle = ((1.0f/(getActor()->getLinearVelocity().magnitude()+0.001)) * 0.01);
+    //if(angle == 0)
+    //{
+    //    if (0.1 - steeringAngle < 0.1)
+    //        steeringAngle = 0;
+    //    else if(steeringAngle > 0)
+    //        steeringAngle -= 0.1;
+    //    else if(steeringAngle < 0)
+    //        steeringAngle += 0.1;
+
+    //    for(int i=0;i<driveWheels.size();i++)
+    //        driveWheels[i]->setSteerAngle(steeringAngle);
+    //}    
+    //else if(angle >= maxSteeringAngle)
+    //    angle = maxSteeringAngle;
+    //else if(angle <= maxSteeringAngle*-1)
+    //    angle = -maxSteeringAngle;
+    //
+
+    //if(((steeringAngle+angle) >= maxSteeringLeft) && ((steeringAngle+angle) <= maxSteeringRight))
+    //    steeringAngle += angle;
+
+    //printf("%f\n",angle);
+
+    //for(int i=0;i<driveWheels.size();i++)
+    //{
+    //    //if(getActor()->getLinearVelocity().magnitude() == 0)
+    //        driveWheels[i]->setSteerAngle(steeringAngle);
+    //    //else
+    //    //   driveWheels[i]->setSteerAngle(steeringAngle*(1.0f/getActor()->getLinearVelocity().magnitude()));
+    //}
 }
 
 NxActor* Entity::getActor()
