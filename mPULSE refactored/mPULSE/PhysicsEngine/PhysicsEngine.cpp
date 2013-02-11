@@ -187,6 +187,16 @@ NxActor* PhysicsEngine::createGroundPlane()
 }
 
 
+void PhysicsEngine::createBoxes(float x, float y, float z, int num, float radius) 
+{
+	for (int i=0; i < num; i++)
+    {
+        float rndx = ((rand() % 100) / 100) * radius;
+        float rndz = ((rand() % 100) / 100) * radius;
+        createBox(x + rndx, y, z + rndz);
+    }
+}
+
 NxActor* PhysicsEngine::createBox(float x, float y, float z) 
 {
 	//Set the box starting height
@@ -208,7 +218,11 @@ NxActor* PhysicsEngine::createBox(float x, float y, float z)
 	actorDesc.globalPose.t = position;
 
 	NxActor *actor = scene->createActor(actorDesc);
-	actor->userData = (void*)size_t(0.5f);
+	//actor->userData = (void*)size_t(0.5f);
+
+    customUserData* cud = new customUserData;
+    cud->type = OBSTACLE;
+    actor->userData = (void*)&cud;
 
 	return actor;
 }
@@ -230,8 +244,10 @@ NxActor* PhysicsEngine::createStaticBox(float x, float y, float z)
 	actorDesc.globalPose.t = position;
 
 	NxActor *actor = scene->createActor(actorDesc);
-	actor->userData = (void*)size_t(0.5f);
-
+	//actor->userData = (void*)size_t(0.5f);
+    customUserData* cud = new customUserData;
+    cud->type = STATIC;
+    actor->userData = (void*)&cud;
 	return actor;
 }
 
@@ -366,6 +382,10 @@ NxActor* PhysicsEngine::createCarChassis()
 	actorDesc.body = &bodyDesc;
 	actorDesc.density = 10.0f;
 	actorDesc.globalPose.t = position;
+
+    customUserData* cud = new customUserData;
+    cud->type = CAR;
+    actorDesc.userData = (void*)&cud;
 
 	NxActor *actor = scene->createActor(actorDesc);
 	actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));

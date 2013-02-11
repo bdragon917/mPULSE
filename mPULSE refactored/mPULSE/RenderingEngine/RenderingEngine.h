@@ -20,7 +20,8 @@
 
 #include <sstream>	//String stream //for float convertion
 
-#include <NxPhysics.h>
+//#include <NxPhysics.h>
+#include "../PhysicsEngine/PhysicsEngine.h"
 
 #include "BMP.h"
 #include "..\GameStates\Console.h"
@@ -37,7 +38,9 @@ typedef struct
 {
     std::vector<Entity*> cars;
     std::vector<Entity*> AIcars;
-    std::vector<Entity*> obstacles;
+    std::vector<Entity*> Obstacles;
+    std::vector<Entity*> StaticObjs;
+    std::vector<Entity*> Track;
 } Entities;
 
 static RenderingEngine* getInstance();

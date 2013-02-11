@@ -12,6 +12,16 @@ PlayState::PlayState()
 
     ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
     physicsEngine->createTriMesh(0,-0.5f,0,*aModel);
+    physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f);
+    physicsEngine->createBoxes(-11.138f, 4.188f, -320.407f, 5, 2.5f);
+    physicsEngine->createBoxes(-360.586f, 0.407f, -326.88f, 5, 2.5f);
+    physicsEngine->createBoxes(-675.201f, 0.403f, -325.229f, 5, 2.5f);
+    physicsEngine->createBoxes(-319.045f, 157.17f, 698.045f, 5, 2.5f);
+
+
+    //2
+    physicsEngine->createStaticBox(-4.195f, 0.403f, -200.2202f);
+    physicsEngine->createStaticBox(-404.991f, 4.188f, -320.407f);
 
     InitializeConsoleCommands();    //Initalize Commands
 }
@@ -162,7 +172,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                         //EntityComponent aEC;
                         aEntity.setActor(aBox);
                         //aEntity.addComponent(&aEC);
-                        entities.obstacles.push_back(&aEntity);
+                        entities.Obstacles.push_back(&aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created 20 Boxes");
                 }
@@ -189,7 +199,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                         //EntityComponent aEC;
                         aEntity.setActor(aBox);
                         //aEntity.addComponent(&aEC);
-                        entities.obstacles.push_back(&aEntity);
+                        entities.Obstacles.push_back(&aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created 20 static Boxes");
                 }

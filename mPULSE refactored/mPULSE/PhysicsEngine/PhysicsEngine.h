@@ -36,6 +36,16 @@ private:
     NxWheelShape* AddWheelToActor(NxActor* actor, float x,float y, float z);
 
 public:
+
+    enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC };
+
+    typedef struct
+    {
+        ObjTypes type;
+    }   customUserData;
+    
+       
+
     PhysicsEngine();
 	static PhysicsEngine* getInstance();
 	void sceneSetup();
@@ -48,6 +58,7 @@ public:
 	//NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);
 	NxActor* createGroundPlane();
 	NxActor* createBox(float x, float y, float z);
+    void createBoxes(float x, float y, float z, int num, float radius);
     NxActor* createStaticBox(float x, float y, float z);
     NxActor* createTriMesh(float x, float y, float z, ObjModel aModel);
     NxActor* createCarChassis();
