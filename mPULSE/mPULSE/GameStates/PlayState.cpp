@@ -13,16 +13,20 @@ PlayState::PlayState()
 
     ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
     physicsEngine->createTriMesh(0,-0.5f,0,*aModel);
-    physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f);
-    physicsEngine->createBoxes(-11.138f, 4.188f, -320.407f, 5, 2.5f);
-    physicsEngine->createBoxes(-360.586f, 0.407f, -326.88f, 5, 2.5f);
-    physicsEngine->createBoxes(-675.201f, 0.403f, -325.229f, 5, 2.5f);
-    physicsEngine->createBoxes(-319.045f, 157.17f, 698.045f, 5, 2.5f);
+    physicsEngine->createBoxes(-103.811f, 0.410f, -292.283f, 10, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-11.138f, 4.198f, -320.407f, 10, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-360.586f, 0.417f, -326.88f, 10, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-675.201f, 0.413f, -325.229f, 10, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-319.045f, 157.18f, 698.045f, 10, 2.5f, &entities.Obstacles);
 
 
     //2
-    physicsEngine->createStaticBox(-4.195f, 0.403f, -200.2202f);
-    physicsEngine->createStaticBox(-404.991f, 4.188f, -320.407f);
+    Entity aEntity;
+    aEntity.setActor(physicsEngine->createStaticBox(-4.195f, 0.403f, -200.2202f));
+    Entity aEntity2;
+    aEntity.setActor(physicsEngine->createStaticBox(-404.991f, 4.188f, -320.407f));
+    entities.StaticObjs.push_back(&aEntity);
+    entities.StaticObjs.push_back(&aEntity2);
 
     InitializeConsoleCommands();    //Initalize Commands
 }
@@ -91,6 +95,15 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")
                 {renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->FloatToString(entities.cars.size()));}
+
+                if (renderingEngine->aConsole.consoleString == "num entities")
+                {
+                    renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->FloatToString(entities.cars.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in AIcars: " + renderingEngine->FloatToString(entities.AIcars.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in Obstacles: " + renderingEngine->FloatToString(entities.Obstacles.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in StaticObj: " + renderingEngine->FloatToString(entities.StaticObjs.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in Track: " + renderingEngine->FloatToString(entities.Track.size()));
+                }
 
                 if (renderingEngine->aConsole.consoleString == "num actors")
                 {renderingEngine->aConsole.propragateMsg("Number of actors in scene: " + renderingEngine->FloatToString(physicsEngine->getScene()->getNbActors()));}
@@ -299,8 +312,13 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
         if(state->lb) {
 		    physicsEngine->resetBox();
+                NxQuat q;
+                q.fromAngleAxis(90, NxVec3(0,1,0));
+                NxMat33 orient;
+                orient.fromQuat(q);
+
             car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
-            car->getActor()->setGlobalOrientation(NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)));
+            car->getActor()->setGlobalOrientation(orient);
             car->getActor()->setLinearVelocity(NxVec3(0,0,0));
 	    }
     }

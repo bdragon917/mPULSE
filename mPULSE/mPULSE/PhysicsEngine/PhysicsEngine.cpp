@@ -187,13 +187,13 @@ NxActor* PhysicsEngine::createGroundPlane()
 }
 
 
-void PhysicsEngine::createBoxes(float x, float y, float z, int num, float radius) 
+void PhysicsEngine::createBoxes(float x, float y, float z, int num, float radius, std::vector<Entity*>* Boxes) 
 {
 	for (int i=0; i < num; i++)
     {
         float rndx = ((rand() % 100) / 100) * radius;
         float rndz = ((rand() % 100) / 100) * radius;
-        createBox(x + rndx, y, z + rndz);
+        Boxes->push_back(&Entity(createBox(x + rndx, y, z + rndz)));
     }
 }
 
@@ -234,7 +234,7 @@ NxActor* PhysicsEngine::createStaticBox(float x, float y, float z)
 
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;
-	boxDesc.dimensions.set(0.5,0.5,0.5);
+	boxDesc.dimensions.set(5.5,5.5,5.5);
 	//boxDesc.localPose.t = position;
 
 	NxActorDesc actorDesc;
@@ -383,6 +383,16 @@ NxActor* PhysicsEngine::createCarChassis()
 	actorDesc.density = 10.0f;
 	actorDesc.globalPose.t = position;
 
+    float d = 90.0f;      //Turn by 90 degrees
+
+    NxVec3 v(0,1,0);
+    NxReal ang = 90;
+
+    NxQuat q;
+    q.fromAngleAxis(ang, v);
+    NxMat33 orient;
+    orient.fromQuat(q);
+
     customUserData* cud = new customUserData;
     cud->type = CAR;
     actorDesc.userData = (void*)&cud;
@@ -390,6 +400,7 @@ NxActor* PhysicsEngine::createCarChassis()
 	NxActor *actor = scene->createActor(actorDesc);
 	actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));
 
+    actor->setGlobalOrientation(orient);
 	return actor;
 }
 
