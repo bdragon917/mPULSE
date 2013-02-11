@@ -252,134 +252,35 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 	NxVec3 v0 = NxVec3(rTriggMag*1000,0,0);
     NxVec3 v1 = NxVec3(lTriggMag*-1000,0,0);
     NxVec3 v2 = NxVec3(0,torque,0);
-    //NxVec3 dir = NxVec3(state->leftStick.x,0,0);    
-        
-    //entities.cars[0]->aWheel1->getActor().addLocalForce(v0);
-    //entities.cars[0]->aWheel1->getActor().addLocalForce(v1);
-    //entities.cars[0]->getWheel1()->getActor().addTorque(v2);
 
 	if(rTriggMag > 0)
-	{
-		physicsEngine->accel();
-	}
+        entities.cars[0]->addTorque(2000);        
 	if(lTriggMag > 0)
-	{
-		physicsEngine->rev();
-	}
+        entities.cars[0]->addTorque(-2000);        
+
 	if(torque > 0)
 	{
-        //printf("torque:%f\n", state->leftStick.magnitude);
-
         float m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
         float d = 0.1f * m;
 
-        NxMat33 yrotMat = (NxVec3(cos(d), 0, sin(d)),
-                            NxVec3(0,1,0),
-                            NxVec3(-sin(d),0,cos(d)));
-
        if (physicsEngine->w1->getSteerAngle() < 0.5f)
-       {
-            physicsEngine->w1->setSteerAngle( (physicsEngine->w1->getSteerAngle() + d) );
-            physicsEngine->w2->setSteerAngle( (physicsEngine->w1->getSteerAngle() + d) );
-       }
-       printf("SteerAngle:%f\n",physicsEngine->w1->getSteerAngle()); 
+           entities.cars[0]->addSteeringAngle(d);
 
-        //physicsEngine->w1->setLocalOrientation( physicsEngine->w1->getLocalOrientation() * yrotMat );
-       // physicsEngine->w2->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
-       // physicsEngine->w3->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
-        //physicsEngine->w4->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
-        //physicsEngine->steer(physicsEngine->w1->getSteerAngle());    //should be in rads
-		//physicsEngine->steer(110);
+       printf("SteerAngle:%f\n",physicsEngine->w1->getSteerAngle()); 
 	}
+
 	if(torque < 0)
 	{
         const float pi = 3.14159265359f;      
         float m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
         float d = 0.1f * m;
 
-//        NxMat33 yrotMat = (NxVec3(cos(d), 0, sin(d)),
-//                            NxVec3(0,1,0),
-//                            NxVec3(-sin(d),0,cos(d)));
         if (physicsEngine->w1->getSteerAngle() > -0.5f)
-        {
-            physicsEngine->w1->setSteerAngle( (physicsEngine->w1->getSteerAngle() - d) );
-            physicsEngine->w2->setSteerAngle( (physicsEngine->w1->getSteerAngle() - d) );
-        }
+            entities.cars[0]->addSteeringAngle(d*-1);
+
         printf("SteerAngle:%f\n",physicsEngine->w1->getSteerAngle()); 
-
-        //physicsEngine->w1->setLocalOrientation( physicsEngine->w1->getLocalOrientation() * yrotMat );
-        //physicsEngine->w2->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
-        //physicsEngine->w3->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
-        //physicsEngine->w4->setLocalOrientation( physicsEngine->w1->getLocalOrientation());
-        //physicsEngine->steer(physicsEngine->w1->getSteerAngle() - 0.2f);    //should be in rads
-		//physicsEngine->steer(70);
 	}
-	if((state->leftStick.x < 0.01f) && (state->leftStick.x > -0.01f))
-	{
-    //    printf("state->leftStick.x:%f\n",state->leftStick.x); 
-    //    const float pi = 3.14159265359f;      
-    //    float m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
-    //    float d = 0.1f * m;
 
-     //   NxMat33 yrotMat = (NxVec3(cos(d), 0, sin(d)),
-    //                        NxVec3(0,1,0),
-     //                       NxVec3(-sin(d),0,cos(d)));
-     //       physicsEngine->w1->setSteerAngle( (physicsEngine->w1->getSteerAngle() * (0.25f) ) );
-     //       physicsEngine->w2->setSteerAngle( (physicsEngine->w1->getSteerAngle() * (0.25f) ) );
-     //   //printf("SteerAngle:%f\n",physicsEngine->w1->getSteerAngle()); 
-     //   //physicsEngine->w1->setSteerAngle( (physicsEngine->w1->getSteerAngle() * 0.5) );
-	//	//physicsEngine->steer(90);
-	}
-	
-
-	//entities.cars[0]->getWheel1()->setMotorTorque(rTriggMag*1000);
-	//entities.cars[0]->getWheel2()->setMotorTorque(rTriggMag*1000);
-	//entities.cars[0]->getWheel3()->setMotorTorque(rTriggMag*1000);
-	//entities.cars[0]->getWheel4()->setMotorTorque(rTriggMag*1000);
-	//entities.cars[0]->getActor()->wakeUp();
-	
-
-
-    if (state->a)
-    {
-        if (!(entities.cars[0]->getWheel1() == NULL))
-		{
-            //cars[0]->aWheel1->getActor().setLinearVelocity(v3);
-			//cars[0]->aWheel2->getActor().setLinearVelocity(v3);
-			//cars[0]->aWheel2->getActor().addTorque(v3);
-			//cars[0]->aWheel1->setAxleSpeed(1);
-			//cars[0]->aWheel2->setAxleSpeed(1);
-		}	
-        else
-            printf("NULL WHEEL0 at Cars[0]\n");
-    }
-
-
-    //if (state->b)
-    //{
-    //    if (!(entities.cars.at(0)->aWheel1 ==NULL))
-    //    {entities.cars.at(0)->aWheel1->getActor().addForce(v3);}
-    //    else
-    //    {printf("NULL WHEEL0 at Cars[0]\n");}
-    //}
-    //if (state->x)
-    //{
-    //    if (!(entities.cars.at(0)->components.at(0) == NULL))
-    //    {entities.cars.at(0)->components.at(0)->getActor()->addForce(v3);}
-    //    else
-    //    {printf("NULL Cars[0]\n");}
-    //}
-    //if (state->y)
-    //{
-    //    if (!(entities.cars.at(0)->components.at(0) == NULL))
-    //    {entities.cars.at(0)->components.at(0)->getActor()->moveGlobalPosition(v0);}
-    //    else
-    //    {printf("NULL Cars[0]\n");}
-    //}
-
-    //cars.at(0)->aWheel1->setMotorTorque(trig);
-    //cars.at(0)->aWheel1->setAxleSpeed(trig);
-    //cars.at(0)->aWheel->motorTorque.setMotorTorque(trig);
 	if(state->lb) {
 		physicsEngine->resetBox();
         entities.cars[0]->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));

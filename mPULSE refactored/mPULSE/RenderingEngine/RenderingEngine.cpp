@@ -5,8 +5,8 @@ RenderingEngine::RenderingEngine()
     modelManager.loadModelsFromList(modelManager.MODEL_LIST_FILENAME);
     showConsole = true;
     zRot = 0.0f;
-    SCREEN_WIDTH = 640;
-    SCREEN_HEIGHT = 480;
+    SCREEN_WIDTH = 1200;
+    SCREEN_HEIGHT = 600;
 	setUpPerpView();
 	createLight();
 	initializeGL();

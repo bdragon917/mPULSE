@@ -53,10 +53,10 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
     Entity* entityCar1 = new Entity();    
     //EntityComponent* ec_car = new EntityComponent();
     //ec_car->setActor(box);
-    entityCar1->setWheel1(wheel);
-	entityCar1->setWheel2(wheel2);
-    entityCar1->setWheel3(wheel3);
-	entityCar1->setWheel4(wheel4);
+    entityCar1->addDriveWheel(wheel);
+	entityCar1->addDriveWheel(wheel2);
+    entityCar1->addPassiveWheel(wheel3);
+	entityCar1->addPassiveWheel(wheel4);
 	w1 = wheel;
 	w2 = wheel2;
 	w3 = wheel3;
@@ -66,11 +66,8 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 
    // entityCar1.components.push_back( &ec_car );
     //entityCar1->addComponent( ec_car );    
-	entityCar1->setActor( box);
+	entityCar1->setActor(box);
     tmpCars->at(0) = entityCar1;    
-    //tmpCars->at(0)->aWheel1->getActor().addTorque(NxVec3(0,10000000000.0f,0));       //This works! But controls can't get to this for some reason???
-	//tmpCars->at(0)->aWheel2->getActor().addTorque(NxVec3(0,10000000000.0f,0));
-    //tmpCars->at(0)->aWheel3->getActor().addTorque(NxVec3(0,10000000000.0f,0));
 	box->setSleepEnergyThreshold(0);
 }
 
@@ -412,8 +409,8 @@ NxScene* PhysicsEngine::getScene()
 
 void PhysicsEngine::accel()
 {
-	w1->setMotorTorque(2000);
-	w2->setMotorTorque(2000);
+	//w1->setMotorTorque(2000);
+	//w2->setMotorTorque(2000);
 	//w3->setMotorTorque(1000);
 	//w4->setMotorTorque(1000);
 	//box->wakeUp();

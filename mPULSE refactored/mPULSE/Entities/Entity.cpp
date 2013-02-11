@@ -2,56 +2,31 @@
 
 Entity::Entity()
 {
-    aWheel1 = NULL;
-    aWheel2 = NULL;
-    aWheel3 = NULL;
-	aWheel4 = NULL;
-}
-/*
-void Entity::addComponent(EntityComponent* com)
-{
-    components.push_back(com);
-}
-*/
-
-void Entity::setWheel1(NxWheelShape* wheel1)
-{
-    aWheel1 = wheel1;
+    torque = 0;
 }
 
-void Entity::setWheel2(NxWheelShape* wheel2)
+void Entity::addDriveWheel(NxWheelShape* wheel)
 {
-	aWheel2 = wheel2;
+    driveWheels.push_back(wheel);
 }
 
-void Entity::setWheel3(NxWheelShape* wheel3)
+void Entity::addPassiveWheel(NxWheelShape* wheel)
 {
-	aWheel3 = wheel3;
+    passiveWheels.push_back(wheel);
 }
 
-void Entity::setWheel4(NxWheelShape* wheel4)
+void Entity::addTorque(int tmpTorque)
 {
-	aWheel4 = wheel4;
+    torque += tmpTorque;
+    for(int i=0;i<driveWheels.size();i++)
+        driveWheels[i]->setMotorTorque(tmpTorque);
 }
 
-NxWheelShape* Entity::getWheel1()
+void Entity::addSteeringAngle(float angle)
 {
-	return aWheel1;
-}
-
-NxWheelShape* Entity::getWheel2()
-{
-	return aWheel2;
-}
-
-NxWheelShape* Entity::getWheel3()
-{
-	return aWheel3;
-}
-
-NxWheelShape* Entity::getWheel4()
-{
-	return aWheel4;
+    steeringAngle += angle;
+    for(int i=0;i<driveWheels.size();i++)
+        driveWheels[i]->setSteerAngle(driveWheels[i]->getSteerAngle() + angle);
 }
 
 NxActor* Entity::getActor()
