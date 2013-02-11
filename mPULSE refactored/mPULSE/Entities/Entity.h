@@ -9,6 +9,7 @@ class Entity
 {
 public:
     Entity();
+    Entity(NxActor* a);
     //std::vector<EntityComponent*> components;
     Camera* aCam;    
     //void addComponent(EntityComponent* com);

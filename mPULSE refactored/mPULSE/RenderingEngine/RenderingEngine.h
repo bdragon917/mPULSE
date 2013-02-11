@@ -59,9 +59,13 @@ int drawIntro();
 void moveStuff(float &testF);
 void drawScene(NxScene* scene, Entities* entities);
 void drawActor(NxActor* actor);
+void drawActor_Safe(NxActor* actor);
 void drawShape(NxShape* shape);
 void drawBox(NxBoxShape* box);
+void drawBox_Generic(float size);
 void drawModel(ObjModel* model,int x,int y, int z, int scale);
+void drawModelPos(ObjModel* model, NxMat34* aMatrix);
+void drawModelShadow(ObjModel* model, NxMat34* aPose);
 
     Console aConsole;    
     Shader* aShader;

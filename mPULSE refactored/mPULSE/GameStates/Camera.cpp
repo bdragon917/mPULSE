@@ -129,15 +129,22 @@ void Camera::updateCamera(float dt)
 
     float catchUpSpd = 1.0f;
 
-    if (movMag > (maxDistance / 2))
-    {
-        catchUpSpd = movMag - (maxDistance / 2);
-    }
+    //if (movMag > (maxDistance / 2))               //Fun Camera 2!!!       //Used if camera is too far away
+    //{
+   //     catchUpSpd = movMag - (maxDistance / 2);
+   // }
 
     
-    curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd * dt;
-
-
+    if (movMag > maxDistance)                                               //Used if camera is too far away
+    {
+        printf("HURRY UP CAMERA!\n");
+        curCamLoc = (curCamLoc + movementVector);
+    }
+    else
+    {
+        curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd * dt * (movementVector.magnitude() * 0.4f);
+    }
+    /*
     if (userCamControl.magnitude() > 0.2f)
     {
 
@@ -151,7 +158,7 @@ void Camera::updateCamera(float dt)
 
         curCamLoc = movementVector;
     }
-
+    */
 
     //curCamLoc.x = movementVector.x;
     //curCamLoc.z = movementVector.z;

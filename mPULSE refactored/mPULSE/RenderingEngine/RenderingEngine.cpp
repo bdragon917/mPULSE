@@ -69,13 +69,17 @@ void RenderingEngine::initializeTexture()
 	int width;
 	int height;
 
-    textureid_P1 = new GLuint[4];
-    glGenTextures(4, textureid_P1);
+    textureid_P1 = new GLuint[8];
+    glGenTextures(8, textureid_P1);
 
     bindBMPtoTexture("./img/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./img/loadScreen.bmp", textureid_P1[1]);
     bindBMPtoTexture("./img/hello.bmp", textureid_P1[2]);
     bindBMPtoTexture("./img/Saruk.bmp", textureid_P1[3]);
+    bindBMPtoTexture("./img/Box.bmp", textureid_P1[4]);
+    bindBMPtoTexture("./img/Box2.bmp", textureid_P1[5]);
+    bindBMPtoTexture("./img/Box3.bmp", textureid_P1[6]);
+    bindBMPtoTexture("./img/white.bmp", textureid_P1[7]);
 	//"/img/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -164,6 +168,105 @@ void RenderingEngine::drawModel(ObjModel* model,int x,int y, int z, int scale)
         }
     }
     glEnd();
+}
+
+
+void RenderingEngine::drawModelPos(ObjModel* model, NxMat34* aPose)
+{
+    glPushMatrix();
+
+ 	float mat[16];
+	aPose->getColumnMajor44(mat);
+    
+    glMultMatrixf(mat);
+    std::vector<std::vector<ObjModel::vertElements>>* faces = model->getFaces();
+    std::vector<ObjModel::vertex3d>* verticies = model->getVerticies();
+    std::vector<ObjModel::vertex3d>* norms = model->getVertexNormals();
+    std::vector<ObjModel::vertex2d>* texs = model->getVertexTextureCoords();
+
+    ObjModel::vertElements face;
+    ObjModel::vertex3d  vert;
+    ObjModel::vertex3d  norm;
+    ObjModel::vertex2d  tex;
+
+    glColor3f(1,1,1);
+    glBegin(GL_TRIANGLES);
+    for(int i=0;i<faces->size();i++)
+    {
+        for(int j=0;j<faces->at(i).size();j++)
+        {            
+            face = faces->at(i).at(j);
+            vert = verticies->at(face.vertIndex);
+
+            if(model->getNormalsEnabled())            
+            {
+                norm = norms->at(face.vertNormalIndex);
+                glNormal3f(norm.x,norm.y,norm.z);
+            }
+            if(model->getTextureCoordsEnabled())
+            {
+                tex = texs->at(face.vertTextureIndex);
+                glTexCoord2d(tex.x,tex.y);
+            }
+
+            glVertex3f((vert.x),(vert.y),(vert.z));
+        }
+    }
+    glEnd();
+
+    glPopMatrix();
+}
+
+void RenderingEngine::drawModelShadow(ObjModel* model, NxMat34* aPose)
+{
+    glPushMatrix();
+
+ 	float mat[16];
+	aPose->getColumnMajor44(mat);
+    glDisable(GL_TEXTURE_2D);
+	const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
+	glMultMatrixf(shadowMat);
+    glMultMatrixf(mat);
+    std::vector<std::vector<ObjModel::vertElements>>* faces = model->getFaces();
+    std::vector<ObjModel::vertex3d>* verticies = model->getVerticies();
+    std::vector<ObjModel::vertex3d>* norms = model->getVertexNormals();
+    std::vector<ObjModel::vertex2d>* texs = model->getVertexTextureCoords();
+
+    ObjModel::vertElements face;
+    ObjModel::vertex3d  vert;
+    ObjModel::vertex3d  norm;
+    ObjModel::vertex2d  tex;
+
+    glColor4f(0.0f, 0.0f, 0.0f, 0.5f);      //Shadow
+
+    glBegin(GL_TRIANGLES);
+    for(int i=0;i<faces->size();i++)
+    {
+        for(int j=0;j<faces->at(i).size();j++)
+        {            
+            face = faces->at(i).at(j);
+            vert = verticies->at(face.vertIndex);
+
+            if(model->getNormalsEnabled())            
+            {
+                norm = norms->at(face.vertNormalIndex);
+                glNormal3f(norm.x,norm.y,norm.z);
+            }
+            if(model->getTextureCoordsEnabled())
+            {
+                tex = texs->at(face.vertTextureIndex);
+                glTexCoord2d(tex.x,tex.y);
+            }
+
+            glVertex3f((vert.x),(vert.y),(vert.z));
+        }
+    }
+    glEnd();
+
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
+    glPopMatrix();
 }
 
 /**
@@ -580,25 +683,157 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 
                 // glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
                  //drawGroundPlane(gxo, gyo);
-                 glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
-                 drawModel(modelManager.getModel(2),0,0,0,1);
-       // glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
-       // for(int i=0;i<modelManager.numOfModels;i++)
-       //     drawModel(modelManager.getModel(i),0,10,0,1);
+                 glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
+                 drawModel(modelManager.getModel(2),0,0,0,1);           //the track
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
-        drawModel(modelManager.getModel(1),0,10,0,1);
+                 //glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+                 //for(int i=0;i<modelManager.numOfModels;i++)
+                 //drawModel(modelManager.getModel(i),0,10,0,1);
 
 
-		// Render all actors
-	    int nbActors = scene->getNbActors();
-	    NxActor** actors = scene->getActors();
-	    while(nbActors--)
-	    {
-		    NxActor* actor = *actors++;
-			drawActor(actor);
-        }
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
+                NxMat34* aPose = &(entities->cars[0]->getActor()->getGlobalPose());
+                drawModelPos(modelManager.getModel(1), aPose );
+
+                //Shadow
+                 if (aShader != NULL)
+                 {
+                    aShader->off();
+                 }
+                glPushMatrix();
+
+		        drawModelShadow(modelManager.getModel(1), aPose );
+
+		        glPopMatrix();
+                if (aShader != NULL)
+                 {
+                    aShader->on();
+                 }
+
+
+
+
+            if (entities->cars.size() > 0)
+            for (int i=0;i < entities->cars.size()-1;i++)
+            {
+
+                if (entities->cars[i]->getModel() != NULL)
+                {
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
+                    NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
+                    drawModelPos(entities->cars[i]->getModel(), aPose );
+                }
+                else
+                {
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
+                    drawActor(entities->cars[i]->getActor());
+                }
+            }
+
+            if (entities->AIcars.size() > 0)
+            for (int i=0;i < entities->AIcars.size()-1;i++)
+            {
+            if (entities->AIcars[i]->getModel() != NULL)
+                {
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
+                    NxMat34* aPose = &(entities->AIcars[i]->getActor()->getGlobalPose());
+                    drawModelPos(entities->AIcars[i]->getModel(), aPose );
+                }
+                else
+                {
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
+                    drawActor(entities->AIcars[i]->getActor());
+                }
+            }
+
+            if (entities->Obstacles.size() > 0)
+            for (int i=0;i < entities->Obstacles.size()-1;i++)
+            {
+                //if (entities->Obstacles[i]->getModel() != NULL)
+               //// {
+                //    NxMat34* aPose = &(entities->Obstacles[i]->getActor()->getGlobalPose());
+                //    drawModelPos(entities->Obstacles[i]->getModel(), aPose );
+               // }
+                //else
+                {
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[4]);
+                    if (entities->Obstacles[i]->getActor() == NULL)
+                    {printf("Obstacles has no actors\n");}
+                    else
+                    {
+//                        drawActor_Safe(entities->Obstacles[i]->getActor());
+                        //drawActor(entities->Obstacles[i]->getActor());
+                    }
+                }
+            }
+
+            if (entities->StaticObjs.size() > 0)
+             for (int i=0;i < entities->StaticObjs.size()-1;i++)
+            {
+               // if (entities->StaticObjs[i]->getModel() != NULL)
+               // {
+               //     NxMat34* aPose = &(entities->StaticObjs[i]->getActor()->getGlobalPose());
+               //     drawModelPos(entities->StaticObjs[i]->getModel(), aPose );
+               // }
+               // else
+                {
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+                     if (entities->StaticObjs[i]->getActor() == NULL)
+                    {printf("StaticObj has no actors\n");}
+                    else
+                    {
+ //                        drawActor_Safe(entities->StaticObjs[i]->getActor());
+//                        drawActor(entities->StaticObjs[i]->getActor());///BUGGY
+                     }
+                }
+            }
+
+             if (entities->Track.size() > 0)
+            for (int i=0;i < entities->Track.size()-1;i++)
+            {
+                if (entities->Track[i]->getModel() != NULL)
+                {
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
+                    NxMat34* aPose = &(entities->Track[i]->getActor()->getGlobalPose());
+                    drawModelPos(entities->Track[i]->getModel(), aPose );
+                }
+                else
+                {
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
+                    if (entities->Track[i]->getActor() == NULL)
+                    {printf("Track has no actors\n");}
+                    else
+                    {
+ //                   drawActor(entities->Track[i]->getActor());///BUGGY
+                    }
+                }
+            }
+
+
+            {
+               
+            }
+            /**
+           // glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+           // for(int i=0;i<modelManager.numOfModels;i++)
+           //     drawModel(modelManager.getModel(i),0,10,0,1);
+
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
+            drawModel(modelManager.getModel(1),0,10,0,1);
+
+            */
+		    // Render all actors
+	        int nbActors = scene->getNbActors();
+	        NxActor** actors = scene->getActors();
+	        while(nbActors--)
+	        {
+		        NxActor* actor = *actors++;
+			    drawActor(actor);
+            }
+            //*/
     }
+
+
 
      if (aShader != NULL)
         aShader->off();
@@ -617,6 +852,20 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	glPopMatrix();
 }
 
+
+void RenderingEngine::drawActor_Safe(NxActor* actor)
+{
+    glPushMatrix();
+    NxMat34 aPose = actor->getGlobalPose();
+ 	float mat[16];
+	aPose.getColumnMajor44(mat);
+    
+    glMultMatrixf(mat);
+
+    drawBox_Generic(1.0f);
+
+
+}
 
 
 void RenderingEngine::drawActor(NxActor* actor)
@@ -644,6 +893,73 @@ void RenderingEngine::drawShape(NxShape* shape)
 	}
 }
 
+
+void RenderingEngine::drawBox_Generic(float size)
+{
+
+	NxVec3 boxDim = NxVec3(size,size,size);
+
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		
+		// (boxDim.x ) (boxDim.y ) (boxDim.z )
+
+		glBegin(GL_POLYGON);
+		//Bottom
+		glNormal3f(0.0f, -1.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( (boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f( (boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,1.0); glVertex3f(-(boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(0.0,1.0); glVertex3f(-(boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		glEnd();
+
+		glBegin(GL_POLYGON);
+		//Left
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f(-(boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f(-(boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,1.0); glVertex3f(-(boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,1.0); glVertex3f(-(boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		//glVertex3f(-d, -d, -d);
+		glEnd();
+
+		glBegin(GL_POLYGON);
+		//Right
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( (boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f( (boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,1.0); glVertex3f( (boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(0.0,1.0); glVertex3f( (boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glEnd();
+
+		glBegin(GL_POLYGON);
+		//Front
+		glNormal3f(0.0f, 0.0f, -1.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f(-(boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f( (boxDim.x ), -(boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,1.0) ;glVertex3f( (boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(0.0,1.0); glVertex3f(-(boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glEnd();
+
+		glBegin(GL_POLYGON);
+		//Back
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( (boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f( (boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,1.0) ;glVertex3f(-(boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(0.0,1.0); glVertex3f(-(boxDim.x ), -(boxDim.y ),  (boxDim.z ));
+		glEnd();
+
+		glBegin(GL_POLYGON);
+		//Top
+		glNormal3f(0.0f, 1.0f, 0.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f( (boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glTexCoord2d(1.0,0.0); glVertex3f( (boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(1.0,1.0); glVertex3f(-(boxDim.x ),  (boxDim.y ), -(boxDim.z ));
+		glTexCoord2d(0.0,1.0); glVertex3f(-(boxDim.x ),  (boxDim.y ),  (boxDim.z ));
+		glEnd();
+
+		//
+}
 
 void RenderingEngine::drawBox(NxBoxShape* box)
 {

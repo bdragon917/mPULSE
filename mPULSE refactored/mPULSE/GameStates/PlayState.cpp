@@ -12,16 +12,20 @@ PlayState::PlayState()
 
     ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
     physicsEngine->createTriMesh(0,-0.5f,0,*aModel);
-    physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f);
-    physicsEngine->createBoxes(-11.138f, 4.188f, -320.407f, 5, 2.5f);
-    physicsEngine->createBoxes(-360.586f, 0.407f, -326.88f, 5, 2.5f);
-    physicsEngine->createBoxes(-675.201f, 0.403f, -325.229f, 5, 2.5f);
-    physicsEngine->createBoxes(-319.045f, 157.17f, 698.045f, 5, 2.5f);
+    physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-11.138f, 4.188f, -320.407f, 5, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-360.586f, 0.407f, -326.88f, 5, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-675.201f, 0.403f, -325.229f, 5, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-319.045f, 157.17f, 698.045f, 5, 2.5f, &entities.Obstacles);
 
 
     //2
-    physicsEngine->createStaticBox(-4.195f, 0.403f, -200.2202f);
-    physicsEngine->createStaticBox(-404.991f, 4.188f, -320.407f);
+    Entity aEntity;
+    aEntity.setActor(physicsEngine->createStaticBox(-4.195f, 0.403f, -200.2202f));
+    Entity aEntity2;
+    aEntity.setActor(physicsEngine->createStaticBox(-404.991f, 4.188f, -320.407f));
+    entities.StaticObjs.push_back(&aEntity);
+    entities.StaticObjs.push_back(&aEntity2);
 
     InitializeConsoleCommands();    //Initalize Commands
 }
@@ -90,6 +94,15 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")
                 {renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->FloatToString(entities.cars.size()));}
+
+                if (renderingEngine->aConsole.consoleString == "num entities")
+                {
+                    renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->FloatToString(entities.cars.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in AIcars: " + renderingEngine->FloatToString(entities.AIcars.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in Obstacles: " + renderingEngine->FloatToString(entities.Obstacles.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in StaticObj: " + renderingEngine->FloatToString(entities.StaticObjs.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in Track: " + renderingEngine->FloatToString(entities.Track.size()));
+                }
 
                 if (renderingEngine->aConsole.consoleString == "num actors")
                 {renderingEngine->aConsole.propragateMsg("Number of actors in scene: " + renderingEngine->FloatToString(physicsEngine->getScene()->getNbActors()));}
@@ -209,9 +222,13 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     {
                         
                         ObjModel* aModel = renderingEngine->getModelManger().getModel(1);
-                        physicsEngine->createTriMesh(0, 0, 0, 
+                        NxActor* aTri = physicsEngine->createTriMesh(0, 0, 0, 
                                                     *aModel
                                                     );
+                        Entity aEntity;
+                        aEntity.setActor(aTri);
+                        aEntity.setModel(aModel);
+                        entities.Track.push_back(&aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created Saruk");
                 }
@@ -221,9 +238,13 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     {
                         
                         ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
-                        physicsEngine->createTriMesh(0, 0, 0, 
+                        NxActor* aTri = physicsEngine->createTriMesh(0, 0, 0, 
                                                     *aModel
                                                     );
+                        Entity aEntity;
+                        aEntity.setActor(aTri);
+                        aEntity.setModel(aModel);
+                        entities.Track.push_back(&aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created track");
                 }

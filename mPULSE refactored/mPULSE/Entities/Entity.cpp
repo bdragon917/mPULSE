@@ -8,6 +8,12 @@ Entity::Entity()
     maxSteeringRight = 0.35;
     maxTorque = 2000;
     minTorque = -2000;
+    model = NULL;
+}
+
+Entity::Entity(NxActor* a)
+{
+    actor = a;
 }
 
 void Entity::addDriveWheel(NxWheelShape* wheel)

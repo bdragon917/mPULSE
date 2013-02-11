@@ -58,7 +58,7 @@ public:
 	//NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);
 	NxActor* createGroundPlane();
 	NxActor* createBox(float x, float y, float z);
-    void createBoxes(float x, float y, float z, int num, float radius);
+    void createBoxes(float x, float y, float z, int num, float radius, std::vector<Entity*>* Boxes);
     NxActor* createStaticBox(float x, float y, float z);
     NxActor* createTriMesh(float x, float y, float z, ObjModel aModel);
     NxActor* createCarChassis();
