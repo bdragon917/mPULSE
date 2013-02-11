@@ -262,6 +262,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 {
     float m = 0;
     float d = 0;
+
     //UserCamControl   
     entities.cars[0]->aCam->updateCamera(1.0f);
     entities.cars[0]->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
@@ -270,33 +271,26 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     int lTriggMag = state->lTrigger;
     int torque = state->leftStick.x * (state->leftStick.magnitude/-5);
 
-	if(rTriggMag > 0)
-        entities.cars[0]->addTorque(rTriggMag);        
-	if(lTriggMag > 0)
-        entities.cars[0]->addTorque(-1*lTriggMag);        
+    entities.cars[0]->addTorque(rTriggMag + -1*lTriggMag);        
 
- //   m = -(physicsEngine->w1->getSteerAngle());    //get the value under 1
- //   d = 0.1f * m;
-
- //   if (rTriggMag == 0 && lTriggMag == 0)
-	//{
-	//	physicsEngine->losing();
-	//}
-
-    //entities.cars[0]->addSteeringAngle(d);
-    //physicsEngine->w1->setSteerAngle( (physicsEngine->w1->getSteerAngle() + d) );
+	if(torque >= 0)
+	if(state->b) {
+		entities.cars[0]->brake(10000);
+	} 
+	else
+	{
+		entities.cars[0]->brake(0);
+	}
 
 	if(torque > 0)
 	{
         m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
-        d = 0.05f * m;
-        entities.cars[0]->addSteeringAngle(d);
+        entities.cars[0]->addSteeringAngle(0.1f * m);
 	}
 	else if(torque < 0)
 	{
         m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
-        d = 0.05f * m;
-        entities.cars[0]->addSteeringAngle(d*-1);
+        entities.cars[0]->addSteeringAngle(-0.1f * m);
 	}
 
 	if(state->lb) {
@@ -308,7 +302,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
 PlayState* PlayState::getInstance()
 {    
-    printf("play state\n");
+     printf("play state\n");
     static PlayState playState;
     playState.changeState(PLAY);
     return &playState;

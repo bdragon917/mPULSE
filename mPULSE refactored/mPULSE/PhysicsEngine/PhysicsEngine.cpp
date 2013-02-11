@@ -494,7 +494,3 @@ void PhysicsEngine::steer(int mag)
     w4->setSteerAngle(mag);
 }
 
-
-// Work on getting braking done
-// Make sure actor doesn't go to sleep (already done), but remeber to do it.
-// Find a way to get this working through the entity class

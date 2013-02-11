@@ -14,7 +14,8 @@ public:
     //void addComponent(EntityComponent* com);
     void addDriveWheel(NxWheelShape* wheel);
     void addPassiveWheel(NxWheelShape* wheel);
-    void addTorque(int tmpTorque);    
+    void addTorque(int tmpTorque);
+	void brake(int tmpTorque);
     void addSteeringAngle(float angle);
     void setModel(ObjModel* m);
     void setActor(NxActor* a);    
