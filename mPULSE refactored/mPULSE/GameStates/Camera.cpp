@@ -155,7 +155,7 @@ void Camera::updateCamera(float dt)
 
     //curCamLoc.x = movementVector.x;
     //curCamLoc.z = movementVector.z;
-    curCamLoc.y = 3.5f;
+    curCamLoc.y = 3.5f + ActLoc.y;
 
     curCamLookAt = ActLoc;
 

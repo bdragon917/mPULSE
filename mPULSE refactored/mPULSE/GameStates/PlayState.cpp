@@ -123,6 +123,20 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 }
                 
 
+
+                if (renderingEngine->aConsole.consoleString == "get curloc")
+                {
+                    entities.cars.at(0)->getActor()->getGlobalPose().t;
+                    renderingEngine->aConsole.propragateMsg(
+                        "CurrentLocation: X:" +
+                        renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPose().t.x) + 
+                        "CurrentLocation: Y:" +
+                        renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPose().t.y) + 
+                        "CurrentLocation: Z:" +
+                        renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPose().t.z)
+                        );
+                }
+
                 //set Commands
 
                 if (renderingEngine->aConsole.consoleString == "spawn obstacles")
