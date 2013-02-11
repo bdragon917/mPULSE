@@ -236,26 +236,20 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
-    //UserCamControl
-    //entities.cars[0]->aCam->updateCamera(1.0f,NxVec3 ((state->rightStick.y), 0,( state->rightStick.x)) );
+    float m = 0;
+    float d = 0;
 
+    //UserCamControl   
     entities.cars[0]->aCam->updateCamera(1.0f);
     entities.cars[0]->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
-    
-    
-    int rTriggMag = state->rTrigger / 60;
-    int lTriggMag = state->lTrigger / 60;
+        
+    int rTriggMag = state->rTrigger;
+    int lTriggMag = state->lTrigger;
     int torque = state->leftStick.x * (state->leftStick.magnitude/-5);
 
-	NxVec3 v0 = NxVec3(rTriggMag*1000,0,0);
-    NxVec3 v1 = NxVec3(lTriggMag*-1000,0,0);
-    NxVec3 v2 = NxVec3(0,torque,0);
+    entities.cars[0]->addTorque(rTriggMag + -1*lTriggMag);        
 
-	if(rTriggMag > 0)
-        entities.cars[0]->addTorque(2000);        
-	if(lTriggMag > 0)
-        entities.cars[0]->addTorque(-2000);      
-
+	if(torque >= 0)
 	if(state->b) {
 		entities.cars[0]->brake(10000);
 	} 
@@ -266,25 +260,13 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
 	if(torque > 0)
 	{
-        float m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
-        float d = 0.1f * m;
-
-       if (physicsEngine->w1->getSteerAngle() < 0.5f)
-           entities.cars[0]->addSteeringAngle(d);
-
-       printf("SteerAngle:%f\n",physicsEngine->w1->getSteerAngle()); 
+        m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
+        entities.cars[0]->addSteeringAngle(0.1f * m);
 	}
-
-	if(torque < 0)
+	else if(torque < 0)
 	{
-        const float pi = 3.14159265359f;      
-        float m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
-        float d = 0.1f * m;
-
-        if (physicsEngine->w1->getSteerAngle() > -0.5f)
-            entities.cars[0]->addSteeringAngle(d*-1);
-
-        printf("SteerAngle:%f\n",physicsEngine->w1->getSteerAngle()); 
+        m = state->leftStick.magnitude / 24000.0f;    //get the value under 1
+        entities.cars[0]->addSteeringAngle(-0.1f * m);
 	}
 
 	if(state->lb) {

@@ -26,7 +26,12 @@ public:
 
 private:
     int torque;
+    int maxTorque;
+    int minTorque;
+    float maxSteeringRight;
+    float maxSteeringLeft;
     float steeringAngle;
+
 	NxActor* actor;
     ObjModel* model;
     std::vector<NxWheelShape*> driveWheels;
