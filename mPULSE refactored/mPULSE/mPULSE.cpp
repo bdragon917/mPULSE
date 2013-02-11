@@ -59,7 +59,7 @@ bool init()
     }
 
 	//Create Main Window	
-	if ((screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)) == NULL)
+	if ((screen = SDL_SetVideoMode(1200, 600, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)) == NULL)
     {
 		printf("Failed to initize graphics\n");
 		return false;	
