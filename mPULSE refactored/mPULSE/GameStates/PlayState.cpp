@@ -239,10 +239,8 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     //UserCamControl
     //entities.cars[0]->aCam->updateCamera(1.0f,NxVec3 ((state->rightStick.y), 0,( state->rightStick.x)) );
 
-    {
-        entities.cars[0]->aCam->updateCamera(1.0f);
-        entities.cars[0]->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
-    }
+    entities.cars[0]->aCam->updateCamera(1.0f);
+    entities.cars[0]->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
     
     
     int rTriggMag = state->rTrigger / 60;
@@ -256,7 +254,15 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 	if(rTriggMag > 0)
         entities.cars[0]->addTorque(2000);        
 	if(lTriggMag > 0)
-        entities.cars[0]->addTorque(-2000);        
+        entities.cars[0]->addTorque(-2000);      
+
+	if(state->b) {
+		entities.cars[0]->brake(10000);
+	} 
+	else
+	{
+		entities.cars[0]->brake(0);
+	}
 
 	if(torque > 0)
 	{
@@ -290,7 +296,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
 PlayState* PlayState::getInstance()
 {    
-    printf("play state\n");
+     printf("play state\n");
     static PlayState playState;
     playState.changeState(PLAY);
     return &playState;

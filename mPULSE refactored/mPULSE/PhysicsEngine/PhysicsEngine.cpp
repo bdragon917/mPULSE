@@ -323,7 +323,7 @@ NxActor* PhysicsEngine::createCarChassis()
 	actorDesc.globalPose.t = position;
 
 	NxActor *actor = scene->createActor(actorDesc);
-	//actor->setCMassOffsetLocalPosition(NxVec3(0,-10,0));
+	actor->setCMassOffsetLocalPosition(NxVec3(0,-2.5,0));
 
     //actor->raiseBodyFlag(NX_BF_FROZEN_ROT_X);
 	//actor->raiseBodyFlag(NX_BF_FROZEN_ROT_Z);
@@ -434,7 +434,3 @@ void PhysicsEngine::steer(int mag)
     w4->setSteerAngle(mag);
 }
 
-
-// Work on getting braking done
-// Make sure actor doesn't go to sleep (already done), but remeber to do it.
-// Find a way to get this working through the entity class

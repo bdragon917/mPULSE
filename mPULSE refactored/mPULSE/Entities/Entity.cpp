@@ -22,6 +22,12 @@ void Entity::addTorque(int tmpTorque)
         driveWheels[i]->setMotorTorque(tmpTorque);
 }
 
+void Entity::brake(int tmpTorque)
+{
+    for(int i=0;i<driveWheels.size();i++)
+        driveWheels[i]->setBrakeTorque(tmpTorque);
+}
+
 void Entity::addSteeringAngle(float angle)
 {
     steeringAngle += angle;
