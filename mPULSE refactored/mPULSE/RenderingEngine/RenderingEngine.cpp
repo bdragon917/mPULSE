@@ -430,7 +430,6 @@ void RenderingEngine::initializeGL()
     }
 }
 
-
 void RenderingEngine::createLight()
 {
 	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0};
