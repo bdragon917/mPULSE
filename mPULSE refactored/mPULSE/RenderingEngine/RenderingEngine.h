@@ -59,8 +59,8 @@ void drawActor(NxActor* actor);
 void drawShape(NxShape* shape);
 void drawBox(NxBoxShape* box);
 void drawModel(ObjModel* model,int x,int y, int z, int scale);
-    Console aConsole;
 
+    Console aConsole;    
     Shader* aShader;
 
     string FloatToString(float input);

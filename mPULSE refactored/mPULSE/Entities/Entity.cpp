@@ -4,8 +4,8 @@ Entity::Entity()
 {
     torque = 0;
     steeringAngle = 0;
-    maxSteeringLeft = -0.5;
-    maxSteeringRight = 0.5;
+    maxSteeringLeft = -0.35;
+    maxSteeringRight = 0.35;
     maxTorque = 2000;
     minTorque = -2000;
 }

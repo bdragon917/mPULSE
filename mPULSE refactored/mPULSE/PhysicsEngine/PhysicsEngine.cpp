@@ -12,6 +12,49 @@ PhysicsEngine* PhysicsEngine::getInstance()
     return &physics;
 }
 
+
+void PhysicsEngine::losing()
+{
+	int one = w1->getMotorTorque();
+	int two = w2->getMotorTorque();
+	int three = w3->getMotorTorque();
+	int four = w4->getMotorTorque();
+	if (one > 0 && two > 0 && three > 0 && four > 0)
+	{
+		if (one > 10)
+		{
+			w1->setMotorTorque(one * 0.7);
+			w2->setMotorTorque(two * 0.7);
+			w3->setMotorTorque(three * 0.7);
+			w4->setMotorTorque(four * 0.7);
+		}
+		else
+		{
+			w1->setMotorTorque(0);
+			w2->setMotorTorque(0);
+			w3->setMotorTorque(0);
+			w4->setMotorTorque(0);
+		}
+	}
+	else if (one < 0 && two < 0 && three < 0 && four < 0)
+	{
+		if (one < -10)
+		{
+			w1->setMotorTorque(one * 0.7);
+			w2->setMotorTorque(two * 0.7);
+			w3->setMotorTorque(three * 0.7);
+			w4->setMotorTorque(four * 0.7);
+		}
+		else
+		{
+			w1->setMotorTorque(0);
+			w2->setMotorTorque(0);
+			w3->setMotorTorque(0);
+			w4->setMotorTorque(0);
+		}
+	}
+}
+
 void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 {
     std::vector<Entity*>* tmpCars =  cars;
@@ -308,6 +351,8 @@ NxActor* PhysicsEngine::createCarChassis()
 	NxBodyDesc bodyDesc;
 	//bodyDesc.angularDamping	= 0.5f;
 	bodyDesc.angularDamping	= 20.0f;
+	bodyDesc.linearDamping = 0.05f;
+
 
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxShapes[2];
@@ -323,15 +368,10 @@ NxActor* PhysicsEngine::createCarChassis()
 	actorDesc.globalPose.t = position;
 
 	NxActor *actor = scene->createActor(actorDesc);
-	//actor->setCMassOffsetLocalPosition(NxVec3(0,-10,0));
-
-    //actor->raiseBodyFlag(NX_BF_FROZEN_ROT_X);
-	//actor->raiseBodyFlag(NX_BF_FROZEN_ROT_Z);
-    
+	actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));
 
 	return actor;
 }
-
 
 NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, float z)
 {
