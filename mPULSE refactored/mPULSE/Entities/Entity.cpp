@@ -3,6 +3,11 @@
 Entity::Entity()
 {
     torque = 0;
+    steeringAngle = 0;
+    maxSteeringLeft = -0.5;
+    maxSteeringRight = 0.5;
+    maxTorque = 2000;
+    minTorque = -2000;
 }
 
 void Entity::addDriveWheel(NxWheelShape* wheel)
@@ -17,16 +22,22 @@ void Entity::addPassiveWheel(NxWheelShape* wheel)
 
 void Entity::addTorque(int tmpTorque)
 {
-    torque += tmpTorque;
-    for(int i=0;i<driveWheels.size();i++)
-        driveWheels[i]->setMotorTorque(tmpTorque);
+    if((torque + tmpTorque) < maxTorque && (torque + tmpTorque) > minTorque)
+    {
+        torque += tmpTorque;
+        for(int i=0;i<driveWheels.size();i++)
+            driveWheels[i]->setMotorTorque(torque);
+    }
 }
 
 void Entity::addSteeringAngle(float angle)
 {
-    steeringAngle += angle;
-    for(int i=0;i<driveWheels.size();i++)
-        driveWheels[i]->setSteerAngle(driveWheels[i]->getSteerAngle() + angle);
+    if(((steeringAngle+angle) >= maxSteeringLeft) && ((steeringAngle+angle) <= maxSteeringRight))
+    {
+        steeringAngle += angle;
+        for(int i=0;i<driveWheels.size();i++)
+            driveWheels[i]->setSteerAngle(steeringAngle);
+    }
 }
 
 NxActor* Entity::getActor()
