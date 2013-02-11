@@ -68,6 +68,15 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
  //               {renderingEngine->aConsole.commands[renderingEngine->aConsole.consoleString](0);}
 
 
+                if (renderingEngine->aConsole.consoleString == "off g")
+                {
+                    physicsEngine->getScene()->setGravity(NxVec3(0,0,0));
+                }
+                if (renderingEngine->aConsole.consoleString == "on g")
+                {
+                    physicsEngine->getScene()->setGravity(NxVec3(0,-9.81f,0));
+                }
+
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")
                 {renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->FloatToString(entities.cars.size()));}
@@ -172,7 +181,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 }
                 if (renderingEngine->aConsole.consoleString == "spawn saruk")
                 {
-                    for (int x=0;x<20;x++)
+                    //for (int x=0;x<20;x++)
                     {
                         
                         ObjModel* aModel = renderingEngine->getModelManger().getModel(1);
@@ -182,7 +191,25 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     }
                      renderingEngine->aConsole.propragateMsg("Created Saruk");
                 }
-                 
+                if (renderingEngine->aConsole.consoleString == "spawn track")
+                {
+                    //for (int x=0;x<20;x++)
+                    {
+                        
+                        ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
+                        physicsEngine->createTriMesh(0, 0, 0, 
+                                                    *aModel
+                                                    );
+                    }
+                     renderingEngine->aConsole.propragateMsg("Created track");
+                }
+                if (renderingEngine->aConsole.consoleString == "reset car")
+                {
+                    physicsEngine->resetBox();
+                    entities.cars[0]->getActor()->setGlobalPosition(NxVec3(0,35.0f,0));
+                    entities.cars[0]->getActor()->setGlobalOrientation(NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)));
+                     renderingEngine->aConsole.propragateMsg("Car Reset");
+                }
                 
                 //master Commands
                 if (renderingEngine->aConsole.consoleString == "quit")

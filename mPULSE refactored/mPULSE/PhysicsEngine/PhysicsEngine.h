@@ -53,6 +53,7 @@ public:
     NxActor* createCarChassis();
 //    NxWheelShape* AddWheelToActor(NxActor* actor, NxWheelDesc* wheelDesc);
     void resetBox();
+    void resetBoxHigh();
 
 	NxScene* getScene();
 	void accel();

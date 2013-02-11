@@ -39,7 +39,7 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	defaultMaterial->setStaticFriction(0.5);
 	defaultMaterial->setDynamicFriction(0.5);
 
-	groundPlane = createGroundPlane();
+	//groundPlane = createGroundPlane();
 	//box = createBox();
 
     NxActor* box = createCarChassis();              //create a Chassis
@@ -218,14 +218,14 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
 
 
    // aModel.getVerticies()->size();
-    gFaces = new NxU32[(aModel.getFaces()->size()*3)];
+    gFaces = new NxU32[(aModel.getFaces()->size()*3)+3];
     //for (int f = 0; f < aModel.getFaces()->size(); f++)
     //{
     //    gFaces[f]
     //}
 
 
-    for (int v = 0; v < aModel.getFaces()->size(); v=v+3)
+    for (int v = 0; v < (aModel.getFaces()->size()); v=v+1)
     {
         gFaces[v*3] = ( NxU32(aModel.getFaces()->at(v).at(0).vertIndex) );
         gFaces[(v*3)+1] = ( NxU32(aModel.getFaces()->at(v).at(1).vertIndex) );
@@ -240,6 +240,8 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
         gNormals[n] = ( NxVec3(aModel.getVertexNormals()->at(n).x, aModel.getVertexNormals()->at(n).y, aModel.getVertexNormals()->at(n).z) );
     }
 
+    printf("PHYSIC_MESH: Ver:%i, Tri:%i\n",aModel.getVerticies()->size(), aModel.getFaces()->size());
+
 	// Build physical model
 	NxTriangleMeshDesc triMeshDesc;
 	triMeshDesc.numVertices					= aModel.getVerticies()->size();
@@ -249,6 +251,7 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
 	triMeshDesc.points						= gVerts;
 	triMeshDesc.triangles					= gFaces;							
 	triMeshDesc.flags						= 0;
+
 	//add the mesh material data:
 	//triMeshDesc.materialIndexStride			= sizeof(NxMaterialIndex);
 	//triMeshDesc.materialIndices				= gTerrainMaterials;
@@ -261,17 +264,18 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
     NxInitCooking();
 
      MemoryWriteBuffer buf;
- //       NxCookingParams params;  
-  //      params.targetPlatform = PLATFORM_PC;  
-   //     params.skinWidth = 0.1f;  
-    //    params.hintCollisionSpeed = false;  
-     //   NxSetCookingParams(params);  
+        NxCookingParams params;  
+        params.targetPlatform = PLATFORM_PC;  
+        params.skinWidth = 0.5f;  
+        params.hintCollisionSpeed = false;  
+        NxSetCookingParams(params);  
      bool status = NxCookTriangleMesh(triMeshDesc, buf); 
 
   	MemoryReadBuffer readBuffer(buf.data);
 
 
   	triMeshShapeDesc.meshData = physicsSDK->createTriangleMesh(readBuffer);
+    ///triMeshShapeDesc.meshFlags = NxMeshFlags::NX_MF_FLIPNORMALS;        //seems to help??
 
 	//
 	// Please note about the created Triangle Mesh, user needs to release it when no one uses it to save memory. It can be detected
@@ -390,6 +394,12 @@ NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, fl
 void PhysicsEngine::resetBox()
 {
 	box->setGlobalPosition(NxVec3(0,3.5,0));
+	scene->flushCaches();
+}
+
+void PhysicsEngine::resetBoxHigh()
+{
+	box->setGlobalPosition(NxVec3(0,35.0f,0));
 	scene->flushCaches();
 }
 
