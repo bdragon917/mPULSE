@@ -67,20 +67,14 @@ void Entity::addSteeringAngle(float percent)
 
     if(getActor()->getLinearVelocity().magnitude() < 30)
     {
-        maxSteeringLeft = -0.85;
-        maxSteeringRight = 0.85;
         maxDeltaAngle = 0.2;
     }
     else if(getActor()->getLinearVelocity().magnitude() < 60)
     {
-        maxSteeringLeft = -0.35;
-        maxSteeringRight = 0.35;
         maxDeltaAngle = 0.01;
     }
     else
     {
-        maxSteeringLeft = -0.25;
-        maxSteeringRight = 0.25;
         maxDeltaAngle = 0.005;
     }
 
@@ -89,10 +83,6 @@ void Entity::addSteeringAngle(float percent)
 
     if(((steeringAngle+deltaAngle) >= maxSteeringLeft) && ((steeringAngle+deltaAngle) <= maxSteeringRight))
         steeringAngle += deltaAngle;
-    else if((steeringAngle+deltaAngle) < maxSteeringLeft)
-        steeringAngle = maxSteeringLeft;
-    else if((steeringAngle+deltaAngle) > maxSteeringRight)
-        steeringAngle = maxSteeringRight;
 
 
     for(int i=0;i<driveWheels.size();i++)
