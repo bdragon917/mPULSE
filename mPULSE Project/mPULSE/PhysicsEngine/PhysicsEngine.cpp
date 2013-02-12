@@ -194,7 +194,7 @@ NxActor* PhysicsEngine::createStaticBox(float x, float y, float z)
 
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;
-	boxDesc.dimensions.set(5.5,5.5,5.5);
+	boxDesc.dimensions.set(0.5,0.5,0.5);
 	//boxDesc.localPose.t = position;
 
 	NxActorDesc actorDesc;
@@ -343,10 +343,7 @@ NxActor* PhysicsEngine::createCarChassis()
 	actorDesc.density = 10.0f;
 	actorDesc.globalPose.t = position;
 
-<<<<<<< HEAD:mPULSE Project/mPULSE/PhysicsEngine/PhysicsEngine.cpp
-=======
 
->>>>>>> 513157ee208f3dae4c99facfeb90e4472fd9237b:mPULSE/mPULSE/PhysicsEngine/PhysicsEngine.cpp
     float d = 90.0f;      //Turn by 90 degrees
 
     NxVec3 v(0,1,0);
@@ -357,10 +354,7 @@ NxActor* PhysicsEngine::createCarChassis()
     NxMat33 orient;
     orient.fromQuat(q);
 
-<<<<<<< HEAD:mPULSE Project/mPULSE/PhysicsEngine/PhysicsEngine.cpp
-=======
 
->>>>>>> 513157ee208f3dae4c99facfeb90e4472fd9237b:mPULSE/mPULSE/PhysicsEngine/PhysicsEngine.cpp
     customUserData* cud = new customUserData;
     cud->type = CAR;
     actorDesc.userData = (void*)&cud;
