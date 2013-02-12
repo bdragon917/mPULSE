@@ -18,7 +18,7 @@ Camera::Camera(void)
 {
         EquilbriumSpeed = 0.5f;
         targetDistance = 15.0f;
-        maxDistance = 40.0f;
+        maxDistance = 20.0f;
         curCamLoc = NxVec3(0,0,-1.0f);
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
@@ -32,7 +32,7 @@ Camera::Camera(NxActor* aActor)
         AttachtoCar(aActor);
         EquilbriumSpeed = 0.5f;
         targetDistance = 15.0f;
-        maxDistance = 40.0f;
+        maxDistance = 20.0f;
         curCamLoc = NxVec3(0,0,-1.0f);
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
@@ -130,22 +130,22 @@ void Camera::updateCamera(float dt)
 
     float catchUpSpd = 1.0f;
 
-    //if (movMag > (maxDistance / 2))               //Fun Camera 2!!!       //Used if camera is too far away
-    //{
-   //     catchUpSpd = movMag - (maxDistance / 2);
-   // }
+    if (movMag > (maxDistance / 2))               //Fun Camera 2!!!       //Used if camera is too far away
+    {
+        catchUpSpd = movMag - (maxDistance / 2);
+    }
 
     
     if (movMag > maxDistance)                                               //Used if camera is too far away
     {
         printf("HURRY UP CAMERA!\n");
-        curCamLoc = (curCamLoc + movementVector);
+        curCamLoc = (curCamLoc + movementVector * (movMag - maxDistance) );
     }
-    else
+   // else
     {
         curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd * dt * (movementVector.magnitude() * 0.4f);
     }
-    /*
+    
     if (userCamControl.magnitude() > 0.2f)
     {
 
@@ -159,7 +159,7 @@ void Camera::updateCamera(float dt)
 
         curCamLoc = movementVector;
     }
-    */
+    
 
     //curCamLoc.x = movementVector.x;
     //curCamLoc.z = movementVector.z;
