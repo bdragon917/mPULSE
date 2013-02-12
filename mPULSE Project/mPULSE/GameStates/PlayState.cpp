@@ -13,11 +13,19 @@ PlayState::PlayState()
 
     ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
     physicsEngine->createTriMesh(0,-0.5f,0,*aModel);
+<<<<<<< HEAD:mPULSE Project/mPULSE/GameStates/PlayState.cpp
     physicsEngine->createBoxes(-103.811f, 0.410f, -292.283f, 10, 2.5f, &entities.Obstacles);
     physicsEngine->createBoxes(-11.138f, 4.198f, -320.407f, 10, 2.5f, &entities.Obstacles);
     physicsEngine->createBoxes(-360.586f, 0.417f, -326.88f, 10, 2.5f, &entities.Obstacles);
     physicsEngine->createBoxes(-675.201f, 0.413f, -325.229f, 10, 2.5f, &entities.Obstacles);
     physicsEngine->createBoxes(-319.045f, 157.18f, 698.045f, 10, 2.5f, &entities.Obstacles);
+=======
+    physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-11.138f, 4.188f, -320.407f, 5, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-360.586f, 0.407f, -326.88f, 5, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-675.201f, 0.403f, -325.229f, 5, 2.5f, &entities.Obstacles);
+    physicsEngine->createBoxes(-319.045f, 157.17f, 698.045f, 5, 2.5f, &entities.Obstacles);
+>>>>>>> 513157ee208f3dae4c99facfeb90e4472fd9237b:mPULSE/mPULSE/GameStates/PlayState.cpp
 
 
     //2
@@ -233,9 +241,13 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     {
                         
                         ObjModel* aModel = renderingEngine->getModelManger().getModel(1);
-                        physicsEngine->createTriMesh(0, 0, 0, 
+                        NxActor* aTri = physicsEngine->createTriMesh(0, 0, 0, 
                                                     *aModel
                                                     );
+                        Entity aEntity;
+                        aEntity.setActor(aTri);
+                        aEntity.setModel(aModel);
+                        entities.Track.push_back(&aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created Saruk");
                 }
@@ -245,9 +257,13 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     {
                         
                         ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
-                        physicsEngine->createTriMesh(0, 0, 0, 
+                        NxActor* aTri = physicsEngine->createTriMesh(0, 0, 0, 
                                                     *aModel
                                                     );
+                        Entity aEntity;
+                        aEntity.setActor(aTri);
+                        aEntity.setModel(aModel);
+                        entities.Track.push_back(&aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created track");
                 }

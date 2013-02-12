@@ -13,47 +13,7 @@ PhysicsEngine* PhysicsEngine::getInstance()
 }
 
 
-void PhysicsEngine::losing()
-{
-	int one = w1->getMotorTorque();
-	int two = w2->getMotorTorque();
-	int three = w3->getMotorTorque();
-	int four = w4->getMotorTorque();
-	if (one > 0 && two > 0 && three > 0 && four > 0)
-	{
-		if (one > 10)
-		{
-			w1->setMotorTorque(one * 0.7);
-			w2->setMotorTorque(two * 0.7);
-			w3->setMotorTorque(three * 0.7);
-			w4->setMotorTorque(four * 0.7);
-		}
-		else
-		{
-			w1->setMotorTorque(0);
-			w2->setMotorTorque(0);
-			w3->setMotorTorque(0);
-			w4->setMotorTorque(0);
-		}
-	}
-	else if (one < 0 && two < 0 && three < 0 && four < 0)
-	{
-		if (one < -10)
-		{
-			w1->setMotorTorque(one * 0.7);
-			w2->setMotorTorque(two * 0.7);
-			w3->setMotorTorque(three * 0.7);
-			w4->setMotorTorque(four * 0.7);
-		}
-		else
-		{
-			w1->setMotorTorque(0);
-			w2->setMotorTorque(0);
-			w3->setMotorTorque(0);
-			w4->setMotorTorque(0);
-		}
-	}
-}
+
 
 void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 {
@@ -322,7 +282,7 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
      MemoryWriteBuffer buf;
         NxCookingParams params;  
         params.targetPlatform = PLATFORM_PC;  
-        params.skinWidth = 0.5f;  
+        params.skinWidth = 0.1f;  
         params.hintCollisionSpeed = false;  
         NxSetCookingParams(params);  
      bool status = NxCookTriangleMesh(triMeshDesc, buf); 
@@ -383,6 +343,10 @@ NxActor* PhysicsEngine::createCarChassis()
 	actorDesc.density = 10.0f;
 	actorDesc.globalPose.t = position;
 
+<<<<<<< HEAD:mPULSE Project/mPULSE/PhysicsEngine/PhysicsEngine.cpp
+=======
+
+>>>>>>> 513157ee208f3dae4c99facfeb90e4472fd9237b:mPULSE/mPULSE/PhysicsEngine/PhysicsEngine.cpp
     float d = 90.0f;      //Turn by 90 degrees
 
     NxVec3 v(0,1,0);
@@ -393,6 +357,10 @@ NxActor* PhysicsEngine::createCarChassis()
     NxMat33 orient;
     orient.fromQuat(q);
 
+<<<<<<< HEAD:mPULSE Project/mPULSE/PhysicsEngine/PhysicsEngine.cpp
+=======
+
+>>>>>>> 513157ee208f3dae4c99facfeb90e4472fd9237b:mPULSE/mPULSE/PhysicsEngine/PhysicsEngine.cpp
     customUserData* cud = new customUserData;
     cud->type = CAR;
     actorDesc.userData = (void*)&cud;
