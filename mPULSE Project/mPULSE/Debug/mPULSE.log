@@ -1,17 +1,59 @@
-﻿Build started 2/12/2013 12:56:50 PM.
-     1>Project "\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE\mPULSE\mPULSE.vcxproj" on node 2 (build target(s)).
+﻿Build started 2/12/2013 1:30:35 PM.
+     1>Project "\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE Project\mPULSE\mPULSE.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\mPULSE.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\mPULSE.unsuccessfulbuild".
        ClCompile:
-         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\PhysXLoader\include" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\include\win32" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Physics\include" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\NxCharacter\include" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Cooking\include" /I"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Foundation\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _MBCS /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GameStates\PlayState.cpp PhysicsEngine\PhysicsEngine.cpp
+         PhysicsEngine.cpp
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(49): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(50): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(51): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(52): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(230): warning C4018: '<' : signed/unsigned mismatch
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(232): warning C4244: 'argument' : conversion from 'double' to 'NxReal', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(232): warning C4244: 'argument' : conversion from 'double' to 'NxReal', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(232): warning C4244: 'argument' : conversion from 'double' to 'NxReal', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(244): warning C4018: '<' : signed/unsigned mismatch
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(254): warning C4018: '<' : signed/unsigned mismatch
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(256): warning C4244: 'argument' : conversion from 'double' to 'NxReal', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(256): warning C4244: 'argument' : conversion from 'double' to 'NxReal', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(256): warning C4244: 'argument' : conversion from 'double' to 'NxReal', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(397): warning C4305: '=' : truncation from 'double' to 'NxReal'
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(464): warning C4244: 'argument' : conversion from 'int' to 'NxReal', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(465): warning C4244: 'argument' : conversion from 'int' to 'NxReal', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(466): warning C4244: 'argument' : conversion from 'int' to 'NxReal', possible loss of data
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\physicsengine\physicsengine.cpp(467): warning C4244: 'argument' : conversion from 'int' to 'NxReal', possible loss of data
+         PlayState.cpp
+     1>\\pc.cpsc.ucalgary.ca\users\ug\ckhlee\documents\mygitdirectory\mpulse\mpulse project\mpulse\gamestates\playstate.cpp(297): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
        Link:
-         All outputs are up-to-date.
-         mPULSE.vcxproj -> \\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE\Debug\mPULSE.exe
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE Project\Debug\mPULSE.exe" /NOLOGO /LIBPATH:"C:\CPSC585\glew-1.9.0\lib" /LIBPATH:"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\lib\win32\glut" /LIBPATH:"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Bin\win32" /LIBPATH:"C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32" glew32.lib PhysXLoader.lib NxCharacter.lib NxCooking.lib SDL.lib SDLmain.lib opengl32.lib glu32.lib XInput.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\mPULSE.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE Project\Debug\mPULSE.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE Project\Debug\mPULSE.lib" /MACHINE:X86 Debug\Entity.obj
+         Debug\EntityComponent.obj
+         Debug\Camera.obj
+         Debug\Console.obj
+         Debug\Game.obj
+         Debug\GameState.obj
+         Debug\InitState.obj
+         Debug\PlayState.obj
+         Debug\XboxController.obj
+         Debug\ModelManager.obj
+         Debug\ObjModel.obj
+         Debug\mPULSE.obj
+         Debug\Physics.obj
+         Debug\PhysicsEngine.obj
+         Debug\Stream.obj
+         Debug\RenderingEngine.obj
+         Debug\Shader.obj
+         Debug\Clock.obj
+         LINK : \\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE Project\Debug\mPULSE.exe not found or not built by the last incremental link; performing full link
+         mPULSE.vcxproj -> \\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE Project\Debug\mPULSE.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE Project\Debug\mPULSE.exe;#1" /manifest Debug\mPULSE.exe.intermediate.manifest
        FinalizeBuildStatus:
          Deleting file "Debug\mPULSE.unsuccessfulbuild".
          Touching "Debug\mPULSE.lastbuildstate".
-     1>Done Building Project "\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE\mPULSE\mPULSE.vcxproj" (build target(s)).
+     1>Done Building Project "\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE Project\mPULSE\mPULSE.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.24
+Time Elapsed 00:00:06.01
