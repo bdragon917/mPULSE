@@ -1,17 +1,17 @@
-﻿Build started 2/12/2013 12:56:50 PM.
-     1>Project "\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE\mPULSE\mPULSE.vcxproj" on node 2 (build target(s)).
+﻿Build started 2/12/2013 1:42:18 PM.
+     1>Project "\\pc.cpsc.ucalgary.ca\Users\ug\kwyan\Documents\mPULSE\mPULSE\mPULSE Project\mPULSE\mPULSE.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\mPULSE.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
        Link:
          All outputs are up-to-date.
-         mPULSE.vcxproj -> \\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE\Debug\mPULSE.exe
+         mPULSE.vcxproj -> \\pc.cpsc.ucalgary.ca\Users\ug\kwyan\Documents\mPULSE\mPULSE\mPULSE Project\Debug\mPULSE.exe
        FinalizeBuildStatus:
          Deleting file "Debug\mPULSE.unsuccessfulbuild".
          Touching "Debug\mPULSE.lastbuildstate".
-     1>Done Building Project "\\pc.cpsc.ucalgary.ca\Users\ug\ckhlee\Documents\MyGitDirectory\mPULSE\mPULSE\mPULSE\mPULSE.vcxproj" (build target(s)).
+     1>Done Building Project "\\pc.cpsc.ucalgary.ca\Users\ug\kwyan\Documents\mPULSE\mPULSE\mPULSE Project\mPULSE\mPULSE.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.24
+Time Elapsed 00:00:00.11
