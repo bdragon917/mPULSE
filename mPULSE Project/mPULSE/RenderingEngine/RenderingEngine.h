@@ -88,6 +88,12 @@ private:
     void drawGroundPlane(float xoffset, float yoffset);
     void drawCheckerBoard(float x, float y);
 
+    void drawCars(Entities* entities);
+    void drawAICars(Entities* entities);
+    void drawObstacles(Entities* entities);
+    void drawStaticObjs(Entities* entities);
+    void drawTrack(Entities* entities);
+
     void RenderDebugPhysic(const NxDebugRenderable* ndr);
     
     //Console Variables
