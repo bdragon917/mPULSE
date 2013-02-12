@@ -1,3 +1,12 @@
 *.exe
 *.suo
 *.sdf
+/mPULSE Project/mPULSE/Debug/*.obj
+/mPULSE Project/mPULSE/img/Thumbs.db
+/mPULSE Project/mPULSE/Debug/*.obj
+/mPULSE Project/mPULSE/Debug/*.tlog
+/mPULSE Project/mPULSE/Debug/*.manifest
+/mPULSE Project/mPULSE/Debug/*.lastbuildstate
+/mPULSE Project/mPULSE/Debug/*.log
+/mPULSE Project/mPULSE/Debug/*.idb
+/mPULSE Project/mPULSE/Debug/*.pdb
