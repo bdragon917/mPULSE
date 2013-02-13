@@ -8,6 +8,7 @@
         currentModelNum = 0;
         numOfModels = 0;
         MODEL_LIST_FILENAME = "ModelLoader\\ModelList.txt";
+        errorMsg = "No Error.";
     }
 
     void ModelManager::loadModelsFromList(std::string modelListFilename)
@@ -44,7 +45,7 @@
 	    file.open(fileName);	
         if(file.is_open())
         {
-            models.push_back(new ObjModel(currentModelNum,fileName));
+            models.push_back(new ObjModel(currentModelNum,removeFilePath(fileName)));
 	        while(!file.eof())
 	        {
                 file.getline(charArray,1024);
@@ -58,11 +59,6 @@
             return currentModelNum++;
         }
         return -1;
-    }
-
-    ObjModel* ModelManager::getModel(int index)
-    {
-        return models[index];
     }
 
     void ModelManager::parseLine(std::string lineString, ObjModel* model)
@@ -292,6 +288,51 @@
         else if(DebugMode)
             printf("%s not defined. Unsupported or bad format. Line:   %d\n",lineString.data(),lineNum);
             
+    }
+
+    ObjModel* ModelManager::getModel(std::string fileName)
+    {        
+        errorMsg = "No error message.";
+        for(unsigned int i=0; i<models.size(); i++)
+        {
+            if(models[i]->getName().compare(fileName) == 0)
+                return models[i];
+        }
+
+        errorMsg = "Invalid Model Name";
+        return NULL;
+    }
+
+    ObjModel* ModelManager::getModel(int index)
+    {
+        errorMsg = "No error message.";
+        if(index < numOfModels)
+            return models[index];         
+
+        errorMsg = "Invalid Model Index";
+        return NULL;
+    }
+
+    std::string ModelManager::getErrorMessage()
+    {
+        return errorMsg;
+    }
+
+    std::string ModelManager::removeFilePath(std::string line)
+    {
+        unsigned int i = 0;
+        int j = 0;
+
+        char ch = '\0';
+        
+        while(i < line.size())
+        {
+            ch = line.at(i++);
+            if(ch == '\\')
+                j=i;
+        }
+
+        return line.substr(j);
     }
 
     std::vector<double> ModelManager::parseFloats(std::string line, int startIndex)
