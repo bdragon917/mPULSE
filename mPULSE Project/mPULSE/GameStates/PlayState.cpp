@@ -13,15 +13,17 @@ PlayState::PlayState()
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
 
-
     //Create Track
     Entity* aTrack = new Entity();
-    ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
-    aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
-    RenderableComponent* rc = new RenderableComponent(2,7);
-    aTrack->rc.push_back(rc);
-    entities.Track.push_back(aTrack);
+    ObjModel* aModel = renderingEngine->getModelManger().getModel("Race1.obj");
+    RenderableComponent* rc = new RenderableComponent(2,7);    
 
+    if(aModel != NULL)
+    {
+        aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
+        entities.Track.push_back(aTrack);
+        aTrack->rc.push_back(rc);    
+    }   
 
     physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);
     physicsEngine->createBoxes(-11.138f, 4.188f, -320.407f, 5, 2.5f, &entities.Obstacles);

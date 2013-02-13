@@ -17,9 +17,8 @@ public:
     void render();
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);
     void handleXboxEvents(int player,XboxController* state);
-
-
     void InitializeConsoleCommands();
+
 private:
     bool showConsole;
     
