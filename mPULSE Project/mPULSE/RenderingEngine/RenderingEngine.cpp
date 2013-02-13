@@ -685,7 +685,7 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 
                 // glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
                  //drawGroundPlane(gxo, gyo);
-                 glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
+                // glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
                  //drawModel(modelManager.getModel(2),0,0,0,1);           //the track
 
                  //glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
@@ -729,18 +729,23 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
                     q.fromAngleAxis(ang,v);
                     NxMat33 o;
                     o.fromQuat(q);
-                    const static float rotMat[]={ o.getRow(0).x,o.getRow(0).y,o.getRow(0).z,0,
-                                                    o.getRow(1).x,o.getRow(1).y,o.getRow(1).z,0,
-                                                    o.getRow(2).x,o.getRow(2).y,o.getRow(2).z,0,
-                                                    o.getRow(3).x,o.getRow(3).y,o.getRow(3).z,1 };
+                    //const static float rotMat[]={ o.getRow(0).x,o.getRow(0).y,o.getRow(0).z,0,
+                    //                                o.getRow(1).x,o.getRow(1).y,o.getRow(1).z,0,
+                    //                                o.getRow(2).x,o.getRow(2).y,o.getRow(2).z,0,
+                     //                               o.getRow(3).x,o.getRow(3).y,o.getRow(3).z,1 };
+
+                                    const static float rotMat[]={ 1,0,0,0,
+                                                    0,std::cos(ang),-std::sin(ang),0,
+                                                    0,std::sin(ang),std::cos(ang),0,
+                                                    0,0,0,1 };
 
 	                glMultMatrixf(mapMat);
-//                    glMultMatrixf(rotMat);
+                    //glMultMatrixf(rotMat);
 	                
                        glColor3f(1.0f,1.0f,1.0f);
- //                      drawCars(entities);
-   //                    drawAICars(entities);
-     //                  drawTrack(entities);
+                       //drawCars(entities);
+                       //drawAICars(entities);
+                       //drawTrack(entities);
 
                     glEnable(GL_TEXTURE_2D);
 		        glPopMatrix();
@@ -753,9 +758,9 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 
 
             drawCars(entities);
-            //drawAICars(entities);
+            drawAICars(entities);
             drawObstacles(entities);
-            //drawStaticObjs(entities);
+            drawStaticObjs(entities);
             drawTrack(entities);
 
 

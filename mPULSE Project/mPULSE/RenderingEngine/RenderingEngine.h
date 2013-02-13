@@ -29,6 +29,7 @@
 #include "..\Entities\Entity.h"
 #include "..\ModelLoader\ModelManager.h"
 #include "..\ModelLoader\ObjModel.h"
+#include <math.h>
 
 class RenderingEngine
 {

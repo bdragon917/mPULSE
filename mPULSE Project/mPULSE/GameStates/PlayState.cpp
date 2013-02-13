@@ -35,7 +35,10 @@ PlayState::PlayState()
     Entity* aEntity = new Entity();
     aEntity->setActor(physicsEngine->createStaticBox(-4.195f, 0.403f, -200.2202f));
     Entity* aEntity2 = new Entity();
-    aEntity->setActor(physicsEngine->createStaticBox(-404.991f, 4.188f, -320.407f));
+    aEntity2->setActor(physicsEngine->createStaticBox(-404.991f, 4.188f, -320.407f));
+    RenderableComponent* rc2 = new RenderableComponent(0,5);
+    aEntity->rc.push_back(rc2);
+    aEntity2->rc.push_back(rc2);
     entities.StaticObjs.push_back(aEntity);
     entities.StaticObjs.push_back(aEntity2);
 
