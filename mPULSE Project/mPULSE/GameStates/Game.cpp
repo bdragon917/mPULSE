@@ -8,7 +8,8 @@
     void Game::update()
     {       
        checkStateChange(); //This method checks if Game should change state and preforms a state change if needed
-       state->update(gameClock->getDeltaTime());       
+       state->update(gameClock->getDeltaTime());
+       //printf(("fps:%i\n"),gameClock->getDeltaTime());
     }
 
     void Game::render()

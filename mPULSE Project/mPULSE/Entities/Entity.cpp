@@ -29,6 +29,13 @@ void Entity::addPassiveWheel(NxWheelShape* wheel)
 
 void Entity::addTorque(int tmpTorque)
 {
+    /* Can use this to keep better contact with the ground
+    NxWheelContactData nxwcd;           //memory for contact data
+    //driveWheels[0]->getContact(nxwcd);  //get contact data
+    if (!(driveWheels[0]->getContact(nxwcd) == NULL))       //get contact data. ==NULL if tires not in contact with anything
+    {driveWheels[0]->getActor().addForce(NxVec3(0,-getActor()->getLinearVelocity().magnitude()*1000,0));};      //apply force to hold it to the track
+    */
+
     if(tmpTorque == 0)
     {
         if (torque > 200)
@@ -130,15 +137,15 @@ NxActor* Entity::getActor()
     return actor;
 }
 
-ObjModel* Entity::getModel()
-{
-    return model;
-}
+//ObjModel* Entity::getModel()
+//{
+//    return model;
+//}
 
-void Entity::setModel(ObjModel* m)
-{
-    model = m;
-}
+//void Entity::setModel(ObjModel* m)
+//{
+//    model = m;
+//}
 
 void Entity::setActor(NxActor* a)
 {

@@ -269,6 +269,8 @@ void RenderingEngine::drawModelShadow(ObjModel* model, NxMat34* aPose)
     glPopMatrix();
 }
 
+
+
 /**
 *	This draws a string on screen
 **/
@@ -684,16 +686,16 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
                 // glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
                  //drawGroundPlane(gxo, gyo);
                  glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
-                 drawModel(modelManager.getModel(2),0,0,0,1);           //the track
+                 //drawModel(modelManager.getModel(2),0,0,0,1);           //the track
 
                  //glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
                  //for(int i=0;i<modelManager.numOfModels;i++)
                  //drawModel(modelManager.getModel(i),0,10,0,1);
 
 
-                glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
-                NxMat34* aPose = &(entities->cars[0]->getActor()->getGlobalPose());
-                drawModelPos(modelManager.getModel(1), aPose );
+//                glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
+//                NxMat34* aPose = &(entities->cars[0]->getActor()->getGlobalPose());
+                //drawModelPos(modelManager.getModel(1), aPose );
 
                 //Shadow
                  if (aShader != NULL)
@@ -702,7 +704,7 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
                  }
                 glPushMatrix();
 
-		        drawModelShadow(modelManager.getModel(1), aPose );
+		        //drawModelShadow(modelManager.getModel(1), aPose );
 
 		        glPopMatrix();
                 if (aShader != NULL)
@@ -718,8 +720,8 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
                  }
                 glPushMatrix();
                  	glDisable(GL_TEXTURE_2D);
-	                const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
-
+	                //const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
+                    const static float mapMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
                     const NxVec3 v(1,0,0);  //Rotate the map
                     const NxReal ang = 90;
 
@@ -732,13 +734,13 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
                                                     o.getRow(2).x,o.getRow(2).y,o.getRow(2).z,0,
                                                     o.getRow(3).x,o.getRow(3).y,o.getRow(3).z,1 };
 
-	                glMultMatrixf(shadowMat);
-                    glMultMatrixf(rotMat);
+	                glMultMatrixf(mapMat);
+//                    glMultMatrixf(rotMat);
 	                
                        glColor3f(1.0f,1.0f,1.0f);
-                       drawCars(entities);
-                       drawAICars(entities);
-                       drawTrack(entities);
+ //                      drawCars(entities);
+   //                    drawAICars(entities);
+     //                  drawTrack(entities);
 
                     glEnable(GL_TEXTURE_2D);
 		        glPopMatrix();
@@ -751,9 +753,9 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 
 
             drawCars(entities);
-            drawAICars(entities);
+            //drawAICars(entities);
             drawObstacles(entities);
-            drawStaticObjs(entities);
+            //drawStaticObjs(entities);
             drawTrack(entities);
 
 
@@ -775,7 +777,7 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	        while(nbActors--)
 	        {
 		        NxActor* actor = *actors++;
-			    drawActor(actor);
+			    //drawActor(actor);
             }
             //*/
     }
@@ -802,14 +804,18 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 void RenderingEngine::drawCars(Entities* entities)
 {
 if (entities->cars.size() > 0)
-            for (int i=0;i < entities->cars.size()-1;i++)
+            for (int i=0;i <= entities->cars.size()-1;i++)      //Should be =<
             {
 
-                if (entities->cars[i]->getModel() != NULL)
+                if (entities->cars[i]->rc.size() > 0)
                 {
-                    glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
-                    NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
-                    drawModelPos(entities->cars[i]->getModel(), aPose );
+                 for (int r=0;r <= entities->cars[i]->rc.size()-1;r++)
+                    {
+                        glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->cars[i]->rc[r]->textureID]);
+                        NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
+                        //drawModel(modelManager.getModel(entities->cars[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
+                        drawModelPos(modelManager.getModel(entities->cars[i]->rc[r]->modelID), aPose );
+                    }
                 }
                 else
                 {
@@ -822,13 +828,17 @@ if (entities->cars.size() > 0)
 void RenderingEngine::drawAICars(Entities* entities)
 {
 if (entities->AIcars.size() > 0)
-            for (int i=0;i < entities->AIcars.size()-1;i++)
+            for (int i=0;i <= entities->AIcars.size()-1;i++)
             {
-            if (entities->AIcars[i]->getModel() != NULL)
+            if (entities->AIcars[i]->rc.size() > 0)
                 {
-                    glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
-                    NxMat34* aPose = &(entities->AIcars[i]->getActor()->getGlobalPose());
-                    drawModelPos(entities->AIcars[i]->getModel(), aPose );
+                    for (int r=0;r <= entities->AIcars[i]->rc.size()-1;r++)
+                    {
+                        glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->AIcars[i]->rc[r]->textureID]);
+                        NxMat34* aPose = &(entities->AIcars[i]->getActor()->getGlobalPose());
+                        //drawModel(modelManager.getModel(entities->AIcars[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
+                        drawModelPos(modelManager.getModel(entities->AIcars[i]->rc[r]->modelID), aPose );
+                    }
                 }
                 else
                 {
@@ -841,14 +851,19 @@ if (entities->AIcars.size() > 0)
 void RenderingEngine::drawObstacles(Entities* entities)
 {
             if (entities->Obstacles.size() > 0)
-            for (int i=0;i < entities->Obstacles.size()-1;i++)
+            for (int i=0;i <= entities->Obstacles.size()-1;i++)
             {
-                //if (entities->Obstacles[i]->getModel() != NULL)
-               //// {
-                //    NxMat34* aPose = &(entities->Obstacles[i]->getActor()->getGlobalPose());
-                //    drawModelPos(entities->Obstacles[i]->getModel(), aPose );
-               // }
-                //else
+                if (entities->Obstacles[i]->rc.size() > 0)
+                {
+                    for (int r=0;r <= entities->Obstacles[i]->rc.size()-1;r++)
+                    {
+                        glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->Obstacles[i]->rc[r]->textureID]);
+                        int s = entities->Obstacles[i]->rc.size();  //debug
+                        NxMat34* aPose = &(entities->Obstacles[i]->getActor()->getGlobalPose());
+                        drawModelPos(modelManager.getModel(entities->Obstacles[i]->rc[r]->modelID), aPose );
+                    }
+                }
+                else
                 {
                     glBindTexture(GL_TEXTURE_2D, textureid_P1[4]);
                     if (entities->Obstacles[i]->getActor() == NULL)
@@ -865,17 +880,22 @@ void RenderingEngine::drawObstacles(Entities* entities)
 void RenderingEngine::drawStaticObjs(Entities* entities)
 {
 if (entities->StaticObjs.size() > 0)
-             for (int i=0;i < entities->StaticObjs.size()-1;i++)
+             for (int i=0;i <= entities->StaticObjs.size()-1;i++)
             {
-               // if (entities->StaticObjs[i]->getModel() != NULL)
-               // {
-               //     NxMat34* aPose = &(entities->StaticObjs[i]->getActor()->getGlobalPose());
-               //     drawModelPos(entities->StaticObjs[i]->getModel(), aPose );
-               // }
-               // else
+                if (entities->StaticObjs[i]->rc.size() > 0)
+                {
+                    for (int r=0;r <= entities->StaticObjs[i]->rc.size()-1;r++)
+                    {
+                        glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->StaticObjs[i]->rc[r]->textureID]);
+                        int s = entities->StaticObjs[i]->rc.size();  //debug
+                        NxMat34* aPose = &(entities->StaticObjs[i]->getActor()->getGlobalPose());
+                        drawModelPos(modelManager.getModel(entities->StaticObjs[i]->rc[r]->modelID), aPose );
+                    }
+                }
+                else
                 {
                     glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
-                     if (entities->StaticObjs[i]->getActor() == NULL)
+                     if (entities->StaticObjs[i]->rc.size() > 0)
                     {printf("StaticObj has no actors\n");}
                     else
                     {
@@ -889,13 +909,17 @@ if (entities->StaticObjs.size() > 0)
 void RenderingEngine::drawTrack(Entities* entities)
 {
 if (entities->Track.size() > 0)
-            for (int i=0;i < entities->Track.size()-1;i++)
+            for (int i=0;i <= entities->Track.size()-1;i++)
             {
-                if (entities->Track[i]->getModel() != NULL)
+                if (entities->Track[i]->rc.size() > 0)
                 {
-                    glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
-                    NxMat34* aPose = &(entities->Track[i]->getActor()->getGlobalPose());
-                    drawModelPos(entities->Track[i]->getModel(), aPose );
+                    for (int r=0;r <= entities->Track[i]->rc.size()-1;r++)
+                    {
+                        glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->Track[i]->rc[r]->textureID]);
+                        NxMat34* aPose = &(entities->Track[i]->getActor()->getGlobalPose());
+                        //drawModel(modelManager.getModel(entities->Track[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
+                        drawModelPos(modelManager.getModel(entities->Track[i]->rc[r]->modelID), aPose );
+                    }
                 }
                 else
                 {

@@ -30,7 +30,7 @@ void Console::propragateMsg(std::string feedbackMsg)
 
     if (log.size() != 0)
     {logPointer = log.size() - 1;}
-    appendExcessLog();
+    //appendExcessLog();
 }
 
 void Console::propragateMsg()
@@ -48,7 +48,7 @@ void Console::propragateMsg()
 
     if (log.size() != 0)
     {logPointer = log.size() - 1;}
-    appendExcessLog();
+    //appendExcessLog();
 }
 
 void Console::goUp()

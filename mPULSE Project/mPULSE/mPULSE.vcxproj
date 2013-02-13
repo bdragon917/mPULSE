@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="Entities\EntityComponent.cpp" />
+    <ClCompile Include="Entities\RenderableComponent.cpp" />
     <ClCompile Include="GameStates\Camera.cpp" />
     <ClCompile Include="GameStates\Console.cpp" />
     <ClCompile Include="GameStates\Game.cpp" />
@@ -101,6 +102,7 @@
   <ItemGroup>
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Entities\EntityComponent.h" />
+    <ClInclude Include="Entities\RenderableComponent.h" />
     <ClInclude Include="GameStates\Camera.h" />
     <ClInclude Include="GameStates\Console.h" />
     <ClInclude Include="GameStates\Game.h" />

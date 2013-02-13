@@ -273,4 +273,14 @@ a
 2.4
 
 a
+spawn obstacles
+Created 20 Boxes
+
+spawn obstacles
+Created 20 Boxes
+spawn obstacles
+Created 20 Boxes
+
+spawn obstacles
+Created 20 Boxes
 

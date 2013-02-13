@@ -3,6 +3,7 @@
 #include <vector>
 #include "..\GameStates\Camera.h"
 #include "../ModelLoader/ObjModel.h"
+#include "RenderableComponent.h"
 #include "NxPhysics.h"
 
 class Entity
@@ -18,12 +19,19 @@ public:
     void addTorque(int tmpTorque);
 	void brake(int tmpTorque);
     void addSteeringAngle(float angle);
-    void setModel(ObjModel* m);
+    //void setModel(ObjModel* m);
     void setActor(NxActor* a);    
     int getTorque();
     int getSteering();
-    ObjModel* getModel();
+    //ObjModel* getModel();
 	NxActor* getActor();
+
+    //Drawing stuff
+    //list of renderableElements [model index, texture index]
+    std::vector<RenderableComponent*> rc;
+    //NxVec3 location for rendering
+    //int rotation mode
+    //rotation data
 
 private:
     int torque;

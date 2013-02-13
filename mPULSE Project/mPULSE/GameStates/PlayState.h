@@ -6,6 +6,7 @@
 #include "../RenderingEngine/RenderingEngine.h"
 #include "../PhysicsEngine/PhysicsEngine.h"
 #include "../Entities/Entity.h"
+#include "../Entities/RenderableComponent.h"
 #include <map>
 
 class PlayState : public GameState

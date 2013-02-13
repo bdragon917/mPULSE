@@ -56,6 +56,8 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
     Entity* entityCar1 = new Entity();    
     //EntityComponent* ec_car = new EntityComponent();
     //ec_car->setActor(box);
+    RenderableComponent* rc = new RenderableComponent(1,3);
+    entityCar1->rc.push_back(rc);
     entityCar1->addDriveWheel(wheel);
 	entityCar1->addDriveWheel(wheel2);
     entityCar1->addPassiveWheel(wheel3);
@@ -153,7 +155,12 @@ void PhysicsEngine::createBoxes(float x, float y, float z, int num, float radius
     {
         float rndx = ((rand() % 100) / 100) * radius;
         float rndz = ((rand() % 100) / 100) * radius;
-        Boxes->push_back(&Entity(createBox(x + rndx, y, z + rndz)));
+        Entity* aEntity = new Entity(createBox(x + rndx, y, z + rndz));
+        //aEntity->rc.push_back(&(RenderableComponent(0,6)));
+        RenderableComponent* rc = new RenderableComponent(0,6);
+        aEntity->rc.push_back(rc);
+        
+        Boxes->push_back(aEntity);
     }
 }
 
@@ -326,7 +333,7 @@ NxActor* PhysicsEngine::createCarChassis()
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
 	//bodyDesc.angularDamping	= 0.5f;
-	bodyDesc.angularDamping	= 20.0f;
+	bodyDesc.angularDamping	= 30.0f;
 	bodyDesc.linearDamping = 0.05f;
 
 

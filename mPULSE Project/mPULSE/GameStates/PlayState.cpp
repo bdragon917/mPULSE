@@ -11,8 +11,16 @@ PlayState::PlayState()
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
 
+
+    //Create Track
+    Entity* aTrack = new Entity();
     ObjModel* aModel = renderingEngine->getModelManger().getModel(2);
-    physicsEngine->createTriMesh(0,-0.5f,0,*aModel);
+    aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
+    RenderableComponent* rc = new RenderableComponent(2,7);
+    aTrack->rc.push_back(rc);
+    entities.Track.push_back(aTrack);
+
+
     physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);
     physicsEngine->createBoxes(-11.138f, 4.188f, -320.407f, 5, 2.5f, &entities.Obstacles);
     physicsEngine->createBoxes(-360.586f, 0.407f, -326.88f, 5, 2.5f, &entities.Obstacles);
@@ -20,13 +28,14 @@ PlayState::PlayState()
     physicsEngine->createBoxes(-319.045f, 157.17f, 698.045f, 5, 2.5f, &entities.Obstacles);
 
 
+
     //2
-    Entity aEntity;
-    aEntity.setActor(physicsEngine->createStaticBox(-4.195f, 0.403f, -200.2202f));
-    Entity aEntity2;
-    aEntity.setActor(physicsEngine->createStaticBox(-404.991f, 4.188f, -320.407f));
-    entities.StaticObjs.push_back(&aEntity);
-    entities.StaticObjs.push_back(&aEntity2);
+    Entity* aEntity = new Entity();
+    aEntity->setActor(physicsEngine->createStaticBox(-4.195f, 0.403f, -200.2202f));
+    Entity* aEntity2 = new Entity();
+    aEntity->setActor(physicsEngine->createStaticBox(-404.991f, 4.188f, -320.407f));
+    entities.StaticObjs.push_back(aEntity);
+    entities.StaticObjs.push_back(aEntity2);
 
     InitializeConsoleCommands();    //Initalize Commands
 }
@@ -192,11 +201,13 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                                                                    // 3.5f,
                                                                    // 0
                                                                     );
-                        Entity aEntity;
+                        Entity* aEntity = new Entity;
                         //EntityComponent aEC;
-                        aEntity.setActor(aBox);
+                        aEntity->setActor(aBox);
+                        RenderableComponent* rc = new RenderableComponent(0,6);
+                        aEntity->rc.push_back(rc);
                         //aEntity.addComponent(&aEC);
-                        entities.Obstacles.push_back(&aEntity);
+                        entities.Obstacles.push_back(aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created 20 Boxes");
                 }
@@ -219,11 +230,11 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                                                                    // 3.5f,
                                                                    // 0
                                                                     );
-                        Entity aEntity;
-                        //EntityComponent aEC;
-                        aEntity.setActor(aBox);
-                        //aEntity.addComponent(&aEC);
-                        entities.Obstacles.push_back(&aEntity);
+                        Entity* aEntity = new Entity;
+                        aEntity->setActor(aBox);
+                        RenderableComponent* rc = new RenderableComponent(0,6);
+                        aEntity->rc.push_back(rc);
+                        entities.Obstacles.push_back(aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created 20 static Boxes");
                 }
@@ -238,7 +249,10 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                                                     );
                         Entity aEntity;
                         aEntity.setActor(aTri);
-                        aEntity.setModel(aModel);
+                        RenderableComponent* nexRc = new RenderableComponent(1,1);
+                        //aEntity.rc.push_back(&nexRc);                                   //I LEAVFT OFF HERE
+                        aEntity.rc.push_back(nexRc);
+                        //aEntity.setModel(aModel);
                         entities.Track.push_back(&aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created Saruk");
@@ -254,7 +268,8 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                                                     );
                         Entity aEntity;
                         aEntity.setActor(aTri);
-                        aEntity.setModel(aModel);
+                        RenderableComponent* rc = new RenderableComponent(2,2);
+                        aEntity.rc.push_back(rc);
                         entities.Track.push_back(&aEntity);
                     }
                      renderingEngine->aConsole.propragateMsg("Created track");
@@ -321,7 +336,16 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
         if(state->lb) {
 		    physicsEngine->resetBox();
             car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
-            car->getActor()->setGlobalOrientation(NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)));
+
+            NxVec3 v(0,1,0);
+            NxReal ang = 90;
+
+            NxQuat q;
+            q.fromAngleAxis(ang, v);
+            NxMat33 orient;
+            orient.fromQuat(q);
+
+            car->getActor()->setGlobalOrientation(orient);
             car->getActor()->setLinearVelocity(NxVec3(0,0,0));
 	    }
     }

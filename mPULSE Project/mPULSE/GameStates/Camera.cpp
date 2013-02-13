@@ -73,7 +73,6 @@ void Camera::setUserCamControl(NxVec3 uControl)
 
     //userCamControl = uControl;
     userCamControl = uControl;
-    printf("FOOOO!\n");
     //userCamControl.setx( uControl.x);
     //userCamControl.sety(uControl.y);
     //userCamControl.setz( uControl.z);
