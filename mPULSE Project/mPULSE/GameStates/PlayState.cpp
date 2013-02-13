@@ -4,6 +4,8 @@ float deg = 0.1;
 
 PlayState::PlayState()
 {
+    showConsole = false;
+
     changeState(PLAY);    
     entities.cars.push_back(new Entity);
     physicsEngine = PhysicsEngine::getInstance();
@@ -73,8 +75,8 @@ int foo(int a) {
 
 bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
-
-
+    if (showConsole)
+    {
     //Console implimentation
         if (KeyboardMouseEvents.type == SDL_KEYDOWN)
          {
@@ -301,7 +303,40 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 renderingEngine->aConsole.consoleString = renderingEngine->aConsole.consoleString + c;
             }
          }
-    
+    }
+
+
+    //Non-Console
+        if (KeyboardMouseEvents.type == SDL_KEYDOWN)
+         {
+            SDLKey keyPressed = KeyboardMouseEvents.key.keysym.sym;
+
+            if (keyPressed == SDLK_F1)
+            {if (showConsole){showConsole=false;}else{showConsole=true;}}
+
+            else if (keyPressed == SDLK_a)
+            {
+                Entity* car = entities.cars[0];
+                car->addSteeringAngle(500.0f);
+            }
+            else if (keyPressed == SDLK_d)
+            {
+                Entity* car = entities.cars[0];
+                car->addSteeringAngle(-500.0f);
+            }
+            else if (keyPressed == SDLK_w)
+            {
+                Entity* car = entities.cars[0];
+                car->addTorque(1000);
+            }
+            else if (keyPressed == SDLK_s)
+            {
+                Entity* car = entities.cars[0];
+                car->addTorque(-1000);        
+            }
+        }
+
+
     return true;
 }
 

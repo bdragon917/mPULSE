@@ -21,6 +21,8 @@ public:
 
     void InitializeConsoleCommands();
 private:
+    bool showConsole;
+    
     PlayState();
 
     RenderingEngine::Entities entities;
