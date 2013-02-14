@@ -1,10 +1,9 @@
 #include "PlayState.h"
 
 float deg = 0.1;
-
 PlayState::PlayState()
 {
-    showConsole = false;
+    showConsole = true;
 
     changeState(PLAY);    
     entities.cars.push_back(new Entity);
@@ -22,7 +21,9 @@ PlayState::PlayState()
     {
         aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
         entities.Track.push_back(aTrack);
-        aTrack->rc.push_back(rc);    
+        aTrack->rc.push_back(rc);        
+        aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));
+        aTrack->setUsingDisplayList(true);        
     }   
 
     physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);

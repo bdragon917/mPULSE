@@ -2,6 +2,9 @@
 
 Entity::Entity()
 {
+    usingDisplayList = false;
+    displayListIndex = -1;
+
     torque = 0;
     steeringAngle = 0;
     
@@ -137,15 +140,22 @@ NxActor* Entity::getActor()
     return actor;
 }
 
-//ObjModel* Entity::getModel()
-//{
-//    return model;
-//}
-
-//void Entity::setModel(ObjModel* m)
-//{
-//    model = m;
-//}
+void Entity::setUsingDisplayList(bool status)
+{
+    usingDisplayList = status;
+}
+void Entity::setDisplayListIndex(int index)
+{
+    displayListIndex = index;
+}
+int Entity::getDisplayListIndex()
+{
+    return displayListIndex;
+}
+bool Entity::getUsingDisplayList()
+{
+    return usingDisplayList;
+}
 
 void Entity::setActor(NxActor* a)
 {
