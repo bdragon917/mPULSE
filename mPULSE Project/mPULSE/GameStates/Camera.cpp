@@ -17,8 +17,8 @@ private:
 Camera::Camera(void)
 {
         EquilbriumSpeed = 0.5f;
-        targetDistance = 5.0f;
-        maxDistance = 20.0f;
+        targetDistance = 10.0f;
+        maxDistance = 30.0f;
         curCamLoc = NxVec3(0,0,-1.0f);
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
@@ -31,8 +31,8 @@ Camera::Camera(NxActor* aActor)
 {
         AttachtoCar(aActor);
         EquilbriumSpeed = 0.5f;
-        targetDistance = 5.0f;
-        maxDistance = 10.0f;
+        targetDistance = 10.0f;
+        maxDistance = 30.0f;
         curCamLoc = NxVec3(0,0,-1.0f);
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
@@ -75,7 +75,9 @@ void Camera::setUserCamControl(NxVec3 uControl)
 
 void Camera::updateCamera(float dt)
 {
-    int mode = 0;       //Testing different camera styles here, change to different values for different test code
+    int mode = 4;       //Testing different camera styles here, change to different values for different test code
+
+                        //4 seems to be the best at this point, but it still needs a spring
 
     switch (mode)
     {
@@ -90,7 +92,7 @@ void Camera::updateCamera(float dt)
 
                 movementVector = targetActor->getGlobalOrientation() * movementVector;
 
-                movementVector.y = 3.5f;
+                movementVector.y = 6.5f;
                 movementVector = movementVector + ActLoc;   //This is the correct camera location target!!!
                 
 
@@ -178,13 +180,15 @@ void Camera::updateCamera(float dt)
             //float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
              //Calculate where to look
-             float lookAhead = 20.f;
+             float lookAhead = 30.f;
                 NxVec3 ActLoc = targetActor->getGlobalPose().t;
                 NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
 
 
             //Calcuate where to go
 //             NxVec3 ActLoc = targetActor->getGlobalPose().t;
+                targetDistance = 5.0f;
+
              NxVec3 tarCamLoc = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
                 NxMat33 actOri = targetActor->getGlobalOrientation();
 
@@ -195,16 +199,20 @@ void Camera::updateCamera(float dt)
                                    
 
 
+            float stiffness = 12.000f;
+            float damping = 4000.0f;
+            float mass = 25.0f;
+            //float stiffness = 1800.0f;
+            //float damping = 600.0f;
+            //float mass = 50.0f;
 
-            float stiffness = 1800.0f;
-            float damping = 600.0f;
-            float mass = 50.0f;
+            NxVec3 velocity = (targetActor->getLinearVelocity()/1000);
 
-            NxVec3 velocity = targetActor->getLinearVelocity();
+            //velocity = targetActor->getCMassGlobalOrientation() * -velocity; 
 
             // Calculate spring force
-            NxVec3 stretch = curCamLoc - tarCamLoc;//position - desiredPosition;
-            NxVec3 force = -stiffness * stretch - damping * velocity;
+            NxVec3 stretch = (curCamLoc - tarCamLoc);//position - desiredPosition;
+            NxVec3 force = (-stiffness * stretch) - (damping * velocity);
 
 
             // Apply acceleration
@@ -212,16 +220,214 @@ void Camera::updateCamera(float dt)
             velocity += acceleration * elapsed;
 
             // Apply velocity
-            //curCamLoc += velocity * elapsed;
-            curCamLoc = tarCamLoc;
-            curCamLookAt = targetLookAt;
+            curCamLoc += velocity;  // * elapsed;
+            //curCamLoc = curCamLoc + (stretch * 0.5);
+            //curCamLoc = tarCamLoc;
+            //curCamLookAt = targetLookAt;
+            curCamLookAt = targetLookAt + velocity;
 
                 break;
             }
-   }
+
+
+            case 2:     //Working fixed Camera
+            {
+                float elapsed = dt * 3.75;
+
+
+             if (dt == 0)
+             {printf("Illegal timestep for camera");}
+
+
+             //Calculate where to look
+             float lookAhead = 40.f;
+                NxVec3 ActLoc = targetActor->getGlobalPose().t;
+                NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
+
+
+            //Calcuate where to go
+//             NxVec3 ActLoc = targetActor->getGlobalPose().t;
+                targetDistance = 8.0f;
+
+             NxVec3 tarCamLoc = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
+                NxMat33 actOri = targetActor->getGlobalOrientation();
+
+                tarCamLoc = targetActor->getGlobalOrientation() * tarCamLoc;
+
+                tarCamLoc.y = 3.5f;
+                tarCamLoc = tarCamLoc + ActLoc; //This is the correct camera location target!!!
+                                   
+
+            //float stiffness = 1800.0f;
+            //float damping = 600.0f;
+            //float mass = 50.0f;
+
+            NxVec3 velocity = (targetActor->getLinearVelocity()/1000);
+
+            //velocity = targetActor->getCMassGlobalOrientation() * -velocity; 
+
+            // Calculate spring force
+            //NxVec3 stretch = (curCamLoc - tarCamLoc);//position - desiredPosition;
+            //NxVec3 force = (-stiffness * stretch) - (damping * velocity);
+
+
+            // Apply acceleration
+            //NxVec3 acceleration = force / mass;
+            //velocity += acceleration * elapsed;
+
+            // Apply velocity
+            //curCamLoc += velocity;  // * elapsed;
+            //curCamLoc = curCamLoc + (stretch * 0.5);
+            curCamLoc = tarCamLoc;
+            curCamLookAt = targetLookAt;
+            //curCamLookAt = targetLookAt + velocity;
+
+                break;
+            }
 
 
 
+
+ case 3:         //This is the inital camera set-up we have
+            {
+                float lookAhead = 20.f;
+                NxVec3 ActLoc = targetActor->getGlobalPose().t;
+                NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
+
+                NxVec3 movementVector = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
+                NxMat33 actOri = targetActor->getGlobalOrientation();
+
+                movementVector = targetActor->getGlobalOrientation() * movementVector;
+
+                movementVector.y = 6.5f;
+                movementVector = movementVector + ActLoc;   //This is the correct camera location target!!!
+                
+
+
+                movementVector = movementVector - curCamLoc;           //Gives a vector to that location
+
+                float movMag = movementVector.magnitude();      //magnitude
+
+                if (movementVector.magnitude() > 1.0f)
+                {movementVector.normalize();}               //Might not do any thing, look at later...
+
+
+                float catchUpSpd = 1.0f;
+
+                if (movMag > (maxDistance / 2))               //Fun Camera 2!!!       //Used if camera is too far away
+                {
+                    catchUpSpd = movMag - (maxDistance / 2);
+                }
+
+    
+                if (movMag > maxDistance)                                               //Used if camera is too far away
+                {
+                    printf("HURRY UP CAMERA!\n");
+                    curCamLoc = (curCamLoc + movementVector * (movMag - maxDistance) );
+                }
+               // else
+                {
+
+                    float stiffness = 100.0f;
+                    float damping = 600.0f;
+                    float mass = 50.0f;
+
+                    NxVec3 velocity =  movementVector * movementVector.magnitude();
+
+                     NxVec3 stretch = (curCamLoc - (curCamLoc + movementVector));//position - desiredPosition;
+                     NxVec3 force = (-stiffness * stretch) - (damping * velocity);
+                    
+
+
+                                 // Apply acceleration
+                    NxVec3 acceleration = force / mass;
+                    velocity += acceleration * dt;
+
+                    // Apply velocity
+                    curCamLoc += velocity;  // * elapsed;
+
+                    //curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd * dt * (movementVector.magnitude() * 0.4f);
+                }
+    
+                if (userCamControl.magnitude() > 0.2f)
+                {
+
+                    //printf("UserControlRaw: %f %f %f\n",userCamControl.x,userCamControl.y,userCamControl.z);
+                    //movementVector = (targetActor->getGlobalOrientation() * (uControl * targetDistance));
+                    movementVector = (userCamControl * -targetDistance);
+                    movementVector = targetActor->getGlobalOrientation() * movementVector;
+                    movementVector = movementVector + ActLoc;
+
+                    //printf("UserControl: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
+
+                    curCamLoc = movementVector;
+                }
+    
+
+                curCamLoc.y = 3.5f + ActLoc.y;
+
+
+                NxVec3 toLA = curCamLookAt - targetLookAt;
+                curCamLookAt = curCamLookAt - (toLA / 4);
+
+                break;
+            }
+
+  
+
+
+   case 4:         //This fixes the slope issues
+            {
+                //Set target camera location in local space
+                float disAbove = 5.0f;
+                NxVec3 tarCamLoc = NxVec3(-targetDistance,disAbove,0.0f);
+
+                //set look at in local space
+                NxVec3 tarCamLookAt = NxVec3(targetDistance / 3,(disAbove * 2 / 3),0.0f);
+
+                //Transform to car's location
+                tarCamLoc = targetActor->getGlobalPose() * tarCamLoc;
+                tarCamLookAt = targetActor->getGlobalPose() * tarCamLookAt;
+
+
+
+                //calculate a vector to tarCamLoc
+                //NxVec3 vecCamLoc = curCamLoc - tarCamLoc;
+                NxVec3 vecCamLoc = tarCamLoc - curCamLoc;
+
+
+
+
+                //Spring
+                float mass = 50.0f;
+                float stiffness = 100.0f;
+                float damping = 600.0f;
+                NxVec3 stretch = (curCamLoc - tarCamLoc);//position - desiredPosition;
+                NxVec3 force = (-stiffness * stretch) - (damping * vecCamLoc);
+
+                //f=ma
+                //apply force to vecCamLoc
+//                vecCamLoc = vecCamLoc * (force.magnitude()/10000.0f);
+
+
+
+
+                //Adds rumble
+                //double ratio = 0.99;
+                //vecCamLoc = vecCamLoc * ratio;
+
+
+                curCamLoc = curCamLoc + (vecCamLoc);
+                curCamLookAt = tarCamLookAt;
+                
+                //curCamLoc = tarCamLoc;
+                //curCamLookAt = tarCamLookAt;
+                break;
+            }
+
+   }//EndSwitch
+
+          
 
 
 

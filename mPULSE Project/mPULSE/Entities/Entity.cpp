@@ -12,7 +12,7 @@ Entity::Entity()
 
     maxSteeringLeft = -0.85;
     maxSteeringRight = 0.85;
-    maxTorque = 4000;
+    maxTorque = 3000;
     minTorque = -3000;
 }
 Entity::Entity(NxActor* a)
