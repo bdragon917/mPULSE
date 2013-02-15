@@ -9,7 +9,7 @@ Entity::Entity()
 
     maxSteeringLeft = -0.85;
     maxSteeringRight = 0.85;
-    maxTorque = 3000;
+    maxTorque = 4000;
     minTorque = -3000;
 }
 Entity::Entity(NxActor* a)
@@ -29,12 +29,12 @@ void Entity::addPassiveWheel(NxWheelShape* wheel)
 
 void Entity::addTorque(int tmpTorque)
 {
-    /* Can use this to keep better contact with the ground
+    ///* Can use this to keep better contact with the ground
     NxWheelContactData nxwcd;           //memory for contact data
     //driveWheels[0]->getContact(nxwcd);  //get contact data
     if (!(driveWheels[0]->getContact(nxwcd) == NULL))       //get contact data. ==NULL if tires not in contact with anything
     {driveWheels[0]->getActor().addForce(NxVec3(0,-getActor()->getLinearVelocity().magnitude()*1000,0));};      //apply force to hold it to the track
-    */
+   // */
 
     if(tmpTorque == 0)
     {
@@ -90,6 +90,12 @@ void Entity::addSteeringAngle(float percent)
 
     if(((steeringAngle+deltaAngle) >= maxSteeringLeft) && ((steeringAngle+deltaAngle) <= maxSteeringRight))
         steeringAngle += deltaAngle;
+
+
+    //Might be more intuitive for the steering Angle to be set rather than add?
+    //This is a test for it
+    //steeringAngle = maxDeltaAngle * percent * 2.0f;       //No traction at high speeds for some reason...
+
 
 
     for(int i=0;i<driveWheels.size();i++)

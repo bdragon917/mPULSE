@@ -76,6 +76,7 @@ void drawModelShadow(ObjModel* model, NxMat34* aPose);
     //used for scene display
     bool debugPhysX;
     bool showScene;
+    bool debugCamera;
 
     //Texture Stuff
     GLuint* textureid_P1;

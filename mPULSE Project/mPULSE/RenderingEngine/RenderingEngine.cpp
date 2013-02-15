@@ -13,6 +13,7 @@ RenderingEngine::RenderingEngine()
 
     debugPhysX = false;
     showScene = true;
+    debugCamera = false;
 }
 
 RenderingEngine* RenderingEngine::getInstance()
@@ -762,6 +763,16 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
             drawObstacles(entities);
             drawStaticObjs(entities);
             drawTrack(entities);
+
+            if (debugCamera)
+            {
+                NxVec3 camLookAt = entities->cars[0]->aCam->getLookAt();
+                glPushMatrix();
+                glTranslatef(camLookAt.x, camLookAt.y, camLookAt.z);
+                drawBox_Generic(2.0f);
+                //drawModel(modelManager.getModel(0), camLookAt.x, camLookAt.y, camLookAt.z, 0.5f);
+                glPopMatrix();
+            }
 
 
             {

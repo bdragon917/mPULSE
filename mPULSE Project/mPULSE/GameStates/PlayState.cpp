@@ -150,6 +150,11 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 {
                     if (renderingEngine->debugPhysX){renderingEngine->debugPhysX=false;renderingEngine->showScene=true;}else{renderingEngine->debugPhysX=true;renderingEngine->showScene=false;}; 
                 }
+                if ((renderingEngine->aConsole.consoleString == "tog camera") || (renderingEngine->aConsole.consoleString == "tog c"))
+                {
+                    if (renderingEngine->debugCamera){renderingEngine->debugCamera=false;}else{renderingEngine->debugCamera=true;}; 
+                    renderingEngine->aConsole.propragateMsg("toggled Camera Debug");
+                }
                 if (renderingEngine->aConsole.consoleString == "tog showscene")
                 {
                     if (renderingEngine->showScene){renderingEngine->showScene=false;}else{renderingEngine->showScene=true;}; 
