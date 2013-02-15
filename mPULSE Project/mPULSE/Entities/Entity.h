@@ -8,7 +8,7 @@
 
 class Entity
 {
-public:
+public:  
     Entity();
     Entity(NxActor* a);
     //std::vector<EntityComponent*> components;
@@ -20,10 +20,13 @@ public:
 	void brake(int tmpTorque);
     void addSteeringAngle(float angle);
     //void setModel(ObjModel* m);
-    void setActor(NxActor* a);    
+    void setActor(NxActor* a);
+    void setDisplayListIndex(int index);
+    void setUsingDisplayList(bool status);
+    int getDisplayListIndex();
     int getTorque();
     int getSteering();
-    //ObjModel* getModel();
+    bool getUsingDisplayList();
 	NxActor* getActor();
 
     //Drawing stuff
@@ -34,6 +37,8 @@ public:
     //rotation data
 
 private:
+    bool usingDisplayList;
+    int displayListIndex;
     int torque;
     int maxTorque;
     int minTorque;
@@ -43,7 +48,7 @@ private:
     float steeringAngle;
 
 	NxActor* actor;
-    ObjModel* model;
+    ObjModel* model;    
     std::vector<NxWheelShape*> driveWheels;
     std::vector<NxWheelShape*> passiveWheels;   
 };

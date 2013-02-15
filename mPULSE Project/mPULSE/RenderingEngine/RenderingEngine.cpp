@@ -22,6 +22,50 @@ RenderingEngine* RenderingEngine::getInstance()
     return &renderer;
 }
 
+GLuint RenderingEngine::generateDisplayList(std::string modelName,int x,int y,int z,int scale)
+{
+    ObjModel* model = modelManager.getModel(modelName);
+    GLuint index = -1;
+    if(model != NULL)
+    {
+        index = glGenLists(1);
+        if(index != 0)
+        {
+            glNewList(index, GL_COMPILE);
+            drawModel(model,x,y,z,scale);
+            glEndList();
+            displayLists.push_back(index);
+        }
+    }
+    return index;
+}
+
+GLuint RenderingEngine::generateDisplayList(ObjModel* model,int x,int y,int z,int scale)
+{
+    GLuint index = -1;
+    if(model != NULL)
+    {
+        index = glGenLists(1);
+        if(index != 0)
+        {
+            glNewList(index, GL_COMPILE);
+            drawModel(model,x,y,z,scale);
+            glEndList();
+            displayLists.push_back(index);
+        }
+    }
+    return index;
+}
+
+void RenderingEngine::deleteDisplayList(GLuint index)
+{
+    glDeleteLists(index,1);
+}
+
+void RenderingEngine::drawDisplayList(int index)
+{
+    glCallList(index);
+}
 
 ModelManager RenderingEngine::getModelManger()
 {
@@ -180,6 +224,7 @@ void RenderingEngine::drawModelPos(ObjModel* model, NxMat34* aPose)
 	aPose->getColumnMajor44(mat);
     
     glMultMatrixf(mat);
+
     std::vector<std::vector<ObjModel::vertElements>>* faces = model->getFaces();
     std::vector<ObjModel::vertex3d>* verticies = model->getVerticies();
     std::vector<ObjModel::vertex3d>* norms = model->getVertexNormals();
@@ -933,8 +978,12 @@ if (entities->Track.size() > 0)
                     {
                         glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->Track[i]->rc[r]->textureID]);
                         NxMat34* aPose = &(entities->Track[i]->getActor()->getGlobalPose());
+
+                        if(entities->Track[i]->getUsingDisplayList())
+                            drawDisplayList(entities->Track[i]->getDisplayListIndex());
+                        else
+                            drawModelPos(modelManager.getModel(entities->Track[i]->rc[r]->modelID), aPose );
                         //drawModel(modelManager.getModel(entities->Track[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
-                        drawModelPos(modelManager.getModel(entities->Track[i]->rc[r]->modelID), aPose );
                     }
                 }
                 else
@@ -957,7 +1006,7 @@ void RenderingEngine::drawActor_Safe(NxActor* actor)
     NxMat34 aPose = actor->getGlobalPose();
  	float mat[16];
 	aPose.getColumnMajor44(mat);
-    
+   // 
     glMultMatrixf(mat);
 
     drawBox_Generic(1.0f);

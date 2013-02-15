@@ -67,6 +67,10 @@ void drawBox_Generic(float size);
 void drawModel(ObjModel* model,int x,int y, int z, int scale);
 void drawModelPos(ObjModel* model, NxMat34* aMatrix);
 void drawModelShadow(ObjModel* model, NxMat34* aPose);
+GLuint generateDisplayList(std::string modelName,int x,int y,int z,int scale);
+GLuint generateDisplayList(ObjModel* model,int x,int y,int z,int scale);
+void deleteDisplayList(GLuint index);
+void drawDisplayList(int index);
 
     Console aConsole;    
     Shader* aShader;
@@ -85,6 +89,8 @@ void drawModelShadow(ObjModel* model, NxMat34* aPose);
 
 private:
     RenderingEngine();
+
+    std::vector<GLuint> displayLists;
     ModelManager modelManager;
 
     void drawGroundPlane(float xoffset, float yoffset);
@@ -101,10 +107,6 @@ private:
     //Console Variables
     bool showConsole;
     void displayConsole();
-
-
-
-
 
     void bindBMPtoTexture(char* filename, GLuint textures);
     void initializeTexture();
