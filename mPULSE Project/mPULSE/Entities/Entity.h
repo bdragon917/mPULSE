@@ -29,6 +29,9 @@ public:
     bool getUsingDisplayList();
 	NxActor* getActor();
 
+    std::vector<NxWheelShape*> getDriveWheels();
+    std::vector<NxWheelShape*> getPassiveWheels();   
+
     //Drawing stuff
     //list of renderableElements [model index, texture index]
     std::vector<RenderableComponent*> rc;

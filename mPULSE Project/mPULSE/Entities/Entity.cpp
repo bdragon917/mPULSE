@@ -145,6 +145,13 @@ NxActor* Entity::getActor()
 {
     return actor;
 }
+std::vector<NxWheelShape*> Entity::getDriveWheels()
+{return driveWheels;}
+
+std::vector<NxWheelShape*> Entity::getPassiveWheels()
+{return passiveWheels;}
+
+
 
 void Entity::setUsingDisplayList(bool status)
 {

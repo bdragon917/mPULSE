@@ -31,5 +31,9 @@ private:
 
         NxVec3 userCamControl;
 
+        //For field of view (TO BE IMPLIMENTED)
+        double nearVal;
+        double farVal;
+
 
 };

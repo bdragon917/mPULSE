@@ -679,6 +679,7 @@ void RenderingEngine::setUpOrthoView()
 	glMatrixMode (GL_MODELVIEW);
 }
 
+//Include entity POV, which car's camera to render from
 void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -804,6 +805,7 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 
 
             drawCars(entities);
+            //drawWheels(entities->cars[0], 0, 5);
             drawAICars(entities);
             drawObstacles(entities);
             drawStaticObjs(entities);
@@ -860,6 +862,29 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
+}
+
+
+
+void RenderingEngine::drawWheels(Entity* entity, int model, int texture)
+{
+if (entity->getDriveWheels().size() > 0)
+    for (int d=0;d <= entity->getDriveWheels().size()-1;d++)
+    {
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[texture]);
+        NxMat34* aPose = &(entity->getDriveWheels().at(d)->getGlobalPose());
+        drawModelPos(modelManager.getModel(model), aPose );
+    }
+
+
+if (entity->getPassiveWheels().size() > 0)
+    for (int d=0;d <= entity->getPassiveWheels().size()-1;d++)
+    {
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[texture]);
+        NxMat34* aPose = &(entity->getPassiveWheels().at(d)->getGlobalPose());
+        drawModelPos(modelManager.getModel(model), aPose );
+    }
+
 }
 
 void RenderingEngine::drawCars(Entities* entities)

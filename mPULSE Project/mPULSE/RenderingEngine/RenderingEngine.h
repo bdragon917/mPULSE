@@ -96,6 +96,7 @@ private:
     void drawGroundPlane(float xoffset, float yoffset);
     void drawCheckerBoard(float x, float y);
 
+    void drawWheels(Entity* entity, int model, int texture);
     void drawCars(Entities* entities);
     void drawAICars(Entities* entities);
     void drawObstacles(Entities* entities);

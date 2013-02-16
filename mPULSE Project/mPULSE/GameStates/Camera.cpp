@@ -24,6 +24,7 @@ Camera::Camera(void)
         curOrientation = NxVec3(0,0,0);
         userCamControl = NxVec3(0,0,0);
         targetActor = NULL;
+
 }
 
 
@@ -37,6 +38,7 @@ Camera::Camera(NxActor* aActor)
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
         userCamControl = NxVec3(0,0,0);
+
 }
 
 Camera::~Camera(void)
@@ -378,6 +380,8 @@ void Camera::updateCamera(float dt)
 
    case 4:         //This fixes the slope issues
             {
+
+
                 //Set target camera location in local space
                 float disAbove = 5.0f;
                 NxVec3 tarCamLoc = NxVec3(-targetDistance,disAbove,0.0f);
