@@ -859,6 +859,11 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
     if (showConsole)
         displayConsole();
 
+    prints(800,-600, FloatToString(entities->cars[0]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
+    prints(800,-620, FloatToString(entities->cars[0]->getDriveWheels()[0]->getAxleSpeed()) + " :W0_d_Rot");
+    prints(800,-640, FloatToString(entities->cars[0]->getDriveWheels()[1]->getAxleSpeed()) + " :W1_d_Rot");
+    prints(800,-660, FloatToString(entities->cars[0]->getPassiveWheels()[0]->getAxleSpeed()) + " :W2_p_Rot");
+    prints(800,-680, FloatToString(entities->cars[0]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
 
 	glEnable(GL_LIGHTING);
 	glPopMatrix();

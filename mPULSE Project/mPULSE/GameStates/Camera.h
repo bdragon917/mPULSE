@@ -25,6 +25,7 @@ private:
         float targetDistance;
         float maxDistance;
         NxVec3 curCamLoc;
+        NxVec3 lastCamLoc;
         NxVec3 curCamLookAt;
         NxVec3 curOrientation;
         NxActor* targetActor;

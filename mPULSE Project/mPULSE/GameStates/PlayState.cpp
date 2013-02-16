@@ -12,6 +12,9 @@ PlayState::PlayState()
     renderingEngine = RenderingEngine::getInstance();
 	renderingEngine->initializeGL();
 
+
+    //physicsEngine->createGroundPlane();
+    ///*
     //Create Track
     Entity* aTrack = new Entity();
     ObjModel* aModel = renderingEngine->getModelManger().getModel("Race1.obj");
@@ -25,6 +28,7 @@ PlayState::PlayState()
         aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));
         aTrack->setUsingDisplayList(true);        
     }   
+    //*/
 
     physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);
     physicsEngine->createBoxes(-11.138f, 4.188f, -320.407f, 5, 2.5f, &entities.Obstacles);

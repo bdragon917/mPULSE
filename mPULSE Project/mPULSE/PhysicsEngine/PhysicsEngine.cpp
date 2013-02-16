@@ -273,7 +273,8 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
 	triMeshDesc.triangleStrideBytes			= 3*sizeof(NxU32);
 	triMeshDesc.points						= gVerts;
 	triMeshDesc.triangles					= gFaces;							
-	triMeshDesc.flags						= 0;
+	triMeshDesc.flags						= 0;//NX_MF_HARDWARE_MESH;//0;
+
 
 	//add the mesh material data:
 	//triMeshDesc.materialIndexStride			= sizeof(NxMaterialIndex);
@@ -298,8 +299,7 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
 
 
   	triMeshShapeDesc.meshData = physicsSDK->createTriangleMesh(readBuffer);
-    ///triMeshShapeDesc.meshFlags = NxMeshFlags::NX_MF_FLIPNORMALS;        //seems to help??
-
+    //triMeshShapeDesc.meshFlags = NxMeshFlags::NX_MF_FLIPNORMALS;        //seems to help??
 	//
 	// Please note about the created Triangle Mesh, user needs to release it when no one uses it to save memory. It can be detected
 	// by API "meshData->getReferenceCount() == 0". And, the release API is "gPhysicsSDK->releaseTriangleMesh(*meshData);"

@@ -25,6 +25,8 @@ Camera::Camera(void)
         userCamControl = NxVec3(0,0,0);
         targetActor = NULL;
 
+        lastCamLoc = NxVec3(-5.0f,3.5f,0);
+
 }
 
 
@@ -38,6 +40,8 @@ Camera::Camera(NxActor* aActor)
         curCamLookAt = NxVec3(0,0,0);
         curOrientation = NxVec3(0,0,0);
         userCamControl = NxVec3(0,0,0);
+
+        lastCamLoc = NxVec3(-5.0f,3.5f,0);
 
 }
 
@@ -411,18 +415,29 @@ void Camera::updateCamera(float dt)
 
                 //f=ma
                 //apply force to vecCamLoc
-//                vecCamLoc = vecCamLoc * (force.magnitude()/10000.0f);
+                vecCamLoc = vecCamLoc * (force.magnitude()/10000.0f);
 
 
 
 
                 //Adds rumble
-                //double ratio = 0.99;
-                //vecCamLoc = vecCamLoc * ratio;
+                double ratio = 0.06111111;
+                vecCamLoc = vecCamLoc * ratio;
+                //vecCamLoc = vecCamLoc * vecCamLoc.magnitude();
+                float magVecCamLoc = vecCamLoc.magnitude();
+                //if (magVecCamLoc < 1.0f){vecCamLoc = vecCamLoc * 0.11111f;}
 
+                printf("curCamVec %f %f %f\n", vecCamLoc.x, vecCamLoc.y, vecCamLoc.z);
+
+//                if (lastCamLoc != NULL)
+                {vecCamLoc = ((lastCamLoc * 0.9) + (vecCamLoc * 0.1));}
 
                 curCamLoc = curCamLoc + (vecCamLoc);
+                //curCamLoc = (curCamLoc * 0.5f) + (tarCamLoc * 0.5f);
                 curCamLookAt = tarCamLookAt;
+
+                //test to smooth
+                lastCamLoc = vecCamLoc;
                 
                 //curCamLoc = tarCamLoc;
                 //curCamLookAt = tarCamLookAt;
