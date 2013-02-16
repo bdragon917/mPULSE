@@ -54,10 +54,12 @@ PlayState::PlayState()
 
 void PlayState::update(float dt)
 {    
+        
     physicsEngine->step(dt/1000);
+    entities.cars[0]->aCam->updateCamera(1.0f);
     
 //    entities.cars[0]->aCam->updateCamera(dt/16);
-    entities.cars[0]->aCam->updateCamera(1.0f);
+    //entities.cars[0]->aCam->updateCamera(1.0f);
 }
 
 void PlayState::render()
@@ -363,7 +365,6 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     {
         //UserCamControl  
         Entity* car = entities.cars[player];
-        car->aCam->updateCamera(1.0f);
         car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
     
         NxVec3 a = car->getActor()->getLinearVelocity();
@@ -397,6 +398,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
             car->getActor()->setGlobalOrientation(orient);
             car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+            car->aCam->resetCamera();
 	    }
     }
 }

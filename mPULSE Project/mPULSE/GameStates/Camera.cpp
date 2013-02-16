@@ -79,6 +79,16 @@ void Camera::setUserCamControl(NxVec3 uControl)
     userCamControl = uControl;
 }
 
+void Camera::resetCamera()
+{
+        NxMat34 actorPose = targetActor->getGlobalPose();
+
+        curCamLoc = actorPose * NxVec3(0,0,-1.0f);
+        curCamLookAt = actorPose * NxVec3(0,0,0);
+        curOrientation = actorPose * NxVec3(0,0,0);
+        userCamControl = actorPose * NxVec3(0,0,0);
+}
+
 void Camera::updateCamera(float dt)
 {
     int mode = 4;       //Testing different camera styles here, change to different values for different test code
@@ -391,7 +401,7 @@ void Camera::updateCamera(float dt)
                 NxVec3 tarCamLoc = NxVec3(-targetDistance,disAbove,0.0f);
 
                 //set look at in local space
-                NxVec3 tarCamLookAt = NxVec3(targetDistance / 3,(disAbove * 2 / 3),0.0f);
+                NxVec3 tarCamLookAt = NxVec3(targetDistance / 3,(disAbove * 3 / 4),0.0f);
 
                 //Transform to car's location
                 tarCamLoc = targetActor->getGlobalPose() * tarCamLoc;
@@ -400,7 +410,6 @@ void Camera::updateCamera(float dt)
 
 
                 //calculate a vector to tarCamLoc
-                //NxVec3 vecCamLoc = curCamLoc - tarCamLoc;
                 NxVec3 vecCamLoc = tarCamLoc - curCamLoc;
 
 
@@ -408,14 +417,37 @@ void Camera::updateCamera(float dt)
 
                 //Spring
                 float mass = 50.0f;
-                float stiffness = 100.0f;
-                float damping = 600.0f;
+                float stiffness = 2000.0f;
+                float damping = 30.0f;
                 NxVec3 stretch = (curCamLoc - tarCamLoc);//position - desiredPosition;
                 NxVec3 force = (-stiffness * stretch) - (damping * vecCamLoc);
 
                 //f=ma
                 //apply force to vecCamLoc
                 vecCamLoc = vecCamLoc * (force.magnitude()/10000.0f);
+
+
+
+
+
+
+
+                //calculate a vector to tarCamLookAt
+                NxVec3 vecCamLookAt = tarCamLookAt - curCamLookAt;
+
+
+                //Spring for LookAt
+                float mass2 = 50.0f;
+                float stiffness2 = 100.0f;
+                float damping2 = 600.0f;
+                NxVec3 stretch2 = (curCamLookAt - tarCamLookAt);//position - desiredPosition;
+                NxVec3 force2 = (-stiffness2 * stretch2) - (damping2 * vecCamLookAt);
+
+                //f=ma
+                //apply force to vecCamLoc
+                vecCamLookAt = vecCamLookAt * (force2.magnitude()/10000.0f);
+
+
 
 
 
@@ -430,17 +462,30 @@ void Camera::updateCamera(float dt)
                 printf("curCamVec %f %f %f\n", vecCamLoc.x, vecCamLoc.y, vecCamLoc.z);
 
 //                if (lastCamLoc != NULL)
-                {vecCamLoc = ((lastCamLoc * 0.9) + (vecCamLoc * 0.1));}
+//                {vecCamLoc = ((lastCamLoc * 0.9) + (vecCamLoc * 0.1));}
 
                 curCamLoc = curCamLoc + (vecCamLoc);
                 //curCamLoc = (curCamLoc * 0.5f) + (tarCamLoc * 0.5f);
-                curCamLookAt = tarCamLookAt;
+
+                //curCamLoc = curCamLoc + targetActor->getLinearVelocity() ;
+
+
+                curCamLookAt = curCamLookAt + (vecCamLookAt);
+                //curCamLookAt = (curCamLookAt * 0.5f) + (tarCamLookAt * 0.5f);
+                //curCamLookAt = curCamLookAt + (vecCamLookAt * 0.5f);
+                //curCamLookAt = tarCamLookAt;
 
                 //test to smooth
-                lastCamLoc = vecCamLoc;
+                //lastCamLoc = vecCamLoc;
                 
-                //curCamLoc = tarCamLoc;
-                //curCamLookAt = tarCamLookAt;
+ //               curCamLoc = tarCamLoc;
+ //               curCamLookAt = tarCamLookAt;
+
+                if (userCamControl.magnitude() > 0.2f)
+                {
+                    NxVec3 newCam = targetActor->getGlobalPose() * (NxVec3(userCamControl.x * 10.0f,3.5f,-userCamControl.z * 10.0f));
+                    curCamLoc = newCam;
+                }
                 break;
             }
 

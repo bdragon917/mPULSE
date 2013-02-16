@@ -370,6 +370,7 @@ NxActor* PhysicsEngine::createCarChassis()
 	actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));
 
     actor->setGlobalOrientation(orient);
+
 	return actor;
 }
 
@@ -393,25 +394,30 @@ NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, fl
 	q.fromAngleAxis(90, NxVec3(0,1,0));
 	wheelShapeDesc.localPose.M.fromQuat(q);
 
-	NxReal heightModifier = 2.0f;  //??    //(wheelDesc->wheelSuspension + wheelDesc->wheelRadius) / wheelDesc->wheelSuspension;
+
+    NxReal wheelSuspension = 2.0f;
+    NxReal WheelRadius = 0.5f;
+    NxReal heightModifier = wheelSuspension + WheelRadius / wheelSuspension;
+	//NxReal heightModifier = 2.0f;  //??    //(wheelDesc->wheelSuspension + wheelDesc->wheelRadius) / wheelDesc->wheelSuspension;
 
 	wheelShapeDesc.suspension.spring = 7000.0f * heightModifier;    //??     //wheelDesc->springRestitution*heightModifier;
-	wheelShapeDesc.suspension.damper = 0 * heightModifier;  //wheelDesc->springDamping*heightModifier;
-	wheelShapeDesc.suspension.targetValue = 0 * heightModifier;  //wheelDesc->springBias*heightModifier;
+	wheelShapeDesc.suspension.damper = 100.0f * heightModifier;  //wheelDesc->springDamping*heightModifier;
+	wheelShapeDesc.suspension.targetValue = 0.001f * heightModifier;  //wheelDesc->springBias*heightModifier;
 
 	wheelShapeDesc.radius = 0.5f;  //wheelDesc->wheelRadius;
 	wheelShapeDesc.suspensionTravel =  0.5f; //wheelDesc->wheelSuspension; 
 	wheelShapeDesc.inverseWheelMass = 0.1;	//not given!? TODO
 
 
-
+    //Sideways ??
     NxTireFunctionDesc latff;
     latff.asymptoteSlip = 2.0f;
     latff.asymptoteValue = 0.01f;
     latff.extremumSlip = 1.0f;
-    latff.extremumValue = 0.02f;
+    latff.extremumValue = 0.05f;
     latff.stiffnessFactor = 1000000.0f;
 
+    //Along the tire??
     NxTireFunctionDesc lotff;
     lotff.asymptoteSlip = 2.0f;
     lotff.asymptoteValue = 0.01f;

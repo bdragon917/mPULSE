@@ -19,6 +19,7 @@ public:
         void setDistance(float inDistance);
         void setMaxDistance(float inDistance);
         void updateCamera(float dt);
+        void resetCamera();
 
 private:
         float EquilbriumSpeed;  //Should be between 0 and 1
