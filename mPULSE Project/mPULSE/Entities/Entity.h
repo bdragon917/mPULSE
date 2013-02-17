@@ -48,7 +48,6 @@ private:
     float maxSteeringAngle;
     float minSteering;
     float maxSteering;
-    float steeringAngle;
 
 	NxActor* actor;
     ObjModel* model;    

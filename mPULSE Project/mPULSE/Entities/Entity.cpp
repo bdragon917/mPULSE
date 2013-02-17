@@ -6,10 +6,9 @@ Entity::Entity()
     displayListIndex = -1;
 
     torque = 0;
-    steeringAngle = 0;
     
     minSteering = 0.1;
-    maxSteering = 0.80;
+    maxSteering = 0.85;
 
     maxTorque = 3000;
     minTorque = -3000;
@@ -63,7 +62,7 @@ void Entity::brake(int tmpTorque)
 float Entity::convertVel(float vel)
 {
     float deltaSteer = 0.0;
-    float sensitivity = 8.0;
+    float sensitivity = 7.0;
 
     if(vel == 0)
         deltaSteer = minSteering;
@@ -81,18 +80,9 @@ float Entity::convertVel(float vel)
 void Entity::addSteeringAngle(float percent)
 {   
     float maxDeltaAngle = 0;
+    float steeringAngle = 0;
 
-    if(percent == 0)
-    {
-        if (0.1 - steeringAngle < 0.1)
-            steeringAngle = 0;
-        else if(steeringAngle > 0)
-            steeringAngle -= 0.1;
-        else if(steeringAngle < 0)
-            steeringAngle += 0.1;
-    }  
-    else
-        steeringAngle = convertVel(getActor()->getLinearVelocity().magnitude()) * percent;
+    steeringAngle = convertVel(getActor()->getLinearVelocity().magnitude()) * percent;
 
     for(int i=0;i<driveWheels.size();i++)
         driveWheels[i]->setSteerAngle(steeringAngle);
@@ -119,6 +109,7 @@ void Entity::setUsingDisplayList(bool status)
 }
 void Entity::setDisplayListIndex(int index)
 {
+    setUsingDisplayList(true);   
     displayListIndex = index;
 }
 int Entity::getDisplayListIndex()

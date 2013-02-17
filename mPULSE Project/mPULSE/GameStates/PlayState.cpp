@@ -25,8 +25,7 @@ PlayState::PlayState()
         aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
         entities.Track.push_back(aTrack);
         aTrack->rc.push_back(rc);        
-        aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));
-        aTrack->setUsingDisplayList(true);        
+        aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));     
     }   
     //*/
 
