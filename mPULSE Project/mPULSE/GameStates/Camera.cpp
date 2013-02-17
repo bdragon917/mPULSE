@@ -414,7 +414,6 @@ void Camera::updateCamera(float dt)
 
 
 
-
                 //Spring
                 float mass = 50.0f;
                 float stiffness = 2000.0f;
@@ -459,7 +458,7 @@ void Camera::updateCamera(float dt)
                 float magVecCamLoc = vecCamLoc.magnitude();
                 //if (magVecCamLoc < 1.0f){vecCamLoc = vecCamLoc * 0.11111f;}
 
-                printf("curCamVec %f %f %f\n", vecCamLoc.x, vecCamLoc.y, vecCamLoc.z);
+                //printf("curCamVec %f %f %f\n", vecCamLoc.x, vecCamLoc.y, vecCamLoc.z);
 
 //                if (lastCamLoc != NULL)
 //                {vecCamLoc = ((lastCamLoc * 0.9) + (vecCamLoc * 0.1));}
@@ -488,6 +487,35 @@ void Camera::updateCamera(float dt)
                 }
                 break;
             }
+
+
+   case 5:
+       {
+                //Set target camera location in local space
+                float disAbove = 5.0f;
+                NxVec3 tarCamLoc = NxVec3(-targetDistance,disAbove,0.0f);
+
+                //set look at in local space
+                NxVec3 tarCamLookAt = NxVec3(targetDistance / 3,(disAbove * 3 / 4),0.0f);
+
+                //Transform to car's location
+                tarCamLoc = targetActor->getGlobalPose() * tarCamLoc;
+                tarCamLookAt = targetActor->getGlobalPose() * tarCamLookAt;
+
+           //curOrientation;
+
+           //calculate target
+
+           //project camera to gyro cam location
+                NxVec3 gyroCam = (curCamLoc - targetActor->getGlobalPose().t);
+                gyroCam = gyroCam / gyroCam.normalize();
+
+           //move cam towards target
+                gyroCam = (gyroCam + tarCamLoc) / 2;
+
+                curCamLoc = gyroCam;
+
+       }
 
    }//EndSwitch
 

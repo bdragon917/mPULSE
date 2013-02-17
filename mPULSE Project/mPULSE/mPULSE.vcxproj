@@ -87,6 +87,7 @@
     <ClCompile Include="GameStates\Game.cpp" />
     <ClCompile Include="GameStates\GameState.cpp" />
     <ClCompile Include="GameStates\InitState.cpp" />
+    <ClCompile Include="GameStates\MainMenuState.cpp" />
     <ClCompile Include="GameStates\PlayState.cpp" />
     <ClCompile Include="Input\XboxController.cpp" />
     <ClCompile Include="ModelLoader\ModelManager.cpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="GameStates\Game.h" />
     <ClInclude Include="GameStates\GameState.h" />
     <ClInclude Include="GameStates\InitState.h" />
+    <ClInclude Include="GameStates\MainMenuState.h" />
     <ClInclude Include="GameStates\PlayState.h" />
     <ClInclude Include="Input\XboxController.h" />
     <ClInclude Include="ModelLoader\ModelManager.h" />

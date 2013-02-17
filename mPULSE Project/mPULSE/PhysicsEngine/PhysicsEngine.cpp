@@ -367,7 +367,8 @@ NxActor* PhysicsEngine::createCarChassis()
     actorDesc.userData = (void*)&cud;
 
 	NxActor *actor = scene->createActor(actorDesc);
-	actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));
+    actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));
+    //actor->setCMassOffsetLocalPosition(NxVec3(0.25f, -4.0, 0));   //True Front Weel Drive =)
 
     actor->setGlobalOrientation(orient);
 

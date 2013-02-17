@@ -374,7 +374,8 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
         static int count = 0;
 
         car->addTorque(rTriggMag - lTriggMag);        
-        car->addSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
+        //car->addSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
+        car->addTilSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
 
         //printf("mag: %f x: %f ang: %f\n",state->leftStick.magnitude,state->leftStick.x,(state->leftStick.magnitude/24000.0) * -state->leftStick.x * deg);
 

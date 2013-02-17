@@ -19,6 +19,9 @@ public:
     void addTorque(int tmpTorque);
 	void brake(int tmpTorque);
     void addSteeringAngle(float angle);
+
+    void addTilSteeringAngle(float percent);
+
     //void setModel(ObjModel* m);
     void setActor(NxActor* a);
     void setDisplayListIndex(int index);

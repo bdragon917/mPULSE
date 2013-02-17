@@ -58,7 +58,13 @@ void setUpOrthoView();
 //Draw Functions
 int drawIntro();
 void moveStuff(float &testF);
+
+
 void drawScene(NxScene* scene, Entities* entities);
+void drawMainMenuScreen(int curMenuButton, bool clicked);
+
+
+
 void drawActor(NxActor* actor);
 void drawActor_Safe(NxActor* actor);
 void drawShape(NxShape* shape);
@@ -74,6 +80,7 @@ void drawDisplayList(int index);
 
     Console aConsole;    
     Shader* aShader;
+    Shader* aShadowShader;
 
     string FloatToString(float input);
 
@@ -120,6 +127,43 @@ private:
     
  //   CONST int ShaderTypeNum = 1;
 
+    //ShadowMap Stuff
+    //{
+    void generateShadowFBO();
+    void setTextureMatrix(void);
+    void setupMatrices(float position_x,float position_y,float position_z,float lookAt_x,float lookAt_y,float lookAt_z);
+
+    #define RENDER_WIDTH 640.0
+    #define RENDER_HEIGHT 480.0
+    #define SHADOW_MAP_RATIO 2
+
+
+    //Camera position
+    float p_camera[3];
+
+    //Camera lookAt
+    float l_camera[3];
+
+    //Light position
+    float p_light[3];
+
+    //Light lookAt
+    float l_light[3];
+
+
+    //Light mouvement circle radius
+    float light_mvnt;
+
+    // Hold id of the framebuffer for light POV rendering
+    GLuint fboId;
+
+    // Z values will be rendered to this texture when using fboId framebuffer
+    GLuint depthTextureId;
+
+    // Use to activate/disable shadowShader
+    GLhandleARB shadowShaderId;
+    GLuint shadowMapUniform;
+    //}
 
 
 };

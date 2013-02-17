@@ -7,6 +7,7 @@
 #include "GameState.h"
 #include "InitState.h"
 #include "PlayState.h"
+#include "MainMenuState.h"
 #include "..\Util\Clock.h"
 
 class Game

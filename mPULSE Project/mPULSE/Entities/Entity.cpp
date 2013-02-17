@@ -141,6 +141,42 @@ void Entity::addSteeringAngle(float percent)
     //}
 }
 
+void Entity::addTilSteeringAngle(float percent)
+{   
+
+    float maxDeltaAngle = percent * 0.60f;  //max angle + or negative
+
+    printf("percent %f\n", percent);
+
+    float deadZone = 0.001f;
+
+
+    if ((percent < deadZone) && (percent > (-deadZone)))
+    {
+        printf("SETTOZER");
+        steeringAngle = 0.0f;
+        //steeringAngle = steeringAngle / 2.0f;
+    }
+    else if ((steeringAngle) > (maxDeltaAngle))
+    {
+        //subtract till the same
+        steeringAngle = steeringAngle - 0.05f;
+    }
+    else if ((steeringAngle) < (maxDeltaAngle))
+    {
+        //Add til the same
+        steeringAngle = steeringAngle + 0.05f;
+    }
+
+    
+
+    for(int i=0;i<driveWheels.size();i++)
+    {
+        driveWheels[i]->setSteerAngle(steeringAngle);
+    }
+    
+}
+
 NxActor* Entity::getActor()
 {
     return actor;

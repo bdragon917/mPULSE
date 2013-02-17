@@ -51,6 +51,9 @@
             case GameState::PLAY:
                 state = PlayState::getInstance();                
                 break;
+            case GameState::MAIN_MENU:
+                state = MainMenuState::getInstance();                
+                break;
             }
         }
     }

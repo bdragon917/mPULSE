@@ -556,6 +556,7 @@ void RenderingEngine::initializeGL()
 {
 	glShadeModel (GL_SMOOTH);
 	glEnable (GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 	glEnable (GL_LIGHTING);
 	glEnable (GL_LIGHT0);
 	glEnable (GL_NORMALIZE);
@@ -575,11 +576,141 @@ void RenderingEngine::initializeGL()
     int err = glewInit();               //Needs a window to execute successfully
 	
    if (err == GLEW_OK)
-		{printf("glewInit is successful!\n");aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");}
+		{
+            printf("glewInit is successful!\n");
+            aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");
+            aShadowShader = new Shader("shaders/shadow.frag", "shaders/shadow.vert");
+        }
     else
     {fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
     }
+
+
+
+   //Initalization for shadowMap
+   p_camera[0] = 32;
+   p_camera[1] = 20;
+   p_camera[2] = 0;
+
+    //Camera lookAt
+   l_camera[0] = 2;
+   l_camera[1] = 0;
+   l_camera[2] = -10;
+
+    //Light position
+   p_light[0] = 3;
+   p_light[1] = 20;
+   p_light[2] = 0;
+
+    //Light lookAt
+   l_light[0] = 0;
+   l_light[1] = 0;
+   l_light[2] = -5;
+
+    //Light mouvement circle radius
+    light_mvnt = 30.0f;
+
+    generateShadowFBO();
+
 }
+
+void RenderingEngine::generateShadowFBO()
+{
+	int shadowMapWidth = RENDER_WIDTH * SHADOW_MAP_RATIO;
+	int shadowMapHeight = RENDER_HEIGHT * SHADOW_MAP_RATIO;
+	
+	//GLfloat borderColor[4] = {0,0,0,0};
+	
+	GLenum FBOstatus;
+	
+	// Try to use a texture depth component
+	glGenTextures(1, &depthTextureId);
+	glBindTexture(GL_TEXTURE_2D, depthTextureId);
+	
+	// GL_LINEAR does not make sense for depth texture. However, next tutorial shows usage of GL_LINEAR and PCF
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	
+	// Remove artefact on the edges of the shadowmap
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
+	
+	//glTexParameterfv( GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor );
+	
+	
+	
+	// No need to force GL_DEPTH_COMPONENT24, drivers usually give you the max precision if available 
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapWidth, shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	// create a framebuffer object
+	glGenFramebuffersEXT(1, &fboId);
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboId);
+	
+	// Instruct openGL that we won't bind a color texture with the currently binded FBO
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	
+	// attach the texture to FBO depth attachment point
+	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,GL_TEXTURE_2D, depthTextureId, 0);
+	
+	// check FBO status
+	FBOstatus = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+	if(FBOstatus != GL_FRAMEBUFFER_COMPLETE_EXT)
+		printf("GL_FRAMEBUFFER_COMPLETE_EXT failed, CANNOT use FBO\n");
+	
+	// switch back to window-system-provided framebuffer
+	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+}
+
+
+void RenderingEngine::setTextureMatrix(void)
+{
+	static double modelView[16];
+	static double projection[16];
+	
+	// This is matrix transform every coordinate x,y,z
+	// x = x* 0.5 + 0.5 
+	// y = y* 0.5 + 0.5 
+	// z = z* 0.5 + 0.5 
+	// Moving from unit cube [-1,1] to [0,1]  
+	const GLdouble bias[16] = {	
+		0.5, 0.0, 0.0, 0.0, 
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+	0.5, 0.5, 0.5, 1.0};
+	
+	// Grab modelview and transformation matrices
+	glGetDoublev(GL_MODELVIEW_MATRIX, modelView);
+	glGetDoublev(GL_PROJECTION_MATRIX, projection);
+	
+	
+	glMatrixMode(GL_TEXTURE);
+	glActiveTextureARB(GL_TEXTURE7);
+	
+	glLoadIdentity();	
+	glLoadMatrixd(bias);
+	
+	// concatating all matrice into one.
+	glMultMatrixd (projection);
+	glMultMatrixd (modelView);
+	
+	// Go back to normal matrix mode
+	glMatrixMode(GL_MODELVIEW);
+}
+
+
+
+void RenderingEngine::setupMatrices(float position_x,float position_y,float position_z,float lookAt_x,float lookAt_y,float lookAt_z)
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45,RENDER_WIDTH/RENDER_HEIGHT,10,40000);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(position_x,position_y,position_z,lookAt_x,lookAt_y,lookAt_z,0,1,0);
+}
+
 
 void RenderingEngine::createLight()
 {
@@ -608,6 +739,8 @@ void RenderingEngine::createLight()
 	glEnable (GL_COLOR_MATERIAL);
 	glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 }
+
+
 
 void RenderingEngine::setUpPerpView()
 {
@@ -714,9 +847,144 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 	//set view
 	setUpPerpView();
 	//glRotatef (10.0f, 10.0f, 0.0, 0.0);
+
+
+    //ShadowMap
+    /**
+    const GLdouble bias[] = {0.5, 0.0, 0.0, 0.0, 
+				0.0, 0.5, 0.0, 0.0,
+				0.0, 0.0, 0.5, 0.0,
+				0.5, 0.5, 0.5, 1.0};
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
+    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+
+   // if ( bFixedFunction )
+    {
+	    const GLdouble x[] = {1.0, 0.0, 0.0, 0.0};
+	    const GLdouble y[] = {0.0, 1.0, 0.0, 0.0};
+	    const GLdouble z[] = {0.0, 0.0, 1.0, 0.0};
+	    const GLdouble w[] = {0.0, 0.0, 0.0, 1.0};
+
+	    glEnable(GL_TEXTURE_GEN_S);
+	    glEnable(GL_TEXTURE_GEN_T);
+	    glEnable(GL_TEXTURE_GEN_R);
+	    glEnable(GL_TEXTURE_GEN_Q);
+
+	    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	    glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	    glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+
+	    glTexGendv(GL_S, GL_EYE_PLANE, x );
+	    glTexGendv(GL_T, GL_EYE_PLANE, y );
+	    glTexGendv(GL_R, GL_EYE_PLANE, z );
+	    glTexGendv(GL_Q, GL_EYE_PLANE, w );
+    }
+
+    glMatrixMode(GL_TEXTURE);
+    glLoadMatrixd(bias);
+    glMultMatrixd(l->get_proj_matrix());
+    glMultMatrixd(l->get_model_matrix());
+    glMatrixMode(GL_MODELVIEW);
+    **/
+
+
 	
     if (showScene)
     {
+        /**
+        glPushMatrix();
+
+        glEnable(GL_CULL_FACE);
+
+        //First step: Render from the light POV to a FBO, story depth values only
+	    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,fboId);	//Rendering offscreen
+	
+	    //Using the fixed pipeline to render to the depthbuffer
+	    glUseProgramObjectARB(0);
+	
+	    // In the case we render the shadowmap to a higher resolution, the viewport must be modified accordingly.
+	    glViewport(0,0,RENDER_WIDTH * SHADOW_MAP_RATIO,RENDER_HEIGHT* SHADOW_MAP_RATIO);
+	
+	    // Clear previous frame values
+	    glClear( GL_DEPTH_BUFFER_BIT);
+	
+	    //Disable color rendering, we only want to write to the Z-Buffer
+	    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
+	
+	    setupMatrices(p_light[0],p_light[1],p_light[2],l_light[0],l_light[1],l_light[2]);
+	
+	    // Culling switching, rendering only backface, this is done to avoid self-shadowing
+	    glCullFace(GL_FRONT_AND_BACK);
+
+        //aShadowShader->on();
+
+	    //drawObjects();
+        drawCars(entities);
+        drawAICars(entities);
+        drawObstacles(entities);
+        drawStaticObjs(entities);
+        drawTrack(entities);
+	
+	    //Save modelview/projection matrice into texture7, also add a biais
+	    setTextureMatrix();
+	
+	
+	    // Now rendering from the camera POV, using the FBO to generate shadows
+	    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,0);
+	
+	    glViewport(0,0,RENDER_WIDTH,RENDER_HEIGHT);
+	
+	    //Enabling color write (previously disabled for light POV z-buffer rendering)
+	    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); 
+	
+	    // Clear previous frame values
+	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	    //Using the shadow shader
+
+	    glUseProgramObjectARB(shadowShaderId);
+	    glUniform1iARB(shadowMapUniform,7);
+	    glActiveTextureARB(GL_TEXTURE7);
+	    glBindTexture(GL_TEXTURE_2D,depthTextureId);
+        aShadowShader->on();
+
+        drawCars(entities);
+        drawAICars(entities);
+        drawObstacles(entities);
+        drawStaticObjs(entities);
+        drawTrack(entities);
+
+
+        glPopMatrix();
+
+
+
+
+
+
+        	//Cameras
+	//gluLookAt(pos.x, pos.y, pos.z,  // Eye/camera position
+	//at.x ,at.y,at.z,		// Look-at position 
+
+  //  	gluLookAt(0, 0, 0,  // Eye/camera position
+	//0 ,0,-2.0f,		// Look-at position 
+//	0.0,1.0,0.0); 		// "Up" vector
+	
+	//set view
+	//setUpPerpView();
+
+
+
+
+        glDisable(GL_CULL_FACE);
+
+
+        */
+              //Test comment
+
 
 
 	    glColor3f(0.75f, 0.75f, 0.75f);          
@@ -835,13 +1103,13 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 
             */
 		    // Render all actors
-	        int nbActors = scene->getNbActors();
-	        NxActor** actors = scene->getActors();
-	        while(nbActors--)
-	        {
-		        NxActor* actor = *actors++;
+	        //int nbActors = scene->getNbActors();
+	       // NxActor** actors = scene->getActors();
+	        //while(nbActors--)
+	       // {
+		   //     NxActor* actor = *actors++;
 			    //drawActor(actor);
-            }
+           // }
             //*/
     }
 
@@ -864,6 +1132,29 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
     prints(800,-640, FloatToString(entities->cars[0]->getDriveWheels()[1]->getAxleSpeed()) + " :W1_d_Rot");
     prints(800,-660, FloatToString(entities->cars[0]->getPassiveWheels()[0]->getAxleSpeed()) + " :W2_p_Rot");
     prints(800,-680, FloatToString(entities->cars[0]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
+
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
+}
+
+//Include entity POV, which car's camera to render from
+void RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix ();
+	glLoadIdentity ();
+	
+
+    gluLookAt(0, 0, 0,  // Eye/camera position
+	0 ,0,-2.0f,		// Look-at position 
+	0.0,1.0,0.0); 		// "Up" vector
+	
+	//set view
+	setUpPerpView();
+    glEnable(GL_LIGHTING);
+	
+    prints(800,-680, "MAIN MENU!");
 
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
