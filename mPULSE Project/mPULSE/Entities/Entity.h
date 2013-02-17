@@ -28,7 +28,7 @@ public:
     int getSteering();
     bool getUsingDisplayList();
 	NxActor* getActor();
-
+    float convertVel(float vel);
     std::vector<NxWheelShape*> getDriveWheels();
     std::vector<NxWheelShape*> getPassiveWheels();   
 
@@ -46,8 +46,8 @@ private:
     int maxTorque;
     int minTorque;
     float maxSteeringAngle;
-    float maxSteeringRight;
-    float maxSteeringLeft;
+    float minSteering;
+    float maxSteering;
     float steeringAngle;
 
 	NxActor* actor;
