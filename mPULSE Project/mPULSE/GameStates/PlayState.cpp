@@ -25,8 +25,7 @@ PlayState::PlayState()
         aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
         entities.Track.push_back(aTrack);
         aTrack->rc.push_back(rc);        
-        aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));
-        aTrack->setUsingDisplayList(true);        
+        aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));     
     }   
     //*/
 
@@ -374,8 +373,8 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
         static int count = 0;
 
         car->addTorque(rTriggMag - lTriggMag);        
-        //car->addSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
-        car->addTilSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
+        car->addSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
+//        car->addTilSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
 
         //printf("mag: %f x: %f ang: %f\n",state->leftStick.magnitude,state->leftStick.x,(state->leftStick.magnitude/24000.0) * -state->leftStick.x * deg);
 
