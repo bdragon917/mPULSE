@@ -45,35 +45,43 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	//groundPlane = createGroundPlane();
 	//box = createBox();
 
-    NxActor* box = createCarChassis();              //create a Chassis
-    NxWheelShape* wheel =  AddWheelToActor(box, 1.0f,0,1.2) ;     //Create a wheel, and attach it to the Chassis
-	NxWheelShape* wheel2 = AddWheelToActor(box, 1.0f,0,-1.2);
-    NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f,0,1.2);
-	NxWheelShape* wheel4 = AddWheelToActor(box, -1.0f,0,-1.2);
+    for (int pxCars=0;pxCars<cars->size();pxCars++)
+    {
 
-    //NxWheelShape* wheel3 = AddWheelToActor(box, -0.5f,0.05);
+        NxActor* box = createCarChassis();              //create a Chassis
+        NxWheelShape* wheel =  AddWheelToActor(box, 1.0f,0,1.2) ;     //Create a wheel, and attach it to the Chassis
+	    NxWheelShape* wheel2 = AddWheelToActor(box, 1.0f,0,-1.2);
+        NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f,0,1.2);
+	    NxWheelShape* wheel4 = AddWheelToActor(box, -1.0f,0,-1.2);
 
-    Entity* entityCar1 = new Entity();    
-    //EntityComponent* ec_car = new EntityComponent();
-    //ec_car->setActor(box);
-    RenderableComponent* rc = new RenderableComponent(1,3);
-    entityCar1->rc.push_back(rc);
-    entityCar1->addDriveWheel(wheel);
-	entityCar1->addDriveWheel(wheel2);
-    entityCar1->addPassiveWheel(wheel3);
-	entityCar1->addPassiveWheel(wheel4);
-	w1 = wheel;
-	w2 = wheel2;
-	w3 = wheel3;
-	w4 = wheel4;
-    //Camera newCamera = Camera(box);
-    entityCar1->aCam = new Camera(box);
+        //NxWheelShape* wheel3 = AddWheelToActor(box, -0.5f,0.05);
 
-   // entityCar1.components.push_back( &ec_car );
-    //entityCar1->addComponent( ec_car );    
-	entityCar1->setActor(box);
-    tmpCars->at(0) = entityCar1;    
-	box->setSleepEnergyThreshold(0);
+        //Entity* entityCar1 = new Entity();
+        Entity* entityCar1 = cars->at(pxCars);
+
+        //EntityComponent* ec_car = new EntityComponent();
+        //ec_car->setActor(box);
+        //RenderableComponent* rc = new RenderableComponent(1,3);
+        //entityCar1->rc.push_back(rc);
+        entityCar1->addDriveWheel(wheel);
+	    entityCar1->addDriveWheel(wheel2);
+        entityCar1->addPassiveWheel(wheel3);
+	    entityCar1->addPassiveWheel(wheel4);
+	    w1 = wheel;
+	    w2 = wheel2;
+	    w3 = wheel3;
+	    w4 = wheel4;
+        //Camera newCamera = Camera(box);
+        entityCar1->aCam = new Camera(box);
+
+       // entityCar1.components.push_back( &ec_car );
+        //entityCar1->addComponent( ec_car );    
+	    entityCar1->setActor(box);
+        tmpCars->at(pxCars) = entityCar1;    
+	    box->setSleepEnergyThreshold(0);
+
+    }
+
 }
 
 void PhysicsEngine::sceneSetup()

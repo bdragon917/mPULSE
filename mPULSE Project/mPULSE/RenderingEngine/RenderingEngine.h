@@ -62,6 +62,7 @@ void moveStuff(float &testF);
 
 
 void drawScene(NxScene* scene, Entities* entities);
+    void drawScene_ForPlayer(NxScene* scene, Entities* entities, int carIndex);
 int drawMainMenuScreen(int curMenuButton, bool clicked);
 
 

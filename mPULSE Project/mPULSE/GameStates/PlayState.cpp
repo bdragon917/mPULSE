@@ -5,8 +5,27 @@ PlayState::PlayState()
 {
     showConsole = true;
 
-    changeState(PLAY);    
-    entities.cars.push_back(new Entity);
+    changeState(PLAY); 
+
+    Entity* playerCar = new Entity();
+    entities.cars.push_back(playerCar);
+
+    RenderableComponent* pc_rc = new RenderableComponent(1,3);
+    playerCar->rc.push_back(pc_rc);
+    
+    int num_AI = 2;
+
+    for (int a=0;a<num_AI;a++)
+    {
+
+        Entity* newAIrCar = new Entity();
+        RenderableComponent* newRc = new RenderableComponent(1, 5);
+        newAIrCar->rc.push_back(newRc);
+        entities.cars.push_back(newAIrCar);
+
+    }
+    
+    
     physicsEngine = PhysicsEngine::getInstance();
     physicsEngine->setupPlayScene(&entities.cars);
     renderingEngine = RenderingEngine::getInstance();
@@ -57,6 +76,7 @@ void PlayState::update(float dt)
         
     physicsEngine->step(dt/1000);
     entities.cars[0]->aCam->updateCamera(1.0f);
+    entities.cars[1]->aCam->updateCamera(1.0f);
     
 //    entities.cars[0]->aCam->updateCamera(dt/16);
     //entities.cars[0]->aCam->updateCamera(1.0f);

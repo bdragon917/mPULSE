@@ -846,340 +846,426 @@ void RenderingEngine::setUpOrthoView()
 //Include entity POV, which car's camera to render from
 void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glPushMatrix ();
-	glLoadIdentity ();
-	
-
-    //Infinite Plane!
-    int groundxoffset = (int(entities->cars.at(0)->getActor()->getGlobalPose().t.x));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x) - (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x));
-    int groundyoffset = (int(entities->cars.at(0)->getActor()->getGlobalPose().t.z));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.z) - );
-
-    float gxo = groundxoffset;
-    float gyo = groundyoffset;
-
-    if ((groundxoffset % 2) == 0)
-    {gxo = (groundxoffset) - 1.0f;}
-    if ((groundyoffset % 2) == 0)
-    {gyo = (groundyoffset) - 1.0f;}
-
-    NxVec3 pos = entities->cars.at(0)->aCam->getCamLoc();
-    NxVec3 at = entities->cars.at(0)->aCam->getLookAt();
-
-	//Cameras
-	gluLookAt(pos.x, pos.y, pos.z,  // Eye/camera position
-	at.x ,at.y,at.z,		// Look-at position 
-
-  //  	gluLookAt(0, 0, 0,  // Eye/camera position
-	//0 ,0,-2.0f,		// Look-at position 
-	0.0,1.0,0.0); 		// "Up" vector
-	
-	//set view
-	setUpPerpView();
-	//glRotatef (10.0f, 10.0f, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-    //ShadowMap
-    /**
-    const GLdouble bias[] = {0.5, 0.0, 0.0, 0.0, 
-				0.0, 0.5, 0.0, 0.0,
-				0.0, 0.0, 0.5, 0.0,
-				0.5, 0.5, 0.5, 1.0};
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
-    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
-
-   // if ( bFixedFunction )
+    for (int activePlayers=0;activePlayers<2;activePlayers++)
     {
-	    const GLdouble x[] = {1.0, 0.0, 0.0, 0.0};
-	    const GLdouble y[] = {0.0, 1.0, 0.0, 0.0};
-	    const GLdouble z[] = {0.0, 0.0, 1.0, 0.0};
-	    const GLdouble w[] = {0.0, 0.0, 0.0, 1.0};
-
-	    glEnable(GL_TEXTURE_GEN_S);
-	    glEnable(GL_TEXTURE_GEN_T);
-	    glEnable(GL_TEXTURE_GEN_R);
-	    glEnable(GL_TEXTURE_GEN_Q);
-
-	    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-	    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-	    glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-	    glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-
-	    glTexGendv(GL_S, GL_EYE_PLANE, x );
-	    glTexGendv(GL_T, GL_EYE_PLANE, y );
-	    glTexGendv(GL_R, GL_EYE_PLANE, z );
-	    glTexGendv(GL_Q, GL_EYE_PLANE, w );
+        drawScene_ForPlayer(scene, entities, activePlayers);
     }
 
-    glMatrixMode(GL_TEXTURE);
-    glLoadMatrixd(bias);
-    glMultMatrixd(l->get_proj_matrix());
-    glMultMatrixd(l->get_model_matrix());
-    glMatrixMode(GL_MODELVIEW);
-    **/
+    //drawScene_ForPlayer(scene, entities, 1);
+    
+}
 
+void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Entities* entities, int carIndex)
+{
+        glPushMatrix ();
+	    glLoadIdentity ();
+        
 
 	
-    if (showScene)
-    {
-        /**
-        glPushMatrix();
 
-        glEnable(GL_CULL_FACE);
+        //Infinite Plane!
+       // int groundxoffset = (int(entities->cars.at(curPlayerIndex)->getActor()->getGlobalPose().t.x));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x) - (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x));
+        //int groundyoffset = (int(entities->cars.at(curPlayerIndex)->getActor()->getGlobalPose().t.z));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.z) - );
 
-        //First step: Render from the light POV to a FBO, story depth values only
-	    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,fboId);	//Rendering offscreen
-	
-	    //Using the fixed pipeline to render to the depthbuffer
-	    glUseProgramObjectARB(0);
-	
-	    // In the case we render the shadowmap to a higher resolution, the viewport must be modified accordingly.
-	    glViewport(0,0,RENDER_WIDTH * SHADOW_MAP_RATIO,RENDER_HEIGHT* SHADOW_MAP_RATIO);
-	
-	    // Clear previous frame values
-	    glClear( GL_DEPTH_BUFFER_BIT);
-	
-	    //Disable color rendering, we only want to write to the Z-Buffer
-	    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
-	
-	    setupMatrices(p_light[0],p_light[1],p_light[2],l_light[0],l_light[1],l_light[2]);
-	
-	    // Culling switching, rendering only backface, this is done to avoid self-shadowing
-	    glCullFace(GL_FRONT_AND_BACK);
+       // float gxo = groundxoffset;
+       // float gyo = groundyoffset;
 
-        //aShadowShader->on();
-
-	    //drawObjects();
-        drawCars(entities);
-        drawAICars(entities);
-        drawObstacles(entities);
-        drawStaticObjs(entities);
-        drawTrack(entities);
-	
-	    //Save modelview/projection matrice into texture7, also add a biais
-	    setTextureMatrix();
-	
-	
-	    // Now rendering from the camera POV, using the FBO to generate shadows
-	    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,0);
-	
-	    glViewport(0,0,RENDER_WIDTH,RENDER_HEIGHT);
-	
-	    //Enabling color write (previously disabled for light POV z-buffer rendering)
-	    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); 
-	
-	    // Clear previous frame values
-	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	    //Using the shadow shader
-
-	    glUseProgramObjectARB(shadowShaderId);
-	    glUniform1iARB(shadowMapUniform,7);
-	    glActiveTextureARB(GL_TEXTURE7);
-	    glBindTexture(GL_TEXTURE_2D,depthTextureId);
-        aShadowShader->on();
-
-        drawCars(entities);
-        drawAICars(entities);
-        drawObstacles(entities);
-        drawStaticObjs(entities);
-        drawTrack(entities);
+       // if ((groundxoffset % 2) == 0)
+       // {gxo = (groundxoffset) - 1.0f;}
+       // if ((groundyoffset % 2) == 0)
+       // {gyo = (groundyoffset) - 1.0f;}
 
 
-        glPopMatrix();
-
-
-
-
-
-
-        	//Cameras
-	//gluLookAt(pos.x, pos.y, pos.z,  // Eye/camera position
-	//at.x ,at.y,at.z,		// Look-at position 
-
-  //  	gluLookAt(0, 0, 0,  // Eye/camera position
-	//0 ,0,-2.0f,		// Look-at position 
-//	0.0,1.0,0.0); 		// "Up" vector
-	
-	//set view
-	//setUpPerpView();
-
-
-
-
-        glDisable(GL_CULL_FACE);
-
-
-        */
-              //Test comment
-
-
-
-	    glColor3f(0.75f, 0.75f, 0.75f);          
-
-         char shaded = 'f';
-
-         if (aShader != NULL)
-         {
-            glEnable(GL_TEXTURE_2D);
-            aShader->on();
-            shaded = 't';
-         }
-
-                // glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
-                 //drawGroundPlane(gxo, gyo);
-                // glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
-                 //drawModel(modelManager.getModel(2),0,0,0,1);           //the track
-
-                 //glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
-                 //for(int i=0;i<modelManager.numOfModels;i++)
-                 //drawModel(modelManager.getModel(i),0,10,0,1);
-
-
-//                glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
-//                NxMat34* aPose = &(entities->cars[0]->getActor()->getGlobalPose());
-                //drawModelPos(modelManager.getModel(1), aPose );
-
-                //Shadow
-                 if (aShader != NULL)
-                 {
-                    aShader->off();
-                 }
-                glPushMatrix();
-
-		        //drawModelShadow(modelManager.getModel(1), aPose );
-
-		        glPopMatrix();
-                if (aShader != NULL)
-                 {
-                    aShader->on();
-                 }
-
-
-                 //Map
-                 if (aShader != NULL)
-                 {
-                    aShader->off();
-                 }
-                glPushMatrix();
-                 	glDisable(GL_TEXTURE_2D);
-	                //const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
-                    const static float mapMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
-                    const NxVec3 v(1,0,0);  //Rotate the map
-                    const NxReal ang = 90;
-
-                    NxQuat q;
-                    q.fromAngleAxis(ang,v);
-                    NxMat33 o;
-                    o.fromQuat(q);
-                    //const static float rotMat[]={ o.getRow(0).x,o.getRow(0).y,o.getRow(0).z,0,
-                    //                                o.getRow(1).x,o.getRow(1).y,o.getRow(1).z,0,
-                    //                                o.getRow(2).x,o.getRow(2).y,o.getRow(2).z,0,
-                     //                               o.getRow(3).x,o.getRow(3).y,o.getRow(3).z,1 };
-
-                                    const static float rotMat[]={ 1,0,0,0,
-                                                    0,std::cos(ang),-std::sin(ang),0,
-                                                    0,std::sin(ang),std::cos(ang),0,
-                                                    0,0,0,1 };
-
-	                glMultMatrixf(mapMat);
-                    //glMultMatrixf(rotMat);
-	                
-                       glColor3f(1.0f,1.0f,1.0f);
-                       //drawCars(entities);
-                       //drawAICars(entities);
-                       //drawTrack(entities);
-
-                    glEnable(GL_TEXTURE_2D);
-		        glPopMatrix();
-                if (aShader != NULL)
-                 {
-                    aShader->on();
-                 }
-
-
-                drawTrack(entities);
-
-            //float blur = (entities->cars[0]->getActor()->getLinearVelocity().magnitude() / 150.0f); //blur = (blur * 0.7) + (0.3 * newblur)
-
-            //glAccum(GL_MULT, blur);
-            //glAccum(GL_ACCUM, 1 -blur );
-            //glAccum(GL_RETURN, 1.0);
-
-            drawCars(entities);
-
-            //drawWheels(entities->cars[0], 0, 5);
-            drawAICars(entities);
-            drawObstacles(entities);
-            drawStaticObjs(entities);
 
             
 
-            //drawTrack(entities);
+	        
+
+            NxVec3 pos = entities->cars.at(carIndex)->aCam->getCamLoc();
+            NxVec3 at = entities->cars.at(carIndex)->aCam->getLookAt();
+	        //Cameras
+	        gluLookAt(pos.x, pos.y, pos.z,  // Eye/camera position      //  	gluLookAt(0, 0, 0,  // Eye/camera position
+	        at.x ,at.y,at.z,		// Look-at position                 //0 ,0,-2.0f,		// Look-at position 
+	        0.0,1.0,0.0); 		// "Up" vector
+
+
+	    //set view
+        if (carIndex == 1)
+        {
+            	        // Switch to the projection matrix
+	        glMatrixMode (GL_PROJECTION);
+	        glLoadIdentity ();
+
+	        int w = SCREEN_WIDTH;
+	        int h = SCREEN_HEIGHT / 2;
+
+	        //int w = 640;
+	        //int h = 480;
+
+	        // Set drawing to NOT take up the entire window
+	        glViewport (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2);
+
+	        if (w > h) {
+		        // In this case the w/h ratio is > 1
+		            float ratio = (float)w/(float)h;
+			        //gluPerspective(60.0, ratio, 0.01, 800.0);
+			        gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+			        //glOrtho (-ratio, ratio, -1, 1, -10, 10);
+	        }
+	        else {
+		        // In this case the h/w ratio is > 1
+		            float ratio = (float)h/(float)w;
+			        //gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
+			        gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+			        //glOrtho (-ratio, ratio, -1, 1, -10, 10);
+	        }
+
+	        //Switch back to modelview matrix
+	        glMatrixMode (GL_MODELVIEW);
+        }
+        else
+        {
+            	// Switch to the projection matrix
+	        glMatrixMode (GL_PROJECTION);
+	        glLoadIdentity ();
+
+	        int w = SCREEN_WIDTH;
+	        int h = SCREEN_HEIGHT / 2;
+
+	        //int w = 640;
+	        //int h = 480;
+
+	        // Set drawing to NOT take up the entire window
+	        glViewport (0, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT/2);
+
+	        if (w > h) {
+		        // In this case the w/h ratio is > 1
+		            float ratio = (float)w/(float)h;
+			        //gluPerspective(60.0, ratio, 0.01, 800.0);
+			        gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+			        //glOrtho (-ratio, ratio, -1, 1, -10, 10);
+	        }
+	        else {
+		        // In this case the h/w ratio is > 1
+		            float ratio = (float)h/(float)w;
+			        //gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
+			        gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+			        //glOrtho (-ratio, ratio, -1, 1, -10, 10);
+	        }
+
+	        //Switch back to modelview matrix
+	        glMatrixMode (GL_MODELVIEW);
+        }
+
+
+	    //setUpPerpView();
+	    //glRotatef (10.0f, 10.0f, 0.0, 0.0);
+
+
+        //ShadowMap
+        /**
+        const GLdouble bias[] = {0.5, 0.0, 0.0, 0.0, 
+				    0.0, 0.5, 0.0, 0.0,
+				    0.0, 0.0, 0.5, 0.0,
+				    0.5, 0.5, 0.5, 1.0};
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
+        glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+
+       // if ( bFixedFunction )
+        {
+	        const GLdouble x[] = {1.0, 0.0, 0.0, 0.0};
+	        const GLdouble y[] = {0.0, 1.0, 0.0, 0.0};
+	        const GLdouble z[] = {0.0, 0.0, 1.0, 0.0};
+	        const GLdouble w[] = {0.0, 0.0, 0.0, 1.0};
+
+	        glEnable(GL_TEXTURE_GEN_S);
+	        glEnable(GL_TEXTURE_GEN_T);
+	        glEnable(GL_TEXTURE_GEN_R);
+	        glEnable(GL_TEXTURE_GEN_Q);
+
+	        glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	        glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	        glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	        glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+
+	        glTexGendv(GL_S, GL_EYE_PLANE, x );
+	        glTexGendv(GL_T, GL_EYE_PLANE, y );
+	        glTexGendv(GL_R, GL_EYE_PLANE, z );
+	        glTexGendv(GL_Q, GL_EYE_PLANE, w );
+        }
+
+        glMatrixMode(GL_TEXTURE);
+        glLoadMatrixd(bias);
+        glMultMatrixd(l->get_proj_matrix());
+        glMultMatrixd(l->get_model_matrix());
+        glMatrixMode(GL_MODELVIEW);
+        **/
+
+
+	
+        if (showScene)
+        {
+            /**
+            glPushMatrix();
+
+            glEnable(GL_CULL_FACE);
+
+            //First step: Render from the light POV to a FBO, story depth values only
+	        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,fboId);	//Rendering offscreen
+	
+	        //Using the fixed pipeline to render to the depthbuffer
+	        glUseProgramObjectARB(0);
+	
+	        // In the case we render the shadowmap to a higher resolution, the viewport must be modified accordingly.
+	        glViewport(0,0,RENDER_WIDTH * SHADOW_MAP_RATIO,RENDER_HEIGHT* SHADOW_MAP_RATIO);
+	
+	        // Clear previous frame values
+	        glClear( GL_DEPTH_BUFFER_BIT);
+	
+	        //Disable color rendering, we only want to write to the Z-Buffer
+	        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE); 
+	
+	        setupMatrices(p_light[0],p_light[1],p_light[2],l_light[0],l_light[1],l_light[2]);
+	
+	        // Culling switching, rendering only backface, this is done to avoid self-shadowing
+	        glCullFace(GL_FRONT_AND_BACK);
+
+            //aShadowShader->on();
+
+	        //drawObjects();
+            drawCars(entities);
+            drawAICars(entities);
+            drawObstacles(entities);
+            drawStaticObjs(entities);
+            drawTrack(entities);
+	
+	        //Save modelview/projection matrice into texture7, also add a biais
+	        setTextureMatrix();
+	
+	
+	        // Now rendering from the camera POV, using the FBO to generate shadows
+	        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT,0);
+	
+	        glViewport(0,0,RENDER_WIDTH,RENDER_HEIGHT);
+	
+	        //Enabling color write (previously disabled for light POV z-buffer rendering)
+	        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE); 
+	
+	        // Clear previous frame values
+	        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	        //Using the shadow shader
+
+	        glUseProgramObjectARB(shadowShaderId);
+	        glUniform1iARB(shadowMapUniform,7);
+	        glActiveTextureARB(GL_TEXTURE7);
+	        glBindTexture(GL_TEXTURE_2D,depthTextureId);
+            aShadowShader->on();
+
+            drawCars(entities);
+            drawAICars(entities);
+            drawObstacles(entities);
+            drawStaticObjs(entities);
+            drawTrack(entities);
+
+
+            glPopMatrix();
+
+
+
+
+
+
+        	    //Cameras
+	    //gluLookAt(pos.x, pos.y, pos.z,  // Eye/camera position
+	    //at.x ,at.y,at.z,		// Look-at position 
+
+      //  	gluLookAt(0, 0, 0,  // Eye/camera position
+	    //0 ,0,-2.0f,		// Look-at position 
+    //	0.0,1.0,0.0); 		// "Up" vector
+	
+	    //set view
+	    //setUpPerpView();
+
+
+
+
+            glDisable(GL_CULL_FACE);
+
+
+            */
+                  //Test comment
+
+
+
+	        glColor3f(0.75f, 0.75f, 0.75f);          
+
+             char shaded = 'f';
+
+             if (aShader != NULL)
+             {
+                glEnable(GL_TEXTURE_2D);
+                aShader->on();
+                shaded = 't';
+             }
+
+                    // glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+                     //drawGroundPlane(gxo, gyo);
+                    // glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
+                     //drawModel(modelManager.getModel(2),0,0,0,1);           //the track
+
+                     //glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+                     //for(int i=0;i<modelManager.numOfModels;i++)
+                     //drawModel(modelManager.getModel(i),0,10,0,1);
+
+
+    //                glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
+    //                NxMat34* aPose = &(entities->cars[0]->getActor()->getGlobalPose());
+                    //drawModelPos(modelManager.getModel(1), aPose );
+
+                    //Shadow
+                     if (aShader != NULL)
+                     {
+                        aShader->off();
+                     }
+                    glPushMatrix();
+
+		            //drawModelShadow(modelManager.getModel(1), aPose );
+
+		            glPopMatrix();
+                    if (aShader != NULL)
+                     {
+                        aShader->on();
+                     }
+
+
+                     //Map
+                     if (aShader != NULL)
+                     {
+                        aShader->off();
+                     }
+                    glPushMatrix();
+                 	    glDisable(GL_TEXTURE_2D);
+	                    //const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
+                        const static float mapMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
+                        const NxVec3 v(1,0,0);  //Rotate the map
+                        const NxReal ang = 90;
+
+                        NxQuat q;
+                        q.fromAngleAxis(ang,v);
+                        NxMat33 o;
+                        o.fromQuat(q);
+                        //const static float rotMat[]={ o.getRow(0).x,o.getRow(0).y,o.getRow(0).z,0,
+                        //                                o.getRow(1).x,o.getRow(1).y,o.getRow(1).z,0,
+                        //                                o.getRow(2).x,o.getRow(2).y,o.getRow(2).z,0,
+                         //                               o.getRow(3).x,o.getRow(3).y,o.getRow(3).z,1 };
+
+                                        const static float rotMat[]={ 1,0,0,0,
+                                                        0,std::cos(ang),-std::sin(ang),0,
+                                                        0,std::sin(ang),std::cos(ang),0,
+                                                        0,0,0,1 };
+
+	                    glMultMatrixf(mapMat);
+                        //glMultMatrixf(rotMat);
+	                
+                           glColor3f(1.0f,1.0f,1.0f);
+                           //drawCars(entities);
+                           //drawAICars(entities);
+                           //drawTrack(entities);
+
+                        glEnable(GL_TEXTURE_2D);
+		            glPopMatrix();
+                    if (aShader != NULL)
+                     {
+                        aShader->on();
+                     }
+
+
+                    drawTrack(entities);
+
+                //float blur = (entities->cars[0]->getActor()->getLinearVelocity().magnitude() / 150.0f); //blur = (blur * 0.7) + (0.3 * newblur)
+
+                //glAccum(GL_MULT, blur);
+                //glAccum(GL_ACCUM, 1 -blur );
+                //glAccum(GL_RETURN, 1.0);
+
+                drawCars(entities);
+
+                //drawWheels(entities->cars[0], 0, 5);
+                drawAICars(entities);
+                drawObstacles(entities);
+                drawStaticObjs(entities);
+
+            
+
+                //drawTrack(entities);
 
                         
 
 
 
-            if (debugCamera)
-            {
-                NxVec3 camLookAt = entities->cars[0]->aCam->getLookAt();
-                glPushMatrix();
-                glTranslatef(camLookAt.x, camLookAt.y, camLookAt.z);
-                drawBox_Generic(2.0f);
-                //drawModel(modelManager.getModel(0), camLookAt.x, camLookAt.y, camLookAt.z, 0.5f);
-                glPopMatrix();
-            }
+                if (debugCamera)
+                {
+                    NxVec3 camLookAt = entities->cars[carIndex]->aCam->getLookAt();
+                    glPushMatrix();
+                    glTranslatef(camLookAt.x, camLookAt.y, camLookAt.z);
+                    drawBox_Generic(2.0f);
+                    //drawModel(modelManager.getModel(0), camLookAt.x, camLookAt.y, camLookAt.z, 0.5f);
+                    glPopMatrix();
+                }
 
 
-            {
+                {
                
-            }
-            /**
-           // glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
-           // for(int i=0;i<modelManager.numOfModels;i++)
-           //     drawModel(modelManager.getModel(i),0,10,0,1);
+                }
+                /**
+               // glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+               // for(int i=0;i<modelManager.numOfModels;i++)
+               //     drawModel(modelManager.getModel(i),0,10,0,1);
 
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
-            drawModel(modelManager.getModel(1),0,10,0,1);
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
+                drawModel(modelManager.getModel(1),0,10,0,1);
 
-            */
-		    // Render all actors
-	        //int nbActors = scene->getNbActors();
-	       // NxActor** actors = scene->getActors();
-	        //while(nbActors--)
-	       // {
-		   //     NxActor* actor = *actors++;
-			    //drawActor(actor);
-           // }
-            //*/
-    }
-
-
-
-     if (aShader != NULL)
-        aShader->off();
+                */
+		        // Render all actors
+	            //int nbActors = scene->getNbActors();
+	           // NxActor** actors = scene->getActors();
+	            //while(nbActors--)
+	           // {
+		       //     NxActor* actor = *actors++;
+			        //drawActor(actor);
+               // }
+                //*/
+        }
 
 
-     if (debugPhysX) //If debugPhyX then
-          RenderDebugPhysic(scene->getDebugRenderable());
+
+         if (aShader != NULL)
+            aShader->off();
 
 
-     glDisable(GL_TEXTURE_2D);
-    if (showConsole)
-        displayConsole();
+         if (debugPhysX) //If debugPhyX then
+              RenderDebugPhysic(scene->getDebugRenderable());
 
-    prints(800,-600, FloatToString(entities->cars[0]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
-    prints(800,-620, FloatToString(entities->cars[0]->getDriveWheels()[0]->getAxleSpeed()) + " :W0_d_Rot");
-    prints(800,-640, FloatToString(entities->cars[0]->getDriveWheels()[1]->getAxleSpeed()) + " :W1_d_Rot");
-    prints(800,-660, FloatToString(entities->cars[0]->getPassiveWheels()[0]->getAxleSpeed()) + " :W2_p_Rot");
-    prints(800,-680, FloatToString(entities->cars[0]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
 
-	glEnable(GL_LIGHTING);
-	glPopMatrix();
+         glDisable(GL_TEXTURE_2D);
+        if (showConsole)
+            displayConsole();
+
+        prints(800,-600, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
+        prints(800,-620, FloatToString(entities->cars[carIndex]->getDriveWheels()[0]->getAxleSpeed()) + " :W0_d_Rot");
+        prints(800,-640, FloatToString(entities->cars[carIndex]->getDriveWheels()[1]->getAxleSpeed()) + " :W1_d_Rot");
+        prints(800,-660, FloatToString(entities->cars[carIndex]->getPassiveWheels()[0]->getAxleSpeed()) + " :W2_p_Rot");
+        prints(800,-680, FloatToString(entities->cars[carIndex]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
+
+	    glEnable(GL_LIGHTING);
+	    glPopMatrix();
+    
 }
 
 //Include entity POV, which car's camera to render from
@@ -1302,6 +1388,9 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 
 
 
+
+
+
 void RenderingEngine::drawWheels(Entity* entity, int model, int texture)
 {
 if (entity->getDriveWheels().size() > 0)
@@ -1326,12 +1415,12 @@ if (entity->getPassiveWheels().size() > 0)
 void RenderingEngine::drawCars(Entities* entities)
 {
 if (entities->cars.size() > 0)
-            for (int i=0;i <= entities->cars.size()-1;i++)      //Should be =<
+            for (int i=0;i < entities->cars.size();i++)
             {
 
                 if (entities->cars[i]->rc.size() > 0)
                 {
-                 for (int r=0;r <= entities->cars[i]->rc.size()-1;r++)
+                 for (int r=0;r < entities->cars[i]->rc.size();r++)
                     {
                         glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->cars[i]->rc[r]->textureID]);
                         NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
@@ -1350,7 +1439,7 @@ if (entities->cars.size() > 0)
 void RenderingEngine::drawAICars(Entities* entities)
 {
 if (entities->AIcars.size() > 0)
-            for (int i=0;i <= entities->AIcars.size()-1;i++)
+            for (int i=0;i < entities->AIcars.size();i++)
             {
             if (entities->AIcars[i]->rc.size() > 0)
                 {
