@@ -1101,14 +1101,28 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
                  }
 
 
+                drawTrack(entities);
 
+            //float blur = (entities->cars[0]->getActor()->getLinearVelocity().magnitude() / 150.0f); //blur = (blur * 0.7) + (0.3 * newblur)
+
+            //glAccum(GL_MULT, blur);
+            //glAccum(GL_ACCUM, 1 -blur );
+            //glAccum(GL_RETURN, 1.0);
 
             drawCars(entities);
+
             //drawWheels(entities->cars[0], 0, 5);
             drawAICars(entities);
             drawObstacles(entities);
             drawStaticObjs(entities);
-            drawTrack(entities);
+
+            
+
+            //drawTrack(entities);
+
+                        
+
+
 
             if (debugCamera)
             {

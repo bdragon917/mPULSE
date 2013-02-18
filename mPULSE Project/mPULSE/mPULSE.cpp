@@ -60,12 +60,22 @@ bool init()
             numPlayers++;
     }
 
+
+    SDL_Init( SDL_INIT_EVERYTHING );
+
+	//Initalization for motion blur
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 8);
+
 	//Create Main Window	
 	if ((screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)) == NULL)
     {
 		printf("Failed to initize graphics\n");
 		return false;	
 	}
+
     SDL_WM_SetCaption("mPULSE","mPULSE");
 
     return true;
