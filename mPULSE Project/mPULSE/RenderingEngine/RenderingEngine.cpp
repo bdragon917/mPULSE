@@ -11,6 +11,9 @@ RenderingEngine::RenderingEngine()
 	createLight();
 	initializeGL();
 
+    FadeCtrl = 1.0f;
+    fadeMode = 1;
+
     debugPhysX = false;
     showScene = true;
     debugCamera = false;
@@ -556,7 +559,7 @@ void RenderingEngine::initializeGL()
 {
 	glShadeModel (GL_SMOOTH);
 	glEnable (GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
 	glEnable (GL_LIGHTING);
 	glEnable (GL_LIGHT0);
 	glEnable (GL_NORMALIZE);
@@ -726,6 +729,34 @@ void RenderingEngine::createLight()
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	//glLightfv(GL_LIGHT0, GL_AMBIENT, light_position);
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_position);
+	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_position);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+		
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);
+		
+		
+	glEnable (GL_NORMALIZE);
+	glEnable (GL_COLOR_MATERIAL);
+	glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+}
+
+void RenderingEngine::createLight_MainMenu()
+{
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0};
+	GLfloat mat_shininess[] = {50.0};
+	GLfloat light_position[] = {0.0,0.0,-1.0,0.0};
+	GLfloat light_ambient[] = {1.0,1.0,1.0,0.1};
+	//GLfloat light_diffuse[] = {0.0,0.0,0.0,1.0};
+	//GLfloat light_specular[] = {0.0,0.0,0.0,1.0};
+	glClearColor(0.0,0.0,0.0,0.0);
+	glShadeModel (GL_SMOOTH);
+		
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_position);
 	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_position);
 	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_position);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
@@ -1138,7 +1169,7 @@ void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
 }
 
 //Include entity POV, which car's camera to render from
-void RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
+int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -1146,18 +1177,113 @@ void RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 	glLoadIdentity ();
 	
 
-    gluLookAt(0, 0, 0,  // Eye/camera position
-	0 ,0,-2.0f,		// Look-at position 
+    gluLookAt(0, 0, -2,  // Eye/camera position
+	0 ,0, 0,		// Look-at position 
 	0.0,1.0,0.0); 		// "Up" vector
 	
 	//set view
 	setUpPerpView();
-    glEnable(GL_LIGHTING);
+    //glEnable(GL_LIGHTING);
+    //glDisable(GL_NORMALIZE);
+    //glDisable(GL_TEXTURE);
 	
+    if (aShader != NULL)
+         {
+            glEnable(GL_TEXTURE_2D);
+            aShader->on();
+         }
+
+
+    //Draw Background
+    glColor4f(1.0f,1.0f,1.0f, 1.0f);
+    float half_width = 1.0f * 1.54f;     //1.5f is compensation for the perpective mode
+    float half_height = ((float)SCREEN_HEIGHT / (float)SCREEN_WIDTH) * 1.54f;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
+    drawSquare(0, 0, 0.01f, half_width, half_height);
+    
+    float pad = 0.03f;
+    float yLoc = -0.75f;
+
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+    //Draw Single
+    if (curMenuButton == 0)
+    {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
+    glColor4f(1.0f,1.0f,1.0f, 0.5f);
+    drawSquare(1.2f, yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+
+    //Draw Single
+    if (curMenuButton == 1)
+    {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
+    glColor4f(1.0f,1.0f,1.0f, 0.5f);
+    drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 1.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+
+    //Draw Single
+    if (curMenuButton == 2)
+    {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
+    glColor4f(1.0f,1.0f,1.0f, 0.5f);
+    drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 2.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+
+    //Draw Single
+    if (curMenuButton == 3)
+    {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
+    glColor4f(1.0f,1.0f,1.0f, 0.5f);
+    drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 3.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+
+    //Draw Single
+    if (curMenuButton == 4)
+    {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
+    glColor4f(1.0f,1.0f,1.0f, 0.5f);
+    drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 4.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+
+
+
+
+
+
+
+
+    if (aShader != NULL)
+    {
+        aShader->off();
+    }
+
+
+    //Fader
+    //float FadeCtrl = 0.0f;
+    glColor4f(0.0f,0.0f,0.0f, updateFade());
+    	glBegin(GL_QUADS);
+            glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
+		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
+		glEnd();
+
+        if (FadeCtrl >= 1.0f){return 1;}
+
+
+    if (aShader != NULL)
+    {
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
     prints(800,-680, "MAIN MENU!");
 
-	glEnable(GL_LIGHTING);
+
+
+
+
+
+    //glEnable(GL_NORMALIZE);
+	//glEnable(GL_LIGHTING);
 	glPopMatrix();
+
+    return 0;
 }
 
 
@@ -1505,6 +1631,18 @@ void RenderingEngine::drawBox(NxBoxShape* box)
 	glPopMatrix();
 }
 
+void RenderingEngine::drawSquare(float x, float y, float z, float half_width, float half_height)
+{
+		glBegin(GL_QUADS);
+		//Bottom
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glTexCoord2d(1.0,1.0); glVertex3f(   (x-half_width),    (y+half_height),    (z)   );
+		glTexCoord2d(0.0,1.0); glVertex3f(   (x+half_width),    (y+half_height),    (z)   );
+		glTexCoord2d(0.0,0.0); glVertex3f(   (x+half_width),    (y-half_height),    (z)   );
+		glTexCoord2d(1.0,0.0); glVertex3f(   (x-half_width),    (y-half_height),    (z)   );
+		glEnd();
+}
+
 int RenderingEngine::drawIntro()
 {
 	SDL_Surface* inImg = NULL;		//Used to load the image into the memory
@@ -1653,3 +1791,46 @@ int RenderingEngine::drawIntro()
 //	return 1;
 //
 //}
+
+void RenderingEngine::startFadeIn()
+{
+//    if (fadeMode == 0)
+    {
+        FadeCtrl = 1.0f;
+        fadeMode = 1;
+    }
+}
+
+void RenderingEngine::startFadeOut()
+{
+//    if (fadeMode == 0)
+    {
+        FadeCtrl = 0.0f;
+        fadeMode = 2;
+    }
+}
+
+float RenderingEngine::updateFade()
+{
+    switch (fadeMode)
+    {
+    case 0: //Stopped
+        break;
+
+    case 1: //Fade In
+        if (FadeCtrl > 0)
+        {FadeCtrl = FadeCtrl - 0.01f;}
+        else
+        {FadeCtrl = 0.0f;fadeMode = 0;}
+        break;
+
+    case 2: //Fade Out
+        if (FadeCtrl < 1.0f)
+        {FadeCtrl = FadeCtrl + 0.01f;}
+        else
+        {FadeCtrl = 1.0f;fadeMode = 0;}
+        break;
+    }
+
+    return FadeCtrl;
+}

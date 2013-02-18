@@ -10,7 +10,8 @@ PlayState::PlayState()
     physicsEngine = PhysicsEngine::getInstance();
     physicsEngine->setupPlayScene(&entities.cars);
     renderingEngine = RenderingEngine::getInstance();
-	renderingEngine->initializeGL();
+	//renderingEngine->initializeGL();
+    renderingEngine->createLight();
 
 
     //physicsEngine->createGroundPlane();

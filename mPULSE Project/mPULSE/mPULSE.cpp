@@ -18,12 +18,14 @@ int numPlayers = 0;
 XboxController* players[MAX_PLAYERS];
  
 int main(int argc, char *argv[])
-{
-    Game game;
-    SDL_Event KeyboardMouseState;    
+{   
     bool gameRunning = true;
 
     gameRunning = init();
+
+    Game game;
+    SDL_Event KeyboardMouseState;
+
     while(gameRunning)
     {
         //Handle window events

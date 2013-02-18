@@ -53,6 +53,7 @@ void prints(float inX, float inY, string s);
 //void drawCube(float x, float y, float z, float size);
 void initializeGL();
 void createLight();
+void createLight_MainMenu();
 void setUpPerpView();
 void setUpOrthoView();
 //Draw Functions
@@ -61,7 +62,7 @@ void moveStuff(float &testF);
 
 
 void drawScene(NxScene* scene, Entities* entities);
-void drawMainMenuScreen(int curMenuButton, bool clicked);
+int drawMainMenuScreen(int curMenuButton, bool clicked);
 
 
 
@@ -70,6 +71,7 @@ void drawActor_Safe(NxActor* actor);
 void drawShape(NxShape* shape);
 void drawBox(NxBoxShape* box);
 void drawBox_Generic(float size);
+void drawSquare(float x, float y, float z, float half_width, float half_height);
 void drawModel(ObjModel* model,int x,int y, int z, int scale);
 void drawModelPos(ObjModel* model, NxMat34* aMatrix);
 void drawModelShadow(ObjModel* model, NxMat34* aPose);
@@ -91,6 +93,11 @@ void drawDisplayList(int index);
 
     //Texture Stuff
     GLuint* textureid_P1;
+
+    //Fade stuff
+    void startFadeIn();
+    void startFadeOut();
+
 
     ModelManager getModelManger();
 
@@ -119,7 +126,15 @@ private:
     void bindBMPtoTexture(char* filename, GLuint textures);
     void initializeTexture();
 
-//    int loadShaders();
+    
+
+    //Used for Fade In and Out
+    float FadeCtrl;
+    int fadeMode;
+    float updateFade(); 
+    
+        
+        //    int loadShaders();
         //Used to generate a list of shaders
  //       typedef enum {
  //       CAR
