@@ -117,8 +117,8 @@ void RenderingEngine::initializeTexture()
 	int width;
 	int height;
 
-    textureid_P1 = new GLuint[8];
-    glGenTextures(8, textureid_P1);
+    textureid_P1 = new GLuint[9];
+    glGenTextures(9, textureid_P1);
 
     bindBMPtoTexture("./img/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./img/loadScreen.bmp", textureid_P1[1]);
@@ -128,6 +128,7 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./img/Box2.bmp", textureid_P1[5]);
     bindBMPtoTexture("./img/Box3.bmp", textureid_P1[6]);
     bindBMPtoTexture("./img/white.bmp", textureid_P1[7]);
+    bindBMPtoTexture("./img/MainMenuBack.bmp", textureid_P1[8]);
 	//"/img/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -881,6 +882,39 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Entities* entities, in
 
 
             
+                const GLdouble bias[] = {0.5, 0.0, 0.0, 0.0, 
+				    0.0, 0.5, 0.0, 0.0,
+				    0.0, 0.0, 0.5, 0.0,
+				    0.5, 0.5, 0.5, 1.0};
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_COMPARE_R_TO_TEXTURE_ARB);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC_ARB, GL_LEQUAL);
+        glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE_ARB, GL_INTENSITY);
+
+       // if ( bFixedFunction )
+        {
+	        const GLdouble x[] = {1.0, 0.0, 0.0, 0.0};
+	        const GLdouble y[] = {0.0, 1.0, 0.0, 0.0};
+	        const GLdouble z[] = {0.0, 0.0, 1.0, 0.0};
+	        const GLdouble w[] = {0.0, 0.0, 0.0, 1.0};
+
+
+	        glEnable(GL_TEXTURE_GEN_S);
+	        glEnable(GL_TEXTURE_GEN_T);
+	        glEnable(GL_TEXTURE_GEN_R);
+	        glEnable(GL_TEXTURE_GEN_Q);
+
+	        glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	        glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	        glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+	        glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+
+	        glTexGendv(GL_S, GL_EYE_PLANE, x );
+	        glTexGendv(GL_T, GL_EYE_PLANE, y );
+	        glTexGendv(GL_R, GL_EYE_PLANE, z );
+	        glTexGendv(GL_Q, GL_EYE_PLANE, w );
+        }
+
 
 	        
 
@@ -1298,11 +1332,11 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
     glColor4f(1.0f,1.0f,1.0f, 1.0f);
     float half_width = 1.0f * 1.54f;     //1.5f is compensation for the perpective mode
     float half_height = ((float)SCREEN_HEIGHT / (float)SCREEN_WIDTH) * 1.54f;
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[8]);
     drawSquare(0, 0, 0.01f, half_width, half_height);
     
     float pad = 0.03f;
-    float yLoc = -0.75f;
+    float yLoc = -0.76f;
 
     glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
     //Draw Single
