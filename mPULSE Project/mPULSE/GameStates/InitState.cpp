@@ -11,7 +11,7 @@ InitState::InitState()
 
 void InitState::update(float dt)
 {    
-    if((clock.getCurrentTime() - time) > TIMEOUT) //Just testing a timed state transition
+    //if((clock.getCurrentTime() - time) > TIMEOUT) //Just testing a timed state transition
         changeState(PLAY);
         //changeState(MAIN_MENU);
 

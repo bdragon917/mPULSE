@@ -117,8 +117,8 @@ void RenderingEngine::initializeTexture()
 	int width;
 	int height;
 
-    textureid_P1 = new GLuint[9];
-    glGenTextures(9, textureid_P1);
+    textureid_P1 = new GLuint[10];
+    glGenTextures(10, textureid_P1);
 
     bindBMPtoTexture("./img/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./img/loadScreen.bmp", textureid_P1[1]);
@@ -129,6 +129,7 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./img/Box3.bmp", textureid_P1[6]);
     bindBMPtoTexture("./img/white.bmp", textureid_P1[7]);
     bindBMPtoTexture("./img/MainMenuBack.bmp", textureid_P1[8]);
+    bindBMPtoTexture("./img/MM_Single.bmp", textureid_P1[9]);
 	//"/img/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -1302,7 +1303,6 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Entities* entities, in
     
 }
 
-//Include entity POV, which car's camera to render from
 int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1338,7 +1338,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
     float pad = 0.03f;
     float yLoc = -0.76f;
 
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[9]);      //image for single
     //Draw Single
     if (curMenuButton == 0)
     {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
