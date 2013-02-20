@@ -379,6 +379,9 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
+
+    //logReplay(player, state, 0);      Used to log replay!
+
     //state->vibrate(((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB,((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB);
 
     if(player < entities.cars.size())
@@ -423,6 +426,43 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 	    }
     }
 }
+
+
+void PlayState::logReplay(int player, XboxController* state, float dt)
+{
+        int rTriggMag = state->rTrigger;
+        int lTriggMag = state->lTrigger;    
+        float leftStickMag = state->leftStick.magnitude;
+        float LeftStickX = state->leftStick.x;
+        float LeftStickY = state->leftStick.y;
+
+
+
+        std::ofstream out;
+        out.open( "replay.txt", std::ios_base::app );
+        if( !out )
+        {
+           printf( "Couldn't open file.\n");
+        }
+        else
+        {
+           out << "dt " + renderingEngine->FloatToString(dt) + char(10) + char(13);
+           out << "----------------------------------------------------------------" + char(10) + char(13);
+           out << "PLAYER: " + renderingEngine->FloatToString(player) + char(10) + char(13);
+           out << "rTigMag " + renderingEngine->FloatToString(rTriggMag) + char(10) + char(13);
+           out << "lTigMag " + renderingEngine->FloatToString(lTriggMag) + char(10) + char(13);
+           out << "lStickMag " + renderingEngine->FloatToString(leftStickMag) + char(10) + char(13);
+           out << "lStickX " + renderingEngine->FloatToString(LeftStickX) + char(10) + char(13);
+           out << "lStickY " + renderingEngine->FloatToString(LeftStickY) + char(10) + char(13);
+           out << char(10);
+           out << char(13);
+           out << char(10);
+           out << char(13);
+        }
+        out.close();
+}
+
+
 
 PlayState* PlayState::getInstance()
 {    
