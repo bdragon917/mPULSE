@@ -15,12 +15,12 @@ SoundEngine* SoundEngine::getInstance()
 
 void SoundEngine::toggleMusic()
 {
-	song.playPause();
+	song->playPause();
 }
 
 void SoundEngine::stopMusic()
 {
-	song.stopSound();
+	song->stopSound();
 }
 
 void SoundEngine::initializeSound()
@@ -29,4 +29,6 @@ void SoundEngine::initializeSound()
 	{ 
 		 printf("Error: No sound\n");
 	}
+
+    song = new Sound();
 }

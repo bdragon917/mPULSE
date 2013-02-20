@@ -16,5 +16,5 @@ public:
 private:
 	SoundEngine();
 
-	Sound song;
+	Sound* song;
 };

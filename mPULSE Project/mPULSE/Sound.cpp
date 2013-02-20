@@ -5,6 +5,9 @@
 Sound::Sound(void)
 {
 	music = Mix_LoadMUS( "01. E.T.P. - 10 years ago_[plixid.com].mp3" );
+    if(!music) {
+    printf("Mix_LoadMUS: %s\n", Mix_GetError());
+    }
 }
 
 
