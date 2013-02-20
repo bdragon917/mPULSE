@@ -30,6 +30,8 @@ private:
 	SoundEngine* soundEngine;
     RenderingEngine* renderingEngine;
 
+    void PlayState::logReplay(int player, XboxController* state, float dt);
+
     std::map<std::string, int(*)(int)> commands;
 
     //Console Command Stuff!!!!// ADD commands here!
