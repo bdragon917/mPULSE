@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "../Util/Clock.h"
 #include "../RenderingEngine/RenderingEngine.h"
+#include "../SoundEngine.h"
 
 class InitState : public GameState
 {
@@ -17,6 +18,7 @@ public:
 private:
     InitState();
     RenderingEngine* renderingEngine;
+	SoundEngine* soundEngine;
     Clock clock;
     unsigned int time;
     static const int TIMEOUT = 3000;

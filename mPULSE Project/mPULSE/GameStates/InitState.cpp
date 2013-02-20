@@ -4,7 +4,9 @@ InitState::InitState()
 {
     stateType = INIT;
     renderingEngine = RenderingEngine::getInstance();
+	soundEngine = SoundEngine::getInstance();
     renderingEngine->initializeGL();
+	soundEngine->initializeSound();
     //renderer->drawIntro2();    
     time = clock.getCurrentTime();
 }

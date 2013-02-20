@@ -55,7 +55,9 @@ PlayState::PlayState()
     physicsEngine->createBoxes(-675.201f, 0.403f, -325.229f, 5, 2.5f, &entities.Obstacles);
     physicsEngine->createBoxes(-319.045f, 157.17f, 698.045f, 5, 2.5f, &entities.Obstacles);
 
-
+	soundEngine = SoundEngine::getInstance();
+	soundEngine->initializeSound();
+	soundEngine->toggleMusic();
 
     //2
     Entity* aEntity = new Entity();

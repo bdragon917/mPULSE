@@ -58,7 +58,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glew32.lib;PhysXLoader.lib;NxCharacter.lib;NxCooking.lib;SDL.lib;SDLmain.lib;opengl32.lib;glu32.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;PhysXLoader.lib;NxCharacter.lib;NxCooking.lib;SDL.lib;SDLmain.lib;SDL_mixer.lib;opengl32.lib;glu32.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\CPSC585\glew-1.9.0\lib;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\lib\win32\glut;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Bin\win32;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -98,6 +98,8 @@
     <ClCompile Include="PhysicsEngine\Stream.cpp" />
     <ClCompile Include="RenderingEngine\RenderingEngine.cpp" />
     <ClCompile Include="RenderingEngine\Shader.cpp" />
+    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="Util\Clock.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -120,6 +122,8 @@
     <ClInclude Include="RenderingEngine\BMP.h" />
     <ClInclude Include="RenderingEngine\RenderingEngine.h" />
     <ClInclude Include="RenderingEngine\Shader.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="Util\Clock.h" />
   </ItemGroup>
   <ItemGroup>

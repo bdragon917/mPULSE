@@ -7,6 +7,7 @@
 #include "../PhysicsEngine/PhysicsEngine.h"
 #include "../Entities/Entity.h"
 #include "../Entities/RenderableComponent.h"
+#include "../SoundEngine.h"
 #include <map>
 
 class PlayState : public GameState
@@ -26,6 +27,7 @@ private:
 
     RenderingEngine::Entities entities;
     PhysicsEngine* physicsEngine;
+	SoundEngine* soundEngine;
     RenderingEngine* renderingEngine;
 
     std::map<std::string, int(*)(int)> commands;
