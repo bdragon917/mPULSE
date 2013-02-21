@@ -4,7 +4,7 @@
 
 Sound::Sound(void)
 {
-	music = Mix_LoadMUS( "01. E.T.P. - 10 years ago_[plixid.com].mp3" );
+	music = Mix_LoadMUS( "10YearsAgoAuda.mp3" );
     if(!music) {
     printf("Mix_LoadMUS: %s\n", Mix_GetError());
     }
@@ -27,10 +27,13 @@ bool Sound::check()
 
 void Sound::playPause()
 {
+
+
 	if( check() )
     {
 		printf("music ON\n");
-	   if (Mix_PlayMusic(music, -1) ==-1)
+	   //if (Mix_PlayMusic(music, -1) ==-1)
+       if (Mix_FadeInMusic(music, -1, 10000) ==-1)
 	   {
 		   printf("problem.\n");
 	   }
@@ -50,6 +53,7 @@ void Sound::playPause()
 	{
 		printf("music OFF\n");
 	}
+
 }
 
 void Sound::stopSound()
