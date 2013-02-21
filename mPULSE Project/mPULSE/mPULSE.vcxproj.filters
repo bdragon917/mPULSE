@@ -61,6 +61,12 @@
     <Filter Include="Header Files\Sound">
       <UniqueIdentifier>{02ca4494-1f9a-42e0-9ceb-afb5ddf3bee8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\AI">
+      <UniqueIdentifier>{0cd90f1b-c831-4e63-b411-67ff022d9c1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AI">
+      <UniqueIdentifier>{4d218c81-2dd8-4112-976c-da4170092811}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mPULSE.cpp">
@@ -129,6 +135,15 @@
     <ClCompile Include="Sound.cpp">
       <Filter>Source Files\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="AI\AI.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Waypoint.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AI\Waypoints.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -196,6 +211,15 @@
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>Header Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\AI.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Waypoint.h">
+      <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\Waypoints.h">
+      <Filter>Header Files\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

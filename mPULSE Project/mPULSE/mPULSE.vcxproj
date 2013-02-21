@@ -79,6 +79,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AI\AI.cpp" />
+    <ClCompile Include="AI\Waypoint.cpp" />
+    <ClCompile Include="AI\Waypoints.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="Entities\EntityComponent.cpp" />
     <ClCompile Include="Entities\RenderableComponent.cpp" />
@@ -103,6 +106,9 @@
     <ClCompile Include="Util\Clock.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AI\AI.h" />
+    <ClInclude Include="AI\Waypoint.h" />
+    <ClInclude Include="AI\Waypoints.h" />
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Entities\EntityComponent.h" />
     <ClInclude Include="Entities\RenderableComponent.h" />

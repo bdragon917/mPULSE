@@ -31,6 +31,7 @@ private:
     RenderingEngine* renderingEngine;
 
     void PlayState::logReplay(int player, XboxController* state, float dt);
+    void PlayState::logWayPoint(int player);
 
     std::map<std::string, int(*)(int)> commands;
 

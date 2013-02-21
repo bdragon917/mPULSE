@@ -79,6 +79,49 @@ void PlayState::update(float dt)
     physicsEngine->step(dt/1000);
     entities.cars[0]->aCam->updateCamera(1.0f);
     entities.cars[1]->aCam->updateCamera(1.0f);
+
+    for (int c=0;c < entities.cars.size();c++)
+    {
+        Entity* car = entities.cars[c];
+        if (car->getActor()->getGlobalPose().t.y < -2.0f)
+        {
+            car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
+
+                NxVec3 v(0,1,0);
+                NxReal ang = 90;
+
+                NxQuat q;
+                q.fromAngleAxis(ang, v);
+                NxMat33 orient;
+                orient.fromQuat(q);
+
+                car->getActor()->setGlobalOrientation(orient);
+                car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+                car->aCam->resetCamera();
+        }
+    }
+
+    for (int c=0;c < entities.AIcars.size();c++)
+    {
+        Entity* car = entities.AIcars[c];
+        if (car->getActor()->getGlobalPose().t.y < -2.0f)
+        {
+            car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
+
+                NxVec3 v(0,1,0);
+                NxReal ang = 90;
+
+                NxQuat q;
+                q.fromAngleAxis(ang, v);
+                NxMat33 orient;
+                orient.fromQuat(q);
+
+                car->getActor()->setGlobalOrientation(orient);
+                car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+                car->aCam->resetCamera();
+        }
+    }
+
     
 //    entities.cars[0]->aCam->updateCamera(dt/16);
     //entities.cars[0]->aCam->updateCamera(1.0f);
@@ -384,6 +427,9 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
     //logReplay(player, state, 0);      Used to log replay!
 
+    if (state->back)
+    {logWayPoint(0);}
+
     //state->vibrate(((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB,((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB);
 
     if(player < entities.cars.size())
@@ -458,6 +504,42 @@ void PlayState::logReplay(int player, XboxController* state, float dt)
            out << "lStickY " + renderingEngine->FloatToString(LeftStickY) + char(10) + char(13);
            out << char(10);
            out << char(13);
+           out << char(10);
+           out << char(13);
+        }
+        out.close();
+}
+
+void PlayState::logWayPoint(int player)
+{
+
+
+    Entity* car = entities.cars[player];
+    
+    NxVec3 loc = car->getActor()->getGlobalPose().t;
+    NxMat33 ori = car->getActor()->getGlobalOrientation();
+
+    NxVec3 spd = car->getActor()->getLinearVelocity();
+
+    float brk0 = car->getDriveWheels().at(0)->getBrakeTorque();
+    float brk1 = car->getDriveWheels().at(1)->getBrakeTorque();
+
+        std::ofstream out;
+        out.open( "replay.txt", std::ios_base::app );
+        if( !out )
+        {
+           printf( "Couldn't open file.\n");
+        }
+        else
+        {
+           out << "WAYPOINT" + char(10) + char(13);
+           out << "loc: " + renderingEngine->FloatToString(loc.x) + " " + renderingEngine->FloatToString(loc.y) + " " + renderingEngine->FloatToString(loc.z) + char(10) + char(13);
+           out << "ori0: " + renderingEngine->FloatToString(ori.getRow(0).x) + " " + renderingEngine->FloatToString(ori.getRow(0).y) + " " + renderingEngine->FloatToString(ori.getRow(0).z) + char(10) + char(13);
+           out << "ori1: " + renderingEngine->FloatToString(ori.getRow(1).x) + " " + renderingEngine->FloatToString(ori.getRow(1).y) + " " + renderingEngine->FloatToString(ori.getRow(1).z) + char(10) + char(13);
+           out << "ori2: " + renderingEngine->FloatToString(ori.getRow(2).x) + " " + renderingEngine->FloatToString(ori.getRow(2).y) + " " + renderingEngine->FloatToString(ori.getRow(2).z) + char(10) + char(13);
+           out << "spd: " + renderingEngine->FloatToString(spd.x) + " " + renderingEngine->FloatToString(spd.y) + " " + renderingEngine->FloatToString(spd.z) + char(10) + char(13);
+           out << "brk0: " + renderingEngine->FloatToString(brk0) + char(10) + char(13);
+           out << "brk1: " + renderingEngine->FloatToString(brk1) + char(10) + char(13);
            out << char(10);
            out << char(13);
         }
