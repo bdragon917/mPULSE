@@ -427,7 +427,8 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
     //logReplay(player, state, 0);      Used to log replay!
 
-    if (state->back)
+    //if (state->back)
+    if (state->rb)
     {logWayPoint(0);}
 
     //state->vibrate(((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB,((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB);
@@ -520,6 +521,7 @@ void PlayState::logWayPoint(int player)
     NxMat33 ori = car->getActor()->getGlobalOrientation();
 
     NxVec3 spd = car->getActor()->getLinearVelocity();
+    float spdF = car->getActor()->getLinearVelocity().magnitude();
 
     float brk0 = car->getDriveWheels().at(0)->getBrakeTorque();
     float brk1 = car->getDriveWheels().at(1)->getBrakeTorque();
@@ -537,7 +539,8 @@ void PlayState::logWayPoint(int player)
            out << "ori0: " + renderingEngine->FloatToString(ori.getRow(0).x) + " " + renderingEngine->FloatToString(ori.getRow(0).y) + " " + renderingEngine->FloatToString(ori.getRow(0).z) + char(10) + char(13);
            out << "ori1: " + renderingEngine->FloatToString(ori.getRow(1).x) + " " + renderingEngine->FloatToString(ori.getRow(1).y) + " " + renderingEngine->FloatToString(ori.getRow(1).z) + char(10) + char(13);
            out << "ori2: " + renderingEngine->FloatToString(ori.getRow(2).x) + " " + renderingEngine->FloatToString(ori.getRow(2).y) + " " + renderingEngine->FloatToString(ori.getRow(2).z) + char(10) + char(13);
-           out << "spd: " + renderingEngine->FloatToString(spd.x) + " " + renderingEngine->FloatToString(spd.y) + " " + renderingEngine->FloatToString(spd.z) + char(10) + char(13);
+           //out << "spd: " + renderingEngine->FloatToString(spd.x) + " " + renderingEngine->FloatToString(spd.y) + " " + renderingEngine->FloatToString(spd.z) + char(10) + char(13);
+           out << "spd: " + renderingEngine->FloatToString(spdF) + char(10) + char(13);
            out << "brk0: " + renderingEngine->FloatToString(brk0) + char(10) + char(13);
            out << "brk1: " + renderingEngine->FloatToString(brk1) + char(10) + char(13);
            out << char(10);
