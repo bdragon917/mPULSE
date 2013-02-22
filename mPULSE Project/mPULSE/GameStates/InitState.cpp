@@ -7,6 +7,8 @@ InitState::InitState()
 	soundEngine = SoundEngine::getInstance();
     renderingEngine->initializeGL();
 	soundEngine->initializeSound();
+    gameVariables = GameVariables::getInstance();
+    gameVariables->initialize();
     //renderer->drawIntro2();    
     time = clock.getCurrentTime();
 }
@@ -14,8 +16,8 @@ InitState::InitState()
 void InitState::update(float dt)
 {    
     //if((clock.getCurrentTime() - time) > TIMEOUT) //Just testing a timed state transition
-        changeState(PLAY);
-        //changeState(MAIN_MENU);
+        //changeState(PLAY);
+        changeState(MAIN_MENU);
 
 }
 void InitState::render()

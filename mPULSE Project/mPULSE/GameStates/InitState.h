@@ -5,6 +5,7 @@
 #include "../Util/Clock.h"
 #include "../RenderingEngine/RenderingEngine.h"
 #include "../SoundEngine.h"
+#include "GameVariables.h"
 
 class InitState : public GameState
 {
@@ -19,6 +20,7 @@ private:
     InitState();
     RenderingEngine* renderingEngine;
 	SoundEngine* soundEngine;
+    GameVariables* gameVariables;
     Clock clock;
     unsigned int time;
     static const int TIMEOUT = 3000;

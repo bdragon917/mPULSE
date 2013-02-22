@@ -2,13 +2,17 @@
 
 MainMenuState::MainMenuState()
 {
-    changeState(MAIN_MENU);    
+    changeState(MAIN_MENU); 
+    gameVariables = GameVariables::getInstance();
+
     //entities.cars.push_back(new Entity);
     physicsEngine = PhysicsEngine::getInstance();
     //physicsEngine->setupPlayScene(&entities.cars);
     renderingEngine = RenderingEngine::getInstance();
 	//renderingEngine->initializeGL();
     renderingEngine->createLight_MainMenu();
+
+
 
 }
 
@@ -30,7 +34,11 @@ void MainMenuState::render()
             changeState(PLAY);
             break;
         case 1:
-            changeState(MAIN_MENU); 
+            //This should bring up a profile screen
+            if (gameVariables->getPlayerNum() < 2)
+            {gameVariables->addPlayerTwo();printf("addedP2: %i\n",gameVariables->getPlayerNum() );}
+            //else set player 2 slot to be default player 2
+            changeState(PLAY); 
             break;
         case 2:
             changeState(MAIN_MENU); 

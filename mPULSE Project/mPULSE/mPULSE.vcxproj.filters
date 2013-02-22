@@ -147,6 +147,15 @@
     <ClCompile Include="Track.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameStates\GameVariables.cpp">
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Profile.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\Particle.cpp">
+      <Filter>Source Files\RenderingEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -226,6 +235,15 @@
     </ClInclude>
     <ClInclude Include="Track.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStates\GameVariables.h">
+      <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Profile.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine\Particle.h">
+      <Filter>Header Files\RenderingEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

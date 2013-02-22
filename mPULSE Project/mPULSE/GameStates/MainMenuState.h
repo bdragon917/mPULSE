@@ -8,6 +8,7 @@
 #include "../Entities/Entity.h"
 #include "../Entities/RenderableComponent.h"
 #include <map>
+#include "GameVariables.h"
 
 class MainMenuState : public GameState
 {
@@ -23,6 +24,7 @@ private:
 
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
+    GameVariables* gameVariables;
 
     int curSelected;
 };

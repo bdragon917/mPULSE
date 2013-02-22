@@ -10,6 +10,7 @@
 #include "../SoundEngine.h"
 #include "../Track.h"
 #include <map>
+#include "GameVariables.h"
 
 class PlayState : public GameState
 {
@@ -31,6 +32,7 @@ private:
     PhysicsEngine* physicsEngine;
 	SoundEngine* soundEngine;
     RenderingEngine* renderingEngine;
+    GameVariables* gameVariables;
 
     void PlayState::logReplay(int player, XboxController* state, float dt);
     void PlayState::logWayPoint(int player);

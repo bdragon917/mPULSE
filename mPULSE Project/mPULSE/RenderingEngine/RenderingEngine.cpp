@@ -117,8 +117,8 @@ void RenderingEngine::initializeTexture()
 	int width;
 	int height;
 
-    textureid_P1 = new GLuint[10];
-    glGenTextures(10, textureid_P1);
+    textureid_P1 = new GLuint[13];
+    glGenTextures(13, textureid_P1);
 
     bindBMPtoTexture("./img/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./img/loadScreen.bmp", textureid_P1[1]);
@@ -130,6 +130,9 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./img/white.bmp", textureid_P1[7]);
     bindBMPtoTexture("./img/MainMenuBack.bmp", textureid_P1[8]);
     bindBMPtoTexture("./img/MM_Single.bmp", textureid_P1[9]);
+    bindBMPtoTexture("./img/MM_SingleSelected.bmp", textureid_P1[10]);
+    bindBMPtoTexture("./img/MM_Verus.bmp", textureid_P1[11]);
+    bindBMPtoTexture("./img/MM_VerusSelected.bmp", textureid_P1[12]);
 	//"/img/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -555,7 +558,10 @@ void RenderingEngine::displayConsole()
 
 }
 
-
+void RenderingEngine::setPlayerNum(int num)
+{
+    playerNum = num;
+}
 
 void RenderingEngine::initializeGL()
 {
@@ -575,7 +581,8 @@ void RenderingEngine::initializeGL()
 	glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-    
+    setPlayerNum(1);    //initalize player numbers  //Hopefully this is only called in init state
+
     initializeTexture();
 
     int err = glewInit();               //Needs a window to execute successfully
@@ -850,17 +857,24 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-    for (int activePlayers=0;activePlayers<1;activePlayers++)
+    int a = playerNum;
+    int b = a;
+    if (playerNum == 2)
     {
-        drawScene_ForPlayer(scene, track, entities, activePlayers);
+        for (int activePlayers=0;activePlayers<2;activePlayers++)
+        {
+            drawScene_ForPlayer(scene, track, entities, activePlayers, true);
+        }
     }
-
+    else
+    {
+        drawScene_ForPlayer(scene, track, entities, 0, false);
+    }
     //drawScene_ForPlayer(scene, entities, 1);
     
 }
 
-void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex)
+void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen)
 {
         glPushMatrix ();
 	    glLoadIdentity ();
@@ -927,76 +941,80 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 	        0.0,1.0,0.0); 		// "Up" vector
 
 
-	    //set view
-        if (carIndex == 1)
-        {
+            if (splitScreen)
+            {
+	            //set view
+                if (carIndex == 1)
+                {
+            	                // Switch to the projection matrix
+	                glMatrixMode (GL_PROJECTION);
+	                glLoadIdentity ();
+
+	                int w = SCREEN_WIDTH;
+	                int h = SCREEN_HEIGHT / 2;
+
+	                //int w = 640;
+	                //int h = 480;
+
+	                // Set drawing to NOT take up the entire window
+	                glViewport (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2);
+
+	                if (w > h) {
+		                // In this case the w/h ratio is > 1
+		                    float ratio = (float)w/(float)h;
+			                //gluPerspective(60.0, ratio, 0.01, 800.0);
+			                gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+			                //glOrtho (-ratio, ratio, -1, 1, -10, 10);
+	                }
+	                else {
+		                // In this case the h/w ratio is > 1
+		                    float ratio = (float)h/(float)w;
+			                //gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
+			                gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+			                //glOrtho (-ratio, ratio, -1, 1, -10, 10);
+	                }
+
+	                //Switch back to modelview matrix
+	                glMatrixMode (GL_MODELVIEW);
+                }
+                else
+                {
             	        // Switch to the projection matrix
-	        glMatrixMode (GL_PROJECTION);
-	        glLoadIdentity ();
+	                glMatrixMode (GL_PROJECTION);
+	                glLoadIdentity ();
 
-	        int w = SCREEN_WIDTH;
-	        int h = SCREEN_HEIGHT / 2;
+	                int w = SCREEN_WIDTH;
+	                int h = SCREEN_HEIGHT / 2;
 
-	        //int w = 640;
-	        //int h = 480;
+	                //int w = 640;
+	                //int h = 480;
 
-	        // Set drawing to NOT take up the entire window
-	        glViewport (0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2);
+	                // Set drawing to NOT take up the entire window
+	                glViewport (0, h, w, h);
 
-	        if (w > h) {
-		        // In this case the w/h ratio is > 1
-		            float ratio = (float)w/(float)h;
-			        //gluPerspective(60.0, ratio, 0.01, 800.0);
-			        gluPerspective(60.0, ratio, 1.0f, 10000.0f);
-			        //glOrtho (-ratio, ratio, -1, 1, -10, 10);
-	        }
-	        else {
-		        // In this case the h/w ratio is > 1
-		            float ratio = (float)h/(float)w;
-			        //gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
-			        gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
-			        //glOrtho (-ratio, ratio, -1, 1, -10, 10);
-	        }
+	                if (w > h) {
+		                // In this case the w/h ratio is > 1
+		                    float ratio = (float)w/(float)h;
+			                //gluPerspective(60.0, ratio, 0.01, 800.0);
+			                gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+			                //glOrtho (-ratio, ratio, -1, 1, -10, 10);
+	                }
+	                else {
+		                // In this case the h/w ratio is > 1
+		                    float ratio = (float)h/(float)w;
+			                //gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
+			                gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+			                //glOrtho (-ratio, ratio, -1, 1, -10, 10);
+	                }
 
-	        //Switch back to modelview matrix
-	        glMatrixMode (GL_MODELVIEW);
-        }
-        else
-        {
-            	// Switch to the projection matrix
-	        glMatrixMode (GL_PROJECTION);
-	        glLoadIdentity ();
-
-	        int w = SCREEN_WIDTH;
-	        int h = SCREEN_HEIGHT;
-
-	        //int w = 640;
-	        //int h = 480;
-
-	        // Set drawing to NOT take up the entire window
-	        glViewport (0, 0, w, h);
-
-	        if (w > h) {
-		        // In this case the w/h ratio is > 1
-		            float ratio = (float)w/(float)h;
-			        //gluPerspective(60.0, ratio, 0.01, 800.0);
-			        gluPerspective(60.0, ratio, 1.0f, 10000.0f);
-			        //glOrtho (-ratio, ratio, -1, 1, -10, 10);
-	        }
-	        else {
-		        // In this case the h/w ratio is > 1
-		            float ratio = (float)h/(float)w;
-			        //gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
-			        gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
-			        //glOrtho (-ratio, ratio, -1, 1, -10, 10);
-	        }
-
-	        //Switch back to modelview matrix
-	        glMatrixMode (GL_MODELVIEW);
-        }
-
-
-	    //setUpPerpView();
+	                //Switch back to modelview matrix
+	                glMatrixMode (GL_MODELVIEW);
+                }
+            }
+            else
+            {
+	            setUpPerpView();    //setup view for one player
+            }
 	    //glRotatef (10.0f, 10.0f, 0.0, 0.0);
 
 
@@ -1341,14 +1359,14 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
     glBindTexture(GL_TEXTURE_2D, textureid_P1[9]);      //image for single
     //Draw Single
     if (curMenuButton == 0)
-    {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
+    {glBindTexture(GL_TEXTURE_2D, textureid_P1[10]);}
     glColor4f(1.0f,1.0f,1.0f, 0.5f);
     drawSquare(1.2f, yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[11]);
 
     //Draw Single
     if (curMenuButton == 1)
-    {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
+    {glBindTexture(GL_TEXTURE_2D, textureid_P1[12]);}
     glColor4f(1.0f,1.0f,1.0f, 0.5f);
     drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 1.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
     glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
@@ -1460,6 +1478,11 @@ if (entities->cars.size() > 0)
                         NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
                         //drawModel(modelManager.getModel(entities->cars[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
                         drawModelPos(modelManager.getModel(entities->cars[i]->rc[r]->modelID), aPose );
+
+                        //Particles
+                        //Particle* newParticle = new Particle(entities->cars[i]->getActor()->getGlobalPose().t.x, entities->cars[i]->getActor()->getGlobalPose().t.y,entities->cars[i]->getActor()->getGlobalPose().t.z);
+                        //particles.push_back(newParticle);
+
                     }
                 }
                 else
@@ -1976,4 +1999,23 @@ float RenderingEngine::updateFade()
     }
 
     return FadeCtrl;
+}
+
+void RenderingEngine::updateParticles()
+{
+
+    /**
+    for (vector<Particle>::iterator it=particles.begin(); 
+                              it!=particles.end(); 
+                              )
+    {
+
+       if(it->isDead()) 
+          it = particles.erase(it);
+      else 
+          ++it;
+     }
+     */
+
+
 }

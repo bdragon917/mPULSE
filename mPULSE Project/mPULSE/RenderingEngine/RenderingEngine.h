@@ -31,6 +31,7 @@
 #include "..\ModelLoader\ObjModel.h"
 #include <math.h>
 #include "../Track.h"
+#include "Particle.h"
 
 class RenderingEngine
 {
@@ -63,7 +64,7 @@ void moveStuff(float &testF);
 
 
 void drawScene(NxScene* scene,Track* track, Entities* entities);
-    void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex);
+void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen);
 int drawMainMenuScreen(int curMenuButton, bool clicked);
 
 
@@ -103,8 +104,13 @@ void drawDisplayList(int index);
 
     ModelManager getModelManger();
 
+    void setPlayerNum(int num);
+
 private:
     RenderingEngine();
+
+    std::vector<Particle*> particles;
+    void updateParticles();
 
     std::vector<GLuint> displayLists;
     ModelManager modelManager;
@@ -128,7 +134,7 @@ private:
     void bindBMPtoTexture(char* filename, GLuint textures);
     void initializeTexture();
 
-    
+    int playerNum;
 
     //Used for Fade In and Out
     float FadeCtrl;

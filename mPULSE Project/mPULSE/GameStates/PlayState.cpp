@@ -24,9 +24,13 @@ PlayState::PlayState()
 
     }    
     
+    gameVariables = GameVariables::getInstance();
     physicsEngine = PhysicsEngine::getInstance();
     physicsEngine->setupPlayScene(&entities.cars);
     renderingEngine = RenderingEngine::getInstance();
+    renderingEngine->setPlayerNum(gameVariables->getPlayerNum());
+
+    //set numPlayers
 	//renderingEngine->initializeGL();
     renderingEngine->createLight();
 
