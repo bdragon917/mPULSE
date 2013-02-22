@@ -1,5 +1,5 @@
 #include "Shader.h"
-
+#include <fstream>
 
 Shader::Shader(const char *fs, const char *vs) {
 	char *vsf = NULL;
@@ -52,30 +52,26 @@ void Shader::off() {
 }
 
 // Code below modified from code originally written by Wojtek Palubicki
-char *Shader::textFileRead(const char *fn) {
-	FILE *fp;
+char *Shader::textFileRead(const char* filename) {
 	char *content = NULL;
+	if (filename != NULL) {
+        // Opens file as input, binary, and with read pointer at end
+        cout << "Reading " << filename << endl;
+        fstream file (filename, ios_base::in | ios_base::binary | ios_base::ate);
 
-	int count = 0;
+		if (file.is_open()) {
+            // Determines filesize then resets read location to beginning
+            unsigned filesize = static_cast<unsigned>(file.tellg());
+            file.seekg(0);
 
-	if (fn != NULL) {
-
-		printf("%s\n", fn);
-
-		fp = fopen(fn,"r");
-		
-		if (fp != NULL) {
-
-			fseek(fp, 0, SEEK_END);
-			count = ftell(fp);
-			rewind(fp);
-
-			if (count > 0) {
-				content = (char *)malloc(sizeof(char) * (count+1));
-				count = fread(content,sizeof(char),count,fp);
-				content[count] = '\0';
+            // Reads contents of file into array
+			if (filesize > 0) {
+                content = new char[filesize+1];
+                file.read(content, filesize);
+				content[filesize] = '\0';
 			}
-			fclose(fp);
+
+			file.close();
 		}
 	}
 	return content;
