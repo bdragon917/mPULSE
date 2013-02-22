@@ -30,6 +30,7 @@
 #include "..\ModelLoader\ModelManager.h"
 #include "..\ModelLoader\ObjModel.h"
 #include <math.h>
+#include "../Track.h"
 
 class RenderingEngine
 {
@@ -61,8 +62,8 @@ int drawIntro();
 void moveStuff(float &testF);
 
 
-void drawScene(NxScene* scene, Entities* entities);
-    void drawScene_ForPlayer(NxScene* scene, Entities* entities, int carIndex);
+void drawScene(NxScene* scene,Track* track, Entities* entities);
+    void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex);
 int drawMainMenuScreen(int curMenuButton, bool clicked);
 
 
@@ -116,7 +117,7 @@ private:
     void drawAICars(Entities* entities);
     void drawObstacles(Entities* entities);
     void drawStaticObjs(Entities* entities);
-    void drawTrack(Entities* entities);
+    void drawTrack(Track* track);
 
     void RenderDebugPhysic(const NxDebugRenderable* ndr);
     

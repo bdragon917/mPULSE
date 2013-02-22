@@ -8,6 +8,7 @@
 #include "../Entities/Entity.h"
 #include "../Entities/RenderableComponent.h"
 #include "../SoundEngine.h"
+#include "../Track.h"
 #include <map>
 
 class PlayState : public GameState
@@ -22,9 +23,10 @@ public:
 
 private:
     bool showConsole;
-    
+    bool rbPressed;
     PlayState();
 
+    Track* track;
     RenderingEngine::Entities entities;
     PhysicsEngine* physicsEngine;
 	SoundEngine* soundEngine;

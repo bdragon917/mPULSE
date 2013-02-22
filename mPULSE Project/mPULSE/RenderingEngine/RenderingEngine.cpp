@@ -846,21 +846,21 @@ void RenderingEngine::setUpOrthoView()
 }
 
 //Include entity POV, which car's camera to render from
-void RenderingEngine::drawScene(NxScene* scene, Entities* entities)
+void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-    for (int activePlayers=0;activePlayers<2;activePlayers++)
+    for (int activePlayers=0;activePlayers<1;activePlayers++)
     {
-        drawScene_ForPlayer(scene, entities, activePlayers);
+        drawScene_ForPlayer(scene, track, entities, activePlayers);
     }
 
     //drawScene_ForPlayer(scene, entities, 1);
     
 }
 
-void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Entities* entities, int carIndex)
+void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex)
 {
         glPushMatrix ();
 	    glLoadIdentity ();
@@ -968,13 +968,13 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Entities* entities, in
 	        glLoadIdentity ();
 
 	        int w = SCREEN_WIDTH;
-	        int h = SCREEN_HEIGHT / 2;
+	        int h = SCREEN_HEIGHT;
 
 	        //int w = 640;
 	        //int h = 480;
 
 	        // Set drawing to NOT take up the entire window
-	        glViewport (0, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT/2);
+	        glViewport (0, 0, w, h);
 
 	        if (w > h) {
 		        // In this case the w/h ratio is > 1
@@ -1221,7 +1221,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Entities* entities, in
                      }
 
 
-                    drawTrack(entities);
+                    drawTrack(track);
 
                 //float blur = (entities->cars[0]->getActor()->getLinearVelocity().magnitude() / 150.0f); //blur = (blur * 0.7) + (0.3 * newblur)
 
@@ -1551,36 +1551,42 @@ if (entities->StaticObjs.size() > 0)
             }
 }
 
-void RenderingEngine::drawTrack(Entities* entities)
+void RenderingEngine::drawTrack(Track* track)
 {
-if (entities->Track.size() > 0)
-            for (int i=0;i <= entities->Track.size()-1;i++)
-            {
-                if (entities->Track[i]->rc.size() > 0)
-                {
-                    for (int r=0;r <= entities->Track[i]->rc.size()-1;r++)
-                    {
-                        glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->Track[i]->rc[r]->textureID]);
-                        NxMat34* aPose = &(entities->Track[i]->getActor()->getGlobalPose());
+    if (track->getEntity()->rc.size() > 0)
+    {
+        for (int r=0; r < track->getEntity()->rc.size(); r++)
+        {
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[track->getEntity()->rc[r]->textureID]);
+            NxMat34* aPose = &(track->getEntity()->getActor()->getGlobalPose());
 
-                        if(entities->Track[i]->getUsingDisplayList())
-                            drawDisplayList(entities->Track[i]->getDisplayListIndex());
-                        else
-                            drawModelPos(modelManager.getModel(entities->Track[i]->rc[r]->modelID), aPose );
-                        //drawModel(modelManager.getModel(entities->Track[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
-                    }
-                }
-                else
-                {
-                    glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
-                    if (entities->Track[i]->getActor() == NULL)
-                    {printf("Track has no actors\n");}
-                    else
-                    {
- //                   drawActor(entities->Track[i]->getActor());///BUGGY
-                    }
-                }
-            }
+            if(track->getEntity()->getUsingDisplayList())
+                drawDisplayList(track->getEntity()->getDisplayListIndex());
+            else
+                drawModelPos(modelManager.getModel(track->getEntity()->rc[r]->modelID), aPose );
+            //drawModel(modelManager.getModel(entities->Track[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
+        }
+    }
+    else
+    {
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
+        if (track->getEntity()->getActor() == NULL)
+        {printf("Track has no actors\n");}
+        else
+        {
+//                   drawActor(entities->Track[i]->getActor());///BUGGY
+        }
+    }
+    //Draw the waypoints on the track
+    std::vector<Track::Waypoint>* wps = track->getWaypoints();
+    ObjModel* sphere = modelManager.getModel("sphere.obj");
+    glColor3f(0,1,1);
+    if (sphere != NULL)
+    {                
+        for(unsigned int i=0; i<wps->size(); i++)         
+            drawModel(sphere,wps->at(i).x,wps->at(i).y+2,wps->at(i).z,1);
+    }
+        
 }
 
 

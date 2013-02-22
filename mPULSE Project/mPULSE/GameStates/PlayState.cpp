@@ -1,10 +1,9 @@
 #include "PlayState.h"
 
-float deg = 0.1;
 PlayState::PlayState()
 {
     showConsole = true;
-
+    rbPressed = false;
     changeState(PLAY); 
 
     Entity* playerCar = new Entity();
@@ -23,8 +22,7 @@ PlayState::PlayState()
         newAIrCar->rc.push_back(newRc);
         entities.cars.push_back(newAIrCar);
 
-    }
-    
+    }    
     
     physicsEngine = PhysicsEngine::getInstance();
     physicsEngine->setupPlayScene(&entities.cars);
@@ -32,10 +30,7 @@ PlayState::PlayState()
 	//renderingEngine->initializeGL();
     renderingEngine->createLight();
 
-
-    //physicsEngine->createGroundPlane();
-    ///*
-    //Create Track
+    //Create Track        
     Entity* aTrack = new Entity();
     ObjModel* aModel = renderingEngine->getModelManger().getModel("Race1.obj");
     RenderableComponent* rc = new RenderableComponent(2,7);    
@@ -47,6 +42,7 @@ PlayState::PlayState()
         aTrack->rc.push_back(rc);        
         aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));     
     }   
+    track = new Track("Race1.txt",aTrack);
     //*/
 
     physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);
@@ -130,7 +126,7 @@ void PlayState::update(float dt)
 void PlayState::render()
 {    	    
 	NxScene* scene = physicsEngine->getScene();
-	renderingEngine->drawScene(scene, &entities);
+	renderingEngine->drawScene(scene, track, &entities);
 }
 
 
@@ -203,16 +199,6 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     renderingEngine->aConsole.propragateMsg("Number of Triangles in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbTriangles()));
                 }
                 
-                if(renderingEngine->aConsole.consoleString == "a")
-                {
-                    deg+=0.1;
-                    renderingEngine->aConsole.propragateMsg(renderingEngine->FloatToString(deg));
-                }
-                if(renderingEngine->aConsole.consoleString == "b")
-                {
-                    deg-=0.1;
-                    renderingEngine->aConsole.propragateMsg(renderingEngine->FloatToString(deg));
-                }
                 //Get Commands
                 //if (renderingEngine->aConsole.consoleString == "get testwheel")
                 //{renderingEngine->aConsole.consoleString = "Test Wheel Torgue: " + renderingEngine->FloatToString(cars.at(0)->aWheel1->getMotorTorque());renderingEngine->aConsole.propragateMsg();}
@@ -428,8 +414,15 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     //logReplay(player, state, 0);      Used to log replay!
 
     //if (state->back)
-    if (state->rb)
-    {logWayPoint(0);}
+    if (state->rb && !rbPressed)
+    {
+        logWayPoint(0);
+        rbPressed = true;
+        printf("Point logged pressed\n");
+    }
+
+    else if (!state->rb)
+        rbPressed = false;
 
     //state->vibrate(((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB,((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB);
 
@@ -455,8 +448,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
         if(state->b)
             car->brake(5000);
         else
-            car->brake(0);
-
+            car->brake(0);        
         if(state->lb) {
 		    physicsEngine->resetBox();
             car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));

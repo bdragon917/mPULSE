@@ -144,6 +144,9 @@
     <ClCompile Include="AI\Waypoints.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
+    <ClCompile Include="Track.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -220,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="AI\Waypoints.h">
       <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Track.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
