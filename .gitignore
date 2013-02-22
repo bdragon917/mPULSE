@@ -1,6 +1,7 @@
 *.exe
 *.suo
 *.sdf
+replay.txt
 /mPULSE Project/mPULSE/Debug/*.obj
 /mPULSE Project/mPULSE/img/Thumbs.db
 /mPULSE Project/mPULSE/Debug/*.obj
