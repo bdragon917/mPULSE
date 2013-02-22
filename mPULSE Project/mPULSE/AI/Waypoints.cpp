@@ -9,7 +9,7 @@ Waypoints::Waypoints()
 
 void Waypoints::loadWaypoints(std::string filename)
 {
-    	char charArray[1024];
+    	//char charArray[1024];
 	    std::ifstream file;
         std::vector<std::string> modelFileNames;
         std::string tmpName;

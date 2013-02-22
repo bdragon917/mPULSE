@@ -93,90 +93,80 @@ void Camera::updateCamera(float dt)
 {
     int mode = 4;       //Testing different camera styles here, change to different values for different test code
 
-                        //4 seems to be the best at this point, but it still needs a spring
-
     switch (mode)
     {
         case 0:         //This is the inital camera set-up we have
-            {
-                float lookAhead = 20.f;
-                NxVec3 ActLoc = targetActor->getGlobalPose().t;
-                NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
+        {
+            float lookAhead = 20.f;
+            NxVec3 ActLoc = targetActor->getGlobalPose().t;
+            NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
 
-                NxVec3 movementVector = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
-                NxMat33 actOri = targetActor->getGlobalOrientation();
+            NxVec3 movementVector = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
+            NxMat33 actOri = targetActor->getGlobalOrientation();
 
-                movementVector = targetActor->getGlobalOrientation() * movementVector;
+            movementVector = targetActor->getGlobalOrientation() * movementVector;
 
-                movementVector.y = 6.5f;
-                movementVector = movementVector + ActLoc;   //This is the correct camera location target!!!
+            movementVector.y = 6.5f;
+            movementVector = movementVector + ActLoc;   //This is the correct camera location target!!!
                 
 
 
-                movementVector = movementVector - curCamLoc;           //Gives a vector to that location
+            movementVector = movementVector - curCamLoc;           //Gives a vector to that location
 
-                float movMag = movementVector.magnitude();      //magnitude
+            float movMag = movementVector.magnitude();      //magnitude
 
-                if (movementVector.magnitude() > 1.0f)
-                {movementVector.normalize();}               //Might not do any thing, look at later...
-
-
-                float catchUpSpd = 1.0f;
-
-                if (movMag > (maxDistance / 2))               //Fun Camera 2!!!       //Used if camera is too far away
-                {
-                    catchUpSpd = movMag - (maxDistance / 2);
-                }
-
-    
-                if (movMag > maxDistance)                                               //Used if camera is too far away
-                {
-                    printf("HURRY UP CAMERA!\n");
-                    curCamLoc = (curCamLoc + movementVector * (movMag - maxDistance) );
-                }
-               // else
-                {
-                    curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd * dt * (movementVector.magnitude() * 0.4f);
-                }
-    
-                if (userCamControl.magnitude() > 0.2f)
-                {
-
-                    //printf("UserControlRaw: %f %f %f\n",userCamControl.x,userCamControl.y,userCamControl.z);
-                    //movementVector = (targetActor->getGlobalOrientation() * (uControl * targetDistance));
-                    movementVector = (userCamControl * -targetDistance);
-                    movementVector = targetActor->getGlobalOrientation() * movementVector;
-                    movementVector = movementVector + ActLoc;
-
-                    //printf("UserControl: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
-
-                    curCamLoc = movementVector;
-                }
-    
-
-                curCamLoc.y = 3.5f + ActLoc.y;
+            if (movementVector.magnitude() > 1.0f)
+            {movementVector.normalize();}               //Might not do any thing, look at later...
 
 
-                NxVec3 toLA = curCamLookAt - targetLookAt;
-                curCamLookAt = curCamLookAt - (toLA / 4);
+            float catchUpSpd = 1.0f;
 
-                break;
+            if (movMag > (maxDistance / 2))               //Fun Camera 2!!!       //Used if camera is too far away
+            {
+                catchUpSpd = movMag - (maxDistance / 2);
             }
 
-
-
-
-
-        case 1:
+    
+            if (movMag > maxDistance)                                               //Used if camera is too far away
             {
-                float elapsed = dt * 3.75;
+                printf("HURRY UP CAMERA!\n");
+                curCamLoc = (curCamLoc + movementVector * (movMag - maxDistance) );
+            }
+            // else
+            {
+                curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd * dt * (movementVector.magnitude() * 0.4f);
+            }
+    
+            if (userCamControl.magnitude() > 0.2f)
+            {
+
+                //printf("UserControlRaw: %f %f %f\n",userCamControl.x,userCamControl.y,userCamControl.z);
+                //movementVector = (targetActor->getGlobalOrientation() * (uControl * targetDistance));
+                movementVector = (userCamControl * -targetDistance);
+                movementVector = targetActor->getGlobalOrientation() * movementVector;
+                movementVector = movementVector + ActLoc;
+
+                //printf("UserControl: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
+
+                curCamLoc = movementVector;
+            }
+    
+
+            curCamLoc.y = 3.5f + ActLoc.y;
 
 
-             if (dt == 0)
-             {printf("Illegal timestep for camera");}
+            NxVec3 toLA = curCamLookAt - targetLookAt;
+            curCamLookAt = curCamLookAt - (toLA / 4);
 
+            break;
+        }
+        case 1:
+        {
+            float elapsed = dt * 3.75f;
+            if (dt == 0.0f)
+                printf("Illegal timestep for camera");
 
-           // //UpdateWorldPositions();
+            // //UpdateWorldPositions();
             // Construct a matrix to transform from object space to worldspace
             // NxVec3 chaseDirection = NxVec3(-1.0f,0.0f,0.0f);
             // NxVec3 Up = NxVec3(0,1.0f,0.0f);
@@ -195,26 +185,24 @@ void Camera::updateCamera(float dt)
 
             //float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-             //Calculate where to look
-             float lookAhead = 30.f;
-                NxVec3 ActLoc = targetActor->getGlobalPose().t;
-                NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
+            //Calculate where to look
+            float lookAhead = 30.f;
+            NxVec3 ActLoc = targetActor->getGlobalPose().t;
+            NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
 
 
             //Calcuate where to go
-//             NxVec3 ActLoc = targetActor->getGlobalPose().t;
-                targetDistance = 5.0f;
+            //NxVec3 ActLoc = targetActor->getGlobalPose().t;
+            targetDistance = 5.0f;
 
-             NxVec3 tarCamLoc = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
-                NxMat33 actOri = targetActor->getGlobalOrientation();
+            NxVec3 tarCamLoc = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
+            NxMat33 actOri = targetActor->getGlobalOrientation();
 
-                tarCamLoc = targetActor->getGlobalOrientation() * tarCamLoc;
+            tarCamLoc = targetActor->getGlobalOrientation() * tarCamLoc;
 
-                tarCamLoc.y = 3.5f;
-                tarCamLoc = tarCamLoc + ActLoc; //This is the correct camera location target!!!
+            tarCamLoc.y = 3.5f;
+            tarCamLoc = tarCamLoc + ActLoc; //This is the correct camera location target!!!
                                    
-
-
             float stiffness = 12.000f;
             float damping = 4000.0f;
             float mass = 25.0f;
@@ -230,7 +218,6 @@ void Camera::updateCamera(float dt)
             NxVec3 stretch = (curCamLoc - tarCamLoc);//position - desiredPosition;
             NxVec3 force = (-stiffness * stretch) - (damping * velocity);
 
-
             // Apply acceleration
             NxVec3 acceleration = force / mass;
             velocity += acceleration * elapsed;
@@ -242,37 +229,31 @@ void Camera::updateCamera(float dt)
             //curCamLookAt = targetLookAt;
             curCamLookAt = targetLookAt + velocity;
 
-                break;
-            }
+            break;
+        }
+        case 2:     //Working fixed Camera
+        {
+            float elapsed = dt * 3.75f;
 
+            if (dt == 0.0f)
+                printf("Illegal timestep for camera");
 
-            case 2:     //Working fixed Camera
-            {
-                float elapsed = dt * 3.75;
-
-
-             if (dt == 0)
-             {printf("Illegal timestep for camera");}
-
-
-             //Calculate where to look
-             float lookAhead = 40.f;
-                NxVec3 ActLoc = targetActor->getGlobalPose().t;
-                NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
-
+            //Calculate where to look
+            float lookAhead = 40.f;
+            NxVec3 ActLoc = targetActor->getGlobalPose().t;
+            NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
 
             //Calcuate where to go
-//             NxVec3 ActLoc = targetActor->getGlobalPose().t;
-                targetDistance = 8.0f;
+            //NxVec3 ActLoc = targetActor->getGlobalPose().t;
+            targetDistance = 8.0f;
 
-             NxVec3 tarCamLoc = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
-                NxMat33 actOri = targetActor->getGlobalOrientation();
+            NxVec3 tarCamLoc = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
+            NxMat33 actOri = targetActor->getGlobalOrientation();
 
-                tarCamLoc = targetActor->getGlobalOrientation() * tarCamLoc;
+            tarCamLoc = targetActor->getGlobalOrientation() * tarCamLoc;
 
-                tarCamLoc.y = 3.5f;
-                tarCamLoc = tarCamLoc + ActLoc; //This is the correct camera location target!!!
-                                   
+            tarCamLoc.y = 3.5f;
+            tarCamLoc = tarCamLoc + ActLoc; //This is the correct camera location target!!!               
 
             //float stiffness = 1800.0f;
             //float damping = 600.0f;
@@ -286,7 +267,6 @@ void Camera::updateCamera(float dt)
             //NxVec3 stretch = (curCamLoc - tarCamLoc);//position - desiredPosition;
             //NxVec3 force = (-stiffness * stretch) - (damping * velocity);
 
-
             // Apply acceleration
             //NxVec3 acceleration = force / mass;
             //velocity += acceleration * elapsed;
@@ -298,101 +278,89 @@ void Camera::updateCamera(float dt)
             curCamLookAt = targetLookAt;
             //curCamLookAt = targetLookAt + velocity;
 
-                break;
+            break;
+        }
+        case 3:         //This is the inital camera set-up we have
+        {
+            float lookAhead = 20.f;
+            NxVec3 ActLoc = targetActor->getGlobalPose().t;
+            NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
+
+            NxVec3 movementVector = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
+            NxMat33 actOri = targetActor->getGlobalOrientation();
+
+            movementVector = targetActor->getGlobalOrientation() * movementVector;
+
+            movementVector.y = 6.5f;
+            movementVector = movementVector + ActLoc;   //This is the correct camera location target!!!
+
+            movementVector = movementVector - curCamLoc;           //Gives a vector to that location
+
+            float movMag = movementVector.magnitude();      //magnitude
+
+            if (movementVector.magnitude() > 1.0f)
+            {movementVector.normalize();}               //Might not do any thing, look at later...
+
+            float catchUpSpd = 1.0f;
+
+            if (movMag > (maxDistance / 2))               //Fun Camera 2!!!       //Used if camera is too far away
+            {
+                catchUpSpd = movMag - (maxDistance / 2);
             }
 
-
-
-
- case 3:         //This is the inital camera set-up we have
+            if (movMag > maxDistance)                                               //Used if camera is too far away
             {
-                float lookAhead = 20.f;
-                NxVec3 ActLoc = targetActor->getGlobalPose().t;
-                NxVec3 targetLookAt = ((targetActor->getGlobalOrientation() * NxVec3(lookAhead,0,0.0f) ) + ActLoc);
+                printf("HURRY UP CAMERA!\n");
+                curCamLoc = (curCamLoc + movementVector * (movMag - maxDistance) );
+            }
+            // else
+            {
 
-                NxVec3 movementVector = NxVec3(-targetDistance,0,0.0f);      //Where the camera should end up at in local space
-                NxMat33 actOri = targetActor->getGlobalOrientation();
+                float stiffness = 100.0f;
+                float damping = 600.0f;
+                float mass = 50.0f;
 
-                movementVector = targetActor->getGlobalOrientation() * movementVector;
+                NxVec3 velocity =  movementVector * movementVector.magnitude();
 
-                movementVector.y = 6.5f;
-                movementVector = movementVector + ActLoc;   //This is the correct camera location target!!!
-                
-
-
-                movementVector = movementVector - curCamLoc;           //Gives a vector to that location
-
-                float movMag = movementVector.magnitude();      //magnitude
-
-                if (movementVector.magnitude() > 1.0f)
-                {movementVector.normalize();}               //Might not do any thing, look at later...
-
-
-                float catchUpSpd = 1.0f;
-
-                if (movMag > (maxDistance / 2))               //Fun Camera 2!!!       //Used if camera is too far away
-                {
-                    catchUpSpd = movMag - (maxDistance / 2);
-                }
-
-    
-                if (movMag > maxDistance)                                               //Used if camera is too far away
-                {
-                    printf("HURRY UP CAMERA!\n");
-                    curCamLoc = (curCamLoc + movementVector * (movMag - maxDistance) );
-                }
-               // else
-                {
-
-                    float stiffness = 100.0f;
-                    float damping = 600.0f;
-                    float mass = 50.0f;
-
-                    NxVec3 velocity =  movementVector * movementVector.magnitude();
-
-                     NxVec3 stretch = (curCamLoc - (curCamLoc + movementVector));//position - desiredPosition;
-                     NxVec3 force = (-stiffness * stretch) - (damping * velocity);
+                    NxVec3 stretch = (curCamLoc - (curCamLoc + movementVector));//position - desiredPosition;
+                    NxVec3 force = (-stiffness * stretch) - (damping * velocity);
                     
 
 
-                                 // Apply acceleration
-                    NxVec3 acceleration = force / mass;
-                    velocity += acceleration * dt;
+                                // Apply acceleration
+                NxVec3 acceleration = force / mass;
+                velocity += acceleration * dt;
 
-                    // Apply velocity
-                    curCamLoc += velocity;  // * elapsed;
+                // Apply velocity
+                curCamLoc += velocity;  // * elapsed;
 
-                    //curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd * dt * (movementVector.magnitude() * 0.4f);
-                }
-    
-                if (userCamControl.magnitude() > 0.2f)
-                {
-
-                    //printf("UserControlRaw: %f %f %f\n",userCamControl.x,userCamControl.y,userCamControl.z);
-                    //movementVector = (targetActor->getGlobalOrientation() * (uControl * targetDistance));
-                    movementVector = (userCamControl * -targetDistance);
-                    movementVector = targetActor->getGlobalOrientation() * movementVector;
-                    movementVector = movementVector + ActLoc;
-
-                    //printf("UserControl: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
-
-                    curCamLoc = movementVector;
-                }
-    
-
-                curCamLoc.y = 3.5f + ActLoc.y;
-
-
-                NxVec3 toLA = curCamLookAt - targetLookAt;
-                curCamLookAt = curCamLookAt - (toLA / 4);
-
-                break;
+                //curCamLoc = curCamLoc + movementVector * EquilbriumSpeed * catchUpSpd * dt * (movementVector.magnitude() * 0.4f);
             }
+    
+            if (userCamControl.magnitude() > 0.2f)
+            {
 
-  
+                //printf("UserControlRaw: %f %f %f\n",userCamControl.x,userCamControl.y,userCamControl.z);
+                //movementVector = (targetActor->getGlobalOrientation() * (uControl * targetDistance));
+                movementVector = (userCamControl * -targetDistance);
+                movementVector = targetActor->getGlobalOrientation() * movementVector;
+                movementVector = movementVector + ActLoc;
+
+                //printf("UserControl: %f %f %f\n", movementVector.x, movementVector.y, movementVector.z);
+
+                curCamLoc = movementVector;
+            }
+    
+
+            curCamLoc.y = 3.5f + ActLoc.y;
 
 
-   case 4:         //This fixes the slope issues
+            NxVec3 toLA = curCamLookAt - targetLookAt;
+            curCamLookAt = curCamLookAt - (toLA / 4);
+
+            break;
+        }
+        case 4:         //This fixes the slope issues
             {
 
 
@@ -452,8 +420,8 @@ void Camera::updateCamera(float dt)
 
 
                 //Adds rumble
-                double ratio = 0.06111111;
-                vecCamLoc = vecCamLoc * ratio;
+                float ratio = 0.06111111f;
+                vecCamLoc *= ratio;
                 //vecCamLoc = vecCamLoc * vecCamLoc.magnitude();
                 float magVecCamLoc = vecCamLoc.magnitude();
                 //if (magVecCamLoc < 1.0f){vecCamLoc = vecCamLoc * 0.11111f;}

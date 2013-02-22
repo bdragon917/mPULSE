@@ -80,45 +80,45 @@ void PlayState::update(float dt)
     entities.cars[0]->aCam->updateCamera(1.0f);
     entities.cars[1]->aCam->updateCamera(1.0f);
 
-    for (int c=0;c < entities.cars.size();c++)
+    for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
         Entity* car = entities.cars[c];
         if (car->getActor()->getGlobalPose().t.y < -2.0f)
         {
             car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
 
-                NxVec3 v(0,1,0);
-                NxReal ang = 90;
+            NxVec3 v(0,1,0);
+            NxReal ang = 90;
 
-                NxQuat q;
-                q.fromAngleAxis(ang, v);
-                NxMat33 orient;
-                orient.fromQuat(q);
+            NxQuat q;
+            q.fromAngleAxis(ang, v);
+            NxMat33 orient;
+            orient.fromQuat(q);
 
-                car->getActor()->setGlobalOrientation(orient);
-                car->getActor()->setLinearVelocity(NxVec3(0,0,0));
-                car->aCam->resetCamera();
+            car->getActor()->setGlobalOrientation(orient);
+            car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+            car->aCam->resetCamera();
         }
     }
 
-    for (int c=0;c < entities.AIcars.size();c++)
+    for (unsigned c = 0; c < entities.AIcars.size(); ++c)
     {
         Entity* car = entities.AIcars[c];
         if (car->getActor()->getGlobalPose().t.y < -2.0f)
         {
             car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
 
-                NxVec3 v(0,1,0);
-                NxReal ang = 90;
+            NxVec3 v(0,1,0);
+            NxReal ang = 90;
 
-                NxQuat q;
-                q.fromAngleAxis(ang, v);
-                NxMat33 orient;
-                orient.fromQuat(q);
+            NxQuat q;
+            q.fromAngleAxis(ang, v);
+            NxMat33 orient;
+            orient.fromQuat(q);
 
-                car->getActor()->setGlobalOrientation(orient);
-                car->getActor()->setLinearVelocity(NxVec3(0,0,0));
-                car->aCam->resetCamera();
+            car->getActor()->setGlobalOrientation(orient);
+            car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+            car->aCam->resetCamera();
         }
     }
 
@@ -430,7 +430,8 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
     //state->vibrate(((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB,((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB);
 
-    if(player < entities.cars.size())
+    int carCount = entities.cars.size();
+    if (player < carCount)
     {
         //UserCamControl  
         Entity* car = entities.cars[player];

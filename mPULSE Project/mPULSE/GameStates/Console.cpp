@@ -104,7 +104,6 @@ void Console::appendLog()
 
     if (log.size() > 20)
     {
-
         std::ofstream out;
         out.open( "log.txt", std::ios_base::app );
         if( !out )
@@ -115,7 +114,7 @@ void Console::appendLog()
         {
             if (log.size() != 0)
             {
-                for (int i=0; i < log.size(); i++)              //Untested
+                for (unsigned i = 0; i < log.size(); ++i)              //Untested
                 {
                     out << log.at(i) + char(10) + char(13);
                 }

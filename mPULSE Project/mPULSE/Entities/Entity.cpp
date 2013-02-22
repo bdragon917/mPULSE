@@ -7,8 +7,8 @@ Entity::Entity()
 
     torque = 0;
     
-    minSteering = 0.1;
-    maxSteering = 0.85;
+    minSteering = 0.1f;
+    maxSteering = 0.85f;
 
     maxTorque = 3000;
     minTorque = -3000;
@@ -40,7 +40,7 @@ void Entity::addTorque(int tmpTorque)
     if(tmpTorque == 0)
     {
         if (torque > 200)
-            torque = torque*.6;
+            torque = static_cast<int>(torque * 0.6f);
         else
             torque = 0;
     }
@@ -48,15 +48,15 @@ void Entity::addTorque(int tmpTorque)
     if((torque + tmpTorque) < maxTorque && (torque + tmpTorque) > minTorque)
     {
         torque += tmpTorque;
-        for(int i=0;i<driveWheels.size();i++)
-            driveWheels[i]->setMotorTorque(torque);
+        for (unsigned i = 0; i < driveWheels.size(); ++i)
+            driveWheels[i]->setMotorTorque(static_cast<float>(torque));
     }
 }
 
 void Entity::brake(int tmpTorque)
 {
-    for(int i=0;i<driveWheels.size();i++)
-        driveWheels[i]->setBrakeTorque(tmpTorque);
+    for (unsigned i = 0; i < driveWheels.size(); ++i)
+        driveWheels[i]->setBrakeTorque(static_cast<float>(tmpTorque));
 }
 
 float Entity::convertVel(float vel)
@@ -84,7 +84,7 @@ void Entity::addSteeringAngle(float percent)
 
     steeringAngle = convertVel(getActor()->getLinearVelocity().magnitude()) * percent;
 
-    for(int i=0;i<driveWheels.size();i++)
+    for (unsigned i = 0; i < driveWheels.size(); ++i)
         driveWheels[i]->setSteerAngle(steeringAngle);
 
     //printf("percent: %f angle: %f vel: %f\n",percent,steeringAngle,getActor()->getLinearVelocity().magnitude());

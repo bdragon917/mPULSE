@@ -73,11 +73,11 @@
                         if((ch == ' ' || ch == '\t') && startSeen)
                         {
                             if (j == 0)
-                                wp.x = atof(tmpLine.substr(startFlag,i).data());
+                                wp.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 1)
-                                wp.y = atof(tmpLine.substr(startFlag,i).data());
+                                wp.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 2)
-                                wp.z = atof(tmpLine.substr(startFlag,i).data());
+                                wp.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
 
                             j++;
                             startSeen = false;
@@ -93,11 +93,11 @@
                     if(startSeen)
                     {
                         if (j == 0)
-                            wp.x = atof(tmpLine.substr(startFlag).data());
+                            wp.x = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                         else if(j == 1)
-                            wp.y = atof(tmpLine.substr(startFlag).data());
+                            wp.y = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                         else if(j == 2)
-                            wp.z = atof(tmpLine.substr(startFlag).data());
+                            wp.z = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                     }
 
                     addWaypoint(wp);

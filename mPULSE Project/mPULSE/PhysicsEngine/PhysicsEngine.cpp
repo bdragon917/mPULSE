@@ -45,14 +45,14 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	//groundPlane = createGroundPlane();
 	//box = createBox();
 
-    for (int pxCars=0;pxCars<cars->size();pxCars++)
+    for (unsigned pxCars = 0; pxCars < cars->size(); ++pxCars)
     {
 
         NxActor* box = createCarChassis();              //create a Chassis
-        NxWheelShape* wheel =  AddWheelToActor(box, 1.0f,0,1.2) ;     //Create a wheel, and attach it to the Chassis
-	    NxWheelShape* wheel2 = AddWheelToActor(box, 1.0f,0,-1.2);
-        NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f,0,1.2);
-	    NxWheelShape* wheel4 = AddWheelToActor(box, -1.0f,0,-1.2);
+        NxWheelShape* wheel =  AddWheelToActor(box, 1.0f, 0, 1.2f) ;     //Create a wheel, and attach it to the Chassis
+	    NxWheelShape* wheel2 = AddWheelToActor(box, 1.0f, 0, -1.2f);
+        NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f, 0, 1.2f);
+	    NxWheelShape* wheel4 = AddWheelToActor(box, -1.0f, 0, -1.2f);
 
         //NxWheelShape* wheel3 = AddWheelToActor(box, -0.5f,0.05);
 
@@ -242,7 +242,7 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
     gVerts = new NxVec3 [aModel.getVerticies()->size()];
 
 
-    for (int v = 0; v < aModel.getVerticies()->size(); v++)
+    for (unsigned v = 0; v < aModel.getVerticies()->size(); ++v)
     {
         gVerts[v] = ( NxVec3(aModel.getVerticies()->at(v).x, aModel.getVerticies()->at(v).y, aModel.getVerticies()->at(v).z) );
     }
@@ -256,7 +256,7 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
     //}
 
 
-    for (int v = 0; v < (aModel.getFaces()->size()); v=v+1)
+    for (unsigned v = 0; v < aModel.getFaces()->size(); ++v)
     {
         gFaces[v*3] = ( NxU32(aModel.getFaces()->at(v).at(0).vertIndex) );
         gFaces[(v*3)+1] = ( NxU32(aModel.getFaces()->at(v).at(1).vertIndex) );
@@ -266,7 +266,7 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
     //aModel.getVertexNormals()->size();
     gNormals = new NxVec3[aModel.getVertexNormals()->size()];
 
-    for (int n = 0; n < aModel.getVertexNormals()->size(); n++)
+    for (unsigned n = 0; n < aModel.getVertexNormals()->size(); ++n)
     {
         gNormals[n] = ( NxVec3(aModel.getVertexNormals()->at(n).x, aModel.getVertexNormals()->at(n).y, aModel.getVertexNormals()->at(n).z) );
     }
@@ -415,7 +415,7 @@ NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, fl
 
 	wheelShapeDesc.radius = 0.5f;  //wheelDesc->wheelRadius;
 	wheelShapeDesc.suspensionTravel =  0.5f; //wheelDesc->wheelSuspension; 
-	wheelShapeDesc.inverseWheelMass = 0.1;	//not given!? TODO
+	wheelShapeDesc.inverseWheelMass = 0.1f;	//not given!? TODO
 
 
     //Sideways ??
@@ -482,10 +482,11 @@ void PhysicsEngine::rev()
 
 void PhysicsEngine::steer(int mag)
 {
+    float magnitude = static_cast<float>(mag);
 	//w1->setSteerAngle(-30);
-    w1->setSteerAngle(mag);
-    w2->setSteerAngle(mag);
-    w3->setSteerAngle(mag);
-    w4->setSteerAngle(mag);
+    w1->setSteerAngle(magnitude);
+    w2->setSteerAngle(magnitude);
+    w3->setSteerAngle(magnitude);
+    w4->setSteerAngle(magnitude);
 }
 
