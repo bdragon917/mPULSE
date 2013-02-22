@@ -12,9 +12,9 @@ ObjModel::ObjModel(int ind, std::string tmpName)
 void ObjModel::addVertexV(std::vector<double> geometricVertex)
 {    
     vertex3d vert;
-    vert.x = geometricVertex[0];
-    vert.y = geometricVertex[1];
-    vert.z = geometricVertex[2];
+    vert.x = static_cast<float>(geometricVertex[0]);
+    vert.y = static_cast<float>(geometricVertex[1]);
+    vert.z = static_cast<float>(geometricVertex[2]);
     verticies.push_back(vert);
 }
 
@@ -29,9 +29,9 @@ void ObjModel::addVertexVT(std::vector<double> textureVertex)
 void ObjModel::addVertexVN(std::vector<double> vertexNormal)
 {
     vertex3d vert;
-    vert.x = vertexNormal[0];
-    vert.y = vertexNormal[1];
-    vert.z = vertexNormal[2];
+    vert.x = static_cast<float>(vertexNormal[0]);
+    vert.y = static_cast<float>(vertexNormal[1]);
+    vert.z = static_cast<float>(vertexNormal[2]);
     vertexNormals.push_back(vert);
 }    
 
