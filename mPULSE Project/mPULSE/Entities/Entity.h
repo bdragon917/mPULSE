@@ -17,8 +17,11 @@ public:
     void addDriveWheel(NxWheelShape* wheel);
     void addPassiveWheel(NxWheelShape* wheel);
     void addTorque(int tmpTorque);
-void brake(int tmpTorque);
+	void brake(int tmpTorque);
     void addSteeringAngle(float angle);
+	void chargeBattery();
+	void dischargeBattery();
+
     //void setModel(ObjModel* m);
     void setActor(NxActor* a);
     void setDisplayListIndex(int index);
@@ -27,7 +30,7 @@ void brake(int tmpTorque);
     int getTorque();
     int getSteering();
     bool getUsingDisplayList();
-NxActor* getActor();
+	NxActor* getActor();
     float convertVel(float vel);
     std::vector<NxWheelShape*> getDriveWheels();
     std::vector<NxWheelShape*> getPassiveWheels();
@@ -40,6 +43,7 @@ NxActor* getActor();
     //rotation data
 
 private:
+	bool batteryCharged;
     bool usingDisplayList;
     int displayListIndex;
     int torque;
@@ -48,6 +52,7 @@ private:
     float maxSteeringAngle;
     float minSteering;
     float maxSteering;
+	float charge;
 
 NxActor* actor;
     ObjModel* model;

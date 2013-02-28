@@ -2,6 +2,8 @@
 
 Entity::Entity()
 {
+	batteryCharged = false;
+	charge = 0.0;
     usingDisplayList = false;
     displayListIndex = -1;
 
@@ -88,6 +90,35 @@ void Entity::addSteeringAngle(float percent)
         driveWheels[i]->setSteerAngle(steeringAngle);
 
     //printf("percent: %f angle: %f vel: %f\n",percent,steeringAngle,getActor()->getLinearVelocity().magnitude());
+}
+
+
+void Entity::chargeBattery()
+{
+	if(!batteryCharged)
+	{
+		batteryCharged = true;
+		NxVec3 lin_vel = actor->getLinearVelocity();
+		NxReal speed = lin_vel.magnitude();
+		lin_vel.setMagnitude(speed/2.0);
+		charge = lin_vel.magnitude();
+	
+		actor->setLinearVelocity(lin_vel);
+	}
+}
+
+
+void Entity::dischargeBattery()
+{
+	if(batteryCharged)
+	{
+		batteryCharged = false;
+		NxVec3 lin_vel = actor->getLinearVelocity();
+		NxReal speed = lin_vel.magnitude();
+		lin_vel.setMagnitude(speed + charge);
+
+		actor->setLinearVelocity(lin_vel);
+	}
 }
 
 
