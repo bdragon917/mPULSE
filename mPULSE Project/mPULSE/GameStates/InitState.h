@@ -4,7 +4,7 @@
 #include "GameState.h"
 #include "../Util/Clock.h"
 #include "../RenderingEngine/RenderingEngine.h"
-#include "../SoundEngine.h"
+#include "../SoundEngine/SoundEngine.h"
 #include "GameVariables.h"
 
 class InitState : public GameState

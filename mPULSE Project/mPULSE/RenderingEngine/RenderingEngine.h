@@ -26,11 +26,11 @@
 #include "BMP.h"
 #include "..\GameStates\Console.h"
 #include <vector>
-#include "..\Entities\Entity.h"
+#include "../InGameObjects\Entities\Entity.h"
 #include "..\ModelLoader\ModelManager.h"
 #include "..\ModelLoader\ObjModel.h"
 #include <math.h>
-#include "../Track.h"
+#include "../InGameObjects/Track.h"
 #include "Particle.h"
 
 class RenderingEngine

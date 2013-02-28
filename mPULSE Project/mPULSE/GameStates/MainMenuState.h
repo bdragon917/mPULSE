@@ -5,8 +5,8 @@
 #include "GameState.h"
 #include "../RenderingEngine/RenderingEngine.h"
 #include "../PhysicsEngine/PhysicsEngine.h"
-#include "../Entities/Entity.h"
-#include "../Entities/RenderableComponent.h"
+#include "../InGameObjects/Entities/Entity.h"
+#include "../InGameObjects/Entities/RenderableComponent.h"
 #include <map>
 #include "GameVariables.h"
 

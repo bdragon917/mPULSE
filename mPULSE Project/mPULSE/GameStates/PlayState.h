@@ -5,10 +5,10 @@
 #include "GameState.h"
 #include "../RenderingEngine/RenderingEngine.h"
 #include "../PhysicsEngine/PhysicsEngine.h"
-#include "../Entities/Entity.h"
-#include "../Entities/RenderableComponent.h"
-#include "../SoundEngine.h"
-#include "../Track.h"
+#include "../InGameObjects/Entities/Entity.h"
+#include "../InGameObjects/Entities/RenderableComponent.h"
+#include "../SoundEngine/SoundEngine.h"
+#include "../InGameObjects/Track.h"
 #include <map>
 #include "GameVariables.h"
 

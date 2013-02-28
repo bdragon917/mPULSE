@@ -37,12 +37,6 @@
     <Filter Include="Source Files\RenderingEngine">
       <UniqueIdentifier>{9b374871-c715-4a74-b464-623aded29154}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Entity">
-      <UniqueIdentifier>{e3ac21f7-c816-4c50-bc15-21621e2fc06d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Entity">
-      <UniqueIdentifier>{a3582aa2-f59e-4c94-9992-439e7d449509}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ModelLoader">
       <UniqueIdentifier>{6106e55f-355c-4478-830a-56a157299ab8}</UniqueIdentifier>
     </Filter>
@@ -55,17 +49,35 @@
     <Filter Include="Source Files\Input">
       <UniqueIdentifier>{02248efd-d4bf-4c85-a909-1f8af361fe4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Sound">
-      <UniqueIdentifier>{06e14a6e-00ab-42c3-8713-18de642dbb3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Sound">
-      <UniqueIdentifier>{02ca4494-1f9a-42e0-9ceb-afb5ddf3bee8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\AI">
       <UniqueIdentifier>{0cd90f1b-c831-4e63-b411-67ff022d9c1c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\AI">
       <UniqueIdentifier>{4d218c81-2dd8-4112-976c-da4170092811}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SoundEngine">
+      <UniqueIdentifier>{02ca4494-1f9a-42e0-9ceb-afb5ddf3bee8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SoundEngine">
+      <UniqueIdentifier>{06e14a6e-00ab-42c3-8713-18de642dbb3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\InGameObjects">
+      <UniqueIdentifier>{4d6df758-ec2b-4930-a1b4-d3ed29053209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\InGameObjects\Entity">
+      <UniqueIdentifier>{a3582aa2-f59e-4c94-9992-439e7d449509}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\InGameObjects\Pickups">
+      <UniqueIdentifier>{8333e960-6f1e-48af-a909-cf5a522bb827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\InGameObjects">
+      <UniqueIdentifier>{92ea595f-e87f-4781-bd6d-046fdd49a1a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\InGameObjects\Entity">
+      <UniqueIdentifier>{e3ac21f7-c816-4c50-bc15-21621e2fc06d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\InGameObjects\Pickups">
+      <UniqueIdentifier>{c4646572-1ea3-4711-8965-b29514921529}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +105,6 @@
     <ClCompile Include="PhysicsEngine\PhysicsEngine.cpp">
       <Filter>Source Files\PhysicsEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\Entity.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="RenderingEngine\RenderingEngine.cpp">
       <Filter>Source Files\RenderingEngine</Filter>
     </ClCompile>
@@ -114,26 +123,14 @@
     <ClCompile Include="GameStates\Console.cpp">
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\EntityComponent.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="GameStates\Camera.cpp">
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsEngine\Stream.cpp">
       <Filter>Source Files\PhysicsEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\RenderableComponent.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="GameStates\MainMenuState.cpp">
       <Filter>Source Files\GameStates</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundEngine.cpp">
-      <Filter>Source Files\Sound</Filter>
-    </ClCompile>
-    <ClCompile Include="Sound.cpp">
-      <Filter>Source Files\Sound</Filter>
     </ClCompile>
     <ClCompile Include="AI\AI.cpp">
       <Filter>Source Files\AI</Filter>
@@ -144,9 +141,6 @@
     <ClCompile Include="AI\Waypoints.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
-    <ClCompile Include="Track.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameStates\GameVariables.cpp">
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
@@ -155,6 +149,33 @@
     </ClCompile>
     <ClCompile Include="RenderingEngine\Particle.cpp">
       <Filter>Source Files\RenderingEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEngine\Sound.cpp">
+      <Filter>Source Files\SoundEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEngine\SoundEngine.cpp">
+      <Filter>Source Files\SoundEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameObjects\Entities\Entity.cpp">
+      <Filter>Source Files\InGameObjects\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameObjects\Entities\EntityComponent.cpp">
+      <Filter>Source Files\InGameObjects\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameObjects\Entities\RenderableComponent.cpp">
+      <Filter>Source Files\InGameObjects\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameObjects\Track.cpp">
+      <Filter>Source Files\InGameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Missile.cpp">
+      <Filter>Source Files\InGameObjects\Pickups</Filter>
+    </ClCompile>
+    <ClCompile Include="MissileLauncher.cpp">
+      <Filter>Source Files\InGameObjects\Pickups</Filter>
+    </ClCompile>
+    <ClCompile Include="Pickup.cpp">
+      <Filter>Source Files\InGameObjects\Pickups</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,9 +200,6 @@
     <ClInclude Include="PhysicsEngine\PhysicsEngine.h">
       <Filter>Header Files\PhysicsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\Entity.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="RenderingEngine\RenderingEngine.h">
       <Filter>Header Files\RenderingEngine</Filter>
     </ClInclude>
@@ -203,26 +221,14 @@
     <ClInclude Include="GameStates\Console.h">
       <Filter>Header Files\GameStates</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\EntityComponent.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="GameStates\Camera.h">
       <Filter>Header Files\GameStates</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsEngine\stream.h">
       <Filter>Header Files\PhysicsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\RenderableComponent.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="GameStates\MainMenuState.h">
       <Filter>Header Files\GameStates</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundEngine.h">
-      <Filter>Header Files\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="Sound.h">
-      <Filter>Header Files\Sound</Filter>
     </ClInclude>
     <ClInclude Include="AI\AI.h">
       <Filter>Header Files\AI</Filter>
@@ -233,9 +239,6 @@
     <ClInclude Include="AI\Waypoints.h">
       <Filter>Header Files\AI</Filter>
     </ClInclude>
-    <ClInclude Include="Track.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameStates\GameVariables.h">
       <Filter>Header Files\GameStates</Filter>
     </ClInclude>
@@ -244,6 +247,33 @@
     </ClInclude>
     <ClInclude Include="RenderingEngine\Particle.h">
       <Filter>Header Files\RenderingEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameObjects\Entities\Entity.h">
+      <Filter>Header Files\InGameObjects\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameObjects\Entities\EntityComponent.h">
+      <Filter>Header Files\InGameObjects\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameObjects\Entities\RenderableComponent.h">
+      <Filter>Header Files\InGameObjects\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEngine\Sound.h">
+      <Filter>Header Files\SoundEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEngine\SoundEngine.h">
+      <Filter>Header Files\SoundEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameObjects\Track.h">
+      <Filter>Header Files\InGameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Pickup.h">
+      <Filter>Header Files\InGameObjects\Pickups</Filter>
+    </ClInclude>
+    <ClInclude Include="MissileLauncher.h">
+      <Filter>Header Files\InGameObjects\Pickups</Filter>
+    </ClInclude>
+    <ClInclude Include="Missile.h">
+      <Filter>Header Files\InGameObjects\Pickups</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

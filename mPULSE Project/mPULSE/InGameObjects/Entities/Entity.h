@@ -1,11 +1,11 @@
 #pragma once
 //#include "EntityComponent.h"
 #include <vector>
-#include "..\GameStates\Camera.h"
-#include "../ModelLoader/ObjModel.h"
+#include "..\..\GameStates\Camera.h"
+#include "../../ModelLoader/ObjModel.h"
 #include "RenderableComponent.h"
 #include "NxPhysics.h"
-#include "../AI/AI.h"
+#include "../../AI/AI.h"
 
 class Entity
 {

@@ -1,6 +1,6 @@
 #pragma once
 #include "Waypoint.h"
-#include "../Entities/Entity.h"
+#include "../InGameObjects/Entities/Entity.h"
 #include <vector>
 #include <iostream>
 #include <stdio.h>
