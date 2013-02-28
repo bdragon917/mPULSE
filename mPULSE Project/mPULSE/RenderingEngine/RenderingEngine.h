@@ -118,6 +118,8 @@ private:
     void drawGroundPlane(float xoffset, float yoffset);
     void drawCheckerBoard(float x, float y);
 
+    void drawSkyBox(float x, float y, float z, float width, float height, float length, int textureID);
+
     void drawWheels(Entity* entity, int model, int texture);
     void drawCars(Entities* entities);
     void drawAICars(Entities* entities);

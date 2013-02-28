@@ -6,3 +6,18 @@ float cosangle = (xz + y12) / sqrt((xz + y11) * (xz + y22));
 float angle = acos(cosangle);
 */
 
+#include "AI.h"
+
+AI::AI(void)
+{}
+
+    AI::~AI(void)
+    {}
+
+    XboxController* AI::getControl()
+    {
+        return new XboxController(0);
+    }
+
+    void AI::update()
+    {}

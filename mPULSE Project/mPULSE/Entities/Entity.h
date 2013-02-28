@@ -5,6 +5,7 @@
 #include "../ModelLoader/ObjModel.h"
 #include "RenderableComponent.h"
 #include "NxPhysics.h"
+#include "../AI/AI.h"
 
 class Entity
 {
@@ -48,6 +49,8 @@ private:
     float maxSteeringAngle;
     float minSteering;
     float maxSteering;
+
+    AI* aAI;
 
 NxActor* actor;
     ObjModel* model;

@@ -115,8 +115,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[13];
-    glGenTextures(13, textureid_P1);
+    textureid_P1 = new GLuint[19];
+    glGenTextures(19, textureid_P1);
 
     bindBMPtoTexture("./img/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./img/loadScreen.bmp", textureid_P1[1]);
@@ -131,6 +131,13 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./img/MM_SingleSelected.bmp", textureid_P1[10]);
     bindBMPtoTexture("./img/MM_Verus.bmp", textureid_P1[11]);
     bindBMPtoTexture("./img/MM_VerusSelected.bmp", textureid_P1[12]);
+
+    bindBMPtoTexture("./img/sb/Weltraum.bmp", textureid_P1[13]);
+    bindBMPtoTexture("./img/sb/WeltraumH.bmp", textureid_P1[14]);
+    bindBMPtoTexture("./img/sb/WeltraumL.bmp", textureid_P1[15]);
+    bindBMPtoTexture("./img/sb/WeltraumO.bmp", textureid_P1[16]);
+    bindBMPtoTexture("./img/sb/WeltraumR.bmp", textureid_P1[17]);
+    bindBMPtoTexture("./img/sb/WeltraumU.bmp", textureid_P1[18]);
 	//"/img/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -1253,6 +1260,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                 drawStaticObjs(entities);
 
             
+                   drawSkyBox(0,0, 0, 10000.0f, 10000.0f, 10000.0f, 0);
 
                 //drawTrack(entities);
 
@@ -1814,6 +1822,73 @@ void RenderingEngine::drawSquare(float x, float y, float z, float half_width, fl
 		glTexCoord2d(0.0,0.0); glVertex3f(   (x+half_width),    (y-half_height),    (z)   );
 		glTexCoord2d(1.0,0.0); glVertex3f(   (x-half_width),    (y-half_height),    (z)   );
 		glEnd();
+}
+
+
+void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float height, float length, int textureID)
+{
+    //const int FRONT = 1;
+    //const int FRONT = 1;
+
+	// Center the Skybox around the given x,y,z position
+	x = x - width  / 2;
+	y = y - height / 2;
+	z = z - length / 2;
+
+
+	// Draw Front side
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[13]);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z+length);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height, z+length);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x+width, y+height, z+length); 
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y,		z+length);
+	glEnd();
+
+	// Draw Back side
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[14]);
+	glBegin(GL_QUADS);		
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y,		z);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x+width, y+height, z); 
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,		  y+height,	z);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x,		  y,		z);
+	glEnd();
+
+	// Draw Left side
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[15]);
+	glBegin(GL_QUADS);		
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height,	z);	
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,		  y+height,	z+length); 
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x,		  y,		z+length);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z);		
+	glEnd();
+
+	// Draw Right side
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[16]);
+	glBegin(GL_QUADS);		
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y,		z);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y,		z+length);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x+width, y+height,	z+length); 
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x+width, y+height,	z);
+	glEnd();
+
+	// Draw Up side
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[17]);
+	glBegin(GL_QUADS);		
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y+height, z);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y+height, z+length); 
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height,	z+length);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,		  y+height,	z);
+	glEnd();
+
+	// Draw Down side
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[18]);
+	glBegin(GL_QUADS);		
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x,		  y,		z);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z+length);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x+width, y,		z+length); 
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x+width, y,		z);
+	glEnd();
 }
 
 int RenderingEngine::drawIntro()
