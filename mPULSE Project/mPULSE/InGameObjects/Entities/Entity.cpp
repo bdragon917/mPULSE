@@ -20,6 +20,14 @@ Entity::Entity(NxActor* a)
     actor = a;
 }
 
+Pickup* Entity::firePickup()
+{
+    printf("Firing");
+    //printf();
+    printf("\n");
+    return new Pickup();
+}
+
 void Entity::addDriveWheel(NxWheelShape* wheel)
 {
     driveWheels.push_back(wheel);

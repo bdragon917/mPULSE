@@ -75,8 +75,21 @@ PlayState::PlayState()
 
 void PlayState::update(float dt)
 {    
-        
+    //Raycasting code    
+    /*NxScene* scene = physicsEngine->getScene(); 
+    NxRay ray;
+    NxRaycastHit hit;
+    ray.orig = entities.cars[0]->getActor()->getGlobalPosition();
+    ray.dir = entities.cars[0]->getActor()->getLinearVelocity(); //Need to normalize?
+    scene->raycastClosestShape(ray,NX_ALL_SHAPES,hit);
+    NxVec3 result = hit.worldImpact - ray.orig;
+    */
     physicsEngine->step(dt/1000);
+    /*
+    NxVec3 result2 = hit.worldImpact - entities.cars[0]->getActor()->getGlobalPosition();
+    if(result.dot(result2) < 0)
+        printf("fallin!");*/
+
     entities.cars[0]->aCam->updateCamera(1.0f);
     entities.cars[1]->aCam->updateCamera(1.0f);
 
@@ -426,9 +439,7 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     }
 
     else if (!state->rb)
-        rbPressed = false;
-
-    //state->vibrate(((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB,((float)state->rTrigger/(float)state->MAX_TRIGGER_MAG)*(float)state->MAX_VIB);
+        rbPressed = false;    
 
     int carCount = entities.cars.size();
     if (player < carCount)
@@ -456,7 +467,10 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
         if(state->b)
             car->brake(5000);
         else
-            car->brake(0);        
+            car->brake(0);   
+        if(state->a)
+            car->firePickup();
+
         if(state->lb) {
 		    physicsEngine->resetBox();
             car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));

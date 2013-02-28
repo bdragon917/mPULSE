@@ -28,10 +28,6 @@
     void Game::handleXboxEvents(int player,XboxController* controller)
     {
 		state->handleXboxEvents(player, controller);
-        if(controller->a)
-        {
-            printf("player pressed a");
-        }
     }
 
     void Game::checkStateChange()

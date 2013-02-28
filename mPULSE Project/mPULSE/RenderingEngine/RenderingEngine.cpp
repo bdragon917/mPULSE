@@ -118,27 +118,27 @@ void RenderingEngine::initializeTexture()
     textureid_P1 = new GLuint[19];
     glGenTextures(19, textureid_P1);
 
-    bindBMPtoTexture("./img/testT.bmp", textureid_P1[0]);
-    bindBMPtoTexture("./img/loadScreen.bmp", textureid_P1[1]);
-    bindBMPtoTexture("./img/hello.bmp", textureid_P1[2]);
-    bindBMPtoTexture("./img/Saruk.bmp", textureid_P1[3]);
-    bindBMPtoTexture("./img/Box.bmp", textureid_P1[4]);
-    bindBMPtoTexture("./img/Box2.bmp", textureid_P1[5]);
-    bindBMPtoTexture("./img/Box3.bmp", textureid_P1[6]);
-    bindBMPtoTexture("./img/white.bmp", textureid_P1[7]);
-    bindBMPtoTexture("./img/MainMenuBack.bmp", textureid_P1[8]);
-    bindBMPtoTexture("./img/MM_Single.bmp", textureid_P1[9]);
-    bindBMPtoTexture("./img/MM_SingleSelected.bmp", textureid_P1[10]);
-    bindBMPtoTexture("./img/MM_Verus.bmp", textureid_P1[11]);
-    bindBMPtoTexture("./img/MM_VerusSelected.bmp", textureid_P1[12]);
+    bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
+    bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
+    bindBMPtoTexture("./Images/hello.bmp", textureid_P1[2]);
+    bindBMPtoTexture("./Images/Saruk.bmp", textureid_P1[3]);
+    bindBMPtoTexture("./Images/Box.bmp", textureid_P1[4]);
+    bindBMPtoTexture("./Images/Box2.bmp", textureid_P1[5]);
+    bindBMPtoTexture("./Images/Box3.bmp", textureid_P1[6]);
+    bindBMPtoTexture("./Images/white.bmp", textureid_P1[7]);
+    bindBMPtoTexture("./Images/MainMenuBack.bmp", textureid_P1[8]);
+    bindBMPtoTexture("./Images/MM_Single.bmp", textureid_P1[9]);
+    bindBMPtoTexture("./Images/MM_SingleSelected.bmp", textureid_P1[10]);
+    bindBMPtoTexture("./Images/MM_Verus.bmp", textureid_P1[11]);
+    bindBMPtoTexture("./Images/MM_VerusSelected.bmp", textureid_P1[12]);
 
-    bindBMPtoTexture("./img/sb/Weltraum.bmp", textureid_P1[13]);
-    bindBMPtoTexture("./img/sb/WeltraumH.bmp", textureid_P1[14]);
-    bindBMPtoTexture("./img/sb/WeltraumL.bmp", textureid_P1[15]);
-    bindBMPtoTexture("./img/sb/WeltraumO.bmp", textureid_P1[16]);
-    bindBMPtoTexture("./img/sb/WeltraumR.bmp", textureid_P1[17]);
-    bindBMPtoTexture("./img/sb/WeltraumU.bmp", textureid_P1[18]);
-	//"/img/textureTest.bmp"
+    bindBMPtoTexture("./Images/sb/Weltraum.bmp", textureid_P1[13]);
+    bindBMPtoTexture("./Images/sb/WeltraumH.bmp", textureid_P1[14]);
+    bindBMPtoTexture("./Images/sb/WeltraumL.bmp", textureid_P1[15]);
+    bindBMPtoTexture("./Images/sb/WeltraumO.bmp", textureid_P1[16]);
+    bindBMPtoTexture("./Images/sb/WeltraumR.bmp", textureid_P1[17]);
+    bindBMPtoTexture("./Images/sb/WeltraumU.bmp", textureid_P1[18]);
+	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
 	//if (!(err == 1))

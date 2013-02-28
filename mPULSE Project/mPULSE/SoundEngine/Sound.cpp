@@ -4,7 +4,7 @@
 
 Sound::Sound(void)
 {
-	music = Mix_LoadMUS( "10YearsAgoAuda.mp3" );
+	music = Mix_LoadMUS( "SoundEngine\\Sounds\\10YearsAgoAuda.mp3" );
     if(!music) {
     printf("Mix_LoadMUS: %s\n", Mix_GetError());
     }

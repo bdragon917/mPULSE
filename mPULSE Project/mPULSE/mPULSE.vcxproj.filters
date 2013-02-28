@@ -168,13 +168,13 @@
     <ClCompile Include="InGameObjects\Track.cpp">
       <Filter>Source Files\InGameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Missile.cpp">
+    <ClCompile Include="InGameObjects\Pickups\Pickup.cpp">
       <Filter>Source Files\InGameObjects\Pickups</Filter>
     </ClCompile>
-    <ClCompile Include="MissileLauncher.cpp">
+    <ClCompile Include="InGameObjects\Pickups\MissileLauncher.cpp">
       <Filter>Source Files\InGameObjects\Pickups</Filter>
     </ClCompile>
-    <ClCompile Include="Pickup.cpp">
+    <ClCompile Include="InGameObjects\Pickups\Missile.cpp">
       <Filter>Source Files\InGameObjects\Pickups</Filter>
     </ClCompile>
   </ItemGroup>
@@ -266,13 +266,13 @@
     <ClInclude Include="InGameObjects\Track.h">
       <Filter>Header Files\InGameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Pickup.h">
+    <ClInclude Include="InGameObjects\Pickups\Missile.h">
       <Filter>Header Files\InGameObjects\Pickups</Filter>
     </ClInclude>
-    <ClInclude Include="MissileLauncher.h">
+    <ClInclude Include="InGameObjects\Pickups\Pickup.h">
       <Filter>Header Files\InGameObjects\Pickups</Filter>
     </ClInclude>
-    <ClInclude Include="Missile.h">
+    <ClInclude Include="InGameObjects\Pickups\MissileLauncher.h">
       <Filter>Header Files\InGameObjects\Pickups</Filter>
     </ClInclude>
   </ItemGroup>

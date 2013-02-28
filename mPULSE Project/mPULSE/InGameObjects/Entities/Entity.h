@@ -6,7 +6,7 @@
 #include "RenderableComponent.h"
 #include "NxPhysics.h"
 #include "../../AI/AI.h"
-
+#include "../Pickups/Pickup.h"
 class Entity
 {
 public:
@@ -35,7 +35,7 @@ public:
     float convertVel(float vel);
     std::vector<NxWheelShape*> getDriveWheels();
     std::vector<NxWheelShape*> getPassiveWheels();
-
+    Pickup* firePickup();
     //Drawing stuff
     //list of renderableElements [model index, texture index]
     std::vector<RenderableComponent*> rc;
