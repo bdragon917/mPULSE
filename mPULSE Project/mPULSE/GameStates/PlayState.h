@@ -9,6 +9,12 @@
 #include "../InGameObjects/Entities/RenderableComponent.h"
 #include "../SoundEngine/SoundEngine.h"
 #include "../InGameObjects/Track.h"
+
+#include "../InGameObjects/Pickups/Pickup.h"
+#include "../InGameObjects/Pickups/Barrier.h"
+#include "../InGameObjects/Pickups/MissileLauncher.h"
+#include "../InGameObjects/Pickups/Shield.h"
+
 #include <map>
 #include "GameVariables.h"
 

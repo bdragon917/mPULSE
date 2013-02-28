@@ -6,7 +6,17 @@
 #include "RenderableComponent.h"
 #include "NxPhysics.h"
 #include "../../AI/AI.h"
+
 #include "../Pickups/Pickup.h"
+//#include "../Pickups/MissileLauncher.h"
+//#include "../Pickups/Shield.h"
+//#include "../Pickups/Barrier.h"
+
+class MissileLauncher;
+class Shield;
+class Barrier;
+class Pickup;
+
 class Entity
 {
 public:
@@ -19,9 +29,11 @@ public:
     void addPassiveWheel(NxWheelShape* wheel);
     void addTorque(int tmpTorque);
 	void brake(int tmpTorque);
-    void addSteeringAngle(float angle);
+    void setSteeringAngle(float angle);
 	void chargeBattery();
 	void dischargeBattery();
+    void givePickup(Pickup* p);
+    void usePickup();
 
     //void setModel(ObjModel* m);
     void setActor(NxActor* a);
@@ -34,8 +46,7 @@ public:
 	NxActor* getActor();
     float convertVel(float vel);
     std::vector<NxWheelShape*> getDriveWheels();
-    std::vector<NxWheelShape*> getPassiveWheels();
-    Pickup* firePickup();
+    std::vector<NxWheelShape*> getPassiveWheels();    
     //Drawing stuff
     //list of renderableElements [model index, texture index]
     std::vector<RenderableComponent*> rc;
@@ -56,8 +67,8 @@ private:
 	float charge;
 
     AI* aAI;
-
-NxActor* actor;
+    Pickup* pickup;
+    NxActor* actor;
     ObjModel* model;
     std::vector<NxWheelShape*> driveWheels;
     std::vector<NxWheelShape*> passiveWheels;
