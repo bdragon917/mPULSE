@@ -449,7 +449,10 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 
         //printf("mag: %f x: %f ang: %f\n",state->leftStick.magnitude,state->leftStick.x,(state->leftStick.magnitude/24000.0) * -state->leftStick.x * deg);
 
-
+		if(state->x)
+			car->chargeBattery();
+		if(state->y)
+			car->dischargeBattery();
         if(state->b)
             car->brake(5000);
         else
