@@ -368,6 +368,25 @@ void Camera::updateCamera(float dt)
                 float disAbove = 5.0f;
                 NxVec3 tarCamLoc = NxVec3(-targetDistance,disAbove,0.0f);
 
+                NxVec3 tarCamSpd30 = NxVec3(-targetDistance,disAbove,0.0f);
+                NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.75f,disAbove,0.0f);
+                NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.60f,disAbove * 0.75f,0.0f);
+                NxVec3 tarCamSpdH = NxVec3(-targetDistance * 0.50f,disAbove * 0.5f,0.0f);       //add random jitter
+
+                float curActorSpd = targetActor->getLinearVelocity().magnitude();
+                if (curActorSpd < 30.0f)
+                    tarCamLoc = (tarCamLoc * (1 - (curActorSpd/30.0f))) + (tarCamSpd30 * (curActorSpd/30.0f));
+                else if (curActorSpd < 50.0f)
+                    tarCamLoc = (tarCamSpd30 * (1 - ((curActorSpd-30.0f)/20.0f))) + (tarCamSpd50 * ((curActorSpd-30.0f)/20.0f));
+                else if (curActorSpd < 70.0f)
+                    tarCamLoc = (tarCamSpd50 * (1 - ((curActorSpd-50.0f)/20.0f))) + (tarCamSpd70 * ((curActorSpd-50.0f)/20.0f));
+                else
+                    tarCamLoc = tarCamSpdH;
+
+
+
+
+
                 //set look at in local space
                 NxVec3 tarCamLookAt = NxVec3(targetDistance / 3,(disAbove * 3 / 4),0.0f);
 

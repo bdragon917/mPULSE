@@ -39,6 +39,8 @@ private:
     //std::vector<waypoint> finishWaypoints;    
     //std::vector<waypoint> carSpawnWaypoints;
     //std::vector<waypoint> itemSpawnWaypoints;
-    Entity* entity;
+    Entity* entity;     //waypointsEntity
+
+    
 };
 
