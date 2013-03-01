@@ -20,6 +20,7 @@ public:
     void render();
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);
     void handleXboxEvents(int player,XboxController* state);
+    void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,XboxController* state);
     void InitializeConsoleCommands();
 
 private:

@@ -12,6 +12,8 @@ class Entity
 public:
     Entity();
     Entity(NxActor* a);
+
+    NxVec3 carStartPos;
     //std::vector<EntityComponent*> components;
     Camera* aCam;
     //void addComponent(EntityComponent* com);
@@ -43,6 +45,9 @@ public:
     //int rotation mode
     //rotation data
 
+    AI* aAI;
+
+
 private:
 	bool batteryCharged;
     bool usingDisplayList;
@@ -55,7 +60,7 @@ private:
     float maxSteering;
 	float charge;
 
-    AI* aAI;
+    
 
 NxActor* actor;
     ObjModel* model;

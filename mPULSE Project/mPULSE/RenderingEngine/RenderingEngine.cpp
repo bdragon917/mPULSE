@@ -88,7 +88,7 @@ void RenderingEngine::bindBMPtoTexture(char* filename, GLuint textures)
 
 	int err = aBMPImg.Load(filename);
 	if (!(err == 1))
-	{printf("Error: Loading Texture: %i\n", err);}
+	{printf("Error: Loading Texture: %i %s\n", err, filename);}
 	data = aBMPImg.GetImg();
 	width = aBMPImg.GetWidth();
 	height = aBMPImg.GetHeight();
@@ -1516,6 +1516,17 @@ void RenderingEngine::drawAICars(Entities* entities)
                     NxMat34* aPose = &(entities->AIcars[i]->getActor()->getGlobalPose());
                     //drawModel(modelManager.getModel(entities->AIcars[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
                     drawModelPos(modelManager.getModel(entities->AIcars[i]->rc[r]->modelID), aPose );
+
+                    //myTargetVector
+                    glBegin(GL_TRIANGLE_STRIP);
+                        glNormal3f(1.0f, 0.0f, 0.0f);
+		                glTexCoord2d(0.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x-0.2f,entities->AIcars.at(i)->aAI->myTargetVector.y,entities->AIcars.at(i)->aAI->myTargetVector.z);
+                        glTexCoord2d(1.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x,entities->AIcars.at(i)->aAI->myTargetVector.y+20.2f,entities->AIcars.at(i)->aAI->myTargetVector.z);
+                        glTexCoord2d(0.0,1.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x+0.2f,entities->AIcars.at(i)->aAI->myTargetVector.y,entities->AIcars.at(i)->aAI->myTargetVector.z);
+                    glEnd();
+
+
+                    //drawModel(0, entities->AIcars.at(i)->aAI->myTargetVector.x,entities->AIcars.at(i)->aAI->myTargetVector.y,entities->AIcars.at(i)->aAI->myTargetVector.z, 1.0f);
                 }
             }
             else
@@ -1616,13 +1627,13 @@ void RenderingEngine::drawTrack(Track* track)
         }
     }
     //Draw the waypoints on the track
-    std::vector<Track::Waypoint>* wps = track->getWaypoints();
+    std::vector<Waypoint*>* wps = track->getWaypoints();
     ObjModel* sphere = modelManager.getModel("sphere.obj");
     glColor3f(0,1,1);
     if (sphere != NULL)
     {                
         for(unsigned int i=0; i<wps->size(); i++)         
-            drawModel(sphere,wps->at(i).x,wps->at(i).y+2,wps->at(i).z,1);
+            drawModel(sphere,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
     }
         
 }

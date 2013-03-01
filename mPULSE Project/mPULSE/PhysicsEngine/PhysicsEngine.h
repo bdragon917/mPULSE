@@ -53,6 +53,8 @@ public:
 	void releaseNx();
 	void resetNx();
     void setupPlayScene(vector<Entity*>* cars);      //Use this to initalize the physicScene for playState
+    void setupCars(vector<Entity*>* cars);
+
     void losing();
 	//NxVec3 ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength);
 	//NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);

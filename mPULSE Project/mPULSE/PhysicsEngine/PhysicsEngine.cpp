@@ -17,7 +17,7 @@ PhysicsEngine* PhysicsEngine::getInstance()
 
 void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 {
-    std::vector<Entity*>* tmpCars =  cars;
+    //std::vector<Entity*>* tmpCars =  cars;
 	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
 	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01f);
 
@@ -45,6 +45,12 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	//groundPlane = createGroundPlane();
 	//box = createBox();
 
+    setupCars(cars);
+
+ }
+
+void PhysicsEngine::setupCars(vector<Entity*>* cars)
+{
     for (unsigned pxCars = 0; pxCars < cars->size(); ++pxCars)
     {
 
@@ -77,11 +83,17 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
        // entityCar1.components.push_back( &ec_car );
         //entityCar1->addComponent( ec_car );    
 	    entityCar1->setActor(box);
-        tmpCars->at(pxCars) = entityCar1;    
+        //cars->at(pxCars) = entityCar1;
+
+        if (&(cars->at(pxCars)->carStartPos) == NULL)
+        {printf("carStartPos is nul\n");}
+
 	    box->setSleepEnergyThreshold(0);
 
-    }
 
+        entityCar1->getActor()->setGlobalPosition(NxVec3(   ((rand() % 100) / 10.0f)    ,10.0f,  ((rand() % 100) / 10.0f)   ));
+
+    }
 }
 
 void PhysicsEngine::sceneSetup()

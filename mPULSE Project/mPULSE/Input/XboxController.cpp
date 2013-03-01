@@ -182,3 +182,23 @@ void XboxController::update()
         rTrigger = state.Gamepad.bRightTrigger;                    
     }
 }
+
+void XboxController::initializeVariables()
+{    
+            dpadUp = false;
+            dpadDown = false;
+            dpadLeft = false;
+            dpadRight = false;
+            a = false;               
+            b = false;                 
+            x = false;                 
+            y = false;                 
+            lb = false;                 
+            rb = false;                 
+            start = false;                 
+            back = false;                 
+            ls = false;                 
+            rs = false;    
+            lTrigger = 0;
+            rTrigger = 0;  
+}

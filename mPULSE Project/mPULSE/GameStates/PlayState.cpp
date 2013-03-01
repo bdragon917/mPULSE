@@ -6,11 +6,25 @@ PlayState::PlayState()
     rbPressed = false;
     changeState(PLAY); 
 
+    //Add player 1
     Entity* playerCar = new Entity();
     entities.cars.push_back(playerCar);
 
     RenderableComponent* pc_rc = new RenderableComponent(1,3);
     playerCar->rc.push_back(pc_rc);
+    
+
+    //Add player 2
+    Entity* player2Car = new Entity();
+    entities.cars.push_back(player2Car);
+
+    RenderableComponent* pc2_rc = new RenderableComponent(1,3);
+    player2Car->rc.push_back(pc2_rc);
+
+
+
+
+
     
     int num_AI = 2;
 
@@ -19,14 +33,28 @@ PlayState::PlayState()
 
         Entity* newAIrCar = new Entity();
         RenderableComponent* newRc = new RenderableComponent(1, 5);
-        newAIrCar->rc.push_back(newRc);
-        entities.cars.push_back(newAIrCar);
 
-    }    
+        newAIrCar->aAI = new AI();
+
+        newAIrCar->rc.push_back(newRc);
+        //entities.cars.push_back(newAIrCar);
+        entities.AIcars.push_back(newAIrCar);
+
+    }
+    
+    //*/
     
     gameVariables = GameVariables::getInstance();
     physicsEngine = PhysicsEngine::getInstance();
-    physicsEngine->setupPlayScene(&entities.cars);
+    physicsEngine->setupPlayScene(&entities.cars);  //Assign actors to the entities
+    physicsEngine->setupCars(&entities.AIcars);  //Assign actors to the entities without the initalization of the engine
+
+    //Attach AI to the cars
+    for (int aa=0;aa<entities.AIcars.size();aa++)
+    {
+        entities.AIcars.at(aa)->aAI->setActor(entities.AIcars.at(aa)->getActor());   //Assign actors to the entities's AI
+    }
+
     renderingEngine = RenderingEngine::getInstance();
     renderingEngine->setPlayerNum(gameVariables->getPlayerNum());
 
@@ -46,7 +74,7 @@ PlayState::PlayState()
         aTrack->rc.push_back(rc);        
         aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));     
     }   
-    track = new Track("Race1.txt",aTrack);
+    track = new Track(".\\InGameObjects\\Race1.txt",aTrack);
     //*/
 
     physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);
@@ -84,14 +112,15 @@ void PlayState::update(float dt)
     scene->raycastClosestShape(ray,NX_ALL_SHAPES,hit);
     NxVec3 result = hit.worldImpact - ray.orig;
     */
-    physicsEngine->step(dt/1000);
+    //physicsEngine->step(dt/1000);
     /*
     NxVec3 result2 = hit.worldImpact - entities.cars[0]->getActor()->getGlobalPosition();
     if(result.dot(result2) < 0)
         printf("fallin!");*/
 
     entities.cars[0]->aCam->updateCamera(1.0f);
-    entities.cars[1]->aCam->updateCamera(1.0f);
+    if (entities.cars.size() > 1)
+        entities.cars[1]->aCam->updateCamera(1.0f);
 
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
@@ -117,6 +146,18 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.AIcars.size(); ++c)
     {
         Entity* car = entities.AIcars[c];
+
+        //Do AI thinking here!!!!!
+        //car->aAI->
+        //car->aAI->setWaypoint(&Waypoint(7.83703,0.413632,-101.592));
+        car->aAI->setWaypoint(&Waypoint(entities.cars[0]->getActor()->getGlobalPose().t));
+        car->aAI->update();
+
+        //Do AI Controller stuff
+        handleXboxController(c, entities.AIcars ,entities.AIcars.at(c)->aAI->getControl());
+        //handleXboxController(0, entities.cars ,entities.AIcars.at(c)->aAI->getControl());
+
+
         if (car->getActor()->getGlobalPose().t.y < -2.0f)
         {
             car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
@@ -135,6 +176,8 @@ void PlayState::update(float dt)
         }
     }
 
+
+    physicsEngine->step(dt/1000);
     
 //    entities.cars[0]->aCam->updateCamera(dt/16);
     //entities.cars[0]->aCam->updateCamera(1.0f);
@@ -427,6 +470,12 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
+    handleXboxController(player, entities.cars , state);
+    
+}
+
+void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,XboxController* state)
+{
 
     //logReplay(player, state, 0);      Used to log replay!
 
@@ -441,11 +490,11 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     else if (!state->rb)
         rbPressed = false;    
 
-    int carCount = entities.cars.size();
+    int carCount = thing.size();
     if (player < carCount)
     {
         //UserCamControl  
-        Entity* car = entities.cars[player];
+        Entity* car = thing[player];
         car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
     
         NxVec3 a = car->getActor()->getLinearVelocity();

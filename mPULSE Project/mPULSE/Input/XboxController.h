@@ -58,6 +58,8 @@ public:
     analogInfo calculateAnalogInfo(XINPUT_STATE const &state, analogType stick);
     void update();
 
+    void initializeVariables();
+
     static const int MAX_VIB = 65535;
     static const int MAX_STICK_MAG = 24000; 
     static const int MAX_TRIGGER_MAG = 255;    

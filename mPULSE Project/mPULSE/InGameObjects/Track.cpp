@@ -56,14 +56,14 @@
 
                     i++;
                 }
-                TYPE type = stringToType(heading);
+                Waypoint::TYPE type = stringToType(heading);
                 
                 //********PARSE OUT THE DATA********//  
-                if (type != INVALID_TYPE)
+                if (type != Waypoint::INVALID_TYPE)
                 {
     
-                    Waypoint wp;
-                    wp.type = type;
+                    Waypoint* wp = new Waypoint();
+                    wp->type = type;
 
                     bool startSeen = true;
                     startFlag = i;
@@ -73,11 +73,11 @@
                         if((ch == ' ' || ch == '\t') && startSeen)
                         {
                             if (j == 0)
-                                wp.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                                wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 1)
-                                wp.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                                wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 2)
-                                wp.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                                wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
 
                             j++;
                             startSeen = false;
@@ -93,11 +93,11 @@
                     if(startSeen)
                     {
                         if (j == 0)
-                            wp.x = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
+                            wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                         else if(j == 1)
-                            wp.y = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
+                            wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                         else if(j == 2)
-                            wp.z = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
+                            wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                     }
 
                     addWaypoint(wp);
@@ -105,6 +105,8 @@
             }
 	        file.close();                
         }
+        else
+        {printf("Track checkpoints didn't open, can't find maybe??\n"); }
         waypoints.shrink_to_fit();
     }
 
@@ -118,44 +120,45 @@
         return entity;
     }
 
-    void Track::addWaypoint(Waypoint wp)
+    void Track::addWaypoint(Waypoint* wp)
     {
         waypoints.push_back(wp);
     }
 
-    void Track::addWaypoint(float x,float y,float z,TYPE type)
+    void Track::addWaypoint(float x,float y,float z,Waypoint::TYPE type)
     {
-        Waypoint w;
-        w.x = x;
-        w.y = y;
-        w.z = z;
-        w.type = type;
+        Waypoint* w = new Waypoint();
+        w->pos.x = x;
+        w->pos.y = y;
+        w->pos.z = z;
+        w->type = type;
 
         waypoints.push_back(w);
     }
 
-    std::vector<Track::Waypoint>* Track::getWaypoints()
+    std::vector<Waypoint*>* Track::getWaypoints()
     {
         return &waypoints;
     }
 
-    std::vector<Track::Waypoint>* Track::getWaypointsOfType(TYPE type)
+    std::vector<Waypoint*>* Track::getWaypointsOfType(Waypoint::TYPE type)
     {
         return NULL;
     }
 
-    Track::TYPE Track::stringToType(std::string typeString)
+
+    Waypoint::TYPE Track::stringToType(std::string typeString)
     {
         if(typeString.compare("START") == 0)
-            return START;
+            return Waypoint::START;
         else if(typeString.compare("FINISH") == 0)
-            return FINISH;
+            return Waypoint::FINISH;
         else if(typeString.compare("WAYPOINT") == 0)
-            return WAYPOINT;
+            return Waypoint::WAYPOINT;
         else if(typeString.compare("CAR_SPAWN") == 0)
-            return CAR_SPAWN;
+            return Waypoint::CAR_SPAWN;
         else if(typeString.compare("ITEM_SPAWN") == 0)
-            return ITEM_SPAWN;
+            return Waypoint::ITEM_SPAWN;
         else
-            return INVALID_TYPE;
+            return Waypoint::INVALID_TYPE;
     }
