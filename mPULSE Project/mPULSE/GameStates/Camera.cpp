@@ -469,7 +469,8 @@ void Camera::updateCamera(float dt)
 
                 if (userCamControl.magnitude() > 0.2f)
                 {
-                    NxVec3 newCam = targetActor->getGlobalPose() * (NxVec3(userCamControl.x * 10.0f,3.5f,-userCamControl.z * 10.0f));
+                    //NxVec3 newCam = targetActor->getGlobalPose() * (NxVec3(userCamControl.x * 10.0f,3.5f,-userCamControl.z * 10.0f));
+                    NxVec3 newCam = targetActor->getGlobalPose() * (NxVec3(userCamControl.x * 10.0f,-userCamControl.z * 10.0f,-3.5f));
                     curCamLoc = newCam;
                 }
                 break;

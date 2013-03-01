@@ -9,7 +9,7 @@ float angle = acos(cosangle);
 #include "AI.h"
 
 AI::AI(void)
-{xController = new XboxController(5);myTargetVector = NxVec3(0,0,0);}
+{xController = new XboxController(5);myTargetVector = NxVec3(0,0,0);myOrientation = NxVec3(0,0,0);}
 
     AI::~AI(void)
     {}
@@ -25,6 +25,7 @@ AI::AI(void)
 
         NxVec3 myDirection = NxVec3(0.0f, 0.0f, 1.0f);
         myDirection = myActor->getGlobalOrientation() * myDirection;
+        myOrientation = myDirection;
         //myDirection = myDirection / myDirection.normalize();
 
         NxVec3 myTarget = targetWaypoint->pos;

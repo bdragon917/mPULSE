@@ -132,12 +132,12 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/MM_Verus.bmp", textureid_P1[11]);
     bindBMPtoTexture("./Images/MM_VerusSelected.bmp", textureid_P1[12]);
 
-    bindBMPtoTexture("./Images/sb/Weltraum.bmp", textureid_P1[13]);
-    bindBMPtoTexture("./Images/sb/WeltraumH.bmp", textureid_P1[14]);
-    bindBMPtoTexture("./Images/sb/WeltraumL.bmp", textureid_P1[15]);
-    bindBMPtoTexture("./Images/sb/WeltraumO.bmp", textureid_P1[16]);
-    bindBMPtoTexture("./Images/sb/WeltraumR.bmp", textureid_P1[17]);
-    bindBMPtoTexture("./Images/sb/WeltraumU.bmp", textureid_P1[18]);
+    bindBMPtoTexture("./Images/sb/ss_front5.bmp", textureid_P1[13]);
+    bindBMPtoTexture("./Images/sb/ss_back6.bmp", textureid_P1[14]);
+    bindBMPtoTexture("./Images/sb/ss_left2.bmp", textureid_P1[15]);
+    bindBMPtoTexture("./Images/sb/ss_right1.bmp", textureid_P1[16]);
+    bindBMPtoTexture("./Images/sb/ss_top3.bmp", textureid_P1[17]);
+    bindBMPtoTexture("./Images/sb/ss_bottom4.bmp", textureid_P1[18]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -1068,6 +1068,9 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 	
         if (showScene)
         {
+
+
+
             /**
             glPushMatrix();
 
@@ -1259,9 +1262,24 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                 drawObstacles(entities);
                 drawStaticObjs(entities);
 
-            
-                   drawSkyBox(0,0, 0, 10000.0f, 10000.0f, 10000.0f, 0);
 
+                     //if (aShader != NULL)
+                     //{
+                     //   aShader->off();           //this give an interesting effect
+                     //}
+                    //glPushMatrix();
+                    glDisable (GL_LIGHTING);
+                    //glEnable(GL_TEXTURE_2D);
+                    //glDisable (GL_NORMALIZE);
+                    //glDepthFunc(GL_ALWAYS);
+                    drawSkyBox(0,0, 0, 15000.0f, 15000.0f, 15000.0f, 0);
+                    //glDepthFunc(GL_LESS);
+                    //glEnable (GL_NORMALIZE);
+                    glEnable (GL_LIGHTING);
+
+
+                   //glColorMaterial(GL_FRONT_AND_BACK,  GL_AMBIENT_AND_DIFFUSE);
+                   //glPopMatrix();
                 //drawTrack(entities);
 
                         
@@ -1846,7 +1864,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	y = y - height / 2;
 	z = z - length / 2;
 
-
+    glNormal3f(0.0f, 0.0f, 0.0f);
 	// Draw Front side
 	glBindTexture(GL_TEXTURE_2D, textureid_P1[13]);
 	glBegin(GL_QUADS);	
@@ -1866,7 +1884,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Left side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[15]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[16]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height,	z);	
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,		  y+height,	z+length); 
@@ -1875,7 +1893,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Right side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[17]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[15]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y,		z);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y,		z+length);
@@ -1884,21 +1902,21 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Up side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[18]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[17]);
 	glBegin(GL_QUADS);		
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y+height, z);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y+height, z+length); 
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height,	z+length);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,		  y+height,	z);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x+width, y+height, z);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y+height, z+length); 
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y+height,	z+length);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height,	z);
 	glEnd();
 
 	// Draw Down side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[16]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[18]);
 	glBegin(GL_QUADS);		
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(x,		  y,		z);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z+length);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(x+width, y,		z+length); 
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(x+width, y,		z);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y,		z+length);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(x+width, y,		z+length); 
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y,		z);
 	glEnd();
 }
 
