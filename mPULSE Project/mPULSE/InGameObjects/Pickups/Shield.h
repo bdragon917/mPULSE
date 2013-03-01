@@ -5,11 +5,12 @@
 
 class Entity;
 
-class MissileLauncher : public Pickup
+class Shield : public Pickup
 {
+
 public:
-    MissileLauncher(void);
-    ~MissileLauncher(void);
+    Shield(void);
+    ~Shield(void);
     Entity* use();
 };
 

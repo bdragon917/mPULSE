@@ -1,8 +1,14 @@
 #pragma once
+#include "../Entities/Entity.h"
+
+class Entity;
+
 class Pickup
 {
 public:
-    Pickup(void);
-    ~Pickup(void);
+    Pickup();
+    ~Pickup();
+
+    virtual Entity* use()=0;
 };
 

@@ -1,11 +1,12 @@
 #include "Pickup.h"
 
 
-Pickup::Pickup(void)
+Pickup::Pickup()
 {
+
 }
 
 
-Pickup::~Pickup(void)
+Pickup::~Pickup()
 {
 }

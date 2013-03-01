@@ -3,6 +3,6 @@ class Missile
 {
 public:
     Missile(void);
-    ~Missile(void);
+    ~Missile(void);    
 };
 

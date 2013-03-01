@@ -445,12 +445,12 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             else if (keyPressed == SDLK_a)
             {
                 Entity* car = entities.cars[0];
-                car->addSteeringAngle(500.0f);
+                car->setSteeringAngle(500.0f);
             }
             else if (keyPressed == SDLK_d)
             {
                 Entity* car = entities.cars[0];
-                car->addSteeringAngle(-500.0f);
+                car->setSteeringAngle(-500.0f);
             }
             else if (keyPressed == SDLK_w)
             {
@@ -504,7 +504,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,Xbo
         static int count = 0;
 
         car->addTorque(rTriggMag - lTriggMag);        
-        car->addSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
+        car->setSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
 //        car->addTilSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
 
         //printf("mag: %f x: %f ang: %f\n",state->leftStick.magnitude,state->leftStick.x,(state->leftStick.magnitude/24000.0) * -state->leftStick.x * deg);
@@ -518,7 +518,15 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,Xbo
         else
             car->brake(0);   
         if(state->a)
-            car->firePickup();
+            car->usePickup();
+        
+        if(state->dpadUp)
+            car->givePickup(new MissileLauncher());
+        if(state->dpadRight)
+            car->givePickup(new Shield());
+        if(state->dpadLeft)
+            car->givePickup(new Barrier());
+        
 
         if(state->lb) {
 		    physicsEngine->resetBox();

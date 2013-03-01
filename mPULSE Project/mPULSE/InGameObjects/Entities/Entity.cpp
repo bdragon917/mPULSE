@@ -14,18 +14,30 @@ Entity::Entity()
 
     maxTorque = 3000;
     minTorque = -3000;
+    //Pickup = NULL
 }
+
 Entity::Entity(NxActor* a)
 {
     actor = a;
 }
 
-Pickup* Entity::firePickup()
+void Entity::givePickup(Pickup* p)
 {
-    printf("Firing");
-    //printf();
-    printf("\n");
-    return new Pickup();
+    pickup = p;
+}
+
+void Entity::usePickup()
+{
+    
+    if(pickup != NULL)
+    {
+        pickup->use();//printf();        
+    }
+    else
+        printf("No Pickups Aquired");
+
+    printf("\n");    
 }
 
 void Entity::addDriveWheel(NxWheelShape* wheel)
@@ -87,7 +99,7 @@ float Entity::convertVel(float vel)
     return deltaSteer;
 }
 
-void Entity::addSteeringAngle(float percent)
+void Entity::setSteeringAngle(float percent)
 {
     float maxDeltaAngle = 0;
     float steeringAngle = 0;
