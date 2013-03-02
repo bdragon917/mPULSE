@@ -93,11 +93,6 @@
     <ClCompile Include="InGameObjects\Entities\Entity.cpp" />
     <ClCompile Include="InGameObjects\Entities\EntityComponent.cpp" />
     <ClCompile Include="InGameObjects\Entities\RenderableComponent.cpp" />
-    <ClCompile Include="InGameObjects\Pickups\Barrier.cpp" />
-    <ClCompile Include="InGameObjects\Pickups\Missile.cpp" />
-    <ClCompile Include="InGameObjects\Pickups\MissileLauncher.cpp" />
-    <ClCompile Include="InGameObjects\Pickups\Pickup.cpp" />
-    <ClCompile Include="InGameObjects\Pickups\Shield.cpp" />
     <ClCompile Include="InGameObjects\Track.cpp" />
     <ClCompile Include="Input\XboxController.cpp" />
     <ClCompile Include="ModelLoader\ModelManager.cpp" />
@@ -129,11 +124,6 @@
     <ClInclude Include="InGameObjects\Entities\Entity.h" />
     <ClInclude Include="InGameObjects\Entities\EntityComponent.h" />
     <ClInclude Include="InGameObjects\Entities\RenderableComponent.h" />
-    <ClInclude Include="InGameObjects\Pickups\Barrier.h" />
-    <ClInclude Include="InGameObjects\Pickups\Missile.h" />
-    <ClInclude Include="InGameObjects\Pickups\MissileLauncher.h" />
-    <ClInclude Include="InGameObjects\Pickups\Pickup.h" />
-    <ClInclude Include="InGameObjects\Pickups\Shield.h" />
     <ClInclude Include="InGameObjects\Track.h" />
     <ClInclude Include="Input\XboxController.h" />
     <ClInclude Include="ModelLoader\ModelManager.h" />
