@@ -48,11 +48,11 @@ AI::AI(void)
 
         //angleToTarget = acos((angleToTarget) / (myDirection.magnitude() * myTarget.magnitude()));
         //angleToTarget = acos((angleToTarget)/(myTarget.magnitude()*myDirection.magnitude()));
-        printf("AI: AngleToTarget%f\n", angleToTarget);
+        //printf("AI: AngleToTarget%f\n", angleToTarget);
 
         if (angleToTarget > 0)
         {
-            printf("AI: Steering right\n");
+            //printf("AI: Steering right\n");
             //steer right
             myTarget.normalize();
             //xController->leftStick.x = myTarget.x;
@@ -71,7 +71,7 @@ AI::AI(void)
         else
         {
             //steer left
-            printf("AI: Steering left\n");
+            //printf("AI: Steering left\n");
             myTarget.normalize();
             //xController->leftStick.x = myTarget.x;
             //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);

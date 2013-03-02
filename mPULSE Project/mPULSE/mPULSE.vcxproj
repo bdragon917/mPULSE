@@ -99,6 +99,7 @@
     <ClCompile Include="InGameObjects\Pickups\Pickup.cpp" />
     <ClCompile Include="InGameObjects\Pickups\Shield.cpp" />
     <ClCompile Include="InGameObjects\Track.cpp" />
+    <ClCompile Include="InGameObjects\TriggerCallback.cpp" />
     <ClCompile Include="Input\XboxController.cpp" />
     <ClCompile Include="ModelLoader\ModelManager.cpp" />
     <ClCompile Include="ModelLoader\ObjModel.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="InGameObjects\Pickups\Pickup.h" />
     <ClInclude Include="InGameObjects\Pickups\Shield.h" />
     <ClInclude Include="InGameObjects\Track.h" />
+    <ClInclude Include="InGameObjects\TriggerCallback.h" />
     <ClInclude Include="Input\XboxController.h" />
     <ClInclude Include="ModelLoader\ModelManager.h" />
     <ClInclude Include="ModelLoader\ObjModel.h" />

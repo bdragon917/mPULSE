@@ -1,5 +1,6 @@
 #include "PhysicsEngine.h"
 
+
 PhysicsEngine::PhysicsEngine()
 {
 	sceneSetup();
@@ -35,6 +36,8 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	NxVec3 defaultGravity(0,-9.8f*(10.0f),0);
 	sceneDesc.gravity = defaultGravity;
 	scene = physicsSDK->createScene(sceneDesc);
+	//Set up so that trigger objects in the scene will sent an event to TriggerReport
+	scene->setUserTriggerReport(&myTriggerCallback);
 
 	//Create the default material
 	NxMaterial* defaultMaterial = scene->getMaterialFromIndex(0);
@@ -280,6 +283,7 @@ NxActor* PhysicsEngine::createStaticBox(float x, float y, float z)
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions.set(0.5,0.5,0.5);
+	boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
 	//boxDesc.localPose.t = position;
 
 	NxActorDesc actorDesc;
@@ -417,13 +421,13 @@ NxActor* PhysicsEngine::createCarChassis()
 
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxShapes[2];
-	boxShapes[0].dimensions.set(2.5f, 0.4f, 1.2f);
-	boxShapes[1].dimensions.set(1.f, 0.3f, 1.1f);
-	boxShapes[1].localPose.t.set(-0.3f, 0.7f, 0.f);
+	boxShapes[0].dimensions.set(2.2f, 0.4f, 1.2f);
+	//boxShapes[1].dimensions.set(1.f, 0.3f, 1.1f);
+	//boxShapes[1].localPose.t.set(-0.3f, 0.7f, 0.f);
 
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&boxShapes[0]);
-	actorDesc.shapes.pushBack(&boxShapes[1]);
+	//actorDesc.shapes.pushBack(&boxShapes[1]);
 	actorDesc.body = &bodyDesc;
 	actorDesc.density = 10.0f;
 	actorDesc.globalPose.t = position;
@@ -559,4 +563,6 @@ void PhysicsEngine::steer(int mag)
     w3->setSteerAngle(magnitude);
     w4->setSteerAngle(magnitude);
 }
+
+
 

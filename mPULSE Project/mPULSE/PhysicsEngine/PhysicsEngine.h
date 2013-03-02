@@ -7,6 +7,7 @@
 #include <NxPhysicsSDK.h>
 #include <NxActor.h>
 #include "../InGameObjects/Entities/Entity.h"
+#include "../InGameObjects/TriggerCallback.h"
 
 #include "stream.h"
 #include <cstdlib>
@@ -30,6 +31,8 @@ private:
 	NxActor* box;
 
     NxMaterial* wsm;
+
+	TriggerCallback myTriggerCallback;
 
 
 

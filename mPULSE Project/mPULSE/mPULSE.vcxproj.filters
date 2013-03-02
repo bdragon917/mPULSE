@@ -183,6 +183,9 @@
     <ClCompile Include="InGameObjects\Pickups\Shield.cpp">
       <Filter>Source Files\InGameObjects\Pickups</Filter>
     </ClCompile>
+    <ClCompile Include="InGameObjects\TriggerCallback.cpp">
+      <Filter>Source Files\InGameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -286,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="InGameObjects\Pickups\Barrier.h">
       <Filter>Header Files\InGameObjects\Pickups</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameObjects\TriggerCallback.h">
+      <Filter>Header Files\InGameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
