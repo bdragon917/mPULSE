@@ -28,7 +28,7 @@ private:
     bool showConsole;
     bool rbPressed;
     PlayState();
-
+    float id;
     Track* track;
     RenderingEngine::Entities entities;
     PhysicsEngine* physicsEngine;
