@@ -79,9 +79,9 @@
                             else if(j == 2)
                                 wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 3)
-                                wp->id = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                                wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 4)
-                                wp->next = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                                wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
 
                             j++;
                             startSeen = false;
@@ -103,9 +103,9 @@
                         else if(j == 2)
                             wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                         else if(j == 3)
-                            wp->id = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
+                            wp->id = static_cast<int>(atof(tmpLine.substr(startFlag).data()));
                         else if(j == 4)
-                            wp->next = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
+                            wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag).data()));
                     }
 
                     addWaypoint(wp);
@@ -115,7 +115,7 @@
         }
         else
         {printf("Track checkpoints didn't open, can't find maybe??\n"); }
-        waypoints.shrink_to_fit();
+        finalizeWaypoints();        
     }
 
     NxActor* Track::getActor()
@@ -140,7 +140,7 @@
         w->pos.y = y;
         w->pos.z = z;
         w->id = tmpId;
-        w->next = tmpNext;
+        w->nextId = tmpNext;
         w->type = type;
 
         waypoints.push_back(w);
@@ -170,4 +170,18 @@
             return Waypoint::ITEM_SPAWN;
         else
             return Waypoint::INVALID_TYPE;
+    }
+
+    void Track::finalizeWaypoints()
+    {
+        waypoints.shrink_to_fit();
+        if(waypoints.size()>0)
+        {
+            for(unsigned i=1;i<waypoints.size()-1;i++)
+            {
+                waypoints[i-1]->nextWaypoint = waypoints[i];
+            }
+            waypoints[waypoints.size()-1]->nextWaypoint = waypoints[0];
+            waypoints[waypoints.size()-1]->nextId = 0;
+        }
     }

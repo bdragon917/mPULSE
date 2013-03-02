@@ -14,23 +14,23 @@ TriggerCallback::~TriggerCallback(void)
 
 void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxTriggerFlag status)
 {
-	if((status & NX_TRIGGER_ON_ENTER) && (triggerShape.getType() == NxShapeType::NX_SHAPE_BOX)) 
+	if((status & NX_TRIGGER_ON_ENTER) && (triggerShape.getType() == NX_SHAPE_BOX)) 
 	{
 		NxActor& triggerActor = triggerShape.getActor();
 
 		if(triggerActor.userData != NULL) {
 			//Waypoint* wp = (Waypoint*)triggerActor.userData;
-            CustomData* cd = (CustomData*)triggerActor.userData;
-			printf("Waypoint ID: %i\n", cd->wp->id);
+            CustomData* triggerCd = (CustomData*)triggerActor.userData;
+			printf("Waypoint ID: %i\n", triggerCd->wp->id);
 
             NxActor& actingActor = actingShape.getActor();
 
             if (actingActor.userData != NULL)
             {
-                CustomData* cd = (CustomData*)actingActor.userData;
-                if (cd->type == cd->CAR)
+                CustomData* actingCd = (CustomData*)actingActor.userData;
+                if (actingCd->type == actingCd->CAR)
                 {
-                    //cd->wp = TRACK.GETWAYPOINT(cd->wp->next);
+                    actingCd->wp = actingCd->wp->nextWaypoint;
                 }
 
             }
@@ -41,7 +41,7 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
 		}
 		
 	}
-	else if((status & NX_TRIGGER_ON_ENTER) && (triggerShape.getType() == NxShapeType::NX_SHAPE_SPHERE)) 
+	else if((status & NX_TRIGGER_ON_ENTER) && (triggerShape.getType() == NX_SHAPE_SPHERE)) 
 	{
 		printf("ITS A SPHERE!");
 	}

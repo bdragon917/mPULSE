@@ -29,6 +29,6 @@ private:
     Clock clock;
     int curSelected;
     unsigned prevTime;
-    unsigned WAIT_TIME;
+    int WAIT_TIME;
 };
 

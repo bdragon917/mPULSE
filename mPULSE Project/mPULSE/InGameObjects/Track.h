@@ -20,6 +20,7 @@ public:
     void addWaypoint(Waypoint* wp);  
     std::vector<Waypoint*>* getWaypoints();    
     std::vector<Waypoint*>* getWaypointsOfType(Waypoint::TYPE type);   
+    void Track::finalizeWaypoints();
     Entity* getEntity();
     NxActor* getActor();     
 

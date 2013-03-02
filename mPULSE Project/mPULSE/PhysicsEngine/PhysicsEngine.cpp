@@ -174,7 +174,7 @@ NxActor* PhysicsEngine::createBarrier(NxVec3 pos,NxVec3 dir)
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
 	bodyDesc.angularDamping	= 0.5f;
-    bodyDesc.flags = NxBodyFlag::NX_BF_FROZEN;
+    bodyDesc.flags = NX_BF_FROZEN;
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions.set(0.5,0.5,0.5);
@@ -203,7 +203,7 @@ NxActor* PhysicsEngine::createMissile(NxVec3 pos,NxVec3 dir)
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
 	bodyDesc.angularDamping	= 0.5f;
-    bodyDesc.flags = NxBodyFlag::NX_BF_DISABLE_GRAVITY;
+    bodyDesc.flags = NX_BF_DISABLE_GRAVITY;
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions.set(0.5,0.5,0.5);
