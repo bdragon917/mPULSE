@@ -8,6 +8,7 @@
 #include <NxActor.h>
 #include "../InGameObjects/Entities/Entity.h"
 #include "../InGameObjects/TriggerCallback.h"
+#include "../AI/Waypoint.h"
 
 #include "stream.h"
 #include <cstdlib>
@@ -66,8 +67,9 @@ public:
     NxActor* createCarChassis();
     NxActor* createBarrier(NxVec3 pos,NxVec3 dir);
     NxActor* createMissile(NxVec3 pos,NxVec3 dir);
+	void createWaypoints(std::vector<Waypoint*>* waypoints);
 
-    void resetBox();
+    void resetBox();  
     void resetBoxHigh();
 
 	NxScene* getScene();

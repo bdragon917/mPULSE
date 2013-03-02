@@ -4,19 +4,19 @@ Waypoint::Waypoint()
 {
     pos.x = 0; pos.y = 0; pos.z=0;
     id = 0;
-    nextExpected = 0;
+    next = 0;
 }
 
-Waypoint::Waypoint(float x, float y, float z,int tmpId,int next)
+Waypoint::Waypoint(float x, float y, float z,int tmpId,int tmpNext)
 {
     pos.x = x; pos.y = y; pos.z=z;
     id = tmpId;
-    nextExpected = next;
+    next = tmpNext;
 }
 
-Waypoint::Waypoint(NxVec3 aVec,int tmpId,int next)
+Waypoint::Waypoint(NxVec3 aVec,int tmpId,int tmpNext)
 {
     pos = aVec;
     id = tmpId;
-    nextExpected = next;
+    next = tmpNext;
 }

@@ -2,6 +2,7 @@
 
 #include <NxPhysics.h>
 #include <stdio.h>
+#include "../AI/Waypoint.h"
 
 class TriggerCallback : public NxUserTriggerReport 
 {

@@ -16,7 +16,13 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& otherShape, NxTr
 {
 	if((status & NX_TRIGGER_ON_ENTER) && (triggerShape.getType() == NxShapeType::NX_SHAPE_BOX)) 
 	{
-		printf("ITS A BOX!");
+		NxActor& triggerActor = triggerShape.getActor();
+
+		if(triggerActor.userData != NULL) {
+			Waypoint* wp = (Waypoint*)triggerActor.userData;
+			printf("Waypoint ID: %i\n", wp->id);
+		}
+		
 	}
 	else if((status & NX_TRIGGER_ON_ENTER) && (triggerShape.getType() == NxShapeType::NX_SHAPE_SPHERE)) 
 	{

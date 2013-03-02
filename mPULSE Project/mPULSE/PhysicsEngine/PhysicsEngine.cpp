@@ -224,6 +224,30 @@ NxActor* PhysicsEngine::createMissile(NxVec3 pos,NxVec3 dir)
 	return actor;
 }
 
+
+void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
+{
+	std::vector<Waypoint*> waypoints = *wps;
+	for(unsigned i = 0; i<waypoints.size();i++)
+	{
+		NxVec3 position(waypoints[i]->pos);
+
+		//The actor has one shape, a box, 1m on a side
+		NxBoxShapeDesc boxDesc;
+		boxDesc.dimensions.set(1.0,1.0,1.0);
+		boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
+
+		NxActorDesc actorDesc;
+		actorDesc.shapes.pushBack(&boxDesc);
+		actorDesc.globalPose.t = position;
+    
+		NxActor *actor = scene->createActor(actorDesc);
+		
+		actor->userData = waypoints[i];   
+	}
+    
+}
+
 void PhysicsEngine::createBoxes(float x, float y, float z, int num, float radius, std::vector<Entity*>* Boxes) 
 {
 	for (int i=0; i < num; i++)
@@ -288,9 +312,6 @@ NxActor* PhysicsEngine::createStaticBox(float x, float y, float z)
 
 	NxActor *actor = scene->createActor(actorDesc);
 	//actor->userData = (void*)size_t(0.5f);
-    customUserData* cud = new customUserData;
-    cud->type = STATIC;
-    actor->userData = (void*)&cud;
 	return actor;
 }
 

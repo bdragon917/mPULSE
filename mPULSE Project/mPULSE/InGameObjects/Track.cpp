@@ -81,7 +81,7 @@
                             else if(j == 3)
                                 wp->id = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 4)
-                                wp->nextExpected = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                                wp->next = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
 
                             j++;
                             startSeen = false;
@@ -105,7 +105,7 @@
                         else if(j == 3)
                             wp->id = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                         else if(j == 4)
-                            wp->nextExpected = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
+                            wp->next = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                     }
 
                     addWaypoint(wp);
@@ -133,14 +133,14 @@
         waypoints.push_back(wp);
     }
 
-    void Track::addWaypoint(float x,float y,float z,int tmpId,int next,Waypoint::TYPE type)
+    void Track::addWaypoint(float x,float y,float z,int tmpId,int tmpNext,Waypoint::TYPE type)
     {
         Waypoint* w = new Waypoint();
         w->pos.x = x;
         w->pos.y = y;
         w->pos.z = z;
         w->id = tmpId;
-        w->nextExpected = next;
+        w->next = tmpNext;
         w->type = type;
 
         waypoints.push_back(w);

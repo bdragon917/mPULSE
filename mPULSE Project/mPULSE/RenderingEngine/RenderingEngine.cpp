@@ -1679,12 +1679,12 @@ void RenderingEngine::drawTrack(Track* track)
     }
     //Draw the waypoints on the track
     std::vector<Waypoint*>* wps = track->getWaypoints();
-    ObjModel* sphere = modelManager.getModel("box.obj");
+    ObjModel* model = modelManager.getModel("box.obj");
     glColor3f(0,1,1);
-    if (sphere != NULL)
+    if (model != NULL)
     {                
         for(unsigned int i=0; i<wps->size(); i++)         
-            drawModel(sphere,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
+            drawModel(model,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
     }
         
 }

@@ -76,6 +76,7 @@ PlayState::PlayState()
         aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));     
     }   
     track = new Track(".\\InGameObjects\\Race1.txt",aTrack);
+	physicsEngine->createWaypoints(track->getWaypoints());
     //*/
 
     physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);
@@ -155,7 +156,7 @@ void PlayState::update(float dt)
         car->aAI->update();
 
         //Do AI Controller stuff
-        //handleXboxController(c, entities.AIcars ,entities.AIcars.at(c)->aAI->getControl());
+        handleXboxController(c, entities.AIcars ,entities.AIcars.at(c)->aAI->getControl());
         //handleXboxController(0, entities.cars ,entities.AIcars.at(c)->aAI->getControl());
 
 
