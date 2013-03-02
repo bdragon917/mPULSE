@@ -4,6 +4,7 @@
 #include <NxPhysics.h>
 #include <NxActor.h>
 #include "../AI/Waypoint.h"
+#include <math.h>
 //#include "../InGameObjects/Track.h"
 //#include "../Entities/Entity.h"
 
@@ -21,12 +22,13 @@ public:
 
 
     NxVec3 myTargetVector;   //For debug
+    NxVec3 myOrientation;
 private:
 
     Waypoint* targetWaypoint;
     NxActor* myActor;
     NxVec3 myLocation;
-    NxVec3 myOrientation;
+    
 
     XboxController* xController;
 };

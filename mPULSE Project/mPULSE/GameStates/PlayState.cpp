@@ -26,7 +26,7 @@ PlayState::PlayState()
 
 
     
-    int num_AI = 2;
+    int num_AI = 1;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -127,8 +127,8 @@ void PlayState::update(float dt)
         Entity* car = entities.cars[c];
         if (car->getActor()->getGlobalPose().t.y < -2.0f)
         {
-            car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
-
+            //car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
+            car->getActor()->setGlobalPosition(NxVec3(   ((rand() % 100) / 10.0f)    ,10.0f,  ((rand() % 100) / 10.0f)   ));
             NxVec3 v(0,1,0);
             NxReal ang = 90;
 
@@ -530,6 +530,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,Xbo
 
         if(state->lb) {
 		    physicsEngine->resetBox();
+            
             car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
 
             NxVec3 v(0,1,0);

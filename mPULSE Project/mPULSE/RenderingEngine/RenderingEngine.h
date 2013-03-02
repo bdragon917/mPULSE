@@ -64,7 +64,7 @@ void moveStuff(float &testF);
 
 
 void drawScene(NxScene* scene,Track* track, Entities* entities);
-void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen);
+void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, std::vector<Entity*> targetEntities);
 int drawMainMenuScreen(int curMenuButton, bool clicked);
 
 
@@ -106,6 +106,8 @@ void drawDisplayList(int index);
 
     void setPlayerNum(int num);
 
+    bool debugCam;
+
 private:
     RenderingEngine();
 
@@ -141,7 +143,8 @@ private:
     //Used for Fade In and Out
     float FadeCtrl;
     int fadeMode;
-    float updateFade(); 
+    float updateFade();
+
     
         
         //    int loadShaders();

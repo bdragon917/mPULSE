@@ -23,19 +23,31 @@ AI::AI(void)
     {
         xController->initializeVariables();
 
-        NxVec3 myDirection = NxVec3(0.0f, 0.0f, 1.0f);
-        myDirection = myActor->getGlobalOrientation() * myDirection;
+        NxVec3 myDirection = NxVec3(0.0f, 0.0f, 10.0f);
+        myDirection = myActor->getGlobalPose() * myDirection;
+        myDirection = myDirection - myActor->getGlobalPose().t;
+
+        //myDirection = NxVec3(1.0f, 0.0f, 0.0f);
+        myDirection.normalize();
+
         myOrientation = myDirection;
         //myDirection = myDirection / myDirection.normalize();
 
         NxVec3 myTarget = targetWaypoint->pos;
         myTarget = myTarget - myActor->getGlobalPose().t;
+        //myTarget = NxVec3(1.0f, 0.0f, 1.0f);
+        myTarget.normalize();
         //myTarget = myTarget / myTarget.normalize();
 
         myTargetVector = myTarget;      //for debug
 
-        float angleToTarget = myDirection.dot(myTarget);
+        //float angleToTarget = myDirection.dot(myTarget);
+        float angleToTarget = myTarget.dot(myDirection);
+        //float angleToTarget = (myDirection.x * myTarget.y) - (myDirection.x * myTarget.y);
 
+
+        //angleToTarget = acos((angleToTarget) / (myDirection.magnitude() * myTarget.magnitude()));
+        //angleToTarget = acos((angleToTarget)/(myTarget.magnitude()*myDirection.magnitude()));
         printf("AI: AngleToTarget%f\n", angleToTarget);
 
         if (angleToTarget > 0)
@@ -43,11 +55,17 @@ AI::AI(void)
             printf("AI: Steering right\n");
             //steer right
             myTarget.normalize();
-            xController->leftStick.x = myTarget.x;
-            xController->leftStick.y = myTarget.z;
-            xController->leftStick.magnitude = angleToTarget * 10000;
+            //xController->leftStick.x = myTarget.x;
+            //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
+            xController->leftStick.x = 1;
+            if (xController->leftStick.x > 1.0f)
+                xController->leftStick.x = 1.0f;
+            else if (xController->leftStick.x < -1.0f)
+                xController->leftStick.x = -1.0f;
+            //xController->leftStick.y = myTarget.z;
+            xController->leftStick.magnitude = angleToTarget * 24000;
 
-            xController->rTrigger = 255;
+            //xController->rTrigger = 255;
 
         }
         else
@@ -55,11 +73,17 @@ AI::AI(void)
             //steer left
             printf("AI: Steering left\n");
             myTarget.normalize();
-            xController->leftStick.x = myTarget.x;
-            xController->leftStick.y = myTarget.z;
-            xController->leftStick.magnitude = angleToTarget * 10000;
+            //xController->leftStick.x = myTarget.x;
+            //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
+            xController->leftStick.x = -1;
+            if (xController->leftStick.x > 1.0f)
+                xController->leftStick.x = 1.0f;
+            else if (xController->leftStick.x < -1.0f)
+                xController->leftStick.x = -1.0f;
+            //xController->leftStick.y = myTarget.z;
+            xController->leftStick.magnitude = angleToTarget * 24000;
 
-            xController->rTrigger = 255;
+            //xController->rTrigger = 255;
 
         }
     //if (myActor->getGlobalOrientation
