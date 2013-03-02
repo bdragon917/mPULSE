@@ -67,7 +67,7 @@
 
                     bool startSeen = true;
                     startFlag = i;
-                    while((parsing && i < tmpLine.size()) && j < 3)
+                    while((parsing && i < tmpLine.size()) && j < 5)
 	                {
                         ch = tmpLine.at(i);
                         if((ch == ' ' || ch == '\t') && startSeen)
@@ -78,6 +78,10 @@
                                 wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 2)
                                 wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 3)
+                                wp->id = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 4)
+                                wp->nextExpected = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
 
                             j++;
                             startSeen = false;
@@ -98,6 +102,10 @@
                             wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                         else if(j == 2)
                             wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
+                        else if(j == 3)
+                            wp->id = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
+                        else if(j == 4)
+                            wp->nextExpected = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
                     }
 
                     addWaypoint(wp);
@@ -125,12 +133,14 @@
         waypoints.push_back(wp);
     }
 
-    void Track::addWaypoint(float x,float y,float z,Waypoint::TYPE type)
+    void Track::addWaypoint(float x,float y,float z,int tmpId,int next,Waypoint::TYPE type)
     {
         Waypoint* w = new Waypoint();
         w->pos.x = x;
         w->pos.y = y;
         w->pos.z = z;
+        w->id = tmpId;
+        w->nextExpected = next;
         w->type = type;
 
         waypoints.push_back(w);
@@ -145,7 +155,6 @@
     {
         return NULL;
     }
-
 
     Waypoint::TYPE Track::stringToType(std::string typeString)
     {

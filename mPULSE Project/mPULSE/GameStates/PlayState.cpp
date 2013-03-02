@@ -151,11 +151,11 @@ void PlayState::update(float dt)
         //Do AI thinking here!!!!!
         //car->aAI->
         //car->aAI->setWaypoint(&Waypoint(7.83703,0.413632,-101.592));
-        car->aAI->setWaypoint(&Waypoint(entities.cars[0]->getActor()->getGlobalPose().t));
+        car->aAI->setWaypoint(&Waypoint(entities.cars[0]->getActor()->getGlobalPose().t,0,0));
         car->aAI->update();
 
         //Do AI Controller stuff
-        handleXboxController(c, entities.AIcars ,entities.AIcars.at(c)->aAI->getControl());
+        //handleXboxController(c, entities.AIcars ,entities.AIcars.at(c)->aAI->getControl());
         //handleXboxController(0, entities.cars ,entities.AIcars.at(c)->aAI->getControl());
 
 
@@ -466,27 +466,32 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     
 }
 
-void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,XboxController* state)
+void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,XboxController* state)
 {
 
     //logReplay(player, state, 0);      Used to log replay!
 
     //if (state->back)
-    if (state->rb && !rbPressed)
-    {
-        logWayPoint(0);
-        rbPressed = true;
-        printf("Point logged pressed\n");
-    }
 
-    else if (!state->rb)
-        rbPressed = false;    
 
-    int carCount = thing.size();
+    int carCount = cars.size();
     if (player < carCount)
     {
+        if(player == 0)
+        {
+            if (state->rb && !rbPressed)
+            {
+                logWayPoint(0);
+                rbPressed = true;
+                printf("Point logged pressed\n");
+            }
+
+            else if (!state->rb)
+                rbPressed = false;   
+        }
+
         //UserCamControl  
-        Entity* car = thing[player];
+        Entity* car = cars[player];
         car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
     
         NxVec3 a = car->getActor()->getLinearVelocity();
