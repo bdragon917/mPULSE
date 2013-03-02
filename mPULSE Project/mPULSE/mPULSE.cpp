@@ -28,7 +28,11 @@ int main(int argc, char *argv[])
 
     // Initializes display
     SDL_Surface* screen = init();
-    bool gameRunning = (screen != NULL);
+    bool gameRunning = false;
+    if (screen != NULL)
+        gameRunning = true;
+    else
+        std::cout << "Screen failed to initialize." << std::endl;
     Game game;
     SDL_Event KeyboardMouseState;
 
@@ -63,7 +67,6 @@ int main(int argc, char *argv[])
 
 SDL_Surface* init()
 {
-    SDL_Surface* screen = NULL;
     SDL_Init( SDL_INIT_EVERYTHING );
 
 	//Initalization for motion blur
@@ -73,13 +76,10 @@ SDL_Surface* init()
     SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 8);
 
 	//Create Main Window	
-	if ((screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL)) == NULL)
-    {
-		printf("Failed to initize graphics\n");
-		return false;	
-	}
-
-    SDL_WM_SetCaption("mPULSE","mPULSE");
+	SDL_Surface* screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL);
+    
+    if (screen != NULL)
+        SDL_WM_SetCaption("mPULSE","mPULSE");
 
     return screen;
 }
