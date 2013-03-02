@@ -4,9 +4,9 @@
 #include <GL/glew.h>
 #include <SDL.h>
 #include <SDL_opengl.h>
-#include "GameStates\Game.h"
-#include "Util\Clock.h"
-#include "Input\XboxController.h"
+#include <GameStates/Game.h>
+#include <Util/Clock.h>
+#include <Input/XboxController.h>
 
 // Methods
 SDL_Surface* init();
