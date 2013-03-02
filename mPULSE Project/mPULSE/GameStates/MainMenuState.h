@@ -9,6 +9,7 @@
 #include "../InGameObjects/Entities/RenderableComponent.h"
 #include <map>
 #include "GameVariables.h"
+#include "Util\Clock.h"
 
 class MainMenuState : public GameState
 {
@@ -21,11 +22,13 @@ public:
 
 private:
     MainMenuState();
-
+    bool buttonPressed;
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
     GameVariables* gameVariables;
-
+    Clock clock;
     int curSelected;
+    unsigned prevTime;
+    unsigned WAIT_TIME;
 };
 
