@@ -14,7 +14,7 @@ Entity::Entity()
 
     maxTorque = 3000;
     minTorque = -3000;
-    //Pickup = NULL
+    pickup = NONE;
 }
 
 Entity::Entity(NxActor* a)
@@ -22,22 +22,14 @@ Entity::Entity(NxActor* a)
     actor = a;
 }
 
-void Entity::givePickup(Pickup* p)
+void Entity::givePickup(Entity::PickupType p)
 {
     pickup = p;
 }
 
-void Entity::usePickup()
+Entity::PickupType Entity::usePickup()
 {
-    
-    if(pickup != NULL)
-    {
-        pickup->use();//printf();        
-    }
-    else
-        printf("No Pickups Aquired");
-
-    printf("\n");    
+    return pickup;  
 }
 
 void Entity::addDriveWheel(NxWheelShape* wheel)

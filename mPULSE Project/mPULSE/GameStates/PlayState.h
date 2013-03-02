@@ -9,12 +9,7 @@
 #include "../InGameObjects/Entities/RenderableComponent.h"
 #include "../SoundEngine/SoundEngine.h"
 #include "../InGameObjects/Track.h"
-
-#include "../InGameObjects/Pickups/Pickup.h"
-#include "../InGameObjects/Pickups/Barrier.h"
-#include "../InGameObjects/Pickups/MissileLauncher.h"
-#include "../InGameObjects/Pickups/Shield.h"
-
+#include "../Util/Clock.h"
 #include <map>
 #include "GameVariables.h"
 
@@ -45,7 +40,7 @@ private:
     void PlayState::logWayPoint(int player);
 
     std::map<std::string, int(*)(int)> commands;
-
-    //Console Command Stuff!!!!// ADD commands here!
+    Clock time;
+    int reloadTime;
 };
 

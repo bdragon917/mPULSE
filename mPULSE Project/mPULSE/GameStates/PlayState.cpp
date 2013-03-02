@@ -518,16 +518,40 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,Xbo
         else
             car->brake(0);   
         if(state->a)
-            car->usePickup();
+        {
+            
+            Entity::PickupType type = car->usePickup();
+            if(type == Entity::MISSILE)
+            {
+                int offset = 5;
+                printf("Missile Fired");                                
+                NxVec3 initPos(1,0,0); 
+                NxVec3 dir = car->getActor()->getGlobalOrientation()*initPos;
+                NxVec3 pos = car->getActor()->getGlobalPose().t + (dir*offset);
+                physicsEngine->createMissile(pos,dir);
+            }
+            else if(type == Entity::SHIELD)
+            {
+                int offset = -5;
+                printf("Shield Fired");                                
+                NxVec3 initPos(1,0,0); 
+                NxVec3 dir = car->getActor()->getGlobalOrientation()*initPos;
+                NxVec3 pos = car->getActor()->getGlobalPose().t + (dir*offset);                                
+
+                physicsEngine->createBarrier(pos,dir);
+            }
+            else if(type == Entity::BARRIER)
+            {
+                printf("Barrier");
+            }
+        }
         
         if(state->dpadUp)
-            car->givePickup(new MissileLauncher());
+            car->givePickup(Entity::BARRIER);
         if(state->dpadRight)
-            car->givePickup(new Shield());
+            car->givePickup(Entity::SHIELD);
         if(state->dpadLeft)
-            car->givePickup(new Barrier());
-        
-
+            car->givePickup(Entity::MISSILE);
         if(state->lb) {
 		    physicsEngine->resetBox();
             

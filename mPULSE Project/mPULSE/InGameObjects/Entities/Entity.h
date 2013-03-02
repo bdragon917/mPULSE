@@ -20,6 +20,14 @@ class Pickup;
 class Entity
 {
 public:
+
+   typedef enum {
+        MISSILE,
+        SHIELD,
+        BARRIER,
+        NONE
+    } PickupType;
+
     Entity();
     Entity(NxActor* a);
 
@@ -34,8 +42,8 @@ public:
     void setSteeringAngle(float angle);
 	void chargeBattery();
 	void dischargeBattery();
-    void givePickup(Pickup* p);
-    void usePickup();
+    void givePickup(PickupType type);
+    PickupType usePickup();
 
     //void setModel(ObjModel* m);
     void setActor(NxActor* a);
@@ -72,7 +80,7 @@ private:
 	float charge;
 
     
-    Pickup* pickup;
+    PickupType pickup;
     NxActor* actor;
     ObjModel* model;
     std::vector<NxWheelShape*> driveWheels;

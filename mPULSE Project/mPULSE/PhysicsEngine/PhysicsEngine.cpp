@@ -168,6 +168,64 @@ NxActor* PhysicsEngine::createGroundPlane()
 	return scene->createActor(actorDesc);
 }
 
+NxActor* PhysicsEngine::createBarrier(NxVec3 pos,NxVec3 dir) 
+{
+	//Set the box starting height
+	NxVec3 position(pos.x, pos.y, pos.z);
+
+	//Add single shape actor to the scene
+	NxBodyDesc bodyDesc;
+	bodyDesc.angularDamping	= 0.5f;
+    bodyDesc.flags = NxBodyFlag::NX_BF_FROZEN;
+	//The actor has one shape, a box, 1m on a side
+	NxBoxShapeDesc boxDesc;
+	boxDesc.dimensions.set(0.5,0.5,0.5);
+	//boxDesc.localPose.t = position;
+
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&boxDesc);
+	actorDesc.body = &bodyDesc;
+	actorDesc.density = 0.1f;
+	actorDesc.globalPose.t = position;
+    
+	NxActor *actor = scene->createActor(actorDesc);
+	//actor->userData = (void*)size_t(0.5f);
+
+    customUserData* cud = new customUserData;
+    cud->type = OBSTACLE;
+    actor->userData = (void*)&cud;   
+    
+	return actor;
+}
+
+NxActor* PhysicsEngine::createMissile(NxVec3 pos,NxVec3 dir) 
+{
+	//Add single shape actor to the scene
+	NxBodyDesc bodyDesc;
+	bodyDesc.angularDamping	= 0.5f;
+    bodyDesc.flags = NxBodyFlag::NX_BF_DISABLE_GRAVITY;
+	//The actor has one shape, a box, 1m on a side
+	NxBoxShapeDesc boxDesc;
+	boxDesc.dimensions.set(0.5,0.5,0.5);
+	//boxDesc.localPose.t = position;
+
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&boxDesc);
+	actorDesc.body = &bodyDesc;
+	actorDesc.density = 0.1f;
+	actorDesc.globalPose.t = pos;
+    
+	NxActor *actor = scene->createActor(actorDesc);
+	//actor->userData = (void*)size_t(0.5f);
+
+    customUserData* cud = new customUserData;
+    cud->type = OBSTACLE;
+    actor->userData = (void*)&cud;
+
+    actor->addLocalForce(dir*500);
+    
+	return actor;
+}
 
 void PhysicsEngine::createBoxes(float x, float y, float z, int num, float radius, std::vector<Entity*>* Boxes) 
 {
