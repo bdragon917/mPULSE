@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <Xinput.h>
 #include <SDL.h>
-#include "../Input/XboxController.h"
+#include <Input/XboxController.h>
 
 class GameState
 {

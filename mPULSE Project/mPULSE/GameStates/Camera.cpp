@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <iostream>
 
 /**
         void AttachtoCar(NxActor* aActor);
@@ -129,7 +130,7 @@ void Camera::updateCamera(float dt)
     
             if (movMag > maxDistance)                                               //Used if camera is too far away
             {
-                printf("HURRY UP CAMERA!\n");
+                std::cout << "HURRY UP CAMERA!" << std::endl;
                 curCamLoc = (curCamLoc + movementVector * (movMag - maxDistance) );
             }
             // else
@@ -164,7 +165,7 @@ void Camera::updateCamera(float dt)
         {
             float elapsed = dt * 3.75f;
             if (dt == 0.0f)
-                printf("Illegal timestep for camera");
+                std::cout << "Illegal timestep for camera" << std::endl;
 
             // //UpdateWorldPositions();
             // Construct a matrix to transform from object space to worldspace
@@ -236,7 +237,7 @@ void Camera::updateCamera(float dt)
             float elapsed = dt * 3.75f;
 
             if (dt == 0.0f)
-                printf("Illegal timestep for camera");
+                std::cout << "Illegal timestep for camera" << std::endl;
 
             //Calculate where to look
             float lookAhead = 40.f;
@@ -310,7 +311,7 @@ void Camera::updateCamera(float dt)
 
             if (movMag > maxDistance)                                               //Used if camera is too far away
             {
-                printf("HURRY UP CAMERA!\n");
+                std::cout << "HURRY UP CAMERA!" << std::endl;
                 curCamLoc = (curCamLoc + movementVector * (movMag - maxDistance) );
             }
             // else

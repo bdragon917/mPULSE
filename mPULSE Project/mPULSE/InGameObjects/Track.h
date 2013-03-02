@@ -1,13 +1,13 @@
 #pragma once
-#include "Entities\Entity.h"
+
 #include <vector>
 #include <string>
 #include <iostream>
-#include <stdio.h>
 #include <fstream>
 #include "NxActor.h"
 
-#include "../AI/Waypoint.h"
+#include <InGameObjects/Entities/Entity.h>
+#include <AI/Waypoint.h>
 
 class Track
 {

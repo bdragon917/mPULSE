@@ -6,7 +6,7 @@
 #include "PhysXLoader.h"
 #include <NxPhysicsSDK.h>
 #include <NxActor.h>
-#include "../InGameObjects/Entities/Entity.h"
+#include <InGameObjects/Entities/Entity.h>
 
 #include "stream.h"
 #include <cstdlib>

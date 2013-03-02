@@ -73,11 +73,11 @@
     <Filter Include="Header Files\InGameObjects">
       <UniqueIdentifier>{92ea595f-e87f-4781-bd6d-046fdd49a1a2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\InGameObjects\Entity">
-      <UniqueIdentifier>{e3ac21f7-c816-4c50-bc15-21621e2fc06d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\InGameObjects\Pickups">
       <UniqueIdentifier>{c4646572-1ea3-4711-8965-b29514921529}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\InGameObjects\Entities">
+      <UniqueIdentifier>{e3ac21f7-c816-4c50-bc15-21621e2fc06d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -255,13 +255,13 @@
       <Filter>Header Files\RenderingEngine</Filter>
     </ClInclude>
     <ClInclude Include="InGameObjects\Entities\Entity.h">
-      <Filter>Header Files\InGameObjects\Entity</Filter>
+      <Filter>Header Files\InGameObjects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="InGameObjects\Entities\EntityComponent.h">
-      <Filter>Header Files\InGameObjects\Entity</Filter>
+      <Filter>Header Files\InGameObjects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="InGameObjects\Entities\RenderableComponent.h">
-      <Filter>Header Files\InGameObjects\Entity</Filter>
+      <Filter>Header Files\InGameObjects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="SoundEngine\Sound.h">
       <Filter>Header Files\SoundEngine</Filter>

@@ -1,7 +1,5 @@
 #pragma once
-#include "Pickup.h"
-//#include "Entity.h"
-#include <stdio.h>
+#include <InGameObjects/Pickups/Pickup.h>
 
 class Entity;
 

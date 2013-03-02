@@ -1,11 +1,11 @@
 #pragma once
 
 #define NOMINMAX
-#include "GameState.h"
-#include "../Util/Clock.h"
-#include "../RenderingEngine/RenderingEngine.h"
-#include "../SoundEngine/SoundEngine.h"
-#include "GameVariables.h"
+#include <GameStates/GameState.h>
+#include <Util/Clock.h>
+#include <RenderingEngine/RenderingEngine.h>
+#include <SoundEngine/SoundEngine.h>
+#include <GameStates/GameVariables.h>
 
 class InitState : public GameState
 {

@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "NxPhysics.h"
 #include "Stream.h"
 

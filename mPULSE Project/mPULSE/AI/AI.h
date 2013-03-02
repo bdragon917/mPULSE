@@ -1,11 +1,9 @@
 #pragma once
 #define NOMINMAX
-#include "../Input/XboxController.h"
+#include <Input/XboxController.h>
 #include <NxPhysics.h>
 #include <NxActor.h>
-#include "../AI/Waypoint.h"
-//#include "../InGameObjects/Track.h"
-//#include "../Entities/Entity.h"
+#include <AI/Waypoint.h>
 
 class AI
 {

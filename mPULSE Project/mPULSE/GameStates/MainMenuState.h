@@ -2,13 +2,14 @@
 
 #define NOMINMAX
 #include <vector>
-#include "GameState.h"
-#include "../RenderingEngine/RenderingEngine.h"
-#include "../PhysicsEngine/PhysicsEngine.h"
-#include "../InGameObjects/Entities/Entity.h"
-#include "../InGameObjects/Entities/RenderableComponent.h"
 #include <map>
-#include "GameVariables.h"
+
+#include <GameStates/GameState.h>
+#include <RenderingEngine/RenderingEngine.h>
+#include <PhysicsEngine/PhysicsEngine.h>
+#include <InGameObjects/Entities/Entity.h>
+#include <InGameObjects/Entities/RenderableComponent.h>
+#include <GameStates/GameVariables.h>
 
 class MainMenuState : public GameState
 {

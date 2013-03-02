@@ -1,12 +1,11 @@
-#include <stdio.h>
 #include "Sound.h"
-
+#include <iostream>
 
 Sound::Sound(void)
 {
 	music = Mix_LoadMUS( "SoundEngine\\Sounds\\10YearsAgoAuda.mp3" );
     if(!music) {
-    printf("Mix_LoadMUS: %s\n", Mix_GetError());
+        std::cout << "Mix_LoadMUS: " << Mix_GetError() << std::endl;
     }
 }
 
@@ -31,11 +30,11 @@ void Sound::playPause()
 
 	if( check() )
     {
-		printf("music ON\n");
+       std::cout << "music ON" << std::endl;
 	   //if (Mix_PlayMusic(music, -1) ==-1)
        if (Mix_FadeInMusic(music, -1, 10000) ==-1)
 	   {
-		   printf("problem.\n");
+		   std::cout << "problem." << std::endl;
 	   }
 	  else 
 	  { //If the music is paused 
@@ -51,7 +50,7 @@ void Sound::playPause()
     }
 	else
 	{
-		printf("music OFF\n");
+		std::cout << "music OFF" << std::endl;
 	}
 
 }
@@ -59,5 +58,5 @@ void Sound::playPause()
 void Sound::stopSound()
 {
     Mix_HaltMusic();
-	printf("stop\n");
+	std::cout << "stop" << std::endl;
 }

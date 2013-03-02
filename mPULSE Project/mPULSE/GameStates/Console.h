@@ -3,14 +3,12 @@
 #define NOMINMAX
 #define NO_SDL_GLEXT
 
-#include <stdio.h>
 #include <sstream>
 
 #include <vector>
 
 //files
 #include <iostream>
-#include <stdio.h>
 #include <fstream>
 
 #include <map>

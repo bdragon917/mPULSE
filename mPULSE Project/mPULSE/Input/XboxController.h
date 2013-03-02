@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include <Xinput.h>
 #include <math.h>
-#include <stdio.h>
 
 class XboxController
 {

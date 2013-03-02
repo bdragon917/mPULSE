@@ -6,7 +6,8 @@ float cosangle = (xz + y12) / sqrt((xz + y11) * (xz + y22));
 float angle = acos(cosangle);
 */
 
-#include "AI.h"
+#include <AI/AI.h>
+#include <iostream>
 
 AI::AI(void)
 {xController = new XboxController(5);myTargetVector = NxVec3(0,0,0);myOrientation = NxVec3(0,0,0);}
@@ -36,11 +37,11 @@ AI::AI(void)
 
         float angleToTarget = myDirection.dot(myTarget);
 
-        printf("AI: AngleToTarget%f\n", angleToTarget);
+        std::cout << "AI: AngleToTarget" << angleToTarget << std::endl;
 
         if (angleToTarget > 0)
         {
-            printf("AI: Steering right\n");
+            std::cout << "AI: Steering right" << std::endl;
             //steer right
             myTarget.normalize();
             xController->leftStick.x = myTarget.x;
@@ -53,7 +54,7 @@ AI::AI(void)
         else
         {
             //steer left
-            printf("AI: Steering left\n");
+            std::cout << "AI: Steering left" << std::endl;
             myTarget.normalize();
             xController->leftStick.x = myTarget.x;
             xController->leftStick.y = myTarget.z;

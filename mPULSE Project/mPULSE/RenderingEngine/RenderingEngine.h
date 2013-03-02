@@ -11,8 +11,6 @@
 
 #include "Shader.h"
 
-#include <stdio.h>
-
 #include <SDL.h>
 #include <SDL_opengl.h>
 
