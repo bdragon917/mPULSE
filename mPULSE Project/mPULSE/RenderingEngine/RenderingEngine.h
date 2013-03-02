@@ -43,6 +43,7 @@ typedef struct
     std::vector<Entity*> AIcars;
     std::vector<Entity*> Obstacles;
     std::vector<Entity*> StaticObjs;
+    std::vector<Entity*> DynamicObjs;
     std::vector<Entity*> Track;
 } Entities;
 
@@ -78,6 +79,7 @@ void drawSquare(float x, float y, float z, float half_width, float half_height);
 void drawModel(ObjModel* model,int x,int y, int z, int scale);
 void drawModelPos(ObjModel* model, NxMat34* aMatrix);
 void drawModelShadow(ObjModel* model, NxMat34* aPose);
+void drawDynamicObjects(std::vector<Entity*>* dObjs);
 GLuint generateDisplayList(std::string modelName,int x,int y,int z,int scale);
 GLuint generateDisplayList(ObjModel* model,int x,int y,int z,int scale);
 void deleteDisplayList(GLuint index);

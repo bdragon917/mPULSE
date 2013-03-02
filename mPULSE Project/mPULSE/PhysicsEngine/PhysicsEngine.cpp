@@ -12,9 +12,6 @@ PhysicsEngine* PhysicsEngine::getInstance()
     return &physics;
 }
 
-
-
-
 void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 {
     //std::vector<Entity*>* tmpCars =  cars;

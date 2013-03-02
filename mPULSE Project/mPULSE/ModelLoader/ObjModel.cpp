@@ -47,12 +47,12 @@ void ObjModel::addLineL(std::vector<double> line)
 
 void ObjModel::addFaceF(std::vector<std::vector<int>> face)
 {   
-    if(face[0].size() < 2)
+    if(face[0][0] == -1)
     {
         textureCoordsEnabled = false;
         normalsEnabled = false;
     }
-    else if(face[0].size() < 3)
+    else if(face[0][1] == -1)
     {
         normalsEnabled = false;
     }

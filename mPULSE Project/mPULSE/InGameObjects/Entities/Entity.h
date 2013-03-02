@@ -47,6 +47,7 @@ public:
 
     //void setModel(ObjModel* m);
     void setActor(NxActor* a);
+    void setModel(ObjModel* m);
     void setDisplayListIndex(int index);
     void setUsingDisplayList(bool status);
     int getDisplayListIndex();
@@ -54,6 +55,7 @@ public:
     int getSteering();
     bool getUsingDisplayList();
 	NxActor* getActor();
+    ObjModel* getModel();
     float convertVel(float vel);
     std::vector<NxWheelShape*> getDriveWheels();
     std::vector<NxWheelShape*> getPassiveWheels();    
@@ -62,8 +64,7 @@ public:
     std::vector<RenderableComponent*> rc;
     //NxVec3 location for rendering
     //int rotation mode
-    //rotation data
-
+    //rotation data    
     AI* aAI;
 
 
