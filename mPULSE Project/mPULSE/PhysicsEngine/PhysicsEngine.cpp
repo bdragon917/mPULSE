@@ -90,6 +90,7 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
 
         entityCar1->getActor()->setGlobalPosition(NxVec3(   ((rand() % 100) / 10.0f)    ,10.0f,  ((rand() % 100) / 10.0f)   ));
 
+
     }
 }
 
@@ -188,9 +189,11 @@ NxActor* PhysicsEngine::createBarrier(NxVec3 pos,NxVec3 dir)
 	NxActor *actor = scene->createActor(actorDesc);
 	//actor->userData = (void*)size_t(0.5f);
 
-    customUserData* cud = new customUserData;
-    cud->type = OBSTACLE;
-    actor->userData = (void*)&cud;   
+//    customUserData* cud = new customUserData;
+//    cud->type = OBSTACLE;
+    CustomData* cd = new CustomData();
+    cd->type = cd->OBSTACLE;
+    actor->userData = (void*)&cd;   
     
 	return actor;
 }
@@ -215,9 +218,9 @@ NxActor* PhysicsEngine::createMissile(NxVec3 pos,NxVec3 dir)
 	NxActor *actor = scene->createActor(actorDesc);
 	//actor->userData = (void*)size_t(0.5f);
 
-    customUserData* cud = new customUserData;
-    cud->type = OBSTACLE;
-    actor->userData = (void*)&cud;
+    CustomData* cd = new CustomData();
+    cd->type = cd->OBSTACLE;
+    actor->userData = (void*)&cd;  
 
     actor->addLocalForce(dir*500);
     
@@ -288,9 +291,9 @@ NxActor* PhysicsEngine::createBox(float x, float y, float z)
 	NxActor *actor = scene->createActor(actorDesc);
 	//actor->userData = (void*)size_t(0.5f);
 
-    customUserData* cud = new customUserData;
-    cud->type = OBSTACLE;
-    actor->userData = (void*)&cud;
+    CustomData* cd = new CustomData();
+    cd->type = cd->OBSTACLE;
+    actor->userData = (void*)&cd;  
 
 	return actor;
 }
@@ -460,10 +463,9 @@ NxActor* PhysicsEngine::createCarChassis()
     NxMat33 orient;
     orient.fromQuat(q);
 
-
-    customUserData* cud = new customUserData;
-    cud->type = CAR;
-    actorDesc.userData = (void*)&cud;
+    CustomData* cd = new CustomData();
+    cd->type = cd->CAR;
+	actorDesc.userData = (void*)&cd;   
 
 	NxActor *actor = scene->createActor(actorDesc);
     actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));

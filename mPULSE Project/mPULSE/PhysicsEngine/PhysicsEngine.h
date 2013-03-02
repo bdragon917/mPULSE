@@ -42,12 +42,12 @@ private:
 
 public:
 
-    enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC };
+    //enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC };
 
-    typedef struct
-    {
-        ObjTypes type;
-    }   customUserData;
+    //typedef struct
+    //{
+    //    ObjTypes type;
+    //}   customUserData;
     
        
 
