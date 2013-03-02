@@ -872,19 +872,19 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
         //{
          //   drawScene_ForPlayer(scene, track, entities, activePlayers, true, entities->cars);
         //}
-        drawScene_ForPlayer(scene, track, entities, 0, true, entities->cars);
-        entities->AIcars.at(1)->aCam->updateCamera(16);
-        drawScene_ForPlayer(scene, track, entities, 1, true, entities->AIcars);
+        drawScene_ForPlayer(scene, track, entities, 0, true, true, entities->cars);
+        entities->AIcars.at(0)->aCam->updateCamera(16);
+        drawScene_ForPlayer(scene, track, entities, 0, true, false, entities->AIcars);
     }
     else
     {
-        drawScene_ForPlayer(scene, track, entities, 0, false, entities->cars);
+        drawScene_ForPlayer(scene, track, entities, 0, false, true, entities->cars);
     }
     //drawScene_ForPlayer(scene, entities, 1);
     
 }
 
-void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, std::vector<Entity*> targetEntities)
+void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, bool topScreen, std::vector<Entity*> targetEntities)
 {
         glPushMatrix ();
 	    glLoadIdentity ();
@@ -963,7 +963,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
             if (splitScreen)
             {
 	            //set view
-                if (carIndex == 1)
+                if (topScreen)
                 {
             	                // Switch to the projection matrix
 	                glMatrixMode (GL_PROJECTION);

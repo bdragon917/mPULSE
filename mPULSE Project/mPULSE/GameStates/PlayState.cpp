@@ -27,7 +27,7 @@ PlayState::PlayState()
 
 
     
-    int num_AI = 1;
+    int num_AI = 6;
 
     for (int a=0;a<num_AI;a++)
     {

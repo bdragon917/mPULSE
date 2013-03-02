@@ -50,9 +50,9 @@ AI::AI(void)
         //angleToTarget = acos((angleToTarget)/(myTarget.magnitude()*myDirection.magnitude()));
         //printf("AI: AngleToTarget%f\n", angleToTarget);
 
-        if (angleToTarget > 0)
+        if (angleToTarget > 0.01f)
         {
-            //printf("AI: Steering right\n");
+            printf("AI: Steering right\n");
             //steer right
             myTarget.normalize();
             //xController->leftStick.x = myTarget.x;
@@ -63,15 +63,16 @@ AI::AI(void)
             else if (xController->leftStick.x < -1.0f)
                 xController->leftStick.x = -1.0f;
             //xController->leftStick.y = myTarget.z;
-            xController->leftStick.magnitude = angleToTarget * 24000;
+            //xController->leftStick.magnitude = angleToTarget * 24000;
+            xController->leftStick.magnitude = 24000;
 
-            //xController->rTrigger = 255;
+            xController->rTrigger = 75;
 
         }
-        else
+        else if (angleToTarget < -0.01f)
         {
             //steer left
-            //printf("AI: Steering left\n");
+            printf("AI: Steering left\n");
             myTarget.normalize();
             //xController->leftStick.x = myTarget.x;
             //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
@@ -81,10 +82,20 @@ AI::AI(void)
             else if (xController->leftStick.x < -1.0f)
                 xController->leftStick.x = -1.0f;
             //xController->leftStick.y = myTarget.z;
-            xController->leftStick.magnitude = angleToTarget * 24000;
+            //xController->leftStick.magnitude = angleToTarget * 24000;
+            xController->leftStick.magnitude = 24000;
 
-            //xController->rTrigger = 255;
+            xController->rTrigger = 75;
 
+        }
+        else
+        {
+            printf("AI: Driving Stright\n");
+            myTarget.normalize();
+            //xController->leftStick.x = myTarget.x;
+            //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
+            xController->leftStick.x = 0;
+            xController->rTrigger = 255;
         }
     //if (myActor->getGlobalOrientation
     

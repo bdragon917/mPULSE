@@ -65,7 +65,7 @@ void moveStuff(float &testF);
 
 
 void drawScene(NxScene* scene,Track* track, Entities* entities);
-void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, std::vector<Entity*> targetEntities);
+void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, bool topScreen, std::vector<Entity*> targetEntities);
 int drawMainMenuScreen(int curMenuButton, bool clicked);
 
 
