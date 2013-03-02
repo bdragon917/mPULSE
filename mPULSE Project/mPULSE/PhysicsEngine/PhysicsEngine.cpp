@@ -243,7 +243,9 @@ void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
     
 		NxActor *actor = scene->createActor(actorDesc);
 		
-		actor->userData = waypoints[i];   
+        CustomData* cd = new CustomData();
+        cd->wp = waypoints[i];
+		actor->userData = cd;   
 	}
     
 }

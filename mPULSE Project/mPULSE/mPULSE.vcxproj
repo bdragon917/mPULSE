@@ -122,6 +122,7 @@
     <ClInclude Include="GameStates\InitState.h" />
     <ClInclude Include="GameStates\MainMenuState.h" />
     <ClInclude Include="GameStates\PlayState.h" />
+    <ClInclude Include="InGameObjects\CustomData.h" />
     <ClInclude Include="InGameObjects\Entities\Entity.h" />
     <ClInclude Include="InGameObjects\Entities\EntityComponent.h" />
     <ClInclude Include="InGameObjects\Entities\RenderableComponent.h" />

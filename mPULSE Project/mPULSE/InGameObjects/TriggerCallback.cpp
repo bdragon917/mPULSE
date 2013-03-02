@@ -19,8 +19,9 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& otherShape, NxTr
 		NxActor& triggerActor = triggerShape.getActor();
 
 		if(triggerActor.userData != NULL) {
-			Waypoint* wp = (Waypoint*)triggerActor.userData;
-			printf("Waypoint ID: %i\n", wp->id);
+			//Waypoint* wp = (Waypoint*)triggerActor.userData;
+            CustomData* cd = (CustomData*)triggerActor.userData;
+			printf("Waypoint ID: %i\n", cd->wp->id);
 		}
 		
 	}

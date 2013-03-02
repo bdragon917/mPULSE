@@ -257,6 +257,9 @@
     <ClInclude Include="InGameObjects\TriggerCallback.h">
       <Filter>Header Files\InGameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="InGameObjects\CustomData.h">
+      <Filter>Header Files\InGameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ModelLoader\ModelList.txt" />
