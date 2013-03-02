@@ -52,7 +52,7 @@ AI::AI(void)
 
         if (angleToTarget > 0.01f)
         {
-            printf("AI: Steering right\n");
+           // printf("AI: Steering right\n");
             //steer right
             myTarget.normalize();
             //xController->leftStick.x = myTarget.x;
@@ -72,7 +72,7 @@ AI::AI(void)
         else if (angleToTarget < -0.01f)
         {
             //steer left
-            printf("AI: Steering left\n");
+            //printf("AI: Steering left\n");
             myTarget.normalize();
             //xController->leftStick.x = myTarget.x;
             //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);

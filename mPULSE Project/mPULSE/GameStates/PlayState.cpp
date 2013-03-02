@@ -27,7 +27,7 @@ PlayState::PlayState()
 
 
     
-    int num_AI = 6;
+    int num_AI = 0;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -156,7 +156,7 @@ void PlayState::update(float dt)
         car->aAI->update();
 
         //Do AI Controller stuff
-        handleXboxController(c, entities.AIcars ,entities.AIcars.at(c)->aAI->getControl());
+        handleXboxController(c, entities.AIcars ,entities.AIcars.at(c)->aAI->getControl(), false);
         //handleXboxController(0, entities.cars ,entities.AIcars.at(c)->aAI->getControl());
 
 
@@ -463,11 +463,11 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
-    handleXboxController(player, entities.cars , state);
+    handleXboxController(player, entities.cars , state, true);
     
 }
 
-void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,XboxController* state)
+void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,XboxController* state, bool isHuman)
 {
 
     //logReplay(player, state, 0);      Used to log replay!
@@ -478,7 +478,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
     int carCount = cars.size();
     if (player < carCount)
     {
-        if(player == 0)
+        if((player == 0) && (isHuman))
         {
             if (state->rb && !rbPressed)
             {
