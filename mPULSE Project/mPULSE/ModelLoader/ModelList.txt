@@ -2,3 +2,4 @@ ModelLoader\\Models\\sphere.obj
 ModelLoader\\Models\\Saruk.obj
 ModelLoader\\Models\\Race1.obj
 ModelLoader\\Models\\box.obj
+ModelLoader\\Models\\Missile.obj

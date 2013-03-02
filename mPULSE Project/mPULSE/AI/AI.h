@@ -5,6 +5,8 @@
 #include <NxActor.h>
 #include "../AI/Waypoint.h"
 #include <math.h>
+#include "InGameObjects\CustomData.h"
+
 //#include "../InGameObjects/Track.h"
 //#include "../Entities/Entity.h"
 
