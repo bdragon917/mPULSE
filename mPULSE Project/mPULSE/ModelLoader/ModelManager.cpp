@@ -397,7 +397,7 @@
         while(parsing && i < line.size())
 	    {
             if(line.at(i) == '/' && ch == '/')
-                elements.push_back(-1);                
+                elements.push_back(0);                
             else
             {
                 ch = line.at(i);
