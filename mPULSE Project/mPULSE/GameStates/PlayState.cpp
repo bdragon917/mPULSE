@@ -197,15 +197,6 @@ void PlayState::InitializeConsoleCommands()
    // renderingEngine->aConsole.commands["foo"] = foo;
 }
 
-int foo(int a) {
-    std::cout << "foo executed " << a << std::endl;
-    return 0;
-}
-
-
-
-
-
 bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
     if (showConsole)
@@ -519,7 +510,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,Xbo
             car->brake(0);   
         if(state->a)
         {
-            
+            Entity* e = new Entity();
             Entity::PickupType type = car->usePickup();
             if(type == Entity::MISSILE)
             {
@@ -528,7 +519,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,Xbo
                 NxVec3 initPos(1,0,0); 
                 NxVec3 dir = car->getActor()->getGlobalOrientation()*initPos;
                 NxVec3 pos = car->getActor()->getGlobalPose().t + (dir*offset);
-                physicsEngine->createMissile(pos,dir);
+                e->setActor(physicsEngine->createMissile(pos,dir));
+                e->setModel(renderingEngine->getModelManger().getModel("sphere.obj"));
+                entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::SHIELD)
             {
@@ -537,8 +530,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,Xbo
                 NxVec3 initPos(1,0,0); 
                 NxVec3 dir = car->getActor()->getGlobalOrientation()*initPos;
                 NxVec3 pos = car->getActor()->getGlobalPose().t + (dir*offset);                                
-
-                physicsEngine->createBarrier(pos,dir);
+                e->setActor(physicsEngine->createBarrier(pos,dir));
+                e->setModel(renderingEngine->getModelManger().getModel("sphere.obj"));
+                entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::BARRIER)
             {

@@ -29,7 +29,9 @@ void Entity::givePickup(Entity::PickupType p)
 
 Entity::PickupType Entity::usePickup()
 {
-    return pickup;  
+    Entity::PickupType tmpPickup = pickup;
+    pickup = NONE;
+    return tmpPickup;  
 }
 
 void Entity::addDriveWheel(NxWheelShape* wheel)
@@ -138,6 +140,12 @@ NxActor* Entity::getActor()
 {
     return actor;
 }
+
+ObjModel* Entity::getModel()
+{
+    return model;
+}
+
 std::vector<NxWheelShape*> Entity::getDriveWheels()
 {return driveWheels;}
 
@@ -167,4 +175,9 @@ bool Entity::getUsingDisplayList()
 void Entity::setActor(NxActor* a)
 {
     actor = a;
+}
+
+void Entity::setModel(ObjModel* m)
+{
+    model = m;
 }

@@ -396,30 +396,34 @@
         std::vector<int> elements;
         while(parsing && i < line.size())
 	    {
-            ch = line.at(i);
-		    if(ch == ' ' || ch == '\t' || ch == '/')
+            if(line.at(i) == '/' && ch == '/')
+                elements.push_back(-1);                
+            else
             {
-                if(startSeen && ch == '/')                    
+                ch = line.at(i);
+		        if(ch == ' ' || ch == '\t' || ch == '/')
                 {
-                   elements.push_back(atoi(line.substr(startFlag,i-startFlag).data()));
-                }
-                else if(startSeen)
-                {
-                    elements.push_back(atoi(line.substr(startFlag,i-startFlag).data()));
-                    faceElements.push_back(elements);
-                    elements.clear();
-                    startSeen = false;
-                }
+                    if(startSeen && ch == '/')                    
+                    {
+                       elements.push_back(atoi(line.substr(startFlag,i-startFlag).data()));
+                    }
+                    else if(startSeen)
+                    {
+                        elements.push_back(atoi(line.substr(startFlag,i-startFlag).data()));
+                        faceElements.push_back(elements);
+                        elements.clear();
+                        startSeen = false;
+                    }
                 
-                startFlag = i+1;
+                    startFlag = i+1;
                
-            }            
-            else if(!startSeen)
-                startSeen = true;
+                }            
+                else if(!startSeen)
+                    startSeen = true;
 		        
-            if(ch == '\n' || ch == '\0')                  
-                parsing = false;
-
+                if(ch == '\n' || ch == '\0')                  
+                    parsing = false;
+            }
             i++;
 	    }
 

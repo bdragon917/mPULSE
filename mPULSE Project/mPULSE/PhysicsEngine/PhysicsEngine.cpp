@@ -13,9 +13,6 @@ PhysicsEngine* PhysicsEngine::getInstance()
     return &physics;
 }
 
-
-
-
 void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 {
     //std::vector<Entity*>* tmpCars =  cars;
@@ -76,10 +73,7 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
 	    entityCar1->addDriveWheel(wheel2);
         entityCar1->addPassiveWheel(wheel3);
 	    entityCar1->addPassiveWheel(wheel4);
-	    w1 = wheel;
-	    w2 = wheel2;
-	    w3 = wheel3;
-	    w4 = wheel4;
+
         //Camera newCamera = Camera(box);
         entityCar1->aCam = new Camera(box);
 
@@ -534,35 +528,3 @@ NxScene* PhysicsEngine::getScene()
 {
 	return scene;
 }
-
-
-void PhysicsEngine::accel()
-{
-	//w1->setMotorTorque(2000);
-	//w2->setMotorTorque(2000);
-	//w3->setMotorTorque(1000);
-	//w4->setMotorTorque(1000);
-	//box->wakeUp();
-}
-
-void PhysicsEngine::rev()
-{
-	w1->setMotorTorque(-2000);
-	w2->setMotorTorque(-2000);
-	//w3->setMotorTorque(-1000);
-	//w4->setMotorTorque(-1000);
-	//box->wakeUp();
-}
-
-void PhysicsEngine::steer(int mag)
-{
-    float magnitude = static_cast<float>(mag);
-	//w1->setSteerAngle(-30);
-    w1->setSteerAngle(magnitude);
-    w2->setSteerAngle(magnitude);
-    w3->setSteerAngle(magnitude);
-    w4->setSteerAngle(magnitude);
-}
-
-
-

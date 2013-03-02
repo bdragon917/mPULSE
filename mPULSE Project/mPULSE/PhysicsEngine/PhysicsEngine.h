@@ -58,9 +58,6 @@ public:
     void setupPlayScene(vector<Entity*>* cars);      //Use this to initalize the physicScene for playState
     void setupCars(vector<Entity*>* cars);
 
-    void losing();
-	//NxVec3 ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength);
-	//NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);
 	NxActor* createGroundPlane();
 	NxActor* createBox(float x, float y, float z);
     void createBoxes(float x, float y, float z, int num, float radius, std::vector<Entity*>* Boxes);
@@ -70,19 +67,10 @@ public:
     NxActor* createBarrier(NxVec3 pos,NxVec3 dir);
     NxActor* createMissile(NxVec3 pos,NxVec3 dir);
 
-//    NxWheelShape* AddWheelToActor(NxActor* actor, NxWheelDesc* wheelDesc);
     void resetBox();
     void resetBoxHigh();
 
 	NxScene* getScene();
-	void accel();
-	void rev();
-	void steer(int);
-
-    	NxWheelShape* w1;
-	NxWheelShape* w2;
-	NxWheelShape* w3;
-	NxWheelShape* w4;
 
 };
 

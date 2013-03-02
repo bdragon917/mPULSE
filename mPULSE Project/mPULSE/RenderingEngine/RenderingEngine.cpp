@@ -1262,7 +1262,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
 
                     drawTrack(track);
-
+                    drawDynamicObjects(&entities->DynamicObjs);
                 //float blur = (entities->cars[0]->getActor()->getLinearVelocity().magnitude() / 150.0f); //blur = (blur * 0.7) + (0.3 * newblur)
 
                 //glAccum(GL_MULT, blur);
@@ -1531,6 +1531,13 @@ void RenderingEngine::drawCars(Entities* entities)
                 drawActor(entities->cars[i]->getActor());
             }
         }
+    }
+}
+void RenderingEngine::drawDynamicObjects(std::vector<Entity*>* dObjs)
+{
+    for(unsigned i=0;i<dObjs->size();i++)
+    {
+        drawModel(dObjs->at(i)->getModel(),dObjs->at(i)->getActor()->getGlobalPosition().x,dObjs->at(i)->getActor()->getGlobalPosition().y,dObjs->at(i)->getActor()->getGlobalPosition().z,2);
     }
 }
 
