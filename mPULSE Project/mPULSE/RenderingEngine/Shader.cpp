@@ -68,7 +68,7 @@ char *Shader::textFileRead(const char* filename) {
 			if (filesize > 0) {
                 content = new char[filesize+1];
                 file.read(content, filesize);
-				content[filesize] = '\0';
+                content[filesize] = '\0';
 			}
 
 			file.close();

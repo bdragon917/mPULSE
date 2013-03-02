@@ -120,7 +120,7 @@ void Entity::chargeBattery()
 		batteryCharged = true;
 		NxVec3 lin_vel = actor->getLinearVelocity();
 		NxReal speed = lin_vel.magnitude();
-		lin_vel.setMagnitude(speed/2.0);
+		lin_vel.setMagnitude(speed/2.0f);
 		charge = lin_vel.magnitude();
 	
 		actor->setLinearVelocity(lin_vel);

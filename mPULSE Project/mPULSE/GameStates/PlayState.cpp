@@ -50,7 +50,7 @@ PlayState::PlayState()
     physicsEngine->setupCars(&entities.AIcars);  //Assign actors to the entities without the initalization of the engine
 
     //Attach AI to the cars
-    for (int aa=0;aa<entities.AIcars.size();aa++)
+    for (unsigned aa = 0; aa < entities.AIcars.size(); ++aa)
     {
         entities.AIcars.at(aa)->aAI->setActor(entities.AIcars.at(aa)->getActor());   //Assign actors to the entities's AI
     }

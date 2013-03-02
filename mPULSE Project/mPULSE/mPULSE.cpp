@@ -8,24 +8,31 @@
 #include "Util\Clock.h"
 #include "Input\XboxController.h"
 
-//Methods
-bool init();
+// Methods
+SDL_Surface* init();
 
-//Variables
-SDL_Surface* screen = NULL;
-const int MAX_PLAYERS = 4;
-int numPlayers = 0;
-XboxController* players[MAX_PLAYERS];
+// Constants
+const unsigned MAX_PLAYER_COUNT = 4;
  
 int main(int argc, char *argv[])
 {   
-    bool gameRunning = true;
+    // Initializes players according to connected controllers
+    unsigned playerCount = 0;
+    XboxController* players[MAX_PLAYER_COUNT];
+    for(unsigned i = 0; i < MAX_PLAYER_COUNT; ++i)
+    {
+        players[i] = new XboxController(i);
+        if (players[i]->isConnected())
+            ++playerCount;
+    }
 
-    gameRunning = init();
-
+    // Initializes display
+    SDL_Surface* screen = init();
+    bool gameRunning = (screen != NULL);
     Game game;
     SDL_Event KeyboardMouseState;
 
+    // Main game loop
     while(gameRunning)
     {
         //Handle window events
@@ -33,7 +40,7 @@ int main(int argc, char *argv[])
             gameRunning = game.handleKeyboardMouseEvents(KeyboardMouseState);
 
         //Handle xbox events
-        for(int player=0;player<numPlayers;player++)
+        for (unsigned player = 0; player < playerCount; ++player)
         {
             players[player]->update();
             game.handleXboxEvents(player,players[player]);
@@ -46,21 +53,17 @@ int main(int argc, char *argv[])
         SDL_GL_SwapBuffers();
 	}
 
+    // Cleanup
     SDL_Quit();
+    for (unsigned i = 0; i < MAX_PLAYER_COUNT; ++i)
+        delete players[i];
     return 0;
 }
 
 
-bool init()
+SDL_Surface* init()
 {
-    for(int i=0;i<MAX_PLAYERS;i++)
-    {
-        players[i] = new XboxController(i);
-        if (players[i]->isConnected())
-            numPlayers++;
-    }
-
-
+    SDL_Surface* screen = NULL;
     SDL_Init( SDL_INIT_EVERYTHING );
 
 	//Initalization for motion blur
@@ -78,5 +81,5 @@ bool init()
 
     SDL_WM_SetCaption("mPULSE","mPULSE");
 
-    return true;
+    return screen;
 }
