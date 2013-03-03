@@ -7,6 +7,8 @@
 
 #include <GameStates/GameState.h>
 #include <GameStates/GameVariables.h>
+#include <Util/Clock.h>
+#include <InGameObjects/CustomData.h>
 
 #include <RenderingEngine/RenderingEngine.h>
 #include <PhysicsEngine/PhysicsEngine.h>
@@ -28,14 +30,14 @@ public:
     void render();
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);
     void handleXboxEvents(int player,XboxController* state);
-    void PlayState::handleXboxController(int player, std::vector<Entity*> thing ,XboxController* state);
+    void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,XboxController* state, bool isHuman);
     void InitializeConsoleCommands();
 
 private:
     bool showConsole;
     bool rbPressed;
     PlayState();
-
+    float id;
     Track* track;
     RenderingEngine::Entities entities;
     PhysicsEngine* physicsEngine;
@@ -47,7 +49,7 @@ private:
     void PlayState::logWayPoint(int player);
 
     std::map<std::string, int(*)(int)> commands;
-
-    //Console Command Stuff!!!!// ADD commands here!
+    Clock time;
+    int reloadTime;
 };
 

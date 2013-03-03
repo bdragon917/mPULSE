@@ -7,6 +7,9 @@
 #include <NxPhysicsSDK.h>
 #include <NxActor.h>
 #include <InGameObjects/Entities/Entity.h>
+#include <InGameObjects/TriggerCallback.h>
+#include <AI/Waypoint.h>
+#include <InGameObjects/CustomData.h>
 
 #include "stream.h"
 #include <cstdlib>
@@ -31,18 +34,20 @@ private:
 
     NxMaterial* wsm;
 
+	TriggerCallback myTriggerCallback;
+
 
 
     NxWheelShape* AddWheelToActor(NxActor* actor, float x,float y, float z);
 
 public:
 
-    enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC };
+    //enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC };
 
-    typedef struct
-    {
-        ObjTypes type;
-    }   customUserData;
+    //typedef struct
+    //{
+    //    ObjTypes type;
+    //}   customUserData;
     
        
 
@@ -55,28 +60,20 @@ public:
     void setupPlayScene(vector<Entity*>* cars);      //Use this to initalize the physicScene for playState
     void setupCars(vector<Entity*>* cars);
 
-    void losing();
-	//NxVec3 ApplyForceToActor(NxActor* actor, const NxVec3& forceDir, const NxReal forceStrength);
-	//NxVec3 ApplyForceToBox(const NxVec3& forceDir, const NxReal forceStrength);
 	NxActor* createGroundPlane();
 	NxActor* createBox(float x, float y, float z);
     void createBoxes(float x, float y, float z, int num, float radius, std::vector<Entity*>* Boxes);
     NxActor* createStaticBox(float x, float y, float z);
     NxActor* createTriMesh(float x, float y, float z, ObjModel aModel);
     NxActor* createCarChassis();
-//    NxWheelShape* AddWheelToActor(NxActor* actor, NxWheelDesc* wheelDesc);
-    void resetBox();
+    NxActor* createBarrier(NxVec3 pos,NxVec3 dir);
+    NxActor* createMissile(NxVec3 pos,NxVec3 dir);
+	void createWaypoints(std::vector<Waypoint*>* waypoints);
+
+    void resetBox();  
     void resetBoxHigh();
 
 	NxScene* getScene();
-	void accel();
-	void rev();
-	void steer(int);
-
-    	NxWheelShape* w1;
-	NxWheelShape* w2;
-	NxWheelShape* w3;
-	NxWheelShape* w4;
 
 };
 

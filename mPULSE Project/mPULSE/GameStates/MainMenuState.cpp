@@ -12,8 +12,9 @@ MainMenuState::MainMenuState()
 	//renderingEngine->initializeGL();
     renderingEngine->createLight_MainMenu();
 
-
-
+    prevTime = 0;
+    WAIT_TIME = 50;
+    buttonPressed = false;
 }
 
 void MainMenuState::update(float dt)
@@ -89,8 +90,34 @@ bool MainMenuState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 }
 
 void MainMenuState::handleXboxEvents(int player,XboxController* state)
-{
-
+{    
+    int MaxSelected = 5;
+    if(state->dpadLeft || state->leftStick.x < 0)
+    {
+        if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
+        {
+            if(!buttonPressed)
+                buttonPressed = true;
+            curSelected = curSelected - 1;
+            if (curSelected < 0){curSelected = MaxSelected;}
+        }
+        prevTime = clock.getCurrentTime();
+    }
+    else if(state->dpadRight || state->leftStick.x > 0)
+    {
+        if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
+        {
+            if(!buttonPressed)
+                buttonPressed = true;
+            curSelected = curSelected + 1;
+            if (curSelected > MaxSelected){curSelected = 0;}
+        }
+        prevTime = clock.getCurrentTime();
+    }
+    else if (state->a)
+    {
+        renderingEngine->startFadeOut();
+    }
 }
 
 MainMenuState* MainMenuState::getInstance()

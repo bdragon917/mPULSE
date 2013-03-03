@@ -4,6 +4,11 @@
 #include <NxPhysics.h>
 #include <NxActor.h>
 #include <AI/Waypoint.h>
+#include <math.h>
+#include <InGameObjects/CustomData.h>
+
+//#include <InGameObjects/Track.h>
+//#include <InGameObjects/Entities/Entity.h>
 
 class AI
 {
@@ -16,15 +21,16 @@ public:
 
     void setWaypoint(Waypoint* aW);
     void setActor(NxActor* aA);
-
+    NxActor* getActor();
 
     NxVec3 myTargetVector;   //For debug
+    NxVec3 myOrientation;
 private:
 
     Waypoint* targetWaypoint;
     NxActor* myActor;
     NxVec3 myLocation;
-    NxVec3 myOrientation;
+    
 
     XboxController* xController;
 };

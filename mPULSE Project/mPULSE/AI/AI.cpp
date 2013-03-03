@@ -24,50 +24,94 @@ AI::AI(void)
     {
         xController->initializeVariables();
 
-        NxVec3 myDirection = NxVec3(0.0f, 0.0f, 1.0f);
-        myDirection = myActor->getGlobalOrientation() * myDirection;
-        myOrientation = myDirection;
-        //myDirection = myDirection / myDirection.normalize();
+        NxVec3 myDirection = NxVec3(0.0f, 0.0f, 10.0f);
+        myDirection = myActor->getGlobalPose() * myDirection;
+        myDirection = myDirection - myActor->getGlobalPose().t;
 
-        NxVec3 myTarget = targetWaypoint->pos;
+        //myDirection = NxVec3(1.0f, 0.0f, 0.0f);
+        myDirection.normalize();
+
+        myOrientation = myDirection;
+        //myDirection = myDirection / myDirection.normalize();       
+
+        CustomData* cd = (CustomData*) myActor->userData;
+        NxVec3 myTarget = cd->wp->nextWaypoint->pos;
+
+
         myTarget = myTarget - myActor->getGlobalPose().t;
+        //myTarget = NxVec3(1.0f, 0.0f, 1.0f);
+        myTarget.normalize();
         //myTarget = myTarget / myTarget.normalize();
 
         myTargetVector = myTarget;      //for debug
 
-        float angleToTarget = myDirection.dot(myTarget);
+        //float angleToTarget = myDirection.dot(myTarget);
+        float angleToTarget = myTarget.dot(myDirection);
+        //float angleToTarget = (myDirection.x * myTarget.y) - (myDirection.x * myTarget.y);
 
         std::cout << "AI: AngleToTarget" << angleToTarget << std::endl;
 
-        if (angleToTarget > 0)
+        //angleToTarget = acos((angleToTarget) / (myDirection.magnitude() * myTarget.magnitude()));
+        //angleToTarget = acos((angleToTarget)/(myTarget.magnitude()*myDirection.magnitude()));
+        //printf("AI: AngleToTarget%f\n", angleToTarget);
+
+        if (angleToTarget > 0.01f)
         {
             std::cout << "AI: Steering right" << std::endl;
             //steer right
             myTarget.normalize();
-            xController->leftStick.x = myTarget.x;
-            xController->leftStick.y = myTarget.z;
-            xController->leftStick.magnitude = angleToTarget * 10000;
+            //xController->leftStick.x = myTarget.x;
+            //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
+            xController->leftStick.x = 1;
+            if (xController->leftStick.x > 1.0f)
+                xController->leftStick.x = 1.0f;
+            else if (xController->leftStick.x < -1.0f)
+                xController->leftStick.x = -1.0f;
+            //xController->leftStick.y = myTarget.z;
+            //xController->leftStick.magnitude = angleToTarget * 24000;
+            xController->leftStick.magnitude = 24000;
 
-            xController->rTrigger = 255;
+            xController->rTrigger = 75;
 
         }
-        else
+        else if (angleToTarget < -0.01f)
         {
             //steer left
             std::cout << "AI: Steering left" << std::endl;
             myTarget.normalize();
-            xController->leftStick.x = myTarget.x;
-            xController->leftStick.y = myTarget.z;
-            xController->leftStick.magnitude = angleToTarget * 10000;
+            //xController->leftStick.x = myTarget.x;
+            //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
+            xController->leftStick.x = -1;
+            if (xController->leftStick.x > 1.0f)
+                xController->leftStick.x = 1.0f;
+            else if (xController->leftStick.x < -1.0f)
+                xController->leftStick.x = -1.0f;
+            //xController->leftStick.y = myTarget.z;
+            //xController->leftStick.magnitude = angleToTarget * 24000;
+            xController->leftStick.magnitude = 24000;
 
+            xController->rTrigger = 75;
+
+        }
+        else
+        {
+            printf("AI: Driving Stright\n");
+            myTarget.normalize();
+            //xController->leftStick.x = myTarget.x;
+            //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
+            xController->leftStick.x = 0;
             xController->rTrigger = 255;
-
         }
     //if (myActor->getGlobalOrientation
     
     
     
     
+    }
+
+    NxActor* AI::getActor()
+    {
+        return myActor;
     }
 
     void AI::setActor(NxActor* aA)

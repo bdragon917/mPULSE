@@ -12,14 +12,14 @@ Clock::Clock(int frameRateLimit)
     maxFrameRate = frameRateLimit;
 }
 
-unsigned int Clock::getCurrentTime()
+unsigned Clock::getCurrentTime()
 {
     return SDL_GetTicks();
 }
 
-unsigned int Clock::getDeltaTime()
+unsigned Clock::getDeltaTime()
 {
-    unsigned int dt = (SDL_GetTicks()-time);
+    unsigned dt = (SDL_GetTicks()-time);
     if(1000.0/maxFrameRate > dt)
     {
         SDL_Delay((1000/60)-(SDL_GetTicks()-time));
@@ -29,6 +29,11 @@ unsigned int Clock::getDeltaTime()
 
 return dt;
 
+}
+
+int Clock::getDeltaTime(unsigned prevTime)
+{
+    return SDL_GetTicks()-prevTime;
 }
 
 void Clock::reset()

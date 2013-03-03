@@ -1,5 +1,6 @@
 #include "PhysicsEngine.h"
 
+
 PhysicsEngine::PhysicsEngine()
 {
 	sceneSetup();
@@ -11,9 +12,6 @@ PhysicsEngine* PhysicsEngine::getInstance()
     static PhysicsEngine physics;
     return &physics;
 }
-
-
-
 
 void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 {
@@ -35,6 +33,8 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	NxVec3 defaultGravity(0,-9.8f*(10.0f),0);
 	sceneDesc.gravity = defaultGravity;
 	scene = physicsSDK->createScene(sceneDesc);
+	//Set up so that trigger objects in the scene will sent an event to TriggerReport
+	scene->setUserTriggerReport(&myTriggerCallback);
 
 	//Create the default material
 	NxMaterial* defaultMaterial = scene->getMaterialFromIndex(0);
@@ -73,10 +73,7 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
 	    entityCar1->addDriveWheel(wheel2);
         entityCar1->addPassiveWheel(wheel3);
 	    entityCar1->addPassiveWheel(wheel4);
-	    w1 = wheel;
-	    w2 = wheel2;
-	    w3 = wheel3;
-	    w4 = wheel4;
+
         //Camera newCamera = Camera(box);
         entityCar1->aCam = new Camera(box);
 
@@ -92,6 +89,7 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
 
 
         entityCar1->getActor()->setGlobalPosition(NxVec3(   ((rand() % 100) / 10.0f)    ,10.0f,  ((rand() % 100) / 10.0f)   ));
+
 
     }
 }
@@ -168,6 +166,92 @@ NxActor* PhysicsEngine::createGroundPlane()
 	return scene->createActor(actorDesc);
 }
 
+NxActor* PhysicsEngine::createBarrier(NxVec3 pos,NxVec3 dir) 
+{
+	//Set the box starting height
+	NxVec3 position(pos.x, pos.y, pos.z);
+
+	//Add single shape actor to the scene
+	NxBodyDesc bodyDesc;
+	bodyDesc.angularDamping	= 0.5f;
+    bodyDesc.flags = NX_BF_FROZEN;
+	//The actor has one shape, a box, 1m on a side
+	NxBoxShapeDesc boxDesc;
+	boxDesc.dimensions.set(0.5,0.5,0.5);
+	//boxDesc.localPose.t = position;
+
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&boxDesc);
+	actorDesc.body = &bodyDesc;
+	actorDesc.density = 0.1f;
+	actorDesc.globalPose.t = position;
+    
+	NxActor *actor = scene->createActor(actorDesc);
+	//actor->userData = (void*)size_t(0.5f);
+
+//    customUserData* cud = new customUserData;
+//    cud->type = OBSTACLE;
+    CustomData* cd = new CustomData();
+    cd->type = cd->OBSTACLE;
+    actor->userData = (void*)&cd;   
+    
+	return actor;
+}
+
+NxActor* PhysicsEngine::createMissile(NxVec3 pos,NxVec3 dir) 
+{
+	//Add single shape actor to the scene
+	NxBodyDesc bodyDesc;
+	bodyDesc.angularDamping	= 0.5f;
+    bodyDesc.flags = NX_BF_DISABLE_GRAVITY;
+	//The actor has one shape, a box, 1m on a side
+	NxBoxShapeDesc boxDesc;
+	boxDesc.dimensions.set(0.5,0.5,0.5);
+	//boxDesc.localPose.t = position;
+
+	NxActorDesc actorDesc;
+	actorDesc.shapes.pushBack(&boxDesc);
+	actorDesc.body = &bodyDesc;
+	actorDesc.density = 0.1f;
+	actorDesc.globalPose.t = pos;
+    
+	NxActor *actor = scene->createActor(actorDesc);
+	//actor->userData = (void*)size_t(0.5f);
+
+    CustomData* cd = new CustomData();
+    cd->type = cd->OBSTACLE;
+    actor->userData = (void*)&cd;  
+
+    actor->addLocalForce(dir*500);
+    
+	return actor;
+}
+
+
+void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
+{
+	std::vector<Waypoint*> waypoints = *wps;
+	for(unsigned i = 0; i<waypoints.size();i++)
+	{
+		NxVec3 position(waypoints[i]->pos);
+
+		//The actor has one shape, a box, 1m on a side
+		NxBoxShapeDesc boxDesc;
+		boxDesc.dimensions.set(1.0,1.0,1.0);
+		boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
+
+		NxActorDesc actorDesc;
+		actorDesc.shapes.pushBack(&boxDesc);
+		actorDesc.globalPose.t = position;
+    
+		NxActor *actor = scene->createActor(actorDesc);
+		
+        CustomData* cd = new CustomData();
+        cd->wp = waypoints[i];
+		actor->userData = cd;   
+	}
+    
+}
 
 void PhysicsEngine::createBoxes(float x, float y, float z, int num, float radius, std::vector<Entity*>* Boxes) 
 {
@@ -207,9 +291,9 @@ NxActor* PhysicsEngine::createBox(float x, float y, float z)
 	NxActor *actor = scene->createActor(actorDesc);
 	//actor->userData = (void*)size_t(0.5f);
 
-    customUserData* cud = new customUserData;
-    cud->type = OBSTACLE;
-    actor->userData = (void*)&cud;
+    CustomData* cd = new CustomData();
+    cd->type = cd->OBSTACLE;
+    actor->userData = (void*)&cd;  
 
 	return actor;
 }
@@ -222,6 +306,7 @@ NxActor* PhysicsEngine::createStaticBox(float x, float y, float z)
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions.set(0.5,0.5,0.5);
+	boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
 	//boxDesc.localPose.t = position;
 
 	NxActorDesc actorDesc;
@@ -232,9 +317,6 @@ NxActor* PhysicsEngine::createStaticBox(float x, float y, float z)
 
 	NxActor *actor = scene->createActor(actorDesc);
 	//actor->userData = (void*)size_t(0.5f);
-    customUserData* cud = new customUserData;
-    cud->type = STATIC;
-    actor->userData = (void*)&cud;
 	return actor;
 }
 
@@ -357,13 +439,13 @@ NxActor* PhysicsEngine::createCarChassis()
 
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxShapes[2];
-	boxShapes[0].dimensions.set(2.5f, 0.4f, 1.2f);
-	boxShapes[1].dimensions.set(1.f, 0.3f, 1.1f);
-	boxShapes[1].localPose.t.set(-0.3f, 0.7f, 0.f);
+	boxShapes[0].dimensions.set(2.2f, 0.4f, 1.2f);
+	//boxShapes[1].dimensions.set(1.f, 0.3f, 1.1f);
+	//boxShapes[1].localPose.t.set(-0.3f, 0.7f, 0.f);
 
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&boxShapes[0]);
-	actorDesc.shapes.pushBack(&boxShapes[1]);
+	//actorDesc.shapes.pushBack(&boxShapes[1]);
 	actorDesc.body = &bodyDesc;
 	actorDesc.density = 10.0f;
 	actorDesc.globalPose.t = position;
@@ -379,10 +461,9 @@ NxActor* PhysicsEngine::createCarChassis()
     NxMat33 orient;
     orient.fromQuat(q);
 
-
-    customUserData* cud = new customUserData;
-    cud->type = CAR;
-    actorDesc.userData = (void*)&cud;
+    CustomData* cd = new CustomData();
+    cd->type = cd->CAR;
+	actorDesc.userData = (void*)&cd;   
 
 	NxActor *actor = scene->createActor(actorDesc);
     actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));
@@ -470,33 +551,3 @@ NxScene* PhysicsEngine::getScene()
 {
 	return scene;
 }
-
-
-void PhysicsEngine::accel()
-{
-	//w1->setMotorTorque(2000);
-	//w2->setMotorTorque(2000);
-	//w3->setMotorTorque(1000);
-	//w4->setMotorTorque(1000);
-	//box->wakeUp();
-}
-
-void PhysicsEngine::rev()
-{
-	w1->setMotorTorque(-2000);
-	w2->setMotorTorque(-2000);
-	//w3->setMotorTorque(-1000);
-	//w4->setMotorTorque(-1000);
-	//box->wakeUp();
-}
-
-void PhysicsEngine::steer(int mag)
-{
-    float magnitude = static_cast<float>(mag);
-	//w1->setSteerAngle(-30);
-    w1->setSteerAngle(magnitude);
-    w2->setSteerAngle(magnitude);
-    w3->setSteerAngle(magnitude);
-    w4->setSteerAngle(magnitude);
-}
-

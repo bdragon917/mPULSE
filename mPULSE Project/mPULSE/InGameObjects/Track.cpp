@@ -38,7 +38,7 @@
 
                 //Check if the line is empty or a comment
                 if(tmpLine.size() <= 0 || tmpLine.at(0) == '#')
-                    return;
+                    continue;
 
                 //Parse out the heading from the current line.
                 while((!headingSeen && parsing) && i < tmpLine.size())
@@ -67,7 +67,7 @@
 
                     bool startSeen = true;
                     startFlag = i;
-                    while((parsing && i < tmpLine.size()) && j < 3)
+                    while((parsing && i < tmpLine.size()) && j < 8)
 	                {
                         ch = tmpLine.at(i);
                         if((ch == ' ' || ch == '\t') && startSeen)
@@ -78,6 +78,16 @@
                                 wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 2)
                                 wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 3)
+                                wp->ori.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 4)
+                                wp->ori.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 5)
+                                wp->ori.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 6)
+                                wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 7)
+                                wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
 
                             j++;
                             startSeen = false;
@@ -92,12 +102,22 @@
 	                }
                     if(startSeen)
                     {
-                        if (j == 0)
-                            wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
-                        else if(j == 1)
-                            wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
-                        else if(j == 2)
-                            wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
+                            if (j == 0)
+                                wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 1)
+                                wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 2)
+                                wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 3)
+                                wp->ori.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 4)
+                                wp->ori.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 5)
+                                wp->ori.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 6)
+                                wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 7)
+                                wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
                     }
 
                     addWaypoint(wp);
@@ -107,7 +127,7 @@
         }
         else
         {printf("Track checkpoints didn't open, can't find maybe??\n"); }
-        waypoints.shrink_to_fit();
+        finalizeWaypoints();        
     }
 
     NxActor* Track::getActor()
@@ -125,12 +145,17 @@
         waypoints.push_back(wp);
     }
 
-    void Track::addWaypoint(float x,float y,float z,Waypoint::TYPE type)
+    void Track::addWaypoint(float xPos, float yPos, float zPos,float xOri, float yOri,float zOri,int tmpId,int tmpNext,Waypoint::TYPE type)
     {
         Waypoint* w = new Waypoint();
-        w->pos.x = x;
-        w->pos.y = y;
-        w->pos.z = z;
+        w->pos.x = xPos;
+        w->pos.y = yPos;
+        w->pos.z = zPos;
+        w->ori.x = xOri;
+        w->ori.y = yOri;
+        w->ori.z = zOri;
+        w->id = tmpId;
+        w->nextId = tmpNext;
         w->type = type;
 
         waypoints.push_back(w);
@@ -146,7 +171,6 @@
         return NULL;
     }
 
-
     Waypoint::TYPE Track::stringToType(std::string typeString)
     {
         if(typeString.compare("START") == 0)
@@ -161,4 +185,27 @@
             return Waypoint::ITEM_SPAWN;
         else
             return Waypoint::INVALID_TYPE;
+    }
+
+    void Track::finalizeWaypoints()
+    {
+        waypoints.shrink_to_fit();
+        if(waypoints.size()>0)
+        {
+            for(unsigned i=1;i<waypoints.size();i++)
+            {
+                waypoints[i-1]->nextWaypoint = waypoints[i];
+            }
+            waypoints[waypoints.size()-1]->nextWaypoint = waypoints[0];
+            waypoints[waypoints.size()-1]->nextId = 0;
+        }
+    }
+
+    Waypoint* Track::getFirst()
+    {
+        return waypoints[0];
+    }
+    Waypoint* Track::getWaypoint(int index)
+    {
+        return waypoints[index];
     }

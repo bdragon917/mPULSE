@@ -570,6 +570,8 @@ void RenderingEngine::setPlayerNum(int num)
 
 void RenderingEngine::initializeGL()
 {
+    debugCam = false;
+
 	glShadeModel (GL_SMOOTH);
 	glEnable (GL_DEPTH_TEST);
     //glEnable(GL_CULL_FACE);
@@ -866,20 +868,23 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
     int b = a;
     if (playerNum == 2)
     {
-        for (int activePlayers=0;activePlayers<2;activePlayers++)
-        {
-            drawScene_ForPlayer(scene, track, entities, activePlayers, true);
-        }
+        //for (int activePlayers=0;activePlayers<2;activePlayers++)
+        //{
+         //   drawScene_ForPlayer(scene, track, entities, activePlayers, true, entities->cars);
+        //}
+        drawScene_ForPlayer(scene, track, entities, 0, true, true, entities->cars);
+        entities->AIcars.at(0)->aCam->updateCamera(16);
+        drawScene_ForPlayer(scene, track, entities, 0, true, false, entities->AIcars);
     }
     else
     {
-        drawScene_ForPlayer(scene, track, entities, 0, false);
+        drawScene_ForPlayer(scene, track, entities, 0, false, true, entities->cars);
     }
     //drawScene_ForPlayer(scene, entities, 1);
     
 }
 
-void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen)
+void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, bool topScreen, std::vector<Entity*> targetEntities)
 {
         glPushMatrix ();
 	    glLoadIdentity ();
@@ -938,18 +943,27 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
 	        
 
-            NxVec3 pos = entities->cars.at(carIndex)->aCam->getCamLoc();
-            NxVec3 at = entities->cars.at(carIndex)->aCam->getLookAt();
+            NxVec3 pos = targetEntities.at(carIndex)->aCam->getCamLoc();
+            NxVec3 at = targetEntities.at(carIndex)->aCam->getLookAt();
 	        //Cameras
-	        gluLookAt(pos.x, pos.y, pos.z,  // Eye/camera position      //  	gluLookAt(0, 0, 0,  // Eye/camera position
-	        at.x ,at.y,at.z,		// Look-at position                 //0 ,0,-2.0f,		// Look-at position 
-	        0.0,1.0,0.0); 		// "Up" vector
 
+            if (debugCamera)
+            {
+                gluLookAt(0.0f, 50.0f, 0.0f,  // Eye/camera position      //  	gluLookAt(0, 0, 0,  // Eye/camera position
+	            at.x ,at.y,at.z,		// Look-at position                 //0 ,0,-2.0f,		// Look-at position 
+	            0.0,1.0,0.0); 		// "Up" vector
+            }
+            else
+            {
+	            gluLookAt(pos.x, pos.y, pos.z,  // Eye/camera position      //  	gluLookAt(0, 0, 0,  // Eye/camera position
+	            at.x ,at.y,at.z,		// Look-at position                 //0 ,0,-2.0f,		// Look-at position 
+	            0.0,1.0,0.0); 		// "Up" vector
+            }
 
             if (splitScreen)
             {
 	            //set view
-                if (carIndex == 1)
+                if (topScreen)
                 {
             	                // Switch to the projection matrix
 	                glMatrixMode (GL_PROJECTION);
@@ -1248,7 +1262,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
 
                     drawTrack(track);
-
+                    drawDynamicObjects(&entities->DynamicObjs);
                 //float blur = (entities->cars[0]->getActor()->getLinearVelocity().magnitude() / 150.0f); //blur = (blur * 0.7) + (0.3 * newblur)
 
                 //glAccum(GL_MULT, blur);
@@ -1286,15 +1300,15 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
 
 
-                if (debugCamera)
-                {
-                    NxVec3 camLookAt = entities->cars[carIndex]->aCam->getLookAt();
-                    glPushMatrix();
-                    glTranslatef(camLookAt.x, camLookAt.y, camLookAt.z);
-                    drawBox_Generic(2.0f);
+               // if (debugCamera)
+              //  {
+               //     NxVec3 camLookAt = entities->cars[carIndex]->aCam->getLookAt();
+              //      glPushMatrix();
+              //      glTranslatef(camLookAt.x, camLookAt.y, camLookAt.z);
+              //      drawBox_Generic(2.0f);
                     //drawModel(modelManager.getModel(0), camLookAt.x, camLookAt.y, camLookAt.z, 0.5f);
-                    glPopMatrix();
-                }
+             //       glPopMatrix();
+             //   }
 
 
                 {
@@ -1439,7 +1453,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
 		glEnd();
 
-        if (FadeCtrl >= 1.0f){return 1;}
+        if (FadeCtrl >= 1.0f){FadeCtrl=0.0f;fadeMode=0;return 1;}
 
 
     if (aShader != NULL)
@@ -1519,6 +1533,13 @@ void RenderingEngine::drawCars(Entities* entities)
         }
     }
 }
+void RenderingEngine::drawDynamicObjects(std::vector<Entity*>* dObjs)
+{
+    for(unsigned i=0;i<dObjs->size();i++)
+    {
+        drawModel(dObjs->at(i)->getModel(),dObjs->at(i)->getActor()->getGlobalPosition().x,dObjs->at(i)->getActor()->getGlobalPosition().y,dObjs->at(i)->getActor()->getGlobalPosition().z,2);
+    }
+}
 
 void RenderingEngine::drawAICars(Entities* entities)
 {
@@ -1536,11 +1557,23 @@ void RenderingEngine::drawAICars(Entities* entities)
                     drawModelPos(modelManager.getModel(entities->AIcars[i]->rc[r]->modelID), aPose );
 
                     //myTargetVector
+                    glBindTexture(GL_TEXTURE_2D, 5);
                     glBegin(GL_TRIANGLE_STRIP);
                         glNormal3f(1.0f, 0.0f, 0.0f);
-		                glTexCoord2d(0.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x-0.2f,entities->AIcars.at(i)->aAI->myTargetVector.y,entities->AIcars.at(i)->aAI->myTargetVector.z);
-                        glTexCoord2d(1.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x,entities->AIcars.at(i)->aAI->myTargetVector.y+20.2f,entities->AIcars.at(i)->aAI->myTargetVector.z);
-                        glTexCoord2d(0.0,1.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x+0.2f,entities->AIcars.at(i)->aAI->myTargetVector.y,entities->AIcars.at(i)->aAI->myTargetVector.z);
+		                //glTexCoord2d(0.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x-0.6f,entities->AIcars.at(i)->aAI->myTargetVector.y,entities->AIcars.at(i)->aAI->myTargetVector.z);
+                        //glTexCoord2d(1.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x,entities->AIcars.at(i)->aAI->myTargetVector.y+20.2f,entities->AIcars.at(i)->aAI->myTargetVector.z);
+                        //glTexCoord2d(0.0,1.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x+0.2f,entities->AIcars.at(i)->aAI->myTargetVector.y,entities->AIcars.at(i)->aAI->myTargetVector.z);
+                        glTexCoord2d(0.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x + entities->AIcars.at(i)->getActor()->getGlobalPose().t.x,entities->AIcars.at(i)->aAI->myTargetVector.y + entities->AIcars.at(i)->getActor()->getGlobalPose().t.y,entities->AIcars.at(i)->aAI->myTargetVector.z + entities->AIcars.at(i)->getActor()->getGlobalPose().t.z);
+                        glTexCoord2d(1.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x + entities->AIcars.at(i)->getActor()->getGlobalPose().t.x,entities->AIcars.at(i)->aAI->myTargetVector.y+2.2f + entities->AIcars.at(i)->getActor()->getGlobalPose().t.y,entities->AIcars.at(i)->aAI->myTargetVector.z + entities->AIcars.at(i)->getActor()->getGlobalPose().t.z);
+                        glTexCoord2d(0.0,1.0); glVertex3f(entities->AIcars.at(i)->getActor()->getGlobalPose().t.x,entities->AIcars.at(i)->getActor()->getGlobalPose().t.y,entities->AIcars.at(i)->getActor()->getGlobalPose().t.z);
+                    glEnd();
+
+                    glBindTexture(GL_TEXTURE_2D, 6);
+                    glBegin(GL_TRIANGLE_STRIP);
+                        glNormal3f(1.0f, 0.0f, 0.0f);
+		                glTexCoord2d(0.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myOrientation.x + entities->AIcars.at(i)->getActor()->getGlobalPose().t.x,entities->AIcars.at(i)->aAI->myOrientation.y + entities->AIcars.at(i)->getActor()->getGlobalPose().t.y,entities->AIcars.at(i)->aAI->myOrientation.z + entities->AIcars.at(i)->getActor()->getGlobalPose().t.z);
+                        glTexCoord2d(1.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myOrientation.x + entities->AIcars.at(i)->getActor()->getGlobalPose().t.x,entities->AIcars.at(i)->aAI->myOrientation.y+2.0f+entities->AIcars.at(i)->getActor()->getGlobalPose().t.y,entities->AIcars.at(i)->aAI->myOrientation.z+entities->AIcars.at(i)->getActor()->getGlobalPose().t.z);
+                                                glTexCoord2d(0.0,1.0); glVertex3f(entities->AIcars.at(i)->getActor()->getGlobalPose().t.x,entities->AIcars.at(i)->getActor()->getGlobalPose().t.y,entities->AIcars.at(i)->getActor()->getGlobalPose().t.z);
                     glEnd();
 
 
@@ -1646,12 +1679,12 @@ void RenderingEngine::drawTrack(Track* track)
     }
     //Draw the waypoints on the track
     std::vector<Waypoint*>* wps = track->getWaypoints();
-    ObjModel* sphere = modelManager.getModel("sphere.obj");
+    ObjModel* model = modelManager.getModel("box.obj");
     glColor3f(0,1,1);
-    if (sphere != NULL)
+    if (model != NULL)
     {                
         for(unsigned int i=0; i<wps->size(); i++)         
-            drawModel(sphere,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
+            drawModel(model,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
     }
         
 }

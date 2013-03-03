@@ -41,6 +41,7 @@ typedef struct
     std::vector<Entity*> AIcars;
     std::vector<Entity*> Obstacles;
     std::vector<Entity*> StaticObjs;
+    std::vector<Entity*> DynamicObjs;
     std::vector<Entity*> Track;
 } Entities;
 
@@ -62,7 +63,7 @@ void moveStuff(float &testF);
 
 
 void drawScene(NxScene* scene,Track* track, Entities* entities);
-void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen);
+void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, bool topScreen, std::vector<Entity*> targetEntities);
 int drawMainMenuScreen(int curMenuButton, bool clicked);
 
 
@@ -76,6 +77,7 @@ void drawSquare(float x, float y, float z, float half_width, float half_height);
 void drawModel(ObjModel* model,int x,int y, int z, int scale);
 void drawModelPos(ObjModel* model, NxMat34* aMatrix);
 void drawModelShadow(ObjModel* model, NxMat34* aPose);
+void drawDynamicObjects(std::vector<Entity*>* dObjs);
 GLuint generateDisplayList(std::string modelName,int x,int y,int z,int scale);
 GLuint generateDisplayList(ObjModel* model,int x,int y,int z,int scale);
 void deleteDisplayList(GLuint index);
@@ -103,6 +105,8 @@ void drawDisplayList(int index);
     ModelManager getModelManger();
 
     void setPlayerNum(int num);
+
+    bool debugCam;
 
 private:
     RenderingEngine();
@@ -139,7 +143,8 @@ private:
     //Used for Fade In and Out
     float FadeCtrl;
     int fadeMode;
-    float updateFade(); 
+    float updateFade();
+
     
         
         //    int loadShaders();

@@ -3,6 +3,7 @@
 #define NOMINMAX
 #include <vector>
 #include <map>
+#include <Util/Clock.h>
 
 #include <GameStates/GameState.h>
 #include <RenderingEngine/RenderingEngine.h>
@@ -22,11 +23,13 @@ public:
 
 private:
     MainMenuState();
-
+    bool buttonPressed;
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
     GameVariables* gameVariables;
-
+    Clock clock;
     int curSelected;
+    unsigned prevTime;
+    int WAIT_TIME;
 };
 

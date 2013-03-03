@@ -67,14 +67,11 @@
     <Filter Include="Source Files\InGameObjects\Entity">
       <UniqueIdentifier>{a3582aa2-f59e-4c94-9992-439e7d449509}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\InGameObjects\Pickups">
-      <UniqueIdentifier>{8333e960-6f1e-48af-a909-cf5a522bb827}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\InGameObjects">
       <UniqueIdentifier>{92ea595f-e87f-4781-bd6d-046fdd49a1a2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\InGameObjects\Pickups">
-      <UniqueIdentifier>{c4646572-1ea3-4711-8965-b29514921529}</UniqueIdentifier>
+    <Filter Include="Header Files\InGameObjects\Entity">
+      <UniqueIdentifier>{e3ac21f7-c816-4c50-bc15-21621e2fc06d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\InGameObjects\Entities">
       <UniqueIdentifier>{e3ac21f7-c816-4c50-bc15-21621e2fc06d}</UniqueIdentifier>
@@ -174,20 +171,8 @@
     <ClCompile Include="InGameObjects\Track.cpp">
       <Filter>Source Files\InGameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="InGameObjects\Pickups\Barrier.cpp">
-      <Filter>Source Files\InGameObjects\Pickups</Filter>
-    </ClCompile>
-    <ClCompile Include="InGameObjects\Pickups\Missile.cpp">
-      <Filter>Source Files\InGameObjects\Pickups</Filter>
-    </ClCompile>
-    <ClCompile Include="InGameObjects\Pickups\MissileLauncher.cpp">
-      <Filter>Source Files\InGameObjects\Pickups</Filter>
-    </ClCompile>
-    <ClCompile Include="InGameObjects\Pickups\Pickup.cpp">
-      <Filter>Source Files\InGameObjects\Pickups</Filter>
-    </ClCompile>
-    <ClCompile Include="InGameObjects\Pickups\Shield.cpp">
-      <Filter>Source Files\InGameObjects\Pickups</Filter>
+    <ClCompile Include="InGameObjects\TriggerCallback.cpp">
+      <Filter>Source Files\InGameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,20 +263,11 @@
     <ClInclude Include="InGameObjects\Track.h">
       <Filter>Header Files\InGameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="InGameObjects\Pickups\Shield.h">
-      <Filter>Header Files\InGameObjects\Pickups</Filter>
+    <ClInclude Include="InGameObjects\TriggerCallback.h">
+      <Filter>Header Files\InGameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="InGameObjects\Pickups\Pickup.h">
-      <Filter>Header Files\InGameObjects\Pickups</Filter>
-    </ClInclude>
-    <ClInclude Include="InGameObjects\Pickups\Missile.h">
-      <Filter>Header Files\InGameObjects\Pickups</Filter>
-    </ClInclude>
-    <ClInclude Include="InGameObjects\Pickups\MissileLauncher.h">
-      <Filter>Header Files\InGameObjects\Pickups</Filter>
-    </ClInclude>
-    <ClInclude Include="InGameObjects\Pickups\Barrier.h">
-      <Filter>Header Files\InGameObjects\Pickups</Filter>
+    <ClInclude Include="InGameObjects\CustomData.h">
+      <Filter>Header Files\InGameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Components\PhysicalComponent.h">
       <Filter>Header Files\Components</Filter>

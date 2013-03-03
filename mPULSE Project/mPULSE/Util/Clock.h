@@ -5,8 +5,9 @@ class Clock
 public:
     Clock();
     Clock(int frameRateLimit);
-    unsigned int getCurrentTime();
-    unsigned int getDeltaTime();
+    unsigned getCurrentTime();
+    unsigned getDeltaTime();
+    int getDeltaTime(unsigned prevTime);
     void reset();
     void stop();
     void start();
