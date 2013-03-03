@@ -1,4 +1,4 @@
-#include "InitState.h"
+#include <GameStates/InitState.h>
 
 InitState::InitState()
 {

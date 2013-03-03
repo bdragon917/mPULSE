@@ -1,4 +1,4 @@
-#include "PlayState.h"
+#include <GameStates/PlayState.h>
 
 PlayState::PlayState()
 {
@@ -671,8 +671,6 @@ void PlayState::logWayPoint(int player)
         }
         out.close();
 }
-
-
 
 PlayState* PlayState::getInstance()
 {    

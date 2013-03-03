@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include <GameStates/Camera.h>
 #include <iostream>
 
 /**
@@ -29,7 +29,6 @@ Camera::Camera(void)
         lastCamLoc = NxVec3(-5.0f,3.5f,0);
 
 }
-
 
 Camera::Camera(NxActor* aActor)
 {

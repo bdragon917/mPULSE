@@ -1,4 +1,4 @@
-#include "GameVariables.h"
+#include <GameStates/GameVariables.h>
 
 GameVariables* GameVariables::getInstance()
 {
@@ -13,7 +13,6 @@ void GameVariables::initialize()
         Profile* defaultProfile = new Profile();
         players.push_back(defaultProfile);
     }
-
 }
 
 int GameVariables::addPlayers(Profile* aPlayer)

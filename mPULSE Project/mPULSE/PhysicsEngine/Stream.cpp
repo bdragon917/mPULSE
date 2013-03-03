@@ -1,5 +1,5 @@
-#include "NxPhysics.h"
-#include "Stream.h"
+#include <NxPhysics.h>
+#include <PhysicsEngine/stream.h>
 
 //Source:
 //http://apcrol.blogspot.ca/2012/02/directx-physx-english.html

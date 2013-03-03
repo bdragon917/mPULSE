@@ -1,11 +1,9 @@
-#include "Waypoints.h"
-
+#include <AI/Waypoints.h>
 
 Waypoints::Waypoints()
 {
 
 }
-
 
 void Waypoints::loadWaypoints(std::string filename)
 {

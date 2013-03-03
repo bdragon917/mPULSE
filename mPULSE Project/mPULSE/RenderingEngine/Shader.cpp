@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include <RenderingEngine/Shader.h>
 #include <fstream>
 
 Shader::Shader(const char *fs, const char *vs) {

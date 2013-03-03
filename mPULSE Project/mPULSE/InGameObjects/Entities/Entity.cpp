@@ -1,4 +1,4 @@
-#include "Entity.h"
+#include <InGameObjects/Entities/Entity.h>
 
 Entity::Entity()
 {
@@ -106,7 +106,6 @@ void Entity::setSteeringAngle(float percent)
     //printf("percent: %f angle: %f vel: %f\n",percent,steeringAngle,getActor()->getLinearVelocity().magnitude());
 }
 
-
 void Entity::chargeBattery()
 {
 	if(!batteryCharged)
@@ -121,7 +120,6 @@ void Entity::chargeBattery()
 	}
 }
 
-
 void Entity::dischargeBattery()
 {
 	if(batteryCharged)
@@ -134,7 +132,6 @@ void Entity::dischargeBattery()
 		actor->setLinearVelocity(lin_vel);
 	}
 }
-
 
 NxActor* Entity::getActor()
 {
@@ -151,8 +148,6 @@ std::vector<NxWheelShape*> Entity::getDriveWheels()
 
 std::vector<NxWheelShape*> Entity::getPassiveWheels()
 {return passiveWheels;}
-
-
 
 void Entity::setUsingDisplayList(bool status)
 {

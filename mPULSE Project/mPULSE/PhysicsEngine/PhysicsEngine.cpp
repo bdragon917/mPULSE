@@ -1,11 +1,9 @@
-#include "PhysicsEngine.h"
-
+#include <PhysicsEngine/PhysicsEngine.h>
 
 PhysicsEngine::PhysicsEngine()
 {
 	sceneSetup();
 }
-
 
 PhysicsEngine* PhysicsEngine::getInstance()
 {

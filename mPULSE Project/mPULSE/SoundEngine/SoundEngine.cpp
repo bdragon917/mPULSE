@@ -1,11 +1,9 @@
-#include "SoundEngine.h"
-
+#include <SoundEngine/SoundEngine.h>
 
 SoundEngine::SoundEngine(void)
 {
 	initializeSound();
 }
-
 
 SoundEngine* SoundEngine::getInstance()
 {

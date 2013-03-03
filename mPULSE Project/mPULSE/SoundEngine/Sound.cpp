@@ -1,4 +1,4 @@
-#include "Sound.h"
+#include <SoundEngine/Sound.h>
 #include <iostream>
 
 Sound::Sound(void)
@@ -8,7 +8,6 @@ Sound::Sound(void)
         std::cout << "Mix_LoadMUS: " << Mix_GetError() << std::endl;
     }
 }
-
 
 Sound::~Sound(void)
 {

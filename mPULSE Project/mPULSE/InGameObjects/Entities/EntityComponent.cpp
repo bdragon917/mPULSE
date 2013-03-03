@@ -1,5 +1,4 @@
-#include "EntityComponent.h"
-
+#include <InGameObjects/Entities/EntityComponent.h>
 
 EntityComponent::EntityComponent(void)
 {

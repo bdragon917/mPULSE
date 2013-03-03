@@ -1,5 +1,4 @@
-#include "ObjModel.h"
-
+#include <ModelLoader/ObjModel.h>
 
 ObjModel::ObjModel(int ind, std::string tmpName)
 {
