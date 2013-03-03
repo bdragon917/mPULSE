@@ -15,11 +15,57 @@ Entity::Entity()
     maxTorque = 3000;
     minTorque = -3000;
     pickup = NONE;
+
+    timeToLive = -1;
+    timeCreated = clock.getCurrentTime();
+}
+
+Entity::Entity(int tmpTimeToLive)
+{
+	batteryCharged = false;
+	charge = 0.0;
+    usingDisplayList = false;
+    displayListIndex = -1;
+
+    torque = 0;
+    
+    minSteering = 0.1f;
+    maxSteering = 0.85f;
+
+    maxTorque = 3000;
+    minTorque = -3000;
+    pickup = NONE;
+
+    timeToLive = tmpTimeToLive;
+    timeCreated = clock.getCurrentTime();
 }
 
 Entity::Entity(NxActor* a)
 {
+    timeToLive = -1;
+    timeCreated = clock.getCurrentTime();
     actor = a;
+}
+
+void Entity::setTimeToLive(int tmpTime)
+{
+    timeToLive = tmpTime;
+} 
+
+int Entity::getTimeToLive()
+{
+    return timeToLive;
+} 
+
+bool Entity::isAlive()
+{
+    if(timeToLive==-1)
+        return true;
+    
+    if((int)clock.getCurrentTime() - timeCreated >= timeToLive)
+        return false;
+    else
+        return true;
 }
 
 void Entity::givePickup(Entity::PickupType p)

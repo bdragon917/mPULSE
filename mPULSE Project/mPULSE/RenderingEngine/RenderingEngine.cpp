@@ -1546,7 +1546,8 @@ void RenderingEngine::drawDynamicObjects(std::vector<Entity*>* dObjs)
 {
     for(unsigned i=0;i<dObjs->size();i++)
     {
-        drawModel(dObjs->at(i)->getModel(),dObjs->at(i)->getActor()->getGlobalPosition().x,dObjs->at(i)->getActor()->getGlobalPosition().y,dObjs->at(i)->getActor()->getGlobalPosition().z,2);
+        if(dObjs->at(i)->isAlive())
+            drawModel(dObjs->at(i)->getModel(),dObjs->at(i)->getActor()->getGlobalPosition().x,dObjs->at(i)->getActor()->getGlobalPosition().y,dObjs->at(i)->getActor()->getGlobalPosition().z,2);
     }
 }
 
