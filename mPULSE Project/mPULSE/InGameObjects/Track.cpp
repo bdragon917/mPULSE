@@ -177,11 +177,20 @@
         waypoints.shrink_to_fit();
         if(waypoints.size()>0)
         {
-            for(unsigned i=1;i<waypoints.size()-1;i++)
+            for(unsigned i=1;i<waypoints.size();i++)
             {
                 waypoints[i-1]->nextWaypoint = waypoints[i];
             }
             waypoints[waypoints.size()-1]->nextWaypoint = waypoints[0];
             waypoints[waypoints.size()-1]->nextId = 0;
         }
+    }
+
+    Waypoint* Track::getFirst()
+    {
+        return waypoints[0];
+    }
+    Waypoint* Track::getWaypoint(int index)
+    {
+        return waypoints[index];
     }

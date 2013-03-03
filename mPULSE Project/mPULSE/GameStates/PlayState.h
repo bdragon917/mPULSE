@@ -9,6 +9,7 @@
 #include "../InGameObjects/Entities/RenderableComponent.h"
 #include "../SoundEngine/SoundEngine.h"
 #include "../InGameObjects/Track.h"
+#include "../InGameObjects/CustomData.h"
 #include "../Util/Clock.h"
 #include <map>
 #include "GameVariables.h"

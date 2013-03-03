@@ -21,6 +21,8 @@ public:
     std::vector<Waypoint*>* getWaypoints();    
     std::vector<Waypoint*>* getWaypointsOfType(Waypoint::TYPE type);   
     void Track::finalizeWaypoints();
+    Waypoint* getFirst();
+    Waypoint* getWaypoint(int index);
     Entity* getEntity();
     NxActor* getActor();     
 

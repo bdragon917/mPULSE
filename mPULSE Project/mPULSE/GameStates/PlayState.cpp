@@ -21,13 +21,8 @@ PlayState::PlayState()
 
     RenderableComponent* pc2_rc = new RenderableComponent(1,3);
     player2Car->rc.push_back(pc2_rc);
-
-
-
-
-
     
-    int num_AI = 0;
+    int num_AI = 1;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -50,12 +45,6 @@ PlayState::PlayState()
     physicsEngine->setupPlayScene(&entities.cars);  //Assign actors to the entities
     physicsEngine->setupCars(&entities.AIcars);  //Assign actors to the entities without the initalization of the engine
 
-    //Attach AI to the cars
-    for (unsigned aa = 0; aa < entities.AIcars.size(); ++aa)
-    {
-        entities.AIcars.at(aa)->aAI->setActor(entities.AIcars.at(aa)->getActor());   //Assign actors to the entities's AI
-    }
-
     renderingEngine = RenderingEngine::getInstance();
     renderingEngine->setPlayerNum(gameVariables->getPlayerNum());
 
@@ -77,6 +66,18 @@ PlayState::PlayState()
     }   
     track = new Track(".\\InGameObjects\\Race1.txt",aTrack);
 	physicsEngine->createWaypoints(track->getWaypoints());
+
+    //Attach AI to the cars
+    for (unsigned aa = 0; aa < entities.AIcars.size(); ++aa)
+    {
+        entities.AIcars.at(aa)->aAI->setActor(entities.AIcars.at(aa)->getActor());   //Assign actors to the entities's AI   
+        CustomData* customData = new CustomData();
+        customData->wp = track->getFirst();
+
+        entities.AIcars.at(aa)->getActor()->userData = customData;
+       // entities.AIcars.at(aa)->aAI->getActor()->userData = customData;
+    }
+
     //*/
 
     physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);

@@ -21,7 +21,7 @@ public:
 
     void setWaypoint(Waypoint* aW);
     void setActor(NxActor* aA);
-
+    NxActor* getActor();
 
     NxVec3 myTargetVector;   //For debug
     NxVec3 myOrientation;

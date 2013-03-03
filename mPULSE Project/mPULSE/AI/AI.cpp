@@ -31,12 +31,10 @@ AI::AI(void)
         myDirection.normalize();
 
         myOrientation = myDirection;
-        //myDirection = myDirection / myDirection.normalize();
+        //myDirection = myDirection / myDirection.normalize();       
 
-        //NxVec3 myTarget = targetWaypoint->pos;                    ///This is old code[Need to trace back and remove this if not nesseccary. Play state used this b4 to set wp as player1
-
-        CustomData* cd = (CustomData*)myActor->userData;
-        NxVec3 myTarget = cd->wp->nextWaypoint();
+        CustomData* cd = (CustomData*) myActor->userData;
+        NxVec3 myTarget = cd->wp->nextWaypoint->pos;
 
 
         myTarget = myTarget - myActor->getGlobalPose().t;
@@ -107,6 +105,11 @@ AI::AI(void)
     
     
     
+    }
+
+    NxActor* AI::getActor()
+    {
+        return myActor;
     }
 
     void AI::setActor(NxActor* aA)
