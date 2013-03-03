@@ -118,6 +118,8 @@
     <ClInclude Include="AI\AI.h" />
     <ClInclude Include="AI\Waypoint.h" />
     <ClInclude Include="AI\Waypoints.h" />
+    <ClInclude Include="Components\GraphicalComponent.h" />
+    <ClInclude Include="Components\PhysicalComponent.h" />
     <ClInclude Include="GameStates\Camera.h" />
     <ClInclude Include="GameStates\Console.h" />
     <ClInclude Include="GameStates\Game.h" />

@@ -82,7 +82,7 @@
                             j++;
                             startSeen = false;
                         }
-                        else if((ch != ' ' || ch != '\t') && !startSeen)
+                        else if ((ch != ' ' && ch != '\t') && !startSeen)
                         {
                             startSeen = true;
                             startFlag = i;

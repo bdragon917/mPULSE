@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     // Initializes players according to connected controllers
     unsigned playerCount = 0;
     XboxController* players[MAX_PLAYER_COUNT];
-    for(unsigned i = 0; i < MAX_PLAYER_COUNT; ++i)
+    for (unsigned i = 0; i < MAX_PLAYER_COUNT; ++i)
     {
         players[i] = new XboxController(i);
         if (players[i]->isConnected())
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
         for (unsigned player = 0; player < playerCount; ++player)
         {
             players[player]->update();
-            game.handleXboxEvents(player,players[player]);
+            game.handleXboxEvents(player, players[player]);
         }
         
 		game.update();  //physics simulations

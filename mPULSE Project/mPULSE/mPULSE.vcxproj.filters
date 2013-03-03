@@ -79,6 +79,12 @@
     <Filter Include="Header Files\InGameObjects\Entities">
       <UniqueIdentifier>{e3ac21f7-c816-4c50-bc15-21621e2fc06d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{15d3f935-a2f9-448e-b9f9-c783c42524de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{6bc79c92-79a1-4bb4-a029-b308bcb00beb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mPULSE.cpp">
@@ -286,6 +292,12 @@
     </ClInclude>
     <ClInclude Include="InGameObjects\Pickups\Barrier.h">
       <Filter>Header Files\InGameObjects\Pickups</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\PhysicalComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\GraphicalComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
