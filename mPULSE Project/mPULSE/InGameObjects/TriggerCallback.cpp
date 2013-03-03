@@ -22,7 +22,6 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
 			//Waypoint* wp = (Waypoint*)triggerActor.userData;
             CustomData* triggerCd = (CustomData*)triggerActor.userData;
 			printf("Waypoint ID: %i\n", triggerCd->wp->id);
-
             NxActor& actingActor = actingShape.getActor();
 
             if (actingActor.userData != NULL)
@@ -30,7 +29,8 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
                 CustomData* actingCd = (CustomData*)actingActor.userData;
                 if (actingCd->type == actingCd->CAR)
                 {
-                    actingCd->wp = actingCd->wp->nextWaypoint;
+                    if(actingCd->wp->nextId == triggerCd->wp->id)
+                        actingCd->wp = actingCd->wp->nextWaypoint;
                 }
 
             }

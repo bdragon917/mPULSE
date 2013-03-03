@@ -22,7 +22,7 @@ PlayState::PlayState()
     RenderableComponent* pc2_rc = new RenderableComponent(1,3);
     player2Car->rc.push_back(pc2_rc);
     
-    int num_AI = 6;
+    int num_AI = 0;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -130,13 +130,14 @@ void PlayState::update(float dt)
             CustomData* cd = (CustomData*)car->getActor()->userData;
 
             NxVec3 respawnPt = cd->wp->pos;
-            //NxVec3(   ((rand() % 100) / 10.0f)    ,10.0f,  ((rand() % 100) / 10.0f)   )
+            NxVec3 ori = cd->wp->ori;
+            float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
+
             car->getActor()->setGlobalPosition(respawnPt);
             NxVec3 v(0,1,0);
-            NxReal ang = 90;
 
             NxQuat q;
-            q.fromAngleAxis(ang, v);
+            q.fromAngleAxis(angle*(180.0f/3.14f), v);
             NxMat33 orient;
             orient.fromQuat(q);
 
@@ -153,7 +154,7 @@ void PlayState::update(float dt)
         //Do AI thinking here!!!!!
         //car->aAI->
         //car->aAI->setWaypoint(&Waypoint(7.83703,0.413632,-101.592));
-        car->aAI->setWaypoint(&Waypoint(entities.cars[0]->getActor()->getGlobalPose().t,0,0));
+        //car->aAI->setWaypoint(&Waypoint(entities.cars[0]->getActor()->getGlobalPose().t,,0,0));
         car->aAI->update();
 
         //Do AI Controller stuff
@@ -166,14 +167,14 @@ void PlayState::update(float dt)
             CustomData* cd = (CustomData*)car->getActor()->userData;
 
             NxVec3 respawnPt = cd->wp->pos;
-
+            NxVec3 ori = cd->wp->ori;
+            float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
             car->getActor()->setGlobalPosition(respawnPt);
-
+            
             NxVec3 v(0,1,0);
-            NxReal ang = 90;
 
             NxQuat q;
-            q.fromAngleAxis(ang, v);
+            q.fromAngleAxis(angle*(180.0f/3.14f), v);
             NxMat33 orient;
             orient.fromQuat(q);
 
@@ -639,7 +640,7 @@ void PlayState::logWayPoint(int player)
     Entity* car = entities.cars[player];
     
     NxVec3 loc = car->getActor()->getGlobalPose().t;
-    NxMat33 ori = car->getActor()->getGlobalOrientation();
+    NxVec3 ori = car->getActor()->getGlobalOrientation()*NxVec3(1,0,0);
 
     NxVec3 spd = car->getActor()->getLinearVelocity();
     float spdF = car->getActor()->getLinearVelocity().magnitude();
@@ -656,6 +657,7 @@ void PlayState::logWayPoint(int player)
         else
         {
            out << "WAYPOINT " << renderingEngine->FloatToString(loc.x) + " " + renderingEngine->FloatToString(loc.y) + " " + renderingEngine->FloatToString(loc.z);
+           out << " "+renderingEngine->FloatToString(ori.x) + " " + renderingEngine->FloatToString(ori.y) + " " + renderingEngine->FloatToString(ori.z);
            out << " "+renderingEngine->FloatToString(id)+" "+renderingEngine->FloatToString(id+1)+"\n";
            id++;
            //out << "loc: " + renderingEngine->FloatToString(loc.x) + " " + renderingEngine->FloatToString(loc.y) + " " + renderingEngine->FloatToString(loc.z) + char(10) + char(13);

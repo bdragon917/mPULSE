@@ -7,16 +7,17 @@ Waypoint::Waypoint()
     nextId = 0;
 }
 
-Waypoint::Waypoint(float x, float y, float z,int tmpId,int tmpNext)
+Waypoint::Waypoint(float x, float y, float z,float xOri, float yOri, float zOri,int tmpId,int tmpNext)
 {
     pos.x = x; pos.y = y; pos.z=z;
     id = tmpId;
     nextId = tmpNext;
 }
 
-Waypoint::Waypoint(NxVec3 aVec,int tmpId,int tmpNext)
+Waypoint::Waypoint(NxVec3 position,NxVec3 orientation,int tmpId,int tmpNext)
 {
-    pos = aVec;
+    pos = position;
+    ori = ori;
     id = tmpId;
     nextId = tmpNext;
 }
