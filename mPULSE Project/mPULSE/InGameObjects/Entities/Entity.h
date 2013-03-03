@@ -8,11 +8,7 @@
 #include <InGameObjects/Entities/RenderableComponent.h>
 #include <AI/AI.h>
 #include <InGameObjects/Pickups/Pickup.h>
-
-class MissileLauncher;
-class Shield;
-class Barrier;
-class Pickup;
+#include "Util\Clock.h"
 
 class Entity
 {
@@ -27,6 +23,7 @@ public:
 
     Entity();
     Entity(NxActor* a);
+    Entity(int tmpTimeToLive);
 
     NxVec3 carStartPos;
     //std::vector<EntityComponent*> components;
@@ -63,7 +60,9 @@ public:
     //int rotation mode
     //rotation data    
     AI* aAI;
-
+    void setTimeToLive(int tmpTime);
+    int getTimeToLive();
+    bool isAlive();
 
 private:
 	bool batteryCharged;
@@ -76,8 +75,10 @@ private:
     float minSteering;
     float maxSteering;
 	float charge;
+    int timeToLive;
+    int timeCreated;
 
-    
+    Clock clock;
     PickupType pickup;
     NxActor* actor;
     ObjModel* model;

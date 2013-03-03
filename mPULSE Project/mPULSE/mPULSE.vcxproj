@@ -41,6 +41,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>C:\CPSC585\glew-1.9.0\lib;C:\CPSC585\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>C:\SDL\SDL-1.2.15\include;$(IncludePath)</IncludePath>
@@ -55,7 +56,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\PhysXLoader\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\include\win32;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Physics\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\NxCharacter\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Cooking\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Foundation\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalOptions>/WX %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/WX /wd6211 /analyze %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
