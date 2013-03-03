@@ -22,7 +22,7 @@ PlayState::PlayState()
     RenderableComponent* pc2_rc = new RenderableComponent(1,3);
     player2Car->rc.push_back(pc2_rc);
     
-    int num_AI = 1;
+    int num_AI = 6;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -78,6 +78,17 @@ PlayState::PlayState()
        // entities.AIcars.at(aa)->aAI->getActor()->userData = customData;
     }
 
+
+
+    //Attach customData to car actors
+    for (int a=0;a<entities.cars.size();a++)
+    {
+        CustomData* customData = new CustomData();
+        customData->wp = track->getFirst();
+
+        entities.cars.at(a)->getActor()->userData = customData;
+    }
+
     //*/
 
     physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);
@@ -131,7 +142,11 @@ void PlayState::update(float dt)
         if (car->getActor()->getGlobalPose().t.y < -2.0f)
         {
             //car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
-            car->getActor()->setGlobalPosition(NxVec3(   ((rand() % 100) / 10.0f)    ,10.0f,  ((rand() % 100) / 10.0f)   ));
+            CustomData* cd = (CustomData*)car->getActor()->userData;
+
+            NxVec3 respawnPt = cd->wp->pos;
+            //NxVec3(   ((rand() % 100) / 10.0f)    ,10.0f,  ((rand() % 100) / 10.0f)   )
+            car->getActor()->setGlobalPosition(respawnPt);
             NxVec3 v(0,1,0);
             NxReal ang = 90;
 
@@ -163,7 +178,11 @@ void PlayState::update(float dt)
 
         if (car->getActor()->getGlobalPose().t.y < -2.0f)
         {
-            car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
+            CustomData* cd = (CustomData*)car->getActor()->userData;
+
+            NxVec3 respawnPt = cd->wp->pos;
+
+            car->getActor()->setGlobalPosition(respawnPt);
 
             NxVec3 v(0,1,0);
             NxReal ang = 90;
