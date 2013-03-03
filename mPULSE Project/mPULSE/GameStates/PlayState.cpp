@@ -549,14 +549,14 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 NxVec3 dir = car->getActor()->getGlobalOrientation()*initPos;
                 NxVec3 pos = car->getActor()->getGlobalPose().t + (dir*offset);
                 e->setActor(physicsEngine->createMissile(pos,dir));
-                e->setModel(renderingEngine->getModelManger().getModel("box.obj"));
+                e->setModel(renderingEngine->getModelManger().getModel("Missile.obj"));
                 entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::SHIELD)
             {                
                 printf("Shield Fired");                                
                 e->setActor(car->getActor());
-                e->setModel(renderingEngine->getModelManger().getModel("sphere.obj"));
+                e->setModel(renderingEngine->getModelManger().getModel("Shield.obj"));
                 entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::BARRIER)
@@ -567,7 +567,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 NxVec3 dir = car->getActor()->getGlobalOrientation()*initPos;
                 NxVec3 pos = car->getActor()->getGlobalPose().t + (dir*offset);                                
                 e->setActor(physicsEngine->createBarrier(pos,dir));
-                e->setModel(renderingEngine->getModelManger().getModel("box.obj"));
+                e->setModel(renderingEngine->getModelManger().getModel("Barrier.obj"));
                 entities.DynamicObjs.push_back(e);
             }
         }
