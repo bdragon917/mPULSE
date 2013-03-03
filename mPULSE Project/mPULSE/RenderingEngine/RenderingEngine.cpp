@@ -1370,6 +1370,39 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
         prints(800,-680, FloatToString(entities->cars[carIndex]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
 
 
+
+        glEnable(GL_LIGHTING);
+	    glPopMatrix();
+
+        /*
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadIdentity();
+        glOrtho(0.0, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0, -1.0, 10.0);
+        glMatrixMode(GL_MODELVIEW);
+        //glPushMatrix();        ----Not sure if I need this
+        glLoadIdentity();
+        glDisable(GL_CULL_FACE);
+
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        glBegin(GL_QUADS);
+            glColor3f(1.0f, 0.0f, 0.0);
+            glVertex2f(0.0, 0.0);
+            glVertex2f(10.0, 0.0);
+            glVertex2f(10.0, 10.0);
+            glVertex2f(0.0, 10.0);
+        glEnd();
+
+        // Making sure we can render 3d again
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        */
+
+
+        //glClear(GL_COLOR_BUFFER_BIT);
+
 //        glPushMatrix();
                     //HUB
 //        glMatrixMode(GL_MODELVIEW);
@@ -1382,8 +1415,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 //        glPopMatrix();
 
 
-	    glEnable(GL_LIGHTING);
-	    glPopMatrix();
+
     
 }
 
@@ -1566,7 +1598,7 @@ void RenderingEngine::drawDynamicObjects(std::vector<Entity*>* dObjs)
     for(unsigned i=0;i<dObjs->size();i++)
     {
         if(dObjs->at(i)->isAlive())
-            drawModel(dObjs->at(i)->getModel(),dObjs->at(i)->getActor()->getGlobalPosition().x,dObjs->at(i)->getActor()->getGlobalPosition().y,dObjs->at(i)->getActor()->getGlobalPosition().z,2);
+            drawModelPos(dObjs->at(i)->getModel(),&(dObjs->at(i)->getActor()->getGlobalPose()));
     }
 }
 
