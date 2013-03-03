@@ -87,6 +87,7 @@ void drawDisplayList(int index);
 
     Console aConsole;    
     Shader* aShader;
+    Shader* aSkyBoxShader;
     Shader* aShadowShader;
 
     string FloatToString(float input);
