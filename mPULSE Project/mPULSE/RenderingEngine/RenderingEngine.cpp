@@ -1037,6 +1037,12 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
             {
 	            setUpPerpView();    //setup view for one player
             }
+
+
+
+
+
+
 	    //glRotatef (10.0f, 10.0f, 0.0, 0.0);
 
 
@@ -1363,6 +1369,19 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
         prints(800,-640, FloatToString(entities->cars[carIndex]->getDriveWheels()[1]->getAxleSpeed()) + " :W1_d_Rot");
         prints(800,-660, FloatToString(entities->cars[carIndex]->getPassiveWheels()[0]->getAxleSpeed()) + " :W2_p_Rot");
         prints(800,-680, FloatToString(entities->cars[carIndex]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
+
+
+//        glPushMatrix();
+                    //HUB
+//        glMatrixMode(GL_MODELVIEW);
+//            glBegin(GL_QUAD_STRIP);
+//                glTexCoord2d(0.0,0.0);glVertex3f(-10.0f + pos.x , 10.0f  + pos.y, 0.5f  + pos.z);
+//                glTexCoord2d(1.0,0.0);glVertex3f(10.0f + pos.x, 10.0f + pos.y, 0.5f + pos.z);
+//                glTexCoord2d(1.0,1.0);glVertex3f(10.0 + pos.x, -10.0f + pos.y, 0.5f + pos.z);
+//                glTexCoord2d(0.0,1.0);glVertex3f(-10.0f + pos.x, -10.0f + pos.y, 0.5f + pos.z);
+//            glEnd();
+//        glPopMatrix();
+
 
 	    glEnable(GL_LIGHTING);
 	    glPopMatrix();
