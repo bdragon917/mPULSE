@@ -552,13 +552,12 @@ void RenderingEngine::displayConsole()
 
      glColor3f(1.0f,1.0f,1.0f);
 
-     prints(0,  0,      aConsole.consoleOut[5]);
-     prints(0,  -20,    aConsole.consoleOut[4]);
-     prints(0,  -40,    aConsole.consoleOut[3]);
-     prints(0,  -60,    aConsole.consoleOut[2]);
-     prints(0,  -80,    aConsole.consoleOut[1]);
-     prints(0,  -100,   aConsole.consoleOut[0]);
-     prints(0,  -140,   aConsole.consoleString);
+     prints(0,  0,    aConsole.consoleOut[4]);
+     prints(0,  -20,    aConsole.consoleOut[3]);
+     prints(0,  -40,    aConsole.consoleOut[2]);
+     prints(0,  -60,    aConsole.consoleOut[1]);
+     prints(0,  -80,   aConsole.consoleOut[0]);
+     prints(0,  -120,   aConsole.consoleString);
      //prints(0,  -200,   debugOut);
 
 }
