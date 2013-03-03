@@ -1,4 +1,4 @@
-#include "Waypoint.h"
+#include <AI/Waypoint.h>
 
 Waypoint::Waypoint()
 {

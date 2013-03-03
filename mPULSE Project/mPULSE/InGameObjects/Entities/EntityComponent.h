@@ -1,5 +1,5 @@
 #pragma once
-#include "../../ModelLoader/ObjModel.h"
+#include <ModelLoader/ObjModel.h>
 #include "NxPhysics.h"
 
 class EntityComponent

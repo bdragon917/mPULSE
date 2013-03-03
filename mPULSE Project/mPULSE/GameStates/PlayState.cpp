@@ -1,4 +1,4 @@
-#include "PlayState.h"
+#include <GameStates/PlayState.h>
 
 PlayState::PlayState()
 {
@@ -81,7 +81,7 @@ PlayState::PlayState()
 
 
     //Attach customData to car actors
-    for (int a=0;a<entities.cars.size();a++)
+    for (unsigned a = 0; a < entities.cars.size(); ++a)
     {
         CustomData* customData = new CustomData();
         customData->wp = track->getFirst();
@@ -549,14 +549,14 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 NxVec3 dir = car->getActor()->getGlobalOrientation()*initPos;
                 NxVec3 pos = car->getActor()->getGlobalPose().t + (dir*offset);
                 e->setActor(physicsEngine->createMissile(pos,dir));
-                e->setModel(renderingEngine->getModelManger().getModel("box.obj"));
+                e->setModel(renderingEngine->getModelManger().getModel("Missile.obj"));
                 entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::SHIELD)
             {                
                 printf("Shield Fired");                                
                 e->setActor(car->getActor());
-                e->setModel(renderingEngine->getModelManger().getModel("sphere.obj"));
+                e->setModel(renderingEngine->getModelManger().getModel("Shield.obj"));
                 entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::BARRIER)
@@ -567,7 +567,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 NxVec3 dir = car->getActor()->getGlobalOrientation()*initPos;
                 NxVec3 pos = car->getActor()->getGlobalPose().t + (dir*offset);                                
                 e->setActor(physicsEngine->createBarrier(pos,dir));
-                e->setModel(renderingEngine->getModelManger().getModel("box.obj"));
+                e->setModel(renderingEngine->getModelManger().getModel("Barrier.obj"));
                 entities.DynamicObjs.push_back(e);
             }
         }
@@ -671,8 +671,6 @@ void PlayState::logWayPoint(int player)
         }
         out.close();
 }
-
-
 
 PlayState* PlayState::getInstance()
 {    

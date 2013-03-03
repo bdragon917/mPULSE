@@ -1,16 +1,13 @@
 #pragma once
-//#include "EntityComponent.h"
-#include <vector>
-#include "..\..\GameStates\Camera.h"
-#include "../../ModelLoader/ObjModel.h"
-#include "RenderableComponent.h"
-#include "NxPhysics.h"
-#include "../../AI/AI.h"
 
-#include "../Pickups/Pickup.h"
-//#include "../Pickups/MissileLauncher.h"
-//#include "../Pickups/Shield.h"
-//#include "../Pickups/Barrier.h"
+#include <vector>
+#include "NxPhysics.h"
+
+#include <GameStates/Camera.h>
+#include <ModelLoader/ObjModel.h>
+#include <InGameObjects/Entities/RenderableComponent.h>
+#include <AI/AI.h>
+#include <InGameObjects/Pickups/Pickup.h>
 
 class MissileLauncher;
 class Shield;

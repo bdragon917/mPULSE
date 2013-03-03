@@ -1,5 +1,4 @@
-#include "TriggerCallback.h"
-
+#include <InGameObjects/TriggerCallback.h>
 
 TriggerCallback::TriggerCallback(void)
 {
@@ -9,8 +8,6 @@ TriggerCallback::TriggerCallback(void)
 TriggerCallback::~TriggerCallback(void)
 {
 }
-
-
 
 void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxTriggerFlag status)
 {

@@ -2,7 +2,6 @@
 #include <vector>
 #include "ObjModel.h"
 #include <iostream>
-#include <stdio.h>
 #include <fstream>
 
 class ModelManager

@@ -1,11 +1,9 @@
-#include "PhysicsEngine.h"
-
+#include <PhysicsEngine/PhysicsEngine.h>
 
 PhysicsEngine::PhysicsEngine()
 {
 	sceneSetup();
 }
-
 
 PhysicsEngine* PhysicsEngine::getInstance()
 {
@@ -334,8 +332,6 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
 
     //aModel.getVerticies()->size();
     gVerts = new NxVec3 [aModel.getVerticies()->size()];
-
-
     for (unsigned v = 0; v < aModel.getVerticies()->size(); ++v)
     {
         gVerts[v] = ( NxVec3(aModel.getVerticies()->at(v).x, aModel.getVerticies()->at(v).y, aModel.getVerticies()->at(v).z) );

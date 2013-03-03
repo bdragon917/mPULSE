@@ -1,4 +1,4 @@
-#include "XboxController.h"
+#include <Input/XboxController.h>
 
 XboxController::XboxController(int index)
 {

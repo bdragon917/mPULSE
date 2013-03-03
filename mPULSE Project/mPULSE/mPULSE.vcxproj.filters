@@ -64,14 +64,23 @@
     <Filter Include="Source Files\InGameObjects">
       <UniqueIdentifier>{4d6df758-ec2b-4930-a1b4-d3ed29053209}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\InGameObjects\Entity">
-      <UniqueIdentifier>{a3582aa2-f59e-4c94-9992-439e7d449509}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\InGameObjects">
       <UniqueIdentifier>{92ea595f-e87f-4781-bd6d-046fdd49a1a2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\InGameObjects\Entity">
       <UniqueIdentifier>{e3ac21f7-c816-4c50-bc15-21621e2fc06d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\InGameObjects\Entities">
+      <UniqueIdentifier>{e3ac21f7-c816-4c50-bc15-21621e2fc06d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{15d3f935-a2f9-448e-b9f9-c783c42524de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{6bc79c92-79a1-4bb4-a029-b308bcb00beb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\InGameObjects\Entities">
+      <UniqueIdentifier>{a3582aa2-f59e-4c94-9992-439e7d449509}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -151,19 +160,25 @@
       <Filter>Source Files\SoundEngine</Filter>
     </ClCompile>
     <ClCompile Include="InGameObjects\Entities\Entity.cpp">
-      <Filter>Source Files\InGameObjects\Entity</Filter>
+      <Filter>Source Files\InGameObjects\Entities</Filter>
     </ClCompile>
     <ClCompile Include="InGameObjects\Entities\EntityComponent.cpp">
-      <Filter>Source Files\InGameObjects\Entity</Filter>
+      <Filter>Source Files\InGameObjects\Entities</Filter>
     </ClCompile>
     <ClCompile Include="InGameObjects\Entities\RenderableComponent.cpp">
-      <Filter>Source Files\InGameObjects\Entity</Filter>
+      <Filter>Source Files\InGameObjects\Entities</Filter>
     </ClCompile>
     <ClCompile Include="InGameObjects\Track.cpp">
       <Filter>Source Files\InGameObjects</Filter>
     </ClCompile>
     <ClCompile Include="InGameObjects\TriggerCallback.cpp">
       <Filter>Source Files\InGameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\GraphicalComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\PhysicalComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -237,13 +252,13 @@
       <Filter>Header Files\RenderingEngine</Filter>
     </ClInclude>
     <ClInclude Include="InGameObjects\Entities\Entity.h">
-      <Filter>Header Files\InGameObjects\Entity</Filter>
+      <Filter>Header Files\InGameObjects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="InGameObjects\Entities\EntityComponent.h">
-      <Filter>Header Files\InGameObjects\Entity</Filter>
+      <Filter>Header Files\InGameObjects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="InGameObjects\Entities\RenderableComponent.h">
-      <Filter>Header Files\InGameObjects\Entity</Filter>
+      <Filter>Header Files\InGameObjects\Entities</Filter>
     </ClInclude>
     <ClInclude Include="SoundEngine\Sound.h">
       <Filter>Header Files\SoundEngine</Filter>
@@ -259,6 +274,12 @@
     </ClInclude>
     <ClInclude Include="InGameObjects\CustomData.h">
       <Filter>Header Files\InGameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\PhysicalComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\GraphicalComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

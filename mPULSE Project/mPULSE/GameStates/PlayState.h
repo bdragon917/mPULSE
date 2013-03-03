@@ -1,18 +1,26 @@
 #pragma once
 
 #define NOMINMAX
+
 #include <vector>
-#include "GameState.h"
-#include "../RenderingEngine/RenderingEngine.h"
-#include "../PhysicsEngine/PhysicsEngine.h"
-#include "../InGameObjects/Entities/Entity.h"
-#include "../InGameObjects/Entities/RenderableComponent.h"
-#include "../SoundEngine/SoundEngine.h"
-#include "../InGameObjects/Track.h"
-#include "../InGameObjects/CustomData.h"
-#include "../Util/Clock.h"
 #include <map>
-#include "GameVariables.h"
+
+#include <GameStates/GameState.h>
+#include <GameStates/GameVariables.h>
+#include <Util/Clock.h>
+#include <InGameObjects/CustomData.h>
+
+#include <RenderingEngine/RenderingEngine.h>
+#include <PhysicsEngine/PhysicsEngine.h>
+#include <SoundEngine/SoundEngine.h>
+
+#include <InGameObjects/Entities/Entity.h>
+#include <InGameObjects/Entities/RenderableComponent.h>
+#include <InGameObjects/Track.h>
+#include <InGameObjects/Pickups/Pickup.h>
+#include <InGameObjects/Pickups/Barrier.h>
+#include <InGameObjects/Pickups/MissileLauncher.h>
+#include <InGameObjects/Pickups/Shield.h>
 
 class PlayState : public GameState
 {

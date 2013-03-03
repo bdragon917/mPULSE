@@ -1,4 +1,4 @@
-#include "MainMenuState.h"
+#include <GameStates/MainMenuState.h>
 
 MainMenuState::MainMenuState()
 {
@@ -53,7 +53,6 @@ void MainMenuState::render()
         }
     }
 }
-
 
 bool MainMenuState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {

@@ -4,11 +4,11 @@
 #include <SDL.h>
 #include <windows.h>
 #include <Xinput.h>
-#include "GameState.h"
-#include "InitState.h"
-#include "PlayState.h"
-#include "MainMenuState.h"
-#include "..\Util\Clock.h"
+#include <GameStates/GameState.h>
+#include <GameStates/InitState.h>
+#include <GameStates/PlayState.h>
+#include <GameStates/MainMenuState.h>
+#include <Util/Clock.h>
 
 class Game
 {

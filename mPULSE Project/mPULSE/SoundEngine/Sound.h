@@ -1,14 +1,11 @@
 #pragma once
 
-//#include "SDL_audio.h"
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 
 class Sound
 {
 	public:
-		Sound(void);
-		~Sound(void);
-
+		Sound();
 		void playPause();
 		void stopSound();
 

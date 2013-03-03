@@ -1,5 +1,5 @@
 #pragma once
-#include "../Util/Profile.h"
+#include <Util/Profile.h>
 #include <vector>
 
 class GameVariables

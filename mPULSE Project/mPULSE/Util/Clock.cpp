@@ -1,4 +1,4 @@
-#include "Clock.h"
+#include <Util/Clock.h>
 #include <SDL.h>
 
 Clock::Clock()

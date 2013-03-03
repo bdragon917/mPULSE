@@ -1,5 +1,5 @@
 #pragma once
-#include "../Entities/Entity.h"
+#include <InGameObjects/Entities/Entity.h>
 
 class Entity;
 

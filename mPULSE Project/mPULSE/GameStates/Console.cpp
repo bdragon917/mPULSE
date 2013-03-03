@@ -1,11 +1,9 @@
-#include "Console.h"
-
+#include <GameStates/Console.h>
 
 Console::Console()
 {
     logPointer = 0;
 }
-
 
 //void Console::addCommand(std::string cmdStr, int(*)(int aFunc))
 ///{
