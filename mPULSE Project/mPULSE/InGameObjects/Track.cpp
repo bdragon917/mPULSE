@@ -38,7 +38,7 @@
 
                 //Check if the line is empty or a comment
                 if(tmpLine.size() <= 0 || tmpLine.at(0) == '#')
-                    return;
+                    continue;
 
                 //Parse out the heading from the current line.
                 while((!headingSeen && parsing) && i < tmpLine.size())
