@@ -539,7 +539,8 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             car->brake(0);   
         if(state->a)
         {
-            Entity* e = new Entity();
+            int timeToLive = 10000;
+            Entity* e = new Entity(timeToLive);
             Entity::PickupType type = car->usePickup();
             if(type == Entity::MISSILE)
             {
