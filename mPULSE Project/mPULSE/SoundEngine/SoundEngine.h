@@ -1,4 +1,5 @@
-#include <SoundEngine/Sound.h>
+#include <stdio.h>
+#include "Sound.h"
 
 #pragma once
 class SoundEngine
@@ -12,8 +13,11 @@ public:
 
 	void toggleMusic();
 	void stopMusic();
+	void engineNoise();
+
 private:
 	SoundEngine();
 
 	Sound* song;
+
 };
