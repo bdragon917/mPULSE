@@ -22,7 +22,7 @@ PlayState::PlayState()
     RenderableComponent* pc2_rc = new RenderableComponent(1,3);
     player2Car->rc.push_back(pc2_rc);
     
-    int num_AI = 0;
+    int num_AI = 5;
 
     for (int a=0;a<num_AI;a++)
     {
