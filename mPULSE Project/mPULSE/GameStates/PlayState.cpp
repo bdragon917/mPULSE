@@ -124,7 +124,7 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
         Entity* car = entities.cars[c];
-        if (car->getActor()->getGlobalPose().t.y < -2.0f)
+        if (car->getActor()->getGlobalPose().t.y < -20.0f)
         {
             //car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
             CustomData* cd = (CustomData*)car->getActor()->userData;
@@ -161,7 +161,7 @@ void PlayState::update(float dt)
         //handleXboxController(0, entities.cars ,entities.AIcars.at(c)->aAI->getControl());
 
 
-        if (car->getActor()->getGlobalPose().t.y < -2.0f)
+        if (car->getActor()->getGlobalPose().t.y < -20.0f)
         {
             CustomData* cd = (CustomData*)car->getActor()->userData;
 
@@ -185,19 +185,19 @@ void PlayState::update(float dt)
 
 
         //Raycasting code    
-    /*NxScene* scene = physicsEngine->getScene(); 
+    NxScene* scene = physicsEngine->getScene(); 
     NxRay ray;
     NxRaycastHit hit;
     ray.orig = entities.cars[0]->getActor()->getGlobalPosition();
     ray.dir = entities.cars[0]->getActor()->getLinearVelocity(); //Need to normalize?
     scene->raycastClosestShape(ray,NX_ALL_SHAPES,hit);
     NxVec3 result = hit.worldImpact - ray.orig;
-    */
+    //*/
     physicsEngine->step(dt/1000);
-    /*
+    
     NxVec3 result2 = hit.worldImpact - entities.cars[0]->getActor()->getGlobalPosition();
     if(result.dot(result2) < 0)
-        printf("fallin!");*/
+        printf("fallin!");//*/
     
 //    entities.cars[0]->aCam->updateCamera(dt/16);
     //entities.cars[0]->aCam->updateCamera(1.0f);

@@ -1283,12 +1283,16 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                      //}
                     //glPushMatrix();
                     glDisable (GL_LIGHTING);
+                    //glDisable (GL_COLOR_MATERIAL);
+	                //glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
                     //glEnable(GL_TEXTURE_2D);
                     //glDisable (GL_NORMALIZE);
                     //glDepthFunc(GL_ALWAYS);
                     drawSkyBox(0,0, 0, 15000.0f, 15000.0f, 15000.0f, 0);
                     //glDepthFunc(GL_LESS);
                     //glEnable (GL_NORMALIZE);
+                    //glEnable (GL_COLOR_MATERIAL);
+	                //glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
                     glEnable (GL_LIGHTING);
 
 
