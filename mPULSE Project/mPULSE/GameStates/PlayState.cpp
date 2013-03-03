@@ -489,7 +489,10 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
 
             else if (!state->rb)
-                rbPressed = false;   
+                rbPressed = false;  
+
+            if (state->back)
+            {changeState(MAIN_MENU); }
         }
 
         //UserCamControl  

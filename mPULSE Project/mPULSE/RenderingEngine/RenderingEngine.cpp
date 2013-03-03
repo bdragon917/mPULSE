@@ -1453,7 +1453,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
 		glEnd();
 
-        if (FadeCtrl >= 1.0f){return 1;}
+        if (FadeCtrl >= 1.0f){FadeCtrl=0.0f;fadeMode=0;return 1;}
 
 
     if (aShader != NULL)
