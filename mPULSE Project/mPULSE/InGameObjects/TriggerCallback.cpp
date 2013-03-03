@@ -40,7 +40,14 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
 	}
 	else if((status & NX_TRIGGER_ON_ENTER) && (triggerShape.getType() == NX_SHAPE_SPHERE)) 
 	{
-		printf("ITS A SPHERE!");
+        NxActor& triggerActor = triggerShape.getActor();
+        CustomData* triggerCd = (CustomData*)triggerActor.userData;
+
+        NxActor& actingActor = actingShape.getActor();
+        CustomData* actingCd = (CustomData*)actingActor.userData;
+        actingCd->pickupType = triggerCd->pickupType;
+
+		printf("got %i\n",actingCd->pickupType);
 	}
 	/*
 	if(status & NX_TRIGGER_ON_ENTER)

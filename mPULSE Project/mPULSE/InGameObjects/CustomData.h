@@ -8,4 +8,5 @@ class CustomData
         Waypoint* wp;
         enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC };
         ObjTypes type;
+        int pickupType;
 };

@@ -22,7 +22,7 @@ PlayState::PlayState()
     RenderableComponent* pc2_rc = new RenderableComponent(1,3);
     player2Car->rc.push_back(pc2_rc);
     
-    int num_AI = 5;
+    int num_AI = 0;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -99,7 +99,7 @@ PlayState::PlayState()
 
 	soundEngine = SoundEngine::getInstance();
 	soundEngine->initializeSound();
-	soundEngine->toggleMusic();
+	//soundEngine->toggleMusic();
 
     //2
     Entity* aEntity = new Entity();
@@ -539,11 +539,10 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             car->brake(0);   
         if(state->a)
         {
-            int timeToLive = 10000;
-            Entity* e = new Entity(timeToLive);
             Entity::PickupType type = car->usePickup();
             if(type == Entity::MISSILE)
             {
+                Entity* e = new Entity(10000); //Missile will live for 10000 ms.
                 int offset = 5;
                 printf("Missile Fired");                                
                 NxVec3 initPos(1,0,0); 
@@ -555,6 +554,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
             else if(type == Entity::SHIELD)
             {                
+                Entity* e = new Entity(10000); //Shield will live for 10000 ms.
                 printf("Shield Fired");                                
                 e->setActor(car->getActor());
                 e->setModel(renderingEngine->getModelManger().getModel("Shield.obj"));
@@ -562,6 +562,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
             else if(type == Entity::BARRIER)
             {
+                Entity* e = new Entity(10000); //Barrier will live for 10000 ms.
                 int offset = -5;
                 printf("Barrier Fired");                                
                 NxVec3 initPos(1,0,0); 

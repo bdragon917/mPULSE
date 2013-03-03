@@ -1709,11 +1709,18 @@ void RenderingEngine::drawTrack(Track* track)
     //Draw the waypoints on the track
     std::vector<Waypoint*>* wps = track->getWaypoints();
     ObjModel* model = modelManager.getModel("box.obj");
-    glColor3f(0,1,1);
     if (model != NULL)
     {                
-        for(unsigned int i=0; i<wps->size(); i++)         
-            drawModel(model,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
+        for(unsigned int i=0; i<wps->size(); i++)       
+        {
+            if(wps->at(i)->type == Waypoint::PICKUP_SPAWN)
+                model = modelManager.getModel("Shield.obj");
+            else if(wps->at(i)->type == Waypoint::WAYPOINT)
+                model = modelManager.getModel("box.obj");
+
+            if(model != NULL)
+                drawModel(model,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
+        }
     }
         
 }

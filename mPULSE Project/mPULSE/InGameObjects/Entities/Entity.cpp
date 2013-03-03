@@ -75,9 +75,18 @@ void Entity::givePickup(Entity::PickupType p)
 
 Entity::PickupType Entity::usePickup()
 {
-    Entity::PickupType tmpPickup = pickup;
-    pickup = NONE;
-    return tmpPickup;  
+    CustomData* cd = (CustomData*) actor->userData;
+    int type = cd->pickupType;    
+    cd->pickupType = -1;
+
+    if(type == 0)
+        return MISSILE;
+    else if(type == 1)
+        return SHIELD;
+    else if(type == 2)
+        return BARRIER; 
+    else
+        return NONE;
 }
 
 void Entity::addDriveWheel(NxWheelShape* wheel)

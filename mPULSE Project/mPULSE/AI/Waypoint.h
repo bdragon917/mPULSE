@@ -15,7 +15,7 @@ public:
     int id;
     int nextId;
     Waypoint* nextWaypoint;
-    typedef enum TYPE {START, FINISH, WAYPOINT, CAR_SPAWN, ITEM_SPAWN, INVALID_TYPE};
+    typedef enum TYPE {START, FINISH, WAYPOINT, CAR_SPAWN, PICKUP_SPAWN, INVALID_TYPE};
     TYPE type;
 };
 

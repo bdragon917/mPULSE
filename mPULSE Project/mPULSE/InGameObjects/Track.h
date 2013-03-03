@@ -18,7 +18,7 @@ public:
     void loadTrackInfo(std::string fileName);
     void addWaypoint(float xPos, float yPos, float zPos,float xOri, float yOri,float zOri,int tmpId,int next,Waypoint::TYPE type);
     void addWaypoint(Waypoint* wp);  
-    std::vector<Waypoint*>* getWaypoints();    
+    std::vector<Waypoint*>* getWaypoints();  
     std::vector<Waypoint*>* getWaypointsOfType(Waypoint::TYPE type);   
     void Track::finalizeWaypoints();
     Waypoint* getFirst();

@@ -220,7 +220,7 @@ NxActor* PhysicsEngine::createMissile(NxVec3 pos,NxVec3 dir)
     cd->type = cd->OBSTACLE;
     actor->userData = (void*)&cd;  
 
-    actor->addLocalForce(dir*500);
+    actor->addLocalForce(dir*200);
     
 	return actor;
 }
@@ -231,22 +231,45 @@ void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
 	std::vector<Waypoint*> waypoints = *wps;
 	for(unsigned i = 0; i<waypoints.size();i++)
 	{
-		NxVec3 position(waypoints[i]->pos);
+        if(waypoints[i]->type == Waypoint::WAYPOINT)
+        {
+		    NxVec3 position(waypoints[i]->pos);
 
-		//The actor has one shape, a box, 1m on a side
-		NxBoxShapeDesc boxDesc;
-		boxDesc.dimensions.set(8.0,1.0,8.0);
-		boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
+		    //The actor has one shape, a box, 1m on a side
+		    NxBoxShapeDesc boxDesc;
+		    boxDesc.dimensions.set(8.0,1.0,8.0);
+		    boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
 
-		NxActorDesc actorDesc;
-		actorDesc.shapes.pushBack(&boxDesc);
-		actorDesc.globalPose.t = position;
+		    NxActorDesc actorDesc;
+		    actorDesc.shapes.pushBack(&boxDesc);
+		    actorDesc.globalPose.t = position;
     
-		NxActor *actor = scene->createActor(actorDesc);
+		    NxActor *actor = scene->createActor(actorDesc);
 		
-        CustomData* cd = new CustomData();
-        cd->wp = waypoints[i];
-		actor->userData = cd;   
+            CustomData* cd = new CustomData();
+            cd->wp = waypoints[i];
+		    actor->userData = cd; 
+        }
+        else if(waypoints[i]->type == Waypoint::PICKUP_SPAWN)
+        {
+		    NxVec3 position(waypoints[i]->pos);
+
+		    //The actor has one shape, a box, 1m on a side
+		    NxSphereShapeDesc sphereDesc;
+		    sphereDesc.radius = (NxReal)2.0f;
+		    sphereDesc.shapeFlags |= NX_TRIGGER_ENABLE;
+
+		    NxActorDesc actorDesc;
+		    actorDesc.shapes.pushBack(&sphereDesc);
+		    actorDesc.globalPose.t = position;
+    
+		    NxActor *actor = scene->createActor(actorDesc);
+		
+            CustomData* cd = new CustomData();
+            cd->wp = waypoints[i];
+            cd->pickupType = waypoints[i]->id;
+		    actor->userData = cd; 
+        }
 	}
     
 }

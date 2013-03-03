@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "../AI/Waypoint.h"
 #include "CustomData.h"
+#include "Entities\Entity.h"
 
 class TriggerCallback : public NxUserTriggerReport 
 {

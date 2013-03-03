@@ -181,8 +181,8 @@ Waypoint::TYPE Track::stringToType(std::string typeString)
         return Waypoint::WAYPOINT;
     else if(typeString.compare("CAR_SPAWN") == 0)
         return Waypoint::CAR_SPAWN;
-    else if(typeString.compare("ITEM_SPAWN") == 0)
-        return Waypoint::ITEM_SPAWN;
+    else if(typeString.compare("PICKUP_SPAWN") == 0)
+        return Waypoint::PICKUP_SPAWN;
     else
         return Waypoint::INVALID_TYPE;
 }
