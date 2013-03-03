@@ -598,6 +598,7 @@ void RenderingEngine::initializeGL()
 		{
             printf("glewInit is successful!\n");
             aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");
+            aSkyBoxShader = new Shader("shaders/skybox.frag", "shaders/texture.vert");
             aShadowShader = new Shader("shaders/shadow.frag", "shaders/shadow.vert");
         }
     else
@@ -733,7 +734,8 @@ void RenderingEngine::setupMatrices(float position_x,float position_y,float posi
 
 void RenderingEngine::createLight()
 {
-	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0};
+    GLfloat mat_ambient[] = { 0.4, 0.4, 0.4, 1.0};
+	GLfloat mat_specular[] = { 0.6, 0.6, 0.6, 1.0};
 	GLfloat mat_shininess[] = {50.0};
 	GLfloat light_position[] = {1.0,1.0,1.0,0.0};
 	//GLfloat light_ambient[] = {0.0,0.0,0.0,0.1};
@@ -741,7 +743,8 @@ void RenderingEngine::createLight()
 	//GLfloat light_specular[] = {0.0,0.0,0.0,1.0};
 	glClearColor(0.0,0.0,0.0,0.0);
 	glShadeModel (GL_SMOOTH);
-		
+	
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	//glLightfv(GL_LIGHT0, GL_AMBIENT, light_position);
@@ -1282,14 +1285,21 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                      //   aShader->off();           //this give an interesting effect
                      //}
                     //glPushMatrix();
-                    glDisable (GL_LIGHTING);
+                    //glDisable (GL_LIGHTING);
+                    aSkyBoxShader->on();
+                    //glDisable (GL_COLOR_MATERIAL);
+	                //glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
                     //glEnable(GL_TEXTURE_2D);
                     //glDisable (GL_NORMALIZE);
                     //glDepthFunc(GL_ALWAYS);
-                    drawSkyBox(0,0, 0, 15000.0f, 15000.0f, 15000.0f, 0);
+                    drawSkyBox(0,0, 0, 10000.0f, 10000.0f, 10000.0f, 0);
+                    aSkyBoxShader->off();
+                    //glMaterialfv(GL_FRONT_AND_BACK,  GL_AMBIENT,  &norMat);
                     //glDepthFunc(GL_LESS);
                     //glEnable (GL_NORMALIZE);
-                    glEnable (GL_LIGHTING);
+                    //glEnable (GL_COLOR_MATERIAL);
+	                //glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+                    //glEnable (GL_LIGHTING);
 
 
                    //glColorMaterial(GL_FRONT_AND_BACK,  GL_AMBIENT_AND_DIFFUSE);
@@ -1898,6 +1908,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	z = z - length / 2;
 
     glNormal3f(0.0f, 0.0f, 0.0f);
+    glColor3f(1.0f,1.0f,1.0f);
 	// Draw Front side
 	glBindTexture(GL_TEXTURE_2D, textureid_P1[13]);
 	glBegin(GL_QUADS);	

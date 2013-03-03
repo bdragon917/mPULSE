@@ -95,7 +95,7 @@ AI::AI(void)
         }
         else
         {
-            printf("AI: Driving Stright\n");
+            //printf("AI: Driving Stright\n");
             myTarget.normalize();
             //xController->leftStick.x = myTarget.x;
             //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
