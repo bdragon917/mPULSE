@@ -67,7 +67,7 @@
 
                     bool startSeen = true;
                     startFlag = i;
-                    while((parsing && i < tmpLine.size()) && j < 5)
+                    while((parsing && i < tmpLine.size()) && j < 8)
 	                {
                         ch = tmpLine.at(i);
                         if((ch == ' ' || ch == '\t') && startSeen)
@@ -79,8 +79,14 @@
                             else if(j == 2)
                                 wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 3)
-                                wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                                wp->ori.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                             else if(j == 4)
+                                wp->ori.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 5)
+                                wp->ori.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 6)
+                                wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 7)
                                 wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
 
                             j++;
@@ -96,16 +102,22 @@
 	                }
                     if(startSeen)
                     {
-                        if (j == 0)
-                            wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
-                        else if(j == 1)
-                            wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
-                        else if(j == 2)
-                            wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag).data()));
-                        else if(j == 3)
-                            wp->id = static_cast<int>(atof(tmpLine.substr(startFlag).data()));
-                        else if(j == 4)
-                            wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag).data()));
+                            if (j == 0)
+                                wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 1)
+                                wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 2)
+                                wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 3)
+                                wp->ori.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 4)
+                                wp->ori.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 5)
+                                wp->ori.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 6)
+                                wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 7)
+                                wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
                     }
 
                     addWaypoint(wp);
@@ -133,12 +145,15 @@
         waypoints.push_back(wp);
     }
 
-    void Track::addWaypoint(float x,float y,float z,int tmpId,int tmpNext,Waypoint::TYPE type)
+    void Track::addWaypoint(float xPos, float yPos, float zPos,float xOri, float yOri,float zOri,int tmpId,int tmpNext,Waypoint::TYPE type)
     {
         Waypoint* w = new Waypoint();
-        w->pos.x = x;
-        w->pos.y = y;
-        w->pos.z = z;
+        w->pos.x = xPos;
+        w->pos.y = yPos;
+        w->pos.z = zPos;
+        w->ori.x = xOri;
+        w->ori.y = yOri;
+        w->ori.z = zOri;
         w->id = tmpId;
         w->nextId = tmpNext;
         w->type = type;

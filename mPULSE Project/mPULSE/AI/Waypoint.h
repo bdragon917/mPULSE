@@ -5,10 +5,11 @@ class Waypoint
 {
 public:
     Waypoint();
-    Waypoint(float x, float y, float z,int tmpId,int next);
-    Waypoint(NxVec3 aVec,int tmpId,int next);
+    Waypoint(float xPos, float yPos, float zPos,float xOri, float yOri, float zOri,int tmpId,int next);
+    Waypoint(NxVec3 position,NxVec3 orientation,int tmpId,int next);
 
     NxVec3 pos;
+    NxVec3 ori;
     float remSpd;   //recommended Speed
     float brakeDur; //If brake, how long to hold it for
     int id;
