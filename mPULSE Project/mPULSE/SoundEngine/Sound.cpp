@@ -9,10 +9,6 @@ Sound::Sound(void)
     }
 }
 
-Sound::~Sound(void)
-{
-}
-
 bool Sound::check()
 {
 	if (music == NULL)

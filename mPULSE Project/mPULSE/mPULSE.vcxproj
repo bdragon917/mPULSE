@@ -82,6 +82,8 @@
     <ClCompile Include="AI\AI.cpp" />
     <ClCompile Include="AI\Waypoint.cpp" />
     <ClCompile Include="AI\Waypoints.cpp" />
+    <ClCompile Include="Components\GraphicalComponent.cpp" />
+    <ClCompile Include="Components\PhysicalComponent.cpp" />
     <ClCompile Include="GameStates\Camera.cpp" />
     <ClCompile Include="GameStates\Console.cpp" />
     <ClCompile Include="GameStates\Game.cpp" />
