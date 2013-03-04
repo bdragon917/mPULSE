@@ -192,12 +192,17 @@ void Track::finalizeWaypoints()
     waypoints.shrink_to_fit();
     if(waypoints.size()>0)
     {
+		Waypoint* lastWaypoint = waypoints[0];
         for(unsigned i=1;i<waypoints.size();i++)
         {
-            waypoints[i-1]->nextWaypoint = waypoints[i];
+			if(waypoints[i]->type == Waypoint::WAYPOINT)
+			{
+				lastWaypoint = waypoints[i];
+				waypoints[i-1]->nextWaypoint = lastWaypoint;
+			}
         }
-        waypoints[waypoints.size()-1]->nextWaypoint = waypoints[0];
-        waypoints[waypoints.size()-1]->nextId = 0;
+        lastWaypoint->nextWaypoint = waypoints[0];
+		lastWaypoint->nextId = waypoints[0]->id;
     }
 }
 

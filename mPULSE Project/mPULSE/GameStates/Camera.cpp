@@ -86,7 +86,7 @@ void Camera::resetCamera()
         curCamLoc = actorPose * NxVec3(0,0,-1.0f);
         curCamLookAt = actorPose * NxVec3(0,0,0);
         curOrientation = actorPose * NxVec3(0,0,0);
-        userCamControl = actorPose * NxVec3(0,0,0);
+        userCamControl = NxVec3(0,0,0);
 }
 
 void Camera::updateCamera(float dt)
