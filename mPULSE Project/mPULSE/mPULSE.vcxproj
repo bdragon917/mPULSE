@@ -105,7 +105,6 @@
     <ClCompile Include="ModelLoader\ModelManager.cpp" />
     <ClCompile Include="ModelLoader\ObjModel.cpp" />
     <ClCompile Include="mPULSE.cpp" />
-    <ClCompile Include="PhysicsEngine\Physics.cpp" />
     <ClCompile Include="PhysicsEngine\PhysicsEngine.cpp" />
     <ClCompile Include="PhysicsEngine\Stream.cpp" />
     <ClCompile Include="RenderingEngine\Particle.cpp" />
@@ -139,7 +138,6 @@
     <ClInclude Include="Input\XboxController.h" />
     <ClInclude Include="ModelLoader\ModelManager.h" />
     <ClInclude Include="ModelLoader\ObjModel.h" />
-    <ClInclude Include="PhysicsEngine\Physics.h" />
     <ClInclude Include="PhysicsEngine\PhysicsEngine.h" />
     <ClInclude Include="PhysicsEngine\stream.h" />
     <ClInclude Include="RenderingEngine\BMP.h" />

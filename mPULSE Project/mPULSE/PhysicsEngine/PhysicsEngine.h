@@ -1,7 +1,6 @@
 #pragma once
 
 #define NOMINMAX
-#include "Physics.h"
 #include <NxPhysics.h>
 #include "PhysXLoader.h"
 #include <NxPhysicsSDK.h>
