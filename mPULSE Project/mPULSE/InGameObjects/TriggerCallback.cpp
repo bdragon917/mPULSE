@@ -29,7 +29,14 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
                     if(actingCd->wp->nextId == triggerCd->wp->id)
 					{
 						if(actingCd->wp->id > triggerCd->wp->id)
-							printf("lap++");
+                        {
+                            actingCd->laps++;
+                            if(actingCd->laps > 2)
+                            {
+                                //Somehow tell the rendering engine that the race ic complete for this car.
+                                printf("You Win!");
+                            }
+                        }
                         actingCd->wp = actingCd->wp->nextWaypoint;
 					}
                 }

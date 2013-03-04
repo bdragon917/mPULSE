@@ -9,4 +9,5 @@ class CustomData
         enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC };
         ObjTypes type;
         int pickupType;
+        int laps;
 };

@@ -188,6 +188,11 @@ void Entity::dischargeBattery()
 	}
 }
 
+bool Entity::isBatteryCharged()
+{
+    return batteryCharged;
+}
+
 NxActor* Entity::getActor()
 {
     return actor;

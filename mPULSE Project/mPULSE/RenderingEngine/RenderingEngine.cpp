@@ -115,8 +115,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[26];
-    glGenTextures(26, textureid_P1);
+    textureid_P1 = new GLuint[27];
+    glGenTextures(27, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -147,6 +147,8 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/sb/ss_right1.bmp", textureid_P1[23]);
     bindBMPtoTexture("./Images/sb/ss_top3.bmp", textureid_P1[24]);
     bindBMPtoTexture("./Images/sb/ss_bottom4.bmp", textureid_P1[25]);
+
+    bindBMPtoTexture("./Images/WIN.bmp", textureid_P1[26]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -426,7 +428,7 @@ void RenderingEngine::prints(float inX, float inY, string s)
 }
 
 
-void RenderingEngine::drawHUD()
+void RenderingEngine::drawHUD(bool hasWon)
 {
     aHUDShader->on();
 
@@ -459,6 +461,17 @@ void RenderingEngine::drawHUD()
         glTexCoord2f(0.0f, 0.0f);glVertex2f(-1.0f, -1.0f);
     glEnd();
 
+    if(hasWon)
+    {
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[26]);
+        glBegin(GL_QUADS);
+            glColor3f(1.0f, 1.0f, 0.0);
+            glTexCoord2f(1.0f, 0.0f);glVertex2f(1.0f, -1.0f);
+            glTexCoord2f(1.0f, 1.0f);glVertex2f(1.0f, 1.0f);
+            glTexCoord2f(0.0f, 1.0f);glVertex2f(-1.0f, 1.0f);
+            glTexCoord2f(0.0f, 0.0f);glVertex2f(-1.0f, -1.0f);
+        glEnd();
+    }
     glPopAttrib();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -1434,7 +1447,13 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
          }
 
 
-         drawHUD();
+        CustomData* cd = (CustomData*)entities->cars[carIndex]->getActor()->userData;
+        bool hasWon = false;
+
+        if (cd->laps > 2)
+            hasWon = true;
+
+         drawHUD(hasWon);
 
          glDisable(GL_TEXTURE_2D);
         if (showConsole)
@@ -1442,7 +1461,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
         //HUD info
         prints(850,-700, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()));
-        CustomData* cd = (CustomData*)entities->cars[carIndex]->getActor()->userData;
+        prints(50,-50, FloatToString(cd->laps) + " / 2 Laps");
         prints(150,-700, FloatToString(cd->wp->id));
 
         //Ya...this should bwe put in a drawHUD element function later....
@@ -1500,17 +1519,19 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
             break;
         case 1:
             //drawModel(modelManager.getModel(5), 0, 0, 0, 0.5f);
-            prints(100,-680, "BARRIER");
+            prints(100,-680, "SHIELD");
             break;
         case 2:
             //drawModel(modelManager.getModel(6), 0, 0, 0, 0.5f);
-            prints(100,-680, "SHIELD");
+            prints(100,-680, "BARRIER");
             break;
         }
 
         //This is code to be for battery
-        //if (targetEntities[carIndex]->batteryCharged
-        //prints(200,-680, "BARRIER");
+        if (targetEntities[carIndex]->isBatteryCharged())
+            prints(200,-680, "Batt. CHARGED");
+        else
+            prints(200,-680, "Batt. empty");
 
  //       glutStrokeCharacter(GLUT_STROKE_ROMAN, FloatToString(cd->pickupType)[0]);
 

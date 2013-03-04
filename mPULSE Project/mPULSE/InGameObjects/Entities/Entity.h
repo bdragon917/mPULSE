@@ -63,6 +63,8 @@ public:
     void setTimeToLive(int tmpTime);
     int getTimeToLive();
     bool isAlive();
+    bool isBatteryCharged();
+
 
 private:
 	bool batteryCharged;

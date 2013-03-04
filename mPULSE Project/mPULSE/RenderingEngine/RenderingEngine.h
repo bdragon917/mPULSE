@@ -122,7 +122,7 @@ private:
     void drawStaticObjs(Entities* entities);
     void drawTrack(Track* track);
 
-    void drawHUD();
+    void drawHUD(bool hasWon);
 
     void RenderDebugPhysic(const NxDebugRenderable* ndr);
     
