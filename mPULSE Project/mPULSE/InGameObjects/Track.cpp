@@ -6,11 +6,6 @@ Track::Track(std::string infoFilename, Entity* trackEntity)
     entity = trackEntity;
 }
 
-Track::Track()
-{
-
-}
-
 void Track::loadTrackInfo(std::string filename)
 {
         
