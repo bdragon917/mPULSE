@@ -251,7 +251,7 @@ void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
 
 		    //The actor has one shape, a box, 1m on a side
 		    NxBoxShapeDesc boxDesc;
-		    boxDesc.dimensions.set(8.0,1.0,8.0);
+		    boxDesc.dimensions.set(25.0,25.0,25.0);
 		    boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
 
 		    NxActorDesc actorDesc;

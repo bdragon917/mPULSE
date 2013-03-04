@@ -662,6 +662,7 @@ void RenderingEngine::initializeGL()
             aSkyBoxShader = new Shader("shaders/skybox.frag", "shaders/texture.vert");
             aShadowShader = new Shader("shaders/shadow.frag", "shaders/shadow.vert");
             aHUDShader = new Shader("shaders/BlueColorKey.frag", "shaders/BlueColorKey.vert");
+			flatten = new Shader("shaders/flatten.frag", "shaders/flatten.vert");
         }
     else
     {fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
@@ -1342,6 +1343,10 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
                 drawCars(entities);
 
+				flatten->on();
+				drawShadow(entities);
+				flatten->off();
+
                 //drawWheels(entities->cars[0], 0, 5);
                 drawAICars(entities);
                 drawObstacles(entities);
@@ -1706,6 +1711,44 @@ void RenderingEngine::drawWheels(Entity* entity, int model, int texture)
             glBindTexture(GL_TEXTURE_2D, textureid_P1[texture]);
             NxMat34* aPose = &(entity->getPassiveWheels().at(d)->getGlobalPose());
             drawModelPos(modelManager.getModel(model), aPose );
+        }
+    }
+}
+
+void RenderingEngine::drawShadow(Entities* entities)
+{
+    if (entities->cars.size() > 0)
+    {
+        for (unsigned i = 0; i < entities->cars.size(); ++i)
+        {
+            if (entities->cars[i]->rc.size() > 0)
+            {
+                for (unsigned r = 0; r < entities->cars[i]->rc.size(); ++r)
+                {
+                    //glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->cars[i]->rc[r]->textureID]);
+                    NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
+					glPushMatrix();
+
+ 					float mat[16];
+					aPose->getColumnMajor44(mat);
+    
+					float distToGround = -0.35f;
+
+					glMultMatrixf(mat);
+
+					glTranslatef(0,distToGround,0);
+					for (unsigned x = 0; x < entities->cars[i]->rc.size();x++)
+					{drawModel(modelManager.getModel(entities->cars[i]->rc[x]->modelID), 0.0f, 0, 0, 1.0f );}
+
+                    glPopMatrix();
+
+                }
+            }
+            else
+            {
+                //glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
+                drawActor(entities->cars[i]->getActor());
+            }
         }
     }
 }

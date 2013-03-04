@@ -57,7 +57,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir);C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\PhysXLoader\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\include\win32;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Physics\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\NxCharacter\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Cooking\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Foundation\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalOptions>/WX /wd6211 /analyze %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/WX /wd6211 %(AdditionalOptions)</AdditionalOptions>
       <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
@@ -105,7 +105,6 @@
     <ClCompile Include="ModelLoader\ModelManager.cpp" />
     <ClCompile Include="ModelLoader\ObjModel.cpp" />
     <ClCompile Include="mPULSE.cpp" />
-    <ClCompile Include="PhysicsEngine\Physics.cpp" />
     <ClCompile Include="PhysicsEngine\PhysicsEngine.cpp" />
     <ClCompile Include="PhysicsEngine\Stream.cpp" />
     <ClCompile Include="RenderingEngine\Particle.cpp" />
@@ -139,7 +138,6 @@
     <ClInclude Include="Input\XboxController.h" />
     <ClInclude Include="ModelLoader\ModelManager.h" />
     <ClInclude Include="ModelLoader\ObjModel.h" />
-    <ClInclude Include="PhysicsEngine\Physics.h" />
     <ClInclude Include="PhysicsEngine\PhysicsEngine.h" />
     <ClInclude Include="PhysicsEngine\stream.h" />
     <ClInclude Include="RenderingEngine\BMP.h" />

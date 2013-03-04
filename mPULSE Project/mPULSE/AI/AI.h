@@ -13,8 +13,7 @@
 class AI
 {
 public:
-    AI(void);
-    ~AI(void);
+    AI();
 
     XboxController* getControl();
     void update();

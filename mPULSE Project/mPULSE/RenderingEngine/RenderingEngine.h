@@ -71,12 +71,14 @@ public:
     GLuint generateDisplayList(ObjModel* model,int x,int y,int z,int scale);
     void deleteDisplayList(GLuint index);
     void drawDisplayList(int index);
+	void drawShadow(Entities* entities);
 
     Console aConsole;    
     Shader* aShader;
     Shader* aSkyBoxShader;
     Shader* aShadowShader;
     Shader* aHUDShader;
+	Shader* flatten;
 
     string FloatToString(float input);
 

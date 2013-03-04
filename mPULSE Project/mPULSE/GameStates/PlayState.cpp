@@ -575,6 +575,24 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
         if(state->dpadLeft)
             car->givePickup(Entity::MISSILE);
         if(state->lb) {
+			CustomData* cd = (CustomData*)car->getActor()->userData;
+
+            NxVec3 respawnPt = cd->wp->pos;
+            NxVec3 ori = cd->wp->ori;
+            float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
+
+            car->getActor()->setGlobalPosition(respawnPt);
+            NxVec3 v(0,1,0);
+
+            NxQuat q;
+            q.fromAngleAxis(angle*(180.0f/3.14f), v);
+            NxMat33 orient;
+            orient.fromQuat(q);
+
+            car->getActor()->setGlobalOrientation(orient);
+            car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+            car->aCam->resetCamera();
+			/*
 		    physicsEngine->resetBox();
             
             car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
@@ -590,6 +608,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             car->getActor()->setGlobalOrientation(orient);
             car->getActor()->setLinearVelocity(NxVec3(0,0,0));
             car->aCam->resetCamera();
+			*/
 	    }
     }
 }

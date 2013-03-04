@@ -18,23 +18,32 @@ void SoundEngine::toggleMusic()
 
 void SoundEngine::stopMusic()
 {
-	song->stopSound();
+	song->stopMusic();
+}
+
+void SoundEngine::engineNoise()
+{
+	song->playEngine(0);
+}
+
+void SoundEngine::engineVol(int engine, int newV)//newV = between 0 - 128
+{
+	if (engine == 1)
+	{
+		song->engine1Volume(newV);
+	}
+	else
+		song->engine2Volume(newV);
+}
+
+void SoundEngine::crashed(int index)
+{
+	song->playCrash(index);
 }
 
 void SoundEngine::initializeSound()
 {
-    /*
-    int flags = MIX_INIT_MP3;                   //I think this code will flag an error if mp3 decoding is not possible???
-    int retVal = Mix_Init(flags);
-    //printf("Sound Initialization: %i\n", retVal);
-    if((retVal&flags) != flags) {
-        printf("Mix_Init: Failed to init required ogg and mod support!\n");
-        printf("Mix_Init: %s\n", Mix_GetError());
-        // handle error
-
-    }*/
-	if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1 ) 
-    //if( Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 2048) == -1 ) 
+	if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1 )  
 	{ 
 		 printf("Error: No sound\n");
 	}

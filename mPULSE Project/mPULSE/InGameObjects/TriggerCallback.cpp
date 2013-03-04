@@ -27,7 +27,11 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
                 if (actingCd->type == actingCd->CAR)
                 {
                     if(actingCd->wp->nextId == triggerCd->wp->id)
+					{
+						if(actingCd->wp->id > triggerCd->wp->id)
+							printf("lap++");
                         actingCd->wp = actingCd->wp->nextWaypoint;
+					}
                 }
 
             }
