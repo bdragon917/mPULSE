@@ -36,6 +36,7 @@ void SoundEngine::engineVol(int engine, int newV)//newV = between 0 - 128
 		song->engine2Volume(newV);
 }
 
+//only valid index: 0
 void SoundEngine::crashed(int index)
 {
 	song->playCrash(index);

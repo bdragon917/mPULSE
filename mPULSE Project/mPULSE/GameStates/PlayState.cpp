@@ -191,6 +191,7 @@ void PlayState::update(float dt)
     NxRaycastHit hit;
     ray.orig = entities.cars[0]->getActor()->getGlobalPosition();
     ray.dir = entities.cars[0]->getActor()->getLinearVelocity(); //Need to normalize?
+    ray.dir.normalize();
     scene->raycastClosestShape(ray,NX_ALL_SHAPES,hit);
     NxVec3 result = hit.worldImpact - ray.orig;
     //*/
@@ -198,7 +199,16 @@ void PlayState::update(float dt)
     
     NxVec3 result2 = hit.worldImpact - entities.cars[0]->getActor()->getGlobalPosition();
     if(result.dot(result2) < 0)
+    {
+        NxVec3 curVec = entities.cars[0]->getActor()->getLinearVelocity();
+
+        entities.cars[0]->getActor()->setLinearVelocity(NxVec3(curVec.x, 10.0f, curVec.z));
+
+
         printf("fallin!");//*/
+    }
+
+    //physicsEngine->step(dt/1000);
     
 //    entities.cars[0]->aCam->updateCamera(dt/16);
     //entities.cars[0]->aCam->updateCamera(1.0f);
