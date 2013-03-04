@@ -9,11 +9,8 @@ float angle = acos(cosangle);
 #include <AI/AI.h>
 #include <iostream>
 
-AI::AI(void)
+AI::AI()
 {xController = new XboxController(5);myTargetVector = NxVec3(0,0,0);myOrientation = NxVec3(0,0,0);}
-
-AI::~AI(void)
-{}
 
 XboxController* AI::getControl()
 {
