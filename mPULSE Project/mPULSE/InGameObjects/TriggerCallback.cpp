@@ -2,6 +2,7 @@
 
 TriggerCallback::TriggerCallback(void)
 {
+    soundEngine = SoundEngine::getInstance();
 }
 
 
@@ -26,6 +27,7 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
                 CustomData* actingCd = (CustomData*)actingActor.userData;
                 if (actingCd->type == actingCd->CAR)
                 {
+                    //Waypoints
                     if(actingCd->wp->nextId == triggerCd->wp->id)
 					{
 						if(actingCd->wp->id > triggerCd->wp->id)
@@ -39,7 +41,32 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
                         }
                         actingCd->wp = actingCd->wp->nextWaypoint;
 					}
+
+
+
+                   
+                    if ((actingCd->type == actingCd->OBSTACLE) && (actingCd->pickupType == 0))    //Missile on Car
+                    {
+                        triggerShape.getActor().addForce(NxVec3(0,50000,0));  //should go up, and slow down
+                        soundEngine->crashed(0);
+                        actingShape.getActor().getScene().releaseActor(triggerActor);
+                    }
+
+                    if ((actingCd->type == actingCd->OBSTACLE) && (actingCd->pickupType == 1))    //Shield vs car
+                    {
+                        
+                    }
+
+                    if ((actingCd->type == actingCd->CAR) && (triggerCd->pickupType == 2))    //Barrier vs car
+                    {
+                        actingShape.getActor().setLinearVelocity(actingShape.getActor().getLinearVelocity() * 0.3f);
+                        soundEngine->crashed(0);
+                    }
+                    
+
                 }
+
+
 
             }
             else
@@ -58,7 +85,8 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
         CustomData* actingCd = (CustomData*)actingActor.userData;
         actingCd->pickupType = triggerCd->pickupType;
 
-		printf("got %i\n",actingCd->pickupType);
+		printf("got %i\n",actingCd->pickupType);        //Power-Up picked up
+        soundEngine->crashed(1);
 	}
 	/*
 	if(status & NX_TRIGGER_ON_ENTER)

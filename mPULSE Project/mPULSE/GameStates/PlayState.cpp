@@ -22,7 +22,7 @@ PlayState::PlayState()
     RenderableComponent* pc2_rc = new RenderableComponent(1,3);
     player2Car->rc.push_back(pc2_rc);
     
-    int num_AI = 0;
+    int num_AI = 4;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -99,9 +99,10 @@ PlayState::PlayState()
 
 	soundEngine = SoundEngine::getInstance();
 	soundEngine->initializeSound();
-	//soundEngine->toggleMusic();
+	soundEngine->toggleMusic();
 
     //2
+    /*
     Entity* aEntity = new Entity();
     aEntity->setActor(physicsEngine->createStaticBox(-4.195f, 0.403f, -200.2202f));
     Entity* aEntity2 = new Entity();
@@ -111,7 +112,7 @@ PlayState::PlayState()
     aEntity2->rc.push_back(rc2);
     entities.StaticObjs.push_back(aEntity);
     entities.StaticObjs.push_back(aEntity2);
-
+    */
     InitializeConsoleCommands();    //Initalize Commands
 }
 

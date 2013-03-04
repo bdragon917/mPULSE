@@ -71,7 +71,7 @@ public:
     GLuint generateDisplayList(ObjModel* model,int x,int y,int z,int scale);
     void deleteDisplayList(GLuint index);
     void drawDisplayList(int index);
-	void drawShadow(Entities* entities);
+	void drawShadow(Entities* entities, NxScene* scene);
 
     Console aConsole;    
     Shader* aShader;

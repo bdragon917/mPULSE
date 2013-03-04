@@ -1357,7 +1357,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                 drawCars(entities);
 
 				flatten->on();
-				drawShadow(entities);
+				drawShadow(entities, scene);
 				flatten->off();
 
                 //drawWheels(entities->cars[0], 0, 5);
@@ -1736,8 +1736,14 @@ void RenderingEngine::drawWheels(Entity* entity, int model, int texture)
     }
 }
 
-void RenderingEngine::drawShadow(Entities* entities)
+void RenderingEngine::drawShadow(Entities* entities, NxScene* scene)
 {
+	NxRay ray;
+    NxRaycastHit hit;
+	NxVec3 down(0.0f, -1.0f, 0.0f);
+
+	ray.dir = down;
+
     if (entities->cars.size() > 0)
     {
         for (unsigned i = 0; i < entities->cars.size(); ++i)
@@ -1746,21 +1752,36 @@ void RenderingEngine::drawShadow(Entities* entities)
             {
                 for (unsigned r = 0; r < entities->cars[i]->rc.size(); ++r)
                 {
+					ray.orig = entities->cars[i]->getActor()->getGlobalPosition();
+
+					scene->raycastClosestShape(ray,NX_ALL_SHAPES,hit);
+					NxVec3 result = hit.worldImpact - ray.orig;
+
                     //glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->cars[i]->rc[r]->textureID]);
                     NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
+                    NxMat33 aRot = (entities->cars[i]->getActor()->getGlobalOrientation());
+					NxVec3* aim = &(entities->cars[i]->getActor()->getGlobalPosition());
 					glPushMatrix();
 
  					float mat[16];
-					aPose->getColumnMajor44(mat);
-    
-					float distToGround = -0.35f;
+					//aPose->getColumnMajor44(mat);
+                    aRot.getColumnMajor(mat);
+					//float distToGround = -0.35f;
 
-					glMultMatrixf(mat);
+					
+                    NxVec3 theVec = NxVec3(aim->x,hit.worldImpact.y + 1.0f,aim->z);
 
-					glTranslatef(0,distToGround,0);
+                    //theVec = entities->cars[i]->getActor()->getGlobalOrientation() * theVec;
+                    //glMultMatrixf(mat);
+					glTranslatef(theVec.x, theVec.y, theVec.z);
+                    //glMultMatrixf(mat);
+                    //glTranslatef(-theVec.x, -theVec.y, -theVec.z);
+
+					//glTranslatef(aim->x,hit.worldImpact.y + 1.0f,aim->z);
+
 					for (unsigned x = 0; x < entities->cars[i]->rc.size();x++)
-					{drawModel(modelManager.getModel(entities->cars[i]->rc[x]->modelID), 0.0f, 0, 0, 1.0f );}
-
+					//{drawModel(modelManager.getModel(entities->cars[i]->rc[x]->modelID), 0.0f, 0, 0, 1.0f );}
+                    {drawModel(modelManager.getModel(0), 0.0f, 0, 0, 1.0f );}
                     glPopMatrix();
 
                 }

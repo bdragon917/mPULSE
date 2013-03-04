@@ -119,7 +119,7 @@ void Sound::engine2Volume(int newV)
 
 void Sound::playCrash(int index)
 {
-	crashChannel = Mix_PlayChannel( 2, chunks.at(5 + index), 1);
+	crashChannel = Mix_PlayChannel( 2, chunks.at(5 + index), 0);
 }
 
 void Sound::crashVolume(int newV)
