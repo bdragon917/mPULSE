@@ -23,8 +23,8 @@ Sound::Sound(void)
 	    }
 	    file.close();
 
-		music1 = Mix_LoadMUS( "SoundEngine\\Sounds\\10YearsAgoAuda.mp3" );
-		music2 = Mix_LoadMUS( "SoundEngine\\Sounds\\FinalCountDownInstrumental.wav" );
+		music1 = Mix_LoadMUS( "SoundEngine\\Sounds\\OuterSpace.mp3" );
+		music2 = Mix_LoadMUS( "SoundEngine\\Sounds\\10YearsAgoAuda.mp3" );
 	}
 
 	if(!music1) 

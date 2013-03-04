@@ -947,13 +947,19 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
     int b = a;
     if (playerNum == 2)
     {
-        //for (int activePlayers=0;activePlayers<2;activePlayers++)
-        //{
-         //   drawScene_ForPlayer(scene, track, entities, activePlayers, true, entities->cars);
-        //}
-        drawScene_ForPlayer(scene, track, entities, 0, true, true, entities->cars);
-        entities->AIcars.at(0)->aCam->updateCamera(16);
-        drawScene_ForPlayer(scene, track, entities, 0, true, false, entities->AIcars);
+        //PlayerMode
+        for (int activePlayers=0;activePlayers<2;activePlayers++)
+        {
+            bool isTop = false;
+            if (activePlayers == 0)
+            {isTop = true;}
+            drawScene_ForPlayer(scene, track, entities, activePlayers, true, isTop, entities->cars);
+        }
+
+        //AI Mode
+        //drawScene_ForPlayer(scene, track, entities, 0, true, true, entities->cars);
+        //entities->AIcars.at(0)->aCam->updateCamera(16);
+        //drawScene_ForPlayer(scene, track, entities, 0, true, false, entities->AIcars);
     }
     else
     {
@@ -1340,6 +1346,12 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
                         glEnable(GL_TEXTURE_2D);
 		            glPopMatrix();
+
+
+                flatten->on();
+				drawShadow(entities, scene);
+				flatten->off();
+
                     if (aShader != NULL)
                      {
                         aShader->on();
@@ -1356,9 +1368,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
                 drawCars(entities);
 
-				flatten->on();
-				drawShadow(entities, scene);
-				flatten->off();
+
 
                 //drawWheels(entities->cars[0], 0, 5);
                 drawAICars(entities);
@@ -1450,7 +1460,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
         CustomData* cd = (CustomData*)entities->cars[carIndex]->getActor()->userData;
         bool hasWon = false;
 
-        if (cd->laps > 2)
+        if (cd->laps > 1)
             hasWon = true;
 
          drawHUD(hasWon);
@@ -1970,6 +1980,8 @@ void RenderingEngine::drawTrack(Track* track)
         }
     }
     //Draw the waypoints on the track
+
+    
     std::vector<Waypoint*>* wps = track->getWaypoints();
     ObjModel* model = modelManager.getModel("box.obj");
     if (model != NULL)
@@ -1977,14 +1989,18 @@ void RenderingEngine::drawTrack(Track* track)
         for(unsigned int i=0; i<wps->size(); i++)       
         {
             if(wps->at(i)->type == Waypoint::PICKUP_SPAWN)
+            {
                 model = modelManager.getModel("Shield.obj");
-            else if(wps->at(i)->type == Waypoint::WAYPOINT)
-                model = modelManager.getModel("box.obj");
 
-            if(model != NULL)
-                drawModel(model,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
+                if(model != NULL)
+                    drawModel(model,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
+            }
+            /*else if(wps->at(i)->type == Waypoint::WAYPOINT)
+                model = modelManager.getModel("box.obj");*/
+
         }
     }
+    
         
 }
 

@@ -33,7 +33,7 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
 						if(actingCd->wp->id > triggerCd->wp->id)
                         {
                             actingCd->laps++;
-                            if(actingCd->laps > 2)
+                            if(actingCd->laps > 1)
                             {
                                 //Somehow tell the rendering engine that the race ic complete for this car.
                                 printf("You Win!");

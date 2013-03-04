@@ -151,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ModelLoader\ModelList.txt" />
+    <None Include="sounds.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

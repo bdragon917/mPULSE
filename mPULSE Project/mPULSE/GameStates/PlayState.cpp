@@ -100,6 +100,9 @@ PlayState::PlayState()
 	soundEngine = SoundEngine::getInstance();
 	soundEngine->initializeSound();
 	soundEngine->toggleMusic();
+    soundEngine->engineNoise();
+    soundEngine->engineVol(1, 0);
+    soundEngine->engineVol(2, 0);
 
     //2
     /*
@@ -118,6 +121,12 @@ PlayState::PlayState()
 
 void PlayState::update(float dt)
 {    
+
+    //soundengine p1
+    float vol = entities.cars.at(0)->getDriveWheels().at(0)->getAxleSpeed() * 0.75f;
+    if (vol > 128){vol=128.0f;}
+    soundEngine->engineVol(1, vol);
+
     entities.cars[0]->aCam->updateCamera(1.0f);
     if (entities.cars.size() > 1)
         entities.cars[1]->aCam->updateCamera(1.0f);
@@ -125,6 +134,16 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
         Entity* car = entities.cars[c];
+
+        NxVec3 vel = car->getActor()->getLinearVelocity();
+        NxReal mag = vel.magnitude();
+    
+        if(mag > 100)
+        {
+            vel.normalize();
+            car->getActor()->setLinearVelocity(vel * 100);
+        }
+
         if (car->getActor()->getGlobalPose().t.y < -20.0f)
         {
             //car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
@@ -152,6 +171,14 @@ void PlayState::update(float dt)
     {
         Entity* car = entities.AIcars[c];
 
+        NxVec3 vel = car->getActor()->getLinearVelocity();
+        NxReal mag = vel.magnitude();
+    
+        if(mag > 120)
+        {
+            vel.normalize();
+            car->getActor()->setLinearVelocity(vel * 120);
+        }
         //Do AI thinking here!!!!!
         //car->aAI->
         //car->aAI->setWaypoint(&Waypoint(7.83703,0.413632,-101.592));
@@ -203,7 +230,7 @@ void PlayState::update(float dt)
     {
         NxVec3 curVec = entities.cars[0]->getActor()->getLinearVelocity();
 
-        entities.cars[0]->getActor()->setLinearVelocity(NxVec3(curVec.x, 10.0f, curVec.z));
+        //entities.cars[0]->getActor()->setLinearVelocity(NxVec3(curVec.x, 10.0f, curVec.z));
 
 
         printf("fallin!");//*/

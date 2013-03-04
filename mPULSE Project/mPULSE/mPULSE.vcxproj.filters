@@ -275,5 +275,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ModelLoader\ModelList.txt" />
+    <None Include="sounds.txt" />
   </ItemGroup>
 </Project>

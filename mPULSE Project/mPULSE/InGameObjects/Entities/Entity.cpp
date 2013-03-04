@@ -9,7 +9,7 @@ Entity::Entity()
 
     torque = 0;
     
-    minSteering = 0.1f;
+    minSteering = 0.07f;
     maxSteering = 0.85f;
 
     maxTorque = 3000;
