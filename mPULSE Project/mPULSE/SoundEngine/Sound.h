@@ -22,6 +22,9 @@ class Sound
 		void engine1Volume(int newV);
 		void engine2Volume(int newV);
 
+		void playCrash(int index);
+		void crashVolume(int newV);
+
 		void startMusic1();
 		void startMusic2();
 
@@ -36,4 +39,5 @@ class Sound
 
 		int engine1Channel;
 		int engine2Channel;
+		int crashChannel;
 };

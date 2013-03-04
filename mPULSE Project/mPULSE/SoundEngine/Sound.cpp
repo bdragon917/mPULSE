@@ -23,8 +23,6 @@ Sound::Sound(void)
 	    }
 	    file.close();
 
-
-
 		music1 = Mix_LoadMUS( "SoundEngine\\Sounds\\10YearsAgoAuda.mp3" );
 		music2 = Mix_LoadMUS( "SoundEngine\\Sounds\\FinalCountDownInstrumental.wav" );
 	}
@@ -60,45 +58,24 @@ void Sound::playPause()
 {
 	if( check() )
     {
-		if (musicTrack == 0)
+		if (Mix_PlayingMusic() == 0)
 		{
-			printf("music ON\n");
-		   //if (Mix_PlayMusic(music, -1) ==-1)
-		   if (Mix_FadeInMusic(music1, 1, 10000) ==-1)
-		   {
-			   printf("problem.\n");
-			}
-		  else 
-		  { //If the music is paused 
-			  if( Mix_PausedMusic() == 1 ) 
-				{ //Resume the music 
-				Mix_ResumeMusic(); 
-				} //If the music is playing
-				else 
-				{ //Pause the music 
-				 //Mix_PauseMusic(); 
-				}
-			}
+			if (musicTrack == 0)
+				startMusic1();
+			else if (musicTrack == 1)
+				startMusic2();
 		}
 		else 
 		{
-			printf("music ON\n");
-		   //if (Mix_PlayMusic(music, -1) ==-1)
-	     if (Mix_FadeInMusic(music2, 1, 10000) ==-1)
-		   {
-			   printf("problem.\n");
-		   }
-		  else 
-		  { //If the music is paused 
+			 //If the music is paused 
 			  if( Mix_PausedMusic() == 1 ) 
 			  { //Resume the music 
 				  Mix_ResumeMusic(); 
 			  } //If the music is playing
 			  else 
 			  { //Pause the music 
-				  //Mix_PauseMusic(); 
+				  Mix_PauseMusic(); 
 			  }
-			}
 		}
     }
 	else
@@ -110,12 +87,12 @@ void Sound::playPause()
 
 void Sound::startMusic1()
 {
-
+	Mix_FadeInMusic(music1, 1, 10000);
 }
 
 void Sound::startMusic2()
 {
-
+	Mix_FadeInMusic(music2, 1, 10000);
 }
 
 void Sound::stopMusic()
@@ -138,4 +115,14 @@ void Sound::engine1Volume(int newV)
 void Sound::engine2Volume(int newV)
 {
 	Mix_Volume(engine2Channel, newV);
+}
+
+void Sound::playCrash(int index)
+{
+	crashChannel = Mix_PlayChannel( 2, chunks.at(5 + index), 1);
+}
+
+void Sound::crashVolume(int newV)
+{
+	Mix_Volume(crashChannel, newV);
 }

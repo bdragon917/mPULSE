@@ -14,6 +14,10 @@ public:
 	void toggleMusic();
 	void stopMusic();
 	void engineNoise();
+	void engineVol(int engine, int newV);
+
+	void crashed(int index);
+	void crashV(int newV);
 
 private:
 	SoundEngine();
