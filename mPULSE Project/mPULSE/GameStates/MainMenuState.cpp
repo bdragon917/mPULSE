@@ -12,6 +12,8 @@ MainMenuState::MainMenuState()
 	//renderingEngine->initializeGL();
     renderingEngine->createLight_MainMenu();
 
+    curSelected = 0;
+
     prevTime = 0;
     WAIT_TIME = 50;
     buttonPressed = false;
@@ -56,7 +58,7 @@ void MainMenuState::render()
 
 bool MainMenuState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
-    int MaxSelected = 5;
+    int MaxSelected = 4;
 
 
     //Non-Console
@@ -90,7 +92,7 @@ bool MainMenuState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void MainMenuState::handleXboxEvents(int player,XboxController* state)
 {    
-    int MaxSelected = 5;
+    int MaxSelected = 4;
     if(state->dpadLeft || state->leftStick.x < 0)
     {
         if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)

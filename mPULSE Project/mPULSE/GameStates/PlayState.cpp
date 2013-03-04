@@ -543,12 +543,10 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             if(type == Entity::MISSILE)
             {
                 Entity* e = new Entity(10000); //Missile will live for 10000 ms.
-                int offset = 5;
-                printf("Missile Fired");                                
-                NxVec3 initPos(1,0,0); 
-                NxVec3 dir = car->getActor()->getGlobalOrientation()*initPos;
-                NxVec3 pos = car->getActor()->getGlobalPose().t + (dir*offset);
-                e->setActor(physicsEngine->createMissile(pos,dir));
+                
+                printf("Missile Fired");
+                NxActor* actingCar = car->getActor();
+                e->setActor(physicsEngine->createMissile(actingCar));
                 e->setModel(renderingEngine->getModelManger().getModel("Missile.obj"));
                 entities.DynamicObjs.push_back(e);
             }
@@ -562,13 +560,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
             else if(type == Entity::BARRIER)
             {
-                Entity* e = new Entity(10000); //Barrier will live for 10000 ms.
-                int offset = -5;
-                printf("Barrier Fired");                                
-                NxVec3 initPos(1,0,0); 
-                NxVec3 dir = car->getActor()->getGlobalOrientation()*initPos;
-                NxVec3 pos = car->getActor()->getGlobalPose().t + (dir*offset);                                
-                e->setActor(physicsEngine->createBarrier(pos,dir));
+                Entity* e = new Entity(10000); //Barrier will live for 10000 ms.                               
+                printf("Barrier Fired");
+                e->setActor(physicsEngine->createBarrier(car->getActor()));
                 e->setModel(renderingEngine->getModelManger().getModel("Barrier.obj"));
                 entities.DynamicObjs.push_back(e);
             }

@@ -115,8 +115,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[19];
-    glGenTextures(19, textureid_P1);
+    textureid_P1 = new GLuint[26];
+    glGenTextures(26, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -126,18 +126,27 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/Box2.bmp", textureid_P1[5]);
     bindBMPtoTexture("./Images/Box3.bmp", textureid_P1[6]);
     bindBMPtoTexture("./Images/white.bmp", textureid_P1[7]);
-    bindBMPtoTexture("./Images/MainMenuBack.bmp", textureid_P1[8]);
-    bindBMPtoTexture("./Images/MM_Single.bmp", textureid_P1[9]);
-    bindBMPtoTexture("./Images/MM_SingleSelected.bmp", textureid_P1[10]);
-    bindBMPtoTexture("./Images/MM_Verus.bmp", textureid_P1[11]);
-    bindBMPtoTexture("./Images/MM_VerusSelected.bmp", textureid_P1[12]);
+    bindBMPtoTexture("./Images/Menu/MenuBG2.bmp", textureid_P1[8]);
+    bindBMPtoTexture("./Images/Menu/single.bmp", textureid_P1[9]);
+    bindBMPtoTexture("./Images/Menu/singleS.bmp", textureid_P1[10]);
+    bindBMPtoTexture("./Images/Menu/versus.bmp", textureid_P1[11]);
+    bindBMPtoTexture("./Images/Menu/versusS.bmp", textureid_P1[12]);
+    bindBMPtoTexture("./Images/Menu/story.bmp", textureid_P1[13]);
+    bindBMPtoTexture("./Images/Menu/storyS.bmp", textureid_P1[14]);
+    bindBMPtoTexture("./Images/Menu/setting.bmp", textureid_P1[15]);
+    bindBMPtoTexture("./Images/Menu/settingS.bmp", textureid_P1[16]);
+    bindBMPtoTexture("./Images/Menu/quit.bmp", textureid_P1[17]);
+    bindBMPtoTexture("./Images/Menu/quitS.bmp", textureid_P1[18]);
 
-    bindBMPtoTexture("./Images/sb/ss_front5.bmp", textureid_P1[13]);
-    bindBMPtoTexture("./Images/sb/ss_back6.bmp", textureid_P1[14]);
-    bindBMPtoTexture("./Images/sb/ss_left2.bmp", textureid_P1[15]);
-    bindBMPtoTexture("./Images/sb/ss_right1.bmp", textureid_P1[16]);
-    bindBMPtoTexture("./Images/sb/ss_top3.bmp", textureid_P1[17]);
-    bindBMPtoTexture("./Images/sb/ss_bottom4.bmp", textureid_P1[18]);
+    bindBMPtoTexture("./Images/HUD.bmp", textureid_P1[19]);
+
+    //Skybox texture
+    bindBMPtoTexture("./Images/sb/ss_front5.bmp", textureid_P1[20]);
+    bindBMPtoTexture("./Images/sb/ss_back6.bmp", textureid_P1[21]);
+    bindBMPtoTexture("./Images/sb/ss_left2.bmp", textureid_P1[22]);
+    bindBMPtoTexture("./Images/sb/ss_right1.bmp", textureid_P1[23]);
+    bindBMPtoTexture("./Images/sb/ss_top3.bmp", textureid_P1[24]);
+    bindBMPtoTexture("./Images/sb/ss_bottom4.bmp", textureid_P1[25]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -158,7 +167,14 @@ void RenderingEngine::initializeTexture()
 	//**/
 
 
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+        // when texture area is large, bilinear filter the original
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+    // the texture wraps over at the edges (repeat)
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 	//Unallocation data
 
 
@@ -410,6 +426,52 @@ void RenderingEngine::prints(float inX, float inY, string s)
 }
 
 
+void RenderingEngine::drawHUD()
+{
+    aHUDShader->on();
+
+    glDisable(GL_LIGHTING);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(70, 1, 1, 100);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(-1, 1, -1, 1, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glPushAttrib(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+
+    
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[19]);
+    glBegin(GL_QUADS);
+        glColor3f(1.0f, 1.0f, 0.0);
+        glTexCoord2f(1.0f, 0.0f);glVertex2f(1.0f, -1.0f);
+        glTexCoord2f(1.0f, 1.0f);glVertex2f(1.0f, -0.5f);
+        glTexCoord2f(0.0f, 1.0f);glVertex2f(-1.0f, -0.5f);
+        glTexCoord2f(0.0f, 0.0f);glVertex2f(-1.0f, -1.0f);
+    glEnd();
+
+    glPopAttrib();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+
+     glEnable(GL_LIGHTING);
+
+    aHUDShader->off();
+
+}
+
 void RenderingEngine::drawGroundPlane(float xoffset, float yoffset)
 {    //*
 	//Draws a checkboard Ground
@@ -599,6 +661,7 @@ void RenderingEngine::initializeGL()
             aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");
             aSkyBoxShader = new Shader("shaders/skybox.frag", "shaders/texture.vert");
             aShadowShader = new Shader("shaders/shadow.frag", "shaders/shadow.vert");
+            aHUDShader = new Shader("shaders/BlueColorKey.frag", "shaders/BlueColorKey.vert");
         }
     else
     {fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
@@ -1356,19 +1419,102 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
 
          if (debugPhysX) //If debugPhyX then
+         {
               RenderDebugPhysic(scene->getDebugRenderable());
+            prints(800,-600, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
+            prints(800,-620, FloatToString(entities->cars[carIndex]->getDriveWheels()[0]->getAxleSpeed()) + " :W0_d_Rot");
+            prints(800,-640, FloatToString(entities->cars[carIndex]->getDriveWheels()[1]->getAxleSpeed()) + " :W1_d_Rot");
+            prints(800,-660, FloatToString(entities->cars[carIndex]->getPassiveWheels()[0]->getAxleSpeed()) + " :W2_p_Rot");
+            prints(800,-680, FloatToString(entities->cars[carIndex]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
+         }
 
+
+         drawHUD();
 
          glDisable(GL_TEXTURE_2D);
         if (showConsole)
             displayConsole();
 
-        prints(800,-600, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
-        prints(800,-620, FloatToString(entities->cars[carIndex]->getDriveWheels()[0]->getAxleSpeed()) + " :W0_d_Rot");
-        prints(800,-640, FloatToString(entities->cars[carIndex]->getDriveWheels()[1]->getAxleSpeed()) + " :W1_d_Rot");
-        prints(800,-660, FloatToString(entities->cars[carIndex]->getPassiveWheels()[0]->getAxleSpeed()) + " :W2_p_Rot");
-        prints(800,-680, FloatToString(entities->cars[carIndex]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
+        //HUD info
+        prints(850,-700, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()));
+        CustomData* cd = (CustomData*)entities->cars[carIndex]->getActor()->userData;
+        prints(150,-700, FloatToString(cd->wp->id));
 
+        //Ya...this should bwe put in a drawHUD element function later....
+
+        //glPushMatrix();
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    glDisable(GL_LIGHTING);
+
+//    glMatrixMode(GL_PROJECTION);
+//    glLoadIdentity();
+//    gluPerspective(70, 1, 1, 100);
+//    glMatrixMode(GL_MODELVIEW);
+//    glLoadIdentity();
+    //gluLookAt(2, 2, 10, 2, 0, 0, 0, 1, 0);
+
+    //(x,y) is from the bottom left of the window
+///**
+//    glMatrixMode(GL_PROJECTION);
+//    glPushMatrix();
+//    glLoadIdentity();
+//    glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1.0f, 1.0f);
+//    glMatrixMode(GL_MODELVIEW);
+//    glPushMatrix();
+//    glLoadIdentity();
+//    glPushAttrib(GL_DEPTH_TEST);
+//    glDisable(GL_DEPTH_TEST);
+
+//    const static float shadowMat[]={ 1,0,0,0, 0,1,0,0, 0,0,0,0, 0,0,0,1 };
+//	glMultMatrixf(shadowMat);
+
+//    glScalef(0.1, 0.1, 0.1);
+
+//    float inX = 400;
+//    float inY = -400;
+
+//    float x = 10 + inX;
+//    float y = SCREEN_HEIGHT - 20 + inY;
+//    glTranslatef(x*10.0f, y*10.0f, 0.0f);
+    //glRasterPos2i(10,10);     //not important i guess??
+
+
+  //  glBegin(GL_TRIANGLE_STRIP);
+  //      glColor3f(1.0f,1.0f,1.0f);
+  //      glVertex3f(-0.5f,0.0f,0.0f);
+  //      glVertex3f(0.0f,0.5f,0.0f);
+  //      glVertex3f(0.5f,0.0f,0.0f);
+   // glEnd();
+
+        switch(cd->pickupType)
+        {
+        case 0: //missile
+            //drawModel(modelManager.getModel(4), 0, 0, 0, 0.5f);
+            prints(100,-680, "MISSILE");
+            break;
+        case 1:
+            //drawModel(modelManager.getModel(5), 0, 0, 0, 0.5f);
+            prints(100,-680, "BARRIER");
+            break;
+        case 2:
+            //drawModel(modelManager.getModel(6), 0, 0, 0, 0.5f);
+            prints(100,-680, "SHIELD");
+            break;
+        }
+
+        //This is code to be for battery
+        //if (targetEntities[carIndex]->batteryCharged
+        //prints(200,-680, "BARRIER");
+
+ //       glutStrokeCharacter(GLUT_STROKE_ROMAN, FloatToString(cd->pickupType)[0]);
+
+ //   glPopAttrib();
+ //   glMatrixMode(GL_PROJECTION);
+ //   glPopMatrix();
+ //   glMatrixMode(GL_MODELVIEW);
+ //   glPopMatrix();
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
 
         glEnable(GL_LIGHTING);
@@ -1467,25 +1613,25 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
     {glBindTexture(GL_TEXTURE_2D, textureid_P1[12]);}
     glColor4f(1.0f,1.0f,1.0f, 0.5f);
     drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 1.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[13]);
 
     //Draw Single
     if (curMenuButton == 2)
-    {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
+    {glBindTexture(GL_TEXTURE_2D, textureid_P1[14]);}
     glColor4f(1.0f,1.0f,1.0f, 0.5f);
     drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 2.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[15]);
 
     //Draw Single
     if (curMenuButton == 3)
-    {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
+    {glBindTexture(GL_TEXTURE_2D, textureid_P1[16]);}
     glColor4f(1.0f,1.0f,1.0f, 0.5f);
     drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 3.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[17]);
 
     //Draw Single
     if (curMenuButton == 4)
-    {glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);}
+    {glBindTexture(GL_TEXTURE_2D, textureid_P1[18]);}
     glColor4f(1.0f,1.0f,1.0f, 0.5f);
     drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 4.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
     glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
@@ -1968,7 +2114,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
     glNormal3f(0.0f, 0.0f, 0.0f);
     glColor3f(1.0f,1.0f,1.0f);
 	// Draw Front side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[13]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[20]);
 	glBegin(GL_QUADS);	
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z+length);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height, z+length);
@@ -1977,7 +2123,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Back side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[14]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[21]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y,		z);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x+width, y+height, z); 
@@ -1986,7 +2132,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Left side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[16]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[23]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height,	z);	
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,		  y+height,	z+length); 
@@ -1995,7 +2141,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Right side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[15]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[22]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y,		z);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y,		z+length);
@@ -2004,7 +2150,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Up side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[17]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[24]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x+width, y+height, z);
 		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y+height, z+length); 
@@ -2013,7 +2159,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Down side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[18]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[25]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y,		z+length);

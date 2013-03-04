@@ -76,6 +76,7 @@ public:
     Shader* aShader;
     Shader* aSkyBoxShader;
     Shader* aShadowShader;
+    Shader* aHUDShader;
 
     string FloatToString(float input);
 
@@ -118,6 +119,8 @@ private:
     void drawObstacles(Entities* entities);
     void drawStaticObjs(Entities* entities);
     void drawTrack(Track* track);
+
+    void drawHUD();
 
     void RenderDebugPhysic(const NxDebugRenderable* ndr);
     

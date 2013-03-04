@@ -164,8 +164,14 @@ NxActor* PhysicsEngine::createGroundPlane()
 	return scene->createActor(actorDesc);
 }
 
-NxActor* PhysicsEngine::createBarrier(NxVec3 pos,NxVec3 dir) 
+NxActor* PhysicsEngine::createBarrier(NxActor* car ) 
 {
+     float offset = -5.0f;
+                                    
+     NxVec3 initPos(1,0,0); 
+     NxVec3 dir = car->getGlobalOrientation()*initPos;
+     NxVec3 pos = car->getGlobalPose().t + (dir*offset); 
+
 	//Set the box starting height
 	NxVec3 position(pos.x, pos.y, pos.z);
 
@@ -182,7 +188,8 @@ NxActor* PhysicsEngine::createBarrier(NxVec3 pos,NxVec3 dir)
 	actorDesc.shapes.pushBack(&boxDesc);
 	actorDesc.body = &bodyDesc;
 	actorDesc.density = 0.1f;
-	actorDesc.globalPose.t = position;
+    actorDesc.globalPose = car->getGlobalPose();
+	actorDesc.globalPose.t = pos;
     
 	NxActor *actor = scene->createActor(actorDesc);
 	//actor->userData = (void*)size_t(0.5f);
@@ -196,8 +203,13 @@ NxActor* PhysicsEngine::createBarrier(NxVec3 pos,NxVec3 dir)
 	return actor;
 }
 
-NxActor* PhysicsEngine::createMissile(NxVec3 pos,NxVec3 dir) 
+NxActor* PhysicsEngine::createMissile(NxActor* car) 
 {
+    float offset = 5.0f;                               
+    NxVec3 initPos(1,0,0); 
+    NxVec3 dir = car->getGlobalOrientation()*initPos;
+    NxVec3 pos = car->getGlobalPose().t + (dir*offset);
+
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
 	bodyDesc.angularDamping	= 0.5f;
@@ -211,6 +223,7 @@ NxActor* PhysicsEngine::createMissile(NxVec3 pos,NxVec3 dir)
 	actorDesc.shapes.pushBack(&boxDesc);
 	actorDesc.body = &bodyDesc;
 	actorDesc.density = 0.1f;
+    actorDesc.globalPose = car->getGlobalPose();
 	actorDesc.globalPose.t = pos;
     
 	NxActor *actor = scene->createActor(actorDesc);
@@ -220,7 +233,8 @@ NxActor* PhysicsEngine::createMissile(NxVec3 pos,NxVec3 dir)
     cd->type = cd->OBSTACLE;
     actor->userData = (void*)&cd;  
 
-    actor->addLocalForce(dir*200);
+    //actor->addLocalForce(dir*200);
+    actor->addLocalForce(NxVec3(200,0,0) + car->getLinearVelocity());
     
 	return actor;
 }

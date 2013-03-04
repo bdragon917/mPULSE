@@ -66,8 +66,8 @@ public:
     NxActor* createStaticBox(float x, float y, float z);
     NxActor* createTriMesh(float x, float y, float z, ObjModel aModel);
     NxActor* createCarChassis();
-    NxActor* createBarrier(NxVec3 pos,NxVec3 dir);
-    NxActor* createMissile(NxVec3 pos,NxVec3 dir);
+    NxActor* createBarrier(NxActor* car);
+    NxActor* createMissile(NxActor* car);
 	void createWaypoints(std::vector<Waypoint*>* waypoints);
 
     void resetBox();  
