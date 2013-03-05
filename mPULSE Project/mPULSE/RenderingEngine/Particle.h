@@ -7,11 +7,16 @@ public:
     ~Particle();
 
     NxVec3 getLocation();
+    void setVelocity(NxVec3 newVel);
     bool isDead();
+    void Age();
+    void Move();
+
+    int timeTilDeath;
 
 private:
     NxVec3 location;
-	int timeTilDeath;
+    NxVec3 velocity;
     int texture;
     int size;
 };

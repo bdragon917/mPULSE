@@ -25,10 +25,12 @@ class Sound
 		void playCrash(int index);
 		void crashVolume(int newV);
 
+        void startMusic0();
 		void startMusic1();
 		void startMusic2();
 
 	private:
+        Mix_Music *music0;
 		Mix_Music *music1;
 		Mix_Music *music2;
 		std::vector <Mix_Chunk*> chunks;

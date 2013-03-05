@@ -5,3 +5,5 @@ ModelLoader\\Models\\box.obj
 ModelLoader\\Models\\Missile.obj
 ModelLoader\\Models\\Barrier.obj
 ModelLoader\\Models\\Shield.obj
+ModelLoader\\Models\\mothershipHull.obj
+ModelLoader\\Models\\mothershipEngine.obj

@@ -46,6 +46,7 @@ public:
     void prints(float inX, float inY, string s);
     //void drawCube(float x, float y, float z, float size);
     void initializeGL();
+    void RenderingEngine::quickInitialize();
     void createLight();
     void createLight_MainMenu();
     void setUpPerpView();
@@ -54,6 +55,7 @@ public:
     int drawIntro();
     void moveStuff(float &testF);
 
+    void RenderingEngine::drawLoading();
     void drawScene(NxScene* scene,Track* track, Entities* entities);
     void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, bool topScreen, std::vector<Entity*> targetEntities);
     int drawMainMenuScreen(int curMenuButton, bool clicked);
@@ -134,6 +136,12 @@ private:
     void initializeTexture();
 
     int playerNum;
+
+    void RenderingEngine::initializeMainMenuVariables();
+    //MainMenu stuff
+    float shipAngle;
+    float shipRotation;
+
 
     //Used for Fade In and Out
     float FadeCtrl;

@@ -5,11 +5,11 @@ InitState::InitState()
     stateType = INIT;
     renderingEngine = RenderingEngine::getInstance();
 	soundEngine = SoundEngine::getInstance();
-    renderingEngine->initializeGL();
+    //renderingEngine->initializeGL();          //should be initalized when RenderingEngine was created
 	soundEngine->initializeSound();
+    soundEngine->playFinalCountDown();
     gameVariables = GameVariables::getInstance();
-    gameVariables->initialize();
-    //renderer->drawIntro2();    
+    gameVariables->initialize(); 
     time = clock.getCurrentTime();
 }
 
@@ -22,6 +22,7 @@ void InitState::update(float dt)
 }
 void InitState::render()
 {
+    
     //renderingEngine->drawIntro2();
 }
 

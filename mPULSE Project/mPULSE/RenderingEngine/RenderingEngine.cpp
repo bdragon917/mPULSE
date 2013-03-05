@@ -108,6 +108,7 @@ void RenderingEngine::bindBMPtoTexture(char* filename, GLuint textures)
 	requires openGL,  BMP.h, 
 **/
 
+
 void RenderingEngine::initializeTexture()
 {
 	//bindBMPtoTexture("./img/textureTest.bmp", textureid_P1);
@@ -149,6 +150,9 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/sb/ss_bottom4.bmp", textureid_P1[25]);
 
     bindBMPtoTexture("./Images/WIN.bmp", textureid_P1[26]);
+
+    bindBMPtoTexture("./Images/motherShipHullUV.bmp", textureid_P1[27]);
+    bindBMPtoTexture("./Images/motherShipEngineUV.bmp", textureid_P1[28]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -642,9 +646,35 @@ void RenderingEngine::setPlayerNum(int num)
     playerNum = num;
 }
 
+void RenderingEngine::quickInitialize()
+{
+    initializeMainMenuVariables();
+    
+    unsigned char *data = 0;
+	BMPImg aBMPImg;
+
+    textureid_P1 = new GLuint[1];
+    glGenTextures(1, textureid_P1);
+
+    bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[0]);
+
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+        // the texture wraps over at the edges (repeat)
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+
+
+}
+
 void RenderingEngine::initializeGL()
 {
+    printf("INITAL");
+
     debugCam = false;
+
+
+    initializeMainMenuVariables();
 
 	glShadeModel (GL_SMOOTH);
 	glEnable (GL_DEPTH_TEST);
@@ -664,7 +694,14 @@ void RenderingEngine::initializeGL()
 
     setPlayerNum(1);    //initalize player numbers  //Hopefully this is only called in init state
 
+    quickInitialize();
+
+    drawLoading();
+    SDL_GL_SwapBuffers();
+
     initializeTexture();
+
+    
 
     int err = glewInit();               //Needs a window to execute successfully
 	
@@ -681,7 +718,7 @@ void RenderingEngine::initializeGL()
     {fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
     }
 
-
+   
 
    //Initalization for shadowMap
    p_camera[0] = 32;
@@ -936,6 +973,69 @@ void RenderingEngine::setUpOrthoView()
 
 	//Switch back to modelview matrix
 	glMatrixMode (GL_MODELVIEW);
+}
+
+void RenderingEngine::drawLoading()
+{
+        glPushMatrix ();
+	    glLoadIdentity ();
+	        //Cameras
+	            gluLookAt(0, 0, -1,  // Eye/camera position      //  	gluLookAt(0, 0, 0,  // Eye/camera position
+	            0,0,0,		// Look-at position                 //0 ,0,-2.0f,		// Look-at position 
+	            0.0,1.0,0.0); 		// "Up" vector
+
+	            setUpPerpView();    //setup view for one player
+
+	            glColor3f(0.75f, 0.75f, 0.75f);          
+
+   
+                
+
+                glDisable(GL_LIGHTING);
+                glMatrixMode(GL_PROJECTION);
+                glLoadIdentity();
+                gluPerspective(70, 1, 1, 100);
+                glMatrixMode(GL_MODELVIEW);
+                glLoadIdentity();
+
+                glMatrixMode(GL_PROJECTION);
+                glPushMatrix();
+                
+                glLoadIdentity();
+                glOrtho(-1, 1, -1, 1, -1.0f, 1.0f);
+                glMatrixMode(GL_MODELVIEW);
+                glPushMatrix();
+                glLoadIdentity();
+                glPushAttrib(GL_DEPTH_TEST);
+                glDisable(GL_DEPTH_TEST);
+
+                glEnable(GL_TEXTURE_2D);
+
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+                    glBegin(GL_QUADS);
+                        glColor3f(1.0f, 1.0f, 1.0f);
+                        glTexCoord2f(1.0f, 0.0f);glVertex2f(1.0f, -1.0f);
+                        glTexCoord2f(1.0f, 1.0f);glVertex2f(1.0f, 1.0f);
+                        glTexCoord2f(0.0f, 1.0f);glVertex2f(-1.0f, 1.0f);
+                        glTexCoord2f(0.0f, 0.0f);glVertex2f(-1.0f, -1.0f);
+                    glEnd();
+
+                glDisable(GL_TEXTURE_2D);
+                glPopAttrib();
+                glMatrixMode(GL_PROJECTION);
+                glPopMatrix();
+                
+                glMatrixMode(GL_MODELVIEW);
+                glPopMatrix();
+
+                
+                 glEnable(GL_LIGHTING);
+
+
+
+	    glPopMatrix();
+
+        glDeleteTextures( 1, textureid_P1 );        //free up the LoadingScreen texture
 }
 
 //Include entity POV, which car's camera to render from
@@ -1601,6 +1701,15 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
     
 }
 
+
+void RenderingEngine::initializeMainMenuVariables()
+{
+    //mainMenu initialization
+    shipAngle = 40.0f;
+    shipRotation = 0.1f;
+    particles.clear();
+}
+
 int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1670,12 +1779,107 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
     {glBindTexture(GL_TEXTURE_2D, textureid_P1[18]);}
     glColor4f(1.0f,1.0f,1.0f, 0.5f);
     drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 4.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[5]);
+    
+
+
+    //ship
+    glPushMatrix();
+    //glLoadIdentity();
+    glPushAttrib(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    if (shipAngle > 45)
+    {shipRotation = -0.1f;}
+    else if (shipAngle < 20)
+    {shipRotation = 0.1f;}
+
+    shipAngle += shipRotation;
+
+    float newY = (shipAngle / 100.0f);  //newY = 0.5f
+    glPushMatrix();
+    glTranslatef(0,-newY,5.0f);
+    glRotatef(75.0f,0.0f,1.0f,0.0f);
+    glRotatef(shipAngle,0.0f,0.0f,1.0f);
+    glScalef(0.0925f,0.0925f,0.0925f);
+    glTranslatef(0,newY,0.0f);
+
+    //glPopAttrib();
+    //glPopMatrix();
+    //draw particle
+    //glPushMatrix();
+   // glPushAttrib(GL_DEPTH_TEST);
+    //glDisable(GL_DEPTH_TEST);
+    //glLoadIdentity();
+    //glOrtho(-1, 1, -1, 1, -10.0f, 1000.0f);
+    //setUpPerpView();
+    Particle* newParticle = new Particle(shipAngle * 0.1f,0.0f,shipAngle * 0.03f + 1.0f);
+    newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,1.5));
+    newParticle->timeTilDeath = 10;
+    particles.push_back(newParticle);
+    Particle* newParticle2 = new Particle(shipAngle * -0.1f,0.0f,shipAngle * 0.04f + 1.0f);
+    newParticle2->setVelocity(NxVec3(0.0f,shipAngle * -0.01f,1.5f));
+    newParticle2->timeTilDeath = 10;
+    particles.push_back(newParticle2);
+
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
+    for (unsigned int x=0;x<particles.size();x++)
+    {
+        glPushMatrix();
+        glScalef(0.7f,0.7f,0.7f);
+        glTranslatef(particles[x]->getLocation().x,particles[x]->getLocation().y,particles[x]->getLocation().z);
+        
+        //glRotatef(75.0f,0.0f,1.0f,0.0f);
+        //glRotatef(shipAngle,0.0f,0.0f,1.0f);
+        //glScalef(0.0725f,0.0725f,0.0725f);
+        //glTranslatef(-particles[x]->getLocation().x,-particles[x]->getLocation().y,-particles[x]->getLocation().z);
+            drawModel(modelManager.getModel(0),0,0,0,1.0f);
+        glPopMatrix();
+    }
+
+    updateParticles();
+    glPopMatrix();
 
 
 
+    
+    //draw mothership 7&8
+
+    //if (shipAngle > 45)
+    //{shipRotation = -0.1f;}
+    //else if (shipAngle < 20)
+    //{shipRotation = 0.1f;}
+
+    
+
+    
+
+    /*
+    glTranslatef(0,-newY,5.0f);
+    glRotatef(75.0f,0.0f,1.0f,0.0f);
+    glRotatef(shipAngle,0.0f,0.0f,1.0f);
+    glScalef(0.0925f,0.0925f,0.0925f);
+    glTranslatef(0,newY,-5.0f);
+    */
+
+    //draw ship
+    glTranslatef(0,-newY,5.0f);
+    glRotatef(75.0f,0.0f,1.0f,0.0f);
+    glRotatef(shipAngle,0.0f,0.0f,1.0f);
+    glScalef(0.0925f,0.0925f,0.0925f);
+    glTranslatef(0,newY,-5.0f);
+
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[27]);
+    drawModel(modelManager.getModel(7),0,0,0,1.0f);     //hull
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[28]);
+    drawModel(modelManager.getModel(8),0,0,0,1.0f);     //engine
 
 
+    glPopAttrib();
+    glPopMatrix();
+    //end particles
+
+
+    //ship
 
 
 
@@ -2456,26 +2660,35 @@ float RenderingEngine::updateFade()
         else
         {FadeCtrl = 1.0f;fadeMode = 0;}
         break;
+    
     }
-
     return FadeCtrl;
+    
 }
 
 void RenderingEngine::updateParticles()
 {
 
-    /**
-    for (vector<Particle>::iterator it=particles.begin(); 
-                              it!=particles.end(); 
-                              )
+    
+//    for (vector<Particle>::iterator it=particles.begin(); 
+//                              it!=particles.end(); 
+//                              )
+//    {
+    for (unsigned int x=0;x<particles.size();x++)
     {
 
-       if(it->isDead()) 
-          it = particles.erase(it);
-      else 
-          ++it;
+       if(particles[x]->isDead())
+       {
+          //it = particles.erase(it);
+           particles.erase(particles.begin()+x);
+       }
+       else
+       {
+          particles[x]->Age();
+          particles[x]->Move();
+       }
      }
-     */
+     
 
 
 }

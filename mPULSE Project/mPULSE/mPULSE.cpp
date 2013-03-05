@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
 
     // Initializes display
     SDL_Surface* screen = init();
+
     bool gameRunning = false;
     if (screen != NULL)
         gameRunning = true;

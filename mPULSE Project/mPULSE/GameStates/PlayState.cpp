@@ -99,6 +99,7 @@ PlayState::PlayState()
 
 	soundEngine = SoundEngine::getInstance();
 	soundEngine->initializeSound();
+    soundEngine->stopMusic();
 	soundEngine->toggleMusic();
     soundEngine->engineNoise();
     soundEngine->engineVol(1, 0);

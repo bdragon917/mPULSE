@@ -11,6 +11,11 @@ SoundEngine* SoundEngine::getInstance()
 	return &soundEngine;
 }
 
+void SoundEngine::playFinalCountDown()
+{
+    song->startMusic0();
+}
+
 void SoundEngine::toggleMusic()
 {
 	song->playPause();

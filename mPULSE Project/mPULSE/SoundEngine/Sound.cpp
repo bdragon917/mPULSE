@@ -23,6 +23,7 @@ Sound::Sound(void)
 	    }
 	    file.close();
 
+        music0 = Mix_LoadMUS( "SoundEngine\\Sounds\\FinalCountdown.mp3");
 		music1 = Mix_LoadMUS( "SoundEngine\\Sounds\\OuterSpace.mp3" );
 		music2 = Mix_LoadMUS( "SoundEngine\\Sounds\\10YearsAgoAuda.mp3" );
 	}
@@ -61,9 +62,9 @@ void Sound::playPause()
 		if (Mix_PlayingMusic() == 0)
 		{
 			if (musicTrack == 0)
-				startMusic1();
-			else if (musicTrack == 1)
 				startMusic2();
+			else// if (musicTrack == 1)
+				startMusic1();
 		}
 		else 
 		{
@@ -85,6 +86,11 @@ void Sound::playPause()
 
 }
 
+
+void Sound::startMusic0()
+{
+	Mix_FadeInMusic(music0, 1, 10000);
+}
 void Sound::startMusic1()
 {
 	Mix_FadeInMusic(music1, 1, 10000);

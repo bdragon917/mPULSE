@@ -13,8 +13,11 @@ public:
     int carTexture;
 
 private:
+
+    
     //Driver name
     //Driver Car (model)
     //car stats
     //Obs
+    double Obs;
 };

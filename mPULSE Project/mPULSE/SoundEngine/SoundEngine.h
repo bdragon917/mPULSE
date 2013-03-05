@@ -13,6 +13,7 @@ public:
 
 	void toggleMusic();
 	void stopMusic();
+    void SoundEngine::playFinalCountDown();
 	void engineNoise();
 	void engineVol(int engine, int newV);
 
