@@ -2,6 +2,11 @@
 
 PlayState::PlayState()
 {
+    keyAPressed = false;
+    keyDPressed = false;
+    keyWPressed = false;
+    keySPressed = false;
+
     id = 0;
     showConsole = true;
     rbPressed = false;
@@ -122,6 +127,40 @@ PlayState::PlayState()
 
 void PlayState::update(float dt)
 {    
+
+    //Keyboard Controls
+            if (keyAPressed)
+            {
+                Entity* car = entities.cars[0];
+                car->setSteeringAngle(1.0f);
+            }
+            else if (keyDPressed)
+            {
+                Entity* car = entities.cars[0];
+                car->setSteeringAngle(-1.0f);
+            }
+            if (keySPressed)
+            {
+                Entity* car = entities.cars[0];
+                car->addTorque(-255);        
+            }
+            else if (keyWPressed)
+            {
+                Entity* car = entities.cars[0];
+                car->addTorque(255);
+                car->addTorque(255);
+                car->addTorque(255);
+                car->addTorque(255);
+                car->addTorque(255);
+            }
+
+            //printf("KeyA: %i\n", keyAPressed);
+            //printf("KeyD: %i\n", keyDPressed);
+            //printf("KeyW: %i\n", keyWPressed);
+            //printf("KeyS: %i\n", keySPressed);
+
+
+
 
     //soundengine p1
     float vol = entities.cars.at(0)->getDriveWheels().at(0)->getAxleSpeed() * 0.75f;
@@ -483,37 +522,65 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             }
          }
     }
+    else    //Not in console
+    {
+
+    //Keyboard Controls
+        if (KeyboardMouseEvents.type == SDL_KEYDOWN)
+         {
+            SDLKey keyPressed = KeyboardMouseEvents.key.keysym.sym;
+
+            if (keyPressed == SDLK_a)
+            {
+                keyAPressed = true;
+            }
+            else if (keyPressed == SDLK_d)
+            {
+                keyDPressed = true;
+            }
+            else if (keyPressed == SDLK_w)
+            {
+                keyWPressed = true;
+            }
+            else if (keyPressed == SDLK_s)
+            {
+                keySPressed = true;      
+            }
+        }
+
+        //keyBoard
+        if (KeyboardMouseEvents.type == SDL_KEYUP)
+        {
+            SDLKey keyPressed = KeyboardMouseEvents.key.keysym.sym;
+            if (keyPressed == SDLK_a)
+            {
+                keyAPressed = false;
+            }
+            else if (keyPressed == SDLK_d)
+            {
+                keyDPressed = false;
+            }
+            else if (keyPressed == SDLK_w)
+            {
+                keyWPressed = false;
+            }
+            else if (keyPressed == SDLK_s)
+            {
+                keySPressed = false;      
+            }
+        }
+    }
 
 
-    //Non-Console
+        //Commands runnable in both console and not_in_console mode
         if (KeyboardMouseEvents.type == SDL_KEYDOWN)
          {
             SDLKey keyPressed = KeyboardMouseEvents.key.keysym.sym;
 
             if (keyPressed == SDLK_F1)
             {if (showConsole){showConsole=false;}else{showConsole=true;}}
-
-            else if (keyPressed == SDLK_a)
-            {
-                Entity* car = entities.cars[0];
-                car->setSteeringAngle(500.0f);
-            }
-            else if (keyPressed == SDLK_d)
-            {
-                Entity* car = entities.cars[0];
-                car->setSteeringAngle(-500.0f);
-            }
-            else if (keyPressed == SDLK_w)
-            {
-                Entity* car = entities.cars[0];
-                car->addTorque(1000);
-            }
-            else if (keyPressed == SDLK_s)
-            {
-                Entity* car = entities.cars[0];
-                car->addTorque(-1000);        
-            }
         }
+
 
 
     return true;

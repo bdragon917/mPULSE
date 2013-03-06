@@ -34,6 +34,14 @@ public:
     void InitializeConsoleCommands();
 
 private:
+
+    //Custom Keyboard Variables for keyboard Controls
+    bool keyAPressed;
+    bool keyDPressed;
+    bool keyWPressed;
+    bool keySPressed;
+
+
     bool showConsole;
     bool rbPressed;
     PlayState();

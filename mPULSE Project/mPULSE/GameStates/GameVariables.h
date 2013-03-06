@@ -13,8 +13,15 @@ public:
     int addPlayerTwo();     //Add default profile
     int setPlayers(Profile* aPlayer, int index);
     int getPlayerNum();
-    
 
+    typedef enum {
+        STANDARD,
+        LAPTOP,
+        GAMELAB,
+        FULLSCREEN
+    } Resolution;
+
+    Resolution curResolution;
 
 private:
     std::vector<Profile*> players; 

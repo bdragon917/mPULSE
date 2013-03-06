@@ -1817,7 +1817,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
     newParticle->timeTilDeath = 10;
     particles.push_back(newParticle);
     Particle* newParticle2 = new Particle(shipAngle * -0.1f,0.0f,shipAngle * 0.04f + 1.0f);
-    newParticle2->setVelocity(NxVec3(0.0f,shipAngle * -0.01f,1.5f));
+    newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,1.7f));
     newParticle2->timeTilDeath = 10;
     particles.push_back(newParticle2);
 

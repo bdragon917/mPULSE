@@ -46,7 +46,7 @@ void AI::update()
     float angleToTarget = myTarget.dot(myDirection);
     //float angleToTarget = (myDirection.x * myTarget.y) - (myDirection.x * myTarget.y);
 
-    std::cout << "AI: AngleToTarget" << angleToTarget << std::endl;
+    //std::cout << "AI: AngleToTarget" << angleToTarget << std::endl;
 
     //angleToTarget = acos((angleToTarget) / (myDirection.magnitude() * myTarget.magnitude()));
     //angleToTarget = acos((angleToTarget)/(myTarget.magnitude()*myDirection.magnitude()));
@@ -54,7 +54,7 @@ void AI::update()
 
     if (angleToTarget > 0.01f)
     {
-        std::cout << "AI: Steering right" << std::endl;
+        //std::cout << "AI: Steering right" << std::endl;
         //steer right
         myTarget.normalize();
         //xController->leftStick.x = myTarget.x;
@@ -74,7 +74,7 @@ void AI::update()
     else if (angleToTarget < -0.01f)
     {
         //steer left
-        std::cout << "AI: Steering left" << std::endl;
+        //std::cout << "AI: Steering left" << std::endl;
         myTarget.normalize();
         //xController->leftStick.x = myTarget.x;
         //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
