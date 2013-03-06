@@ -9,15 +9,19 @@ PhysicsEngine::PhysicsEngine()
 {
 	sceneSetup();
     NxReal startX = 9;
+    NxReal startZ = -3;
     NxReal offset = -6;
     curSP = 0;
-    maxSP = 5;
-    spawnPoints.push_back(new NxVec3 (startX,3,-9));      startX+=offset;
-    spawnPoints.push_back(new NxVec3 (startX,3,-9));      startX+=offset;
-    spawnPoints.push_back(new NxVec3 (startX,3,-3));      startX+=offset;
-    spawnPoints.push_back(new NxVec3 (startX,3,-3));      startX+=offset;
-    spawnPoints.push_back(new NxVec3 (startX,3,-3));      startX+=offset;
-    spawnPoints.push_back(new NxVec3 (startX,3,-3));      startX+=offset;
+    maxSP = 9;
+    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset; 
+    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
+    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset; 
+    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
+    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;   startX = 7; startZ+=offset;
+    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset; 
+    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
+    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
+    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
 
 }
 
