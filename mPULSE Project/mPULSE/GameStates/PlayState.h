@@ -32,6 +32,7 @@ public:
     void handleXboxEvents(int player,XboxController* state);
     void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,XboxController* state, bool isHuman);
     void InitializeConsoleCommands();
+    void setNumberOfPlayers(int numOfPlayers);
 
 private:
 
@@ -58,6 +59,6 @@ private:
 
     std::map<std::string, int(*)(int)> commands;
     Clock time;
-    int reloadTime;
+    int numPlayers;
 };
 

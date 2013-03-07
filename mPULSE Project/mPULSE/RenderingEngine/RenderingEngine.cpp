@@ -1043,8 +1043,6 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    int a = playerNum;
-    int b = a;
     if (playerNum == 2)
     {
         //PlayerMode

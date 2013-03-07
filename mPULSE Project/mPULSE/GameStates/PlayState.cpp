@@ -2,6 +2,7 @@
 
 PlayState::PlayState()
 {
+    gameVariables = GameVariables::getInstance();
     keyAPressed = false;
     keyDPressed = false;
     keyWPressed = false;
@@ -10,22 +11,18 @@ PlayState::PlayState()
     id = 0;
     showConsole = true;
     rbPressed = false;
+
     changeState(PLAY); 
+    numPlayers = gameVariables->getPlayerNum();
 
-    //Add player 1
-    Entity* playerCar = new Entity();
-    entities.cars.push_back(playerCar);
+    for(int i=0;i<numPlayers;i++)
+    {
+        Entity* playerCar = new Entity();
+        entities.cars.push_back(playerCar);
 
-    RenderableComponent* pc_rc = new RenderableComponent(1,3);
-    playerCar->rc.push_back(pc_rc);
-    
-
-    //Add player 2
-    Entity* player2Car = new Entity();
-    entities.cars.push_back(player2Car);
-
-    RenderableComponent* pc2_rc = new RenderableComponent(1,3);
-    player2Car->rc.push_back(pc2_rc);
+        RenderableComponent* pc_rc = new RenderableComponent(1,3);
+        playerCar->rc.push_back(pc_rc);
+    }
     
     int num_AI = 6;
 
@@ -44,8 +41,7 @@ PlayState::PlayState()
     }
     
     //*/
-    
-    gameVariables = GameVariables::getInstance();
+        
     physicsEngine = PhysicsEngine::getInstance();
     physicsEngine->setupPlayScene(&entities.cars);  //Assign actors to the entities
     physicsEngine->setupCars(&entities.AIcars);  //Assign actors to the entities without the initalization of the engine
@@ -320,6 +316,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 if (renderingEngine->aConsole.consoleString == "off g")
                 {
                     physicsEngine->getScene()->setGravity(NxVec3(0,0,0));
+                    physicsEngine->getScene()->releaseActor(entities.cars.at(1)->getPassiveWheels().at(1)->getActor());
                 }
                 if (renderingEngine->aConsole.consoleString == "on g")
                 {
@@ -619,10 +616,11 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             if (state->back)
             {changeState(MAIN_MENU); }
         }
+        
 
         //UserCamControl  
         Entity* car = cars[player];
-
+        
         car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
     
         NxVec3 a = car->getActor()->getLinearVelocity();

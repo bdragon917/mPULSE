@@ -21,14 +21,16 @@ public:
     std::vector<Waypoint*>* getWaypointsOfType(Waypoint::TYPE type);   
     Waypoint* getFirst();
     Waypoint* getWaypoint(int index);
+    std::string getName();
     Entity* getEntity();
     NxActor* getActor();     
 
 private:
     Waypoint::TYPE stringToType(std::string typeString);
-    void Track::finalizeWaypoints();
-
+    void finalizeWaypoints();
+    std::string removeFilePath(std::string line);
     std::vector<Waypoint*> waypoints;
+    std::string trackName;
     //std::vector<waypoint> startWaypoints;
     //std::vector<waypoint> finishWaypoints;    
     //std::vector<waypoint> carSpawnWaypoints;

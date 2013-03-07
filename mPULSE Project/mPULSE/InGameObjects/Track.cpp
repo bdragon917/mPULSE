@@ -6,13 +6,30 @@ Track::Track(std::string infoFilename, Entity* trackEntity)
     entity = trackEntity;
 }
 
+std::string Track::removeFilePath(std::string line)
+{
+    unsigned int i = 0;
+    int j = 0;
+
+    char ch = '\0';
+        
+    while(i < line.size())
+    {
+        ch = line.at(i++);
+        if(ch == '\\')
+            j=i;
+    }
+
+    return line.substr(j);
+}
+
 void Track::loadTrackInfo(std::string filename)
 {
         
     char charArray[1024];
     std::string tmpLine = "";
     std::ifstream file;
-
+    trackName = removeFilePath(filename);
 	file.open(filename);	
     if(file.is_open())
     {
@@ -133,6 +150,11 @@ NxActor* Track::getActor()
 Entity* Track::getEntity()
 {
     return entity;
+}
+
+std::string Track::getName()
+{
+    return trackName;
 }
 
 void Track::addWaypoint(Waypoint* wp)

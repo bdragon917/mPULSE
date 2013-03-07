@@ -22,8 +22,6 @@ int main(int argc, char *argv[])
     for (unsigned i = 0; i < MAX_PLAYER_COUNT; ++i)
     {
         players[i] = new XboxController(i);
-        if (players[i]->isConnected())
-            ++playerCount;
     }
 
     // Initializes display
@@ -45,7 +43,7 @@ int main(int argc, char *argv[])
             gameRunning = game.handleKeyboardMouseEvents(KeyboardMouseState);
 
         //Handle xbox events
-        for (unsigned player = 0; player < playerCount; ++player)
+        for (unsigned player = 0; player < MAX_PLAYER_COUNT; ++player)
         {
             players[player]->update();
             game.handleXboxEvents(player, players[player]);
