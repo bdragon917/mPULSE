@@ -607,6 +607,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
         {
             if (state->rb && !rbPressed)
             {
+
                 logWayPoint(0);
                 rbPressed = true;
                 printf("Point logged pressed\n");
@@ -621,6 +622,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
 
         //UserCamControl  
         Entity* car = cars[player];
+
         car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
     
         NxVec3 a = car->getActor()->getLinearVelocity();

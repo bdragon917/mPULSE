@@ -77,9 +77,8 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
 	    NxWheelShape* wheel2 = AddWheelToActor(box, 1.0f, 0, -1.2f);
         NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f, 0, 1.2f);
 	    NxWheelShape* wheel4 = AddWheelToActor(box, -1.0f, 0, -1.2f);
-
+        
         //NxWheelShape* wheel3 = AddWheelToActor(box, -0.5f,0.05);
-
         //Entity* entityCar1 = new Entity();
         Entity* entityCar1 = cars->at(pxCars);
 
@@ -591,8 +590,8 @@ NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, fl
     wheelShapeDesc.lateralTireForceFunction = latff;	//TODO
 	wheelShapeDesc.longitudalTireForceFunction = lotff;	//TODO
 
-    NxWheelShape* wheelShape;
-	wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));
+    NxWheelShape* wheelShape;    
+	wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));    
 
     return wheelShape;
 }

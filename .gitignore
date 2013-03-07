@@ -2,6 +2,12 @@
 *.suo
 *.sdf
 replay.txt
+/mPULSE Project/Debug
+/mPULSE Project/mPULSE/Debug
+/mPULSE Project/ipch
+/mPULSE Project/mPULSE/Images
+/mPULSE Project/mPULSE/SoundEngine/Sounds
+/mPULSE Project/mPULSE/ModelLoader/Models
 /mPULSE Project/mPULSE/Debug/*.obj
 /mPULSE Project/mPULSE/img/Thumbs.db
 /mPULSE Project/mPULSE/Debug/*.obj
