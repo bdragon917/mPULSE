@@ -43,7 +43,8 @@ public:
     int SCREEN_WIDTH;
     int SCREEN_HEIGHT;
     ///Custom Draw Functions
-    void prints(float inX, float inY, string s);
+    void drawText(float inX, float inY, string s);
+
     //void drawCube(float x, float y, float z, float size);
     void initializeGL();
     void RenderingEngine::quickInitialize();
@@ -104,6 +105,15 @@ public:
     bool debugCam;
 
 private:
+    
+    struct drawableText {
+        float x;
+        float y;
+        std::string text;
+    };
+
+    std::vector<drawableText> textQueue;
+
     RenderingEngine();
 
     std::vector<Particle*> particles;
@@ -125,6 +135,7 @@ private:
     void drawTrack(Track* track);
 
     void drawHUD(bool hasWon);
+    void drawAllText();
 
     void RenderDebugPhysic(const NxDebugRenderable* ndr);
     

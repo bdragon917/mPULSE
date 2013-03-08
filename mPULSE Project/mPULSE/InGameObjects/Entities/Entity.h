@@ -61,7 +61,9 @@ public:
     //rotation data    
     AI* aAI;
     void setTimeToLive(int tmpTime);
+    void kill();
     int getTimeToLive();
+    void reset();
     bool isAlive();
     bool isBatteryCharged();
 
@@ -69,6 +71,7 @@ public:
 private:
 	bool batteryCharged;
     bool usingDisplayList;
+    bool alive;
     int displayListIndex;
     int torque;
     int maxTorque;

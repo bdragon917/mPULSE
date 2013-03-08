@@ -58,7 +58,7 @@ public:
 	void resetNx();
     void setupPlayScene(vector<Entity*>* cars);      //Use this to initalize the physicScene for playState
     void setupCars(vector<Entity*>* cars);
-
+    void destroy(NxActor* actor);
 	NxActor* createGroundPlane();
 	NxActor* createBox(float x, float y, float z);
     void createBoxes(float x, float y, float z, int num, float radius, std::vector<Entity*>* Boxes);

@@ -2,6 +2,7 @@
 
 PlayState::PlayState()
 {
+    gameVariables = GameVariables::getInstance();
     keyAPressed = false;
     keyDPressed = false;
     keyWPressed = false;
@@ -10,24 +11,20 @@ PlayState::PlayState()
     id = 0;
     showConsole = true;
     rbPressed = false;
+
     changeState(PLAY); 
+    numPlayers = gameVariables->getPlayerNum();
 
-    //Add player 1
-    Entity* playerCar = new Entity();
-    entities.cars.push_back(playerCar);
+    for(int i=0;i<numPlayers;i++)
+    {
+        Entity* playerCar = new Entity();
+        entities.cars.push_back(playerCar);
 
-    RenderableComponent* pc_rc = new RenderableComponent(1,3);
-    playerCar->rc.push_back(pc_rc);
+        RenderableComponent* pc_rc = new RenderableComponent(1,3);
+        playerCar->rc.push_back(pc_rc);
+    }
     
-
-    //Add player 2
-    Entity* player2Car = new Entity();
-    entities.cars.push_back(player2Car);
-
-    RenderableComponent* pc2_rc = new RenderableComponent(1,3);
-    player2Car->rc.push_back(pc2_rc);
-    
-    int num_AI = 6;
+    int num_AI = 0;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -44,8 +41,7 @@ PlayState::PlayState()
     }
     
     //*/
-    
-    gameVariables = GameVariables::getInstance();
+        
     physicsEngine = PhysicsEngine::getInstance();
     physicsEngine->setupPlayScene(&entities.cars);  //Assign actors to the entities
     physicsEngine->setupCars(&entities.AIcars);  //Assign actors to the entities without the initalization of the engine
@@ -126,7 +122,26 @@ PlayState::PlayState()
 }
 
 void PlayState::update(float dt)
-{
+{    
+    //unsigned sizeOfVec = entities.cars.size();
+    //for(unsigned i=0;i<sizeOfVec;i++)
+    //{
+    //    if(!(entities.cars.at(i)->isAlive()))
+    //        physicsEngine->destroy(entities.cars.at(i)->getActor());
+    //}
+
+    unsigned i = 0;
+    while(i<entities.DynamicObjs.size())
+    {        
+        if(!(entities.DynamicObjs.at(i)->isAlive()))
+        {
+            physicsEngine->destroy(entities.DynamicObjs.at(i)->getActor());
+            entities.DynamicObjs.erase(entities.DynamicObjs.begin()+i);
+            i = 0;
+        }
+        else
+            i++;
+    }
 
     //Keyboard Controls
             if (keyAPressed)
@@ -263,23 +278,9 @@ void PlayState::update(float dt)
     scene->raycastClosestShape(ray,NX_ALL_SHAPES,hit);
     NxVec3 result = hit.worldImpact - ray.orig;
     //*/
-    physicsEngine->step(dt/1000);
-    
-    NxVec3 result2 = hit.worldImpact - entities.cars[0]->getActor()->getGlobalPosition();
-    if(result.dot(result2) < 0)
-    {
-        NxVec3 curVec = entities.cars[0]->getActor()->getLinearVelocity();
-
-        //entities.cars[0]->getActor()->setLinearVelocity(NxVec3(curVec.x, 10.0f, curVec.z));
-
-
-        printf("fallin!");//*/
-    }
-
-    //physicsEngine->step(dt/1000);
-    
-//    entities.cars[0]->aCam->updateCamera(dt/16);
-    //entities.cars[0]->aCam->updateCamera(1.0f);
+    //Display FPS
+    renderingEngine->drawText(100,-50,"FPS: "+renderingEngine->FloatToString(1000.0f/dt));
+    physicsEngine->step(dt/1000.0f);
 }
 
 void PlayState::render()
@@ -320,6 +321,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 if (renderingEngine->aConsole.consoleString == "off g")
                 {
                     physicsEngine->getScene()->setGravity(NxVec3(0,0,0));
+                    physicsEngine->getScene()->releaseActor(entities.cars.at(1)->getPassiveWheels().at(1)->getActor());
                 }
                 if (renderingEngine->aConsole.consoleString == "on g")
                 {
@@ -607,6 +609,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
         {
             if (state->rb && !rbPressed)
             {
+
                 logWayPoint(0);
                 rbPressed = true;
                 printf("Point logged pressed\n");
@@ -618,11 +621,13 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             if (state->back)
             {changeState(MAIN_MENU); }
         }
+        
 
         //UserCamControl  
         Entity* car = cars[player];
+        
         car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
-    
+
         NxVec3 a = car->getActor()->getLinearVelocity();
         //printf("x: %f y: %f z: %f \n",a.x,a.y,a.z);
         int rTriggMag = state->rTrigger;
@@ -631,9 +636,23 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
 
         car->addTorque(rTriggMag - lTriggMag);        
         car->setSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
-//        car->addTilSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
 
-        //printf("mag: %f x: %f ang: %f\n",state->leftStick.magnitude,state->leftStick.x,(state->leftStick.magnitude/24000.0) * -state->leftStick.x * deg);
+        //TEST CODE FOR DELETING THE WHEELS OF AN ACTOR.
+        //if(state->rb)
+        //{
+        //    Entity* car2 = cars[1];
+
+        //    NxShape * const * shapes = car2->getActor()->getShapes();
+
+        //    for(unsigned i=0;i<car2->getActor()->getNbShapes();i++)
+        //    {
+        //        if(shapes[i]->isWheel())
+        //        {
+        //            NxShape* s = shapes[i];
+        //            car2->getActor()->releaseShape(*s);
+        //        }
+        //    }
+        //}
 
 		if(state->x)
 			car->chargeBattery();
@@ -658,11 +677,13 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
             else if(type == Entity::SHIELD)
             {                
-                Entity* e = new Entity(10000); //Shield will live for 10000 ms.
-                printf("Shield Fired");                                
-                e->setActor(car->getActor());
-                e->setModel(renderingEngine->getModelManger().getModel("Shield.obj"));
-                entities.DynamicObjs.push_back(e);
+                //FIXME: Broken right now because when the shield is deleted the car's actor is also deleted causing the game to crash.
+
+                //Entity* e = new Entity(10000); //Shield will live for 10000 ms.
+                //printf("Shield Fired");                                
+                //e->setActor(car->getActor());
+                //e->setModel(renderingEngine->getModelManger().getModel("Shield.obj"));
+                //entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::BARRIER)
             {

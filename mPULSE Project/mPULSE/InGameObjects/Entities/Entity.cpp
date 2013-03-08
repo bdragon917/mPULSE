@@ -17,13 +17,15 @@ Entity::Entity()
     pickup = NONE;
 
     timeToLive = -1;
+    alive = true;
     timeCreated = clock.getCurrentTime();
 }
 
 Entity::Entity(int tmpTimeToLive)
 {
+    alive = true;
 	batteryCharged = false;
-	charge = 0.0;
+	charge = 0.0f;
     usingDisplayList = false;
     displayListIndex = -1;
 
@@ -42,6 +44,7 @@ Entity::Entity(int tmpTimeToLive)
 
 Entity::Entity(NxActor* a)
 {
+    alive = true;
     timeToLive = -1;
     timeCreated = clock.getCurrentTime();
     actor = a;
@@ -57,15 +60,28 @@ int Entity::getTimeToLive()
     return timeToLive;
 } 
 
+void Entity::reset()
+{
+
+}
+
+void Entity::kill()
+{
+    alive = false;
+    timeToLive = 0;
+}
+
 bool Entity::isAlive()
 {
     if(timeToLive==-1)
-        return true;
+        alive = true;
     
     if((int)clock.getCurrentTime() - timeCreated >= timeToLive)
-        return false;
+        alive = false;
     else
-        return true;
+        alive = true;
+
+    return alive;
 }
 
 void Entity::givePickup(Entity::PickupType p)

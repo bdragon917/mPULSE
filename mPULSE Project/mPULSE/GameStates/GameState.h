@@ -12,7 +12,7 @@ public:
         MAIN_MENU,
         PLAY,
         PAUSE,
-        FINISHED
+        GAMEOVER
     } StateType;
 
     GameState();
@@ -30,9 +30,6 @@ public:
     {
         stateType = type;
     }
-
     StateType stateType;
-private:
-    
 };
 

@@ -7,11 +7,21 @@ class GameVariables
 public:
 	static GameVariables* getInstance();
     
-    void GameVariables::initialize();
+    void initialize();
 
     int addPlayers(Profile* aPlayer);
+    void setConnectedControllers(bool* controllerIndexes);
+    bool* getConnectedControllers(bool* controllerIndexes);
+
+    void setControllers(bool* controllerArray);
+    bool* getControllers();
+
+    int addPlayer(int controllerIndex);
+    void removePlayer(int controllerIndex);    
+
     int addPlayerTwo();     //Add default profile
     int setPlayers(Profile* aPlayer, int index);
+
     int getPlayerNum();
 
     typedef enum {
@@ -25,4 +35,6 @@ public:
 
 private:
     std::vector<Profile*> players; 
+    int numPlayers;
+    bool* controllers;
 };

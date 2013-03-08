@@ -24,12 +24,15 @@ public:
 private:
     MainMenuState();
     bool buttonPressed;
+    bool startGame;
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
     GameVariables* gameVariables;
     Clock clock;
-    int curSelected;
     unsigned prevTime;
+
+    int curSelected;
     int WAIT_TIME;
+    int MAX_SELECTED;
 };
 

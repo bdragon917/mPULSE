@@ -27,7 +27,7 @@ bool Game::handleKeyboardMouseEvents(SDL_Event& KeyboardMouseEvents)
 
 void Game::handleXboxEvents(int player,XboxController* controller)
 {
-	state->handleXboxEvents(player, controller);
+	state->handleXboxEvents(player, controller);    
 }
 
 void Game::checkStateChange()
@@ -49,7 +49,7 @@ void Game::checkStateChange()
             break;
         case GameState::MAIN_MENU:
             state = MainMenuState::getInstance();                
-            break;
+            break;        
         }
     }
 }

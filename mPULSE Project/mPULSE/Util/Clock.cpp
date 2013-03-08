@@ -6,10 +6,11 @@ Clock::Clock()
     time = 0;
 }
 
-Clock::Clock(int frameRateLimit)
+Clock::Clock(float frameRateLimit)
 {
     time = 0;
     maxFrameRate = frameRateLimit;
+    milliSecPerFrame = 1000.0f/frameRateLimit;
 }
 
 unsigned Clock::getCurrentTime()
@@ -19,13 +20,13 @@ unsigned Clock::getCurrentTime()
 
 unsigned Clock::getDeltaTime()
 {
-    unsigned dt = (SDL_GetTicks()-time);
-    if(1000.0/maxFrameRate > dt)
+    unsigned dt = SDL_GetTicks()-time;
+    if(milliSecPerFrame > dt)//Cap the clock at 60FPS
     {
-        SDL_Delay((1000/60)-(SDL_GetTicks()-time));
-        dt = SDL_GetTicks()-time;
-    }    
-    time = SDL_GetTicks();
+        SDL_Delay((unsigned)milliSecPerFrame-dt); //Wait for the difference
+        dt = SDL_GetTicks()-time;   //Calculate new dt
+    }        
+    time = SDL_GetTicks(); //update previous time
 
 return dt;
 
