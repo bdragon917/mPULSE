@@ -116,13 +116,13 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
 void PhysicsEngine::sceneSetup()
 {
 	physicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
-	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01f);
-
+	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01f);    
 	NxSceneDesc sceneDesc;
-	sceneDesc.simType = NX_SIMULATION_SW;
+    sceneDesc.simType = NX_SIMULATION_SW;
 	NxVec3 defaultGravity(0,-9.8f*(10.0f),0);
 	sceneDesc.gravity = defaultGravity;
 	scene = physicsSDK->createScene(sceneDesc);
+    //scene->setTiming(NxReal(0.016f),NX_TIMESTEP_FIXED); //TODO: Use this?
 
 	//Create the default material
 	NxMaterial* defaultMaterial = scene->getMaterialFromIndex(0);
@@ -140,6 +140,7 @@ void PhysicsEngine::step(float deltaTime)
 	scene->simulate(deltaTime);
 	scene->flushStream();
 	scene->fetchResults(NX_RIGID_BODY_FINISHED, true);
+    //scene->fetchResults(NX_ALL_FINISHED, true); //TODO: Use this instead?
 }
 
 

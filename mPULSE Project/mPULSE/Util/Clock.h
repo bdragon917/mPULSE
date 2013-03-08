@@ -4,7 +4,7 @@ class Clock
 {
 public:
     Clock();
-    Clock(int frameRateLimit);
+    Clock(float frameRateLimit);
     unsigned getCurrentTime();
     unsigned getDeltaTime();
     int getDeltaTime(unsigned prevTime);
@@ -14,5 +14,6 @@ public:
 
 private:
     unsigned int time;
-    int maxFrameRate;
+    float maxFrameRate;
+    float milliSecPerFrame;
 };

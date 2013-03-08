@@ -355,20 +355,30 @@ void RenderingEngine::drawModelShadow(ObjModel* model, NxMat34* aPose)
 /**
 *	This draws a string on screen
 **/
-void RenderingEngine::prints(float inX, float inY, string s)
+void RenderingEngine::drawText(float inX, float inY, string s)
 {
+    drawableText t;
+    t.text = s;
+    t.x = inX;
+    t.y = inY;
+
+    textQueue.push_back(t);
+
+}
+
+void RenderingEngine::drawAllText()
+{
+    
     glRasterPos3f(0.0f ,0.0f , 0.0f);
     glDisable(GL_LIGHTING);
 
-    glMatrixMode(GL_PROJECTION);
+    /*glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(70, 1, 1, 100);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    //gluLookAt(2, 2, 10, 2, 0, 0, 0, 1, 0);
+    */
 
-    //(x,y) is from the bottom left of the window
-///**
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -376,21 +386,27 @@ void RenderingEngine::prints(float inX, float inY, string s)
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
+
     glPushAttrib(GL_DEPTH_TEST);
     glDisable(GL_DEPTH_TEST);
 
-    glScalef(0.1, 0.1, 0.1);
-
-    float x = 10 + inX;
-    float y = SCREEN_HEIGHT - 20 + inY;
-    glTranslatef(x*10.0f, y*10.0f, 0.0f);
-    //glRasterPos2i(10,10);     //not important i guess??
-
-
-     for (unsigned int i=0; i < s.size(); i++)
+    for(unsigned i=0;i<textQueue.size();i++)
     {
-        glutStrokeCharacter(GLUT_STROKE_ROMAN, s[i]);
+        drawableText words = textQueue[i];
+        float x = 10 + words.x;
+        float y = SCREEN_HEIGHT - 20 + words.y;
+
+        glScalef(0.1, 0.1, 0.1);
+        glTranslatef(x*10.0f, y*10.0f, 0.0f);
+
+        for (unsigned int ch=0; ch < words.text.size(); ch++)
+        {
+            glutStrokeCharacter(GLUT_STROKE_ROMAN, words.text[ch]);
+        }
+        glLoadIdentity();
     }
+
+    textQueue.clear();
 
     glPopAttrib();
     glMatrixMode(GL_PROJECTION);
@@ -398,39 +414,8 @@ void RenderingEngine::prints(float inX, float inY, string s)
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 
-
      glEnable(GL_LIGHTING);
-
-    /**
-    glPushMatrix ();			////////
-	glLoadIdentity ();			////////
-
-    setUpOrthoView();
-	//  Fonts
-	//  GLUT_BITMAP_9_BY_15,
-    //  GLUT_BITMAP_8_BY_13,
-    //  GLUT_BITMAP_TIMES_ROMAN_10,
-     // GLUT_BITMAP_TIMES_ROMAN_24,
-    //  GLUT_BITMAP_HELVETICA_10,
-    //  GLUT_BITMAP_HELVETICA_12,
-     // GLUT_BITMAP_HELVETICA_18  
-
-
-	 glDisable(GL_TEXTURE_2D);
-
-	   if (s && strlen(s)) {
-      while (*s) {
-         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *s);
-         //glutStrokeCharacter(GLUT_STROKE_ROMAN, *s);
-         s++;
-      }
-   }
-
-       glPopMatrix();
-       */
-
 }
-
 
 void RenderingEngine::drawHUD(bool hasWon)
 {
@@ -630,14 +615,14 @@ void RenderingEngine::displayConsole()
 {
 
      glColor3f(1.0f,1.0f,1.0f);
-
-     prints(0,  0,    aConsole.consoleOut[4]);
-     prints(0,  -20,    aConsole.consoleOut[3]);
-     prints(0,  -40,    aConsole.consoleOut[2]);
-     prints(0,  -60,    aConsole.consoleOut[1]);
-     prints(0,  -80,   aConsole.consoleOut[0]);
-     prints(0,  -120,   aConsole.consoleString);
-     //prints(0,  -200,   debugOut);
+     
+     drawText(0,  0,    aConsole.consoleOut[4]);
+     drawText(0,  -20,    aConsole.consoleOut[3]);
+     drawText(0,  -40,    aConsole.consoleOut[2]);
+     drawText(0,  -60,    aConsole.consoleOut[1]);
+     drawText(0,  -80,   aConsole.consoleOut[0]);
+     drawText(0,  -120,   aConsole.consoleString);
+     //drawText(0,  -200,   debugOut);
 
 }
 
@@ -1063,8 +1048,7 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
     {
         drawScene_ForPlayer(scene, track, entities, 0, false, true, entities->cars);
     }
-    //drawScene_ForPlayer(scene, entities, 1);
-    
+    //drawScene_ForPlayer(scene, entities, 1);        
 }
 
 void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, bool topScreen, std::vector<Entity*> targetEntities)
@@ -1547,11 +1531,11 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
          if (debugPhysX) //If debugPhyX then
          {
               RenderDebugPhysic(scene->getDebugRenderable());
-            prints(800,-600, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
-            prints(800,-620, FloatToString(entities->cars[carIndex]->getDriveWheels()[0]->getAxleSpeed()) + " :W0_d_Rot");
-            prints(800,-640, FloatToString(entities->cars[carIndex]->getDriveWheels()[1]->getAxleSpeed()) + " :W1_d_Rot");
-            prints(800,-660, FloatToString(entities->cars[carIndex]->getPassiveWheels()[0]->getAxleSpeed()) + " :W2_p_Rot");
-            prints(800,-680, FloatToString(entities->cars[carIndex]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
+            drawText(800,-600, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
+            drawText(800,-620, FloatToString(entities->cars[carIndex]->getDriveWheels()[0]->getAxleSpeed()) + " :W0_d_Rot");
+            drawText(800,-640, FloatToString(entities->cars[carIndex]->getDriveWheels()[1]->getAxleSpeed()) + " :W1_d_Rot");
+            drawText(800,-660, FloatToString(entities->cars[carIndex]->getPassiveWheels()[0]->getAxleSpeed()) + " :W2_p_Rot");
+            drawText(800,-680, FloatToString(entities->cars[carIndex]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
          }
 
 
@@ -1568,9 +1552,9 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
             displayConsole();
 
         //HUD info
-        prints(850,-700, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()));
-        prints(50,-50, FloatToString(cd->laps) + " / 2 Laps");
-        prints(150,-700, FloatToString(cd->wp->id));
+        drawText(850,-700, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()));
+        drawText(SCREEN_WIDTH-150,-50, FloatToString(cd->laps) + " / 2 Laps");
+        drawText(150,-700, FloatToString(cd->wp->id));
 
         //Ya...this should bwe put in a drawHUD element function later....
 
@@ -1623,24 +1607,26 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
         {
         case 0: //missile
             //drawModel(modelManager.getModel(4), 0, 0, 0, 0.5f);
-            prints(100,-680, "MISSILE");
+            drawText(100,-680, "MISSILE");
             break;
         case 1:
             //drawModel(modelManager.getModel(5), 0, 0, 0, 0.5f);
-            prints(100,-680, "SHIELD");
+            drawText(100,-680, "SHIELD");
             break;
         case 2:
             //drawModel(modelManager.getModel(6), 0, 0, 0, 0.5f);
-            prints(100,-680, "BARRIER");
+            drawText(100,-680, "BARRIER");
             break;
         }
 
         //This is code to be for battery
         if (targetEntities[carIndex]->isBatteryCharged())
-            prints(200,-680, "Batt. CHARGED");
+            drawText(200,-680, "Batt. CHARGED");
         else
-            prints(200,-680, "Batt. empty");
+            drawText(200,-680, "Batt. empty");
 
+
+        drawAllText();
  //       glutStrokeCharacter(GLUT_STROKE_ROMAN, FloatToString(cd->pickupType)[0]);
 
  //   glPopAttrib();
@@ -1906,7 +1892,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
     }
 
 
-    prints(800,-680, "MAIN MENU!");
+    drawText(800,-680, "MAIN MENU!");
 
 
 

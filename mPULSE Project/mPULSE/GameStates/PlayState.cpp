@@ -278,23 +278,9 @@ void PlayState::update(float dt)
     scene->raycastClosestShape(ray,NX_ALL_SHAPES,hit);
     NxVec3 result = hit.worldImpact - ray.orig;
     //*/
-    physicsEngine->step(dt/1000);
-    
-    NxVec3 result2 = hit.worldImpact - entities.cars[0]->getActor()->getGlobalPosition();
-    if(result.dot(result2) < 0)
-    {
-        NxVec3 curVec = entities.cars[0]->getActor()->getLinearVelocity();
-
-        //entities.cars[0]->getActor()->setLinearVelocity(NxVec3(curVec.x, 10.0f, curVec.z));
-
-
-        printf("fallin!");//*/
-    }
-
-    //physicsEngine->step(dt/1000);
-    
-//    entities.cars[0]->aCam->updateCamera(dt/16);
-    //entities.cars[0]->aCam->updateCamera(1.0f);
+    //Display FPS
+    renderingEngine->drawText(100,-50,"FPS: "+renderingEngine->FloatToString(1000.0f/dt));
+    physicsEngine->step(dt/1000.0f);
 }
 
 void PlayState::render()
@@ -641,7 +627,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
         Entity* car = cars[player];
         
         car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
-    
+
         NxVec3 a = car->getActor()->getLinearVelocity();
         //printf("x: %f y: %f z: %f \n",a.x,a.y,a.z);
         int rTriggMag = state->rTrigger;
