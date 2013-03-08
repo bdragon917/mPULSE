@@ -116,8 +116,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[27];
-    glGenTextures(27, textureid_P1);
+    textureid_P1 = new GLuint[29];
+    glGenTextures(29, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -1814,11 +1814,11 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
     //setUpPerpView();
     Particle* newParticle = new Particle(shipAngle * 0.1f,0.0f,shipAngle * 0.03f + 1.0f);
     newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,1.5));
-    newParticle->timeTilDeath = 10;
+    newParticle->timeTilDeath = 20;
     particles.push_back(newParticle);
     Particle* newParticle2 = new Particle(shipAngle * -0.1f,0.0f,shipAngle * 0.04f + 1.0f);
     newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,1.7f));
-    newParticle2->timeTilDeath = 10;
+    newParticle2->timeTilDeath = 20;
     particles.push_back(newParticle2);
 
     glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);

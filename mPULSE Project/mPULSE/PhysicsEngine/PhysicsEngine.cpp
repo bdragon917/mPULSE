@@ -257,7 +257,7 @@ NxActor* PhysicsEngine::createMissile(NxActor* car)
     actor->userData = (void*)&cd;  
 
     //actor->addLocalForce(dir*200);
-    actor->addLocalForce(NxVec3(20000,0,0) + car->getLinearVelocity());
+    actor->addLocalForce(NxVec3(100000,0,0) + car->getLinearVelocity());
     
 	return actor;
 }

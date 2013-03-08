@@ -71,6 +71,9 @@ bool Entity::isAlive()
 void Entity::givePickup(Entity::PickupType p)
 {
     pickup = p;
+
+    CustomData* cd = (CustomData*) actor->userData;
+    cd->pickupType = p;
 }
 
 Entity::PickupType Entity::usePickup()
