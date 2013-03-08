@@ -82,6 +82,8 @@ bool MainMenuState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
         }
         else if ((keyPressed == SDLK_RETURN) || (keyPressed == SDLK_SPACE))
             startGame = true;
+        else if(keyPressed == SDLK_n)
+            gameVariables->addPlayer(1);
     }
     return true;
 }

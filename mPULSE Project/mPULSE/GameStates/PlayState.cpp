@@ -24,7 +24,7 @@ PlayState::PlayState()
         playerCar->rc.push_back(pc_rc);
     }
     
-    int num_AI = 6;
+    int num_AI = 0;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -123,6 +123,25 @@ PlayState::PlayState()
 
 void PlayState::update(float dt)
 {    
+    //unsigned sizeOfVec = entities.cars.size();
+    //for(unsigned i=0;i<sizeOfVec;i++)
+    //{
+    //    if(!(entities.cars.at(i)->isAlive()))
+    //        physicsEngine->destroy(entities.cars.at(i)->getActor());
+    //}
+
+    unsigned i = 0;
+    while(i<entities.DynamicObjs.size())
+    {        
+        if(!(entities.DynamicObjs.at(i)->isAlive()))
+        {
+            physicsEngine->destroy(entities.DynamicObjs.at(i)->getActor());
+            entities.DynamicObjs.erase(entities.DynamicObjs.begin()+i);
+            i = 0;
+        }
+        else
+            i++;
+    }
 
     //Keyboard Controls
             if (keyAPressed)
@@ -631,9 +650,23 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
 
         car->addTorque(rTriggMag - lTriggMag);        
         car->setSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
-//        car->addTilSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
 
-        //printf("mag: %f x: %f ang: %f\n",state->leftStick.magnitude,state->leftStick.x,(state->leftStick.magnitude/24000.0) * -state->leftStick.x * deg);
+        //TEST CODE FOR DELETING THE WHEELS OF AN ACTOR.
+        //if(state->rb)
+        //{
+        //    Entity* car2 = cars[1];
+
+        //    NxShape * const * shapes = car2->getActor()->getShapes();
+
+        //    for(unsigned i=0;i<car2->getActor()->getNbShapes();i++)
+        //    {
+        //        if(shapes[i]->isWheel())
+        //        {
+        //            NxShape* s = shapes[i];
+        //            car2->getActor()->releaseShape(*s);
+        //        }
+        //    }
+        //}
 
 		if(state->x)
 			car->chargeBattery();
@@ -658,11 +691,13 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
             else if(type == Entity::SHIELD)
             {                
-                Entity* e = new Entity(10000); //Shield will live for 10000 ms.
-                printf("Shield Fired");                                
-                e->setActor(car->getActor());
-                e->setModel(renderingEngine->getModelManger().getModel("Shield.obj"));
-                entities.DynamicObjs.push_back(e);
+                //FIXME: Broken right now because when the shield is deleted the car's actor is also deleted causing the game to crash.
+
+                //Entity* e = new Entity(10000); //Shield will live for 10000 ms.
+                //printf("Shield Fired");                                
+                //e->setActor(car->getActor());
+                //e->setModel(renderingEngine->getModelManger().getModel("Shield.obj"));
+                //entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::BARRIER)
             {

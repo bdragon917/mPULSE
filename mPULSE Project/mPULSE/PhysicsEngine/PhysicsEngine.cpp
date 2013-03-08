@@ -536,6 +536,11 @@ NxActor* PhysicsEngine::createCarChassis()
 	return actor;
 }
 
+void PhysicsEngine::destroy(NxActor* actor)
+{
+    scene->releaseActor(*actor);
+}
+
 NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, float z)
 {
 	NxWheelShapeDesc wheelShapeDesc;
@@ -591,7 +596,7 @@ NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, fl
 	wheelShapeDesc.longitudalTireForceFunction = lotff;	//TODO
 
     NxWheelShape* wheelShape;    
-	wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));    
+	wheelShape = static_cast<NxWheelShape *>(actor->createShape(wheelShapeDesc));     
 
     return wheelShape;
 }
