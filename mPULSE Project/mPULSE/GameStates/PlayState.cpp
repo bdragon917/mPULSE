@@ -123,24 +123,20 @@ PlayState::PlayState()
 
 void PlayState::update(float dt)
 {    
-    //unsigned sizeOfVec = entities.cars.size();
-    //for(unsigned i=0;i<sizeOfVec;i++)
-    //{
-    //    if(!(entities.cars.at(i)->isAlive()))
-    //        physicsEngine->destroy(entities.cars.at(i)->getActor());
-    //}
+    unsigned numOfObjs = entities.DynamicObjs.size();
+    unsigned currObj = 0;
 
-    unsigned i = 0;
-    while(i<entities.DynamicObjs.size())
-    {        
-        if(!(entities.DynamicObjs.at(i)->isAlive()))
-        {
-            physicsEngine->destroy(entities.DynamicObjs.at(i)->getActor());
-            entities.DynamicObjs.erase(entities.DynamicObjs.begin()+i);
-            i = 0;
+    while(currObj<numOfObjs)
+    {    
+        NxActor* a = entities.DynamicObjs.at(currObj)->getActor();
+        if(!(entities.DynamicObjs.at(currObj)->isAlive()))
+        {            
+            numOfObjs--;
+            physicsEngine->destroy(entities.DynamicObjs.at(currObj)->getActor());
+            entities.DynamicObjs.erase(entities.DynamicObjs.begin()+currObj);
         }
         else
-            i++;
+            currObj++;
     }
 
     //Keyboard Controls

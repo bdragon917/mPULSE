@@ -200,8 +200,7 @@ NxActor* PhysicsEngine::createBarrier(NxActor* car )
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
 	bodyDesc.angularDamping	= 0.5f;
-    //bodyDesc.flags = NX_BF_FROZEN;
-	//The actor has one shape, a box, 1m on a side
+
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions.set(0.5,0.5,0.5);
 	//boxDesc.localPose.t = position;
@@ -240,8 +239,6 @@ NxActor* PhysicsEngine::createMissile(NxActor* car)
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions.set(0.5,0.5,0.5);
-    //boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
-	//boxDesc.localPose.t = position;
 
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&boxDesc);
@@ -252,16 +249,13 @@ NxActor* PhysicsEngine::createMissile(NxActor* car)
     
 	NxActor *actor = scene->createActor(actorDesc);
 
-    
-	//actor->userData = (void*)size_t(0.5f);
-
     CustomData* cd = new CustomData();
     cd->type = cd->OBSTACLE;
     cd->pickupType = 0;
     actor->userData = (void*)&cd;  
 
     //actor->addLocalForce(dir*200);
-    actor->addLocalForce(NxVec3(100000,0,0) + car->getLinearVelocity());
+    actor->addLocalForce(NxVec3(1000,0,0) + car->getLinearVelocity());
     
 	return actor;
 }
@@ -289,6 +283,7 @@ void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
 		
             CustomData* cd = new CustomData();
             cd->wp = waypoints[i];
+            cd->type = CustomData::WAYPOINT;
 		    actor->userData = cd; 
         }
         else if(waypoints[i]->type == Waypoint::PICKUP_SPAWN)

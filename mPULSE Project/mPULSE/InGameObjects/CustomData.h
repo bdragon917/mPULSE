@@ -6,7 +6,7 @@ class CustomData
 {
     public:
         Waypoint* wp;
-        enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC };
+        enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC, WAYPOINT};
         ObjTypes type;
         int pickupType;
         int laps;
