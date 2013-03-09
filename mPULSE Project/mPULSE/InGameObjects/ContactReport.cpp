@@ -33,7 +33,7 @@ void ContactReport::onContactNotify(NxContactPair& pair, NxU32 events)
                 if(actor1CustomData->pickupType == 0) //Car hit a missile
                 {
                     //Knock the car into the air
-                    actor2->addForce(NxVec3(0,100000,0));
+                    actor2->addForce(NxVec3(0,1000000,0));
 
                     //Slow the player down by 30%
                     NxVec3 unitDir = actor2->getLinearVelocity();

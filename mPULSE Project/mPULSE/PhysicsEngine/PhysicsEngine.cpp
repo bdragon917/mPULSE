@@ -255,7 +255,7 @@ NxActor* PhysicsEngine::createMissile(NxActor* car)
     CustomData* cd = new CustomData(CustomData::OBSTACLE,0);
     actor->userData = (void*)cd;      
     
-    actor->addLocalForce(NxVec3(50000,0,0) + car->getLinearVelocity());
+    actor->addLocalForce(NxVec3(100000,0,0) + car->getLinearVelocity());
     
 	return actor;
 }
