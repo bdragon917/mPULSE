@@ -56,8 +56,8 @@ void MainMenuState::render()
             break;
         }
     }
-    else 
-        startGame = false;
+     
+    startGame = false;
 }
 
 bool MainMenuState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)

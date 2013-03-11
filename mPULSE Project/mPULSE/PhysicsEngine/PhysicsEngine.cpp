@@ -51,8 +51,12 @@ void PhysicsEngine::setupPlayScene(vector<Entity*>* cars)
 	NxVec3 defaultGravity(0,-9.8f*(10.0f),0);
 	sceneDesc.gravity = defaultGravity;
 	scene = physicsSDK->createScene(sceneDesc);
+
 	//Set up so that trigger objects in the scene will sent an event to TriggerReport
 	scene->setUserTriggerReport(&myTriggerCallback);
+    scene->setUserContactReport(&contactReport); 
+    //FIXME: ContactReport
+    scene->setActorGroupPairFlags(carGroup,pickupsGroup,CustomData::CAR | CustomData::OBSTACLE);
 
 	//Create the default material
 	NxMaterial* defaultMaterial = scene->getMaterialFromIndex(0);
@@ -78,6 +82,9 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
         NxWheelShape* wheel3 = AddWheelToActor(box, -1.0f, 0, 1.2f);
 	    NxWheelShape* wheel4 = AddWheelToActor(box, -1.0f, 0, -1.2f);
         
+        //FIXME: ContactReport
+        box->setContactReportFlags(NX_NOTIFY_ON_TOUCH);
+
         //NxWheelShape* wheel3 = AddWheelToActor(box, -0.5f,0.05);
         //Entity* entityCar1 = new Entity();
         Entity* entityCar1 = cars->at(pxCars);
@@ -105,11 +112,9 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
 	    box->setSleepEnergyThreshold(0);
 
 
-            if(curSP>maxSP){curSP=0;}
+        if(curSP>maxSP){curSP=0;}
 
-        entityCar1->getActor()->setGlobalPosition(*spawnPoints[curSP++]);
-
-
+        entityCar1->getActor()->setGlobalPosition(*spawnPoints[curSP++]);      
     }
 }
 
@@ -119,6 +124,7 @@ void PhysicsEngine::sceneSetup()
 	physicsSDK->setParameter(NX_SKIN_WIDTH, 0.01f);    
 	NxSceneDesc sceneDesc;
     sceneDesc.simType = NX_SIMULATION_SW;
+    
 	NxVec3 defaultGravity(0,-9.8f*(10.0f),0);
 	sceneDesc.gravity = defaultGravity;
 	scene = physicsSDK->createScene(sceneDesc);
@@ -200,10 +206,9 @@ NxActor* PhysicsEngine::createBarrier(NxActor* car )
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
 	bodyDesc.angularDamping	= 0.5f;
-    //bodyDesc.flags = NX_BF_FROZEN;
-	//The actor has one shape, a box, 1m on a side
+
 	NxBoxShapeDesc boxDesc;
-	boxDesc.dimensions.set(0.5,0.5,0.5);
+	boxDesc.dimensions.set(0.5,0.5,1.0);
 	//boxDesc.localPose.t = position;
 
 	NxActorDesc actorDesc;
@@ -214,13 +219,9 @@ NxActor* PhysicsEngine::createBarrier(NxActor* car )
 	actorDesc.globalPose.t = pos;
     
 	NxActor *actor = scene->createActor(actorDesc);
-	//actor->userData = (void*)size_t(0.5f);
 
-//    customUserData* cud = new customUserData;
-//    cud->type = OBSTACLE;
-    CustomData* cd = new CustomData();
-    cd->type = cd->OBSTACLE;
-    actor->userData = (void*)&cd;   
+    CustomData* cd = new CustomData(CustomData::OBSTACLE,2);
+    actor->userData = (void*)cd;   
     
 	return actor;
 }
@@ -235,13 +236,11 @@ NxActor* PhysicsEngine::createMissile(NxActor* car)
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
 	bodyDesc.angularDamping	= 0.5f;
-    bodyDesc.flags = NX_BF_DISABLE_GRAVITY;
+    bodyDesc.flags = NX_BF_DISABLE_GRAVITY | NX_BF_FROZEN_ROT;
     
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions.set(0.5,0.5,0.5);
-    //boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
-	//boxDesc.localPose.t = position;
 
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&boxDesc);
@@ -251,16 +250,11 @@ NxActor* PhysicsEngine::createMissile(NxActor* car)
 	actorDesc.globalPose.t = pos;
     
 	NxActor *actor = scene->createActor(actorDesc);
+    actor->setContactReportFlags(NX_NOTIFY_ON_START_TOUCH);
 
+    CustomData* cd = new CustomData(CustomData::OBSTACLE,0);
+    actor->userData = (void*)cd;      
     
-	//actor->userData = (void*)size_t(0.5f);
-
-    CustomData* cd = new CustomData();
-    cd->type = cd->OBSTACLE;
-    cd->pickupType = 0;
-    actor->userData = (void*)&cd;  
-
-    //actor->addLocalForce(dir*200);
     actor->addLocalForce(NxVec3(100000,0,0) + car->getLinearVelocity());
     
 	return actor;
@@ -285,10 +279,9 @@ void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
 		    actorDesc.shapes.pushBack(&boxDesc);
 		    actorDesc.globalPose.t = position;
     
-		    NxActor *actor = scene->createActor(actorDesc);
-		
-            CustomData* cd = new CustomData();
-            cd->wp = waypoints[i];
+		    NxActor *actor = scene->createActor(actorDesc);		
+            CustomData* cd = new CustomData(CustomData::WAYPOINT,-1,-1,waypoints[i]);
+
 		    actor->userData = cd; 
         }
         else if(waypoints[i]->type == Waypoint::PICKUP_SPAWN)
@@ -304,11 +297,9 @@ void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
 		    actorDesc.shapes.pushBack(&sphereDesc);
 		    actorDesc.globalPose.t = position;
     
-		    NxActor *actor = scene->createActor(actorDesc);
-		
-            CustomData* cd = new CustomData();
-            cd->wp = waypoints[i];
-            cd->pickupType = waypoints[i]->id;
+		    NxActor *actor = scene->createActor(actorDesc);		
+            CustomData* cd = new CustomData(CustomData::WAYPOINT,waypoints[i]->id,-1,waypoints[i]);
+
 		    actor->userData = cd; 
         }
 	}
@@ -351,11 +342,9 @@ NxActor* PhysicsEngine::createBox(float x, float y, float z)
 	actorDesc.globalPose.t = position;
 
 	NxActor *actor = scene->createActor(actorDesc);
-	//actor->userData = (void*)size_t(0.5f);
-
-    CustomData* cd = new CustomData();
-    cd->type = cd->OBSTACLE;
-    actor->userData = (void*)&cd;  
+    CustomData* cd = new CustomData(CustomData::OBSTACLE);
+    
+    actor->userData = (void*)cd;  
 
 	return actor;
 }
@@ -379,6 +368,8 @@ NxActor* PhysicsEngine::createStaticBox(float x, float y, float z)
 
 	NxActor *actor = scene->createActor(actorDesc);
 	//actor->userData = (void*)size_t(0.5f);
+    CustomData* cd = new CustomData(CustomData::STATIC);
+    actor->userData = (void*)cd;
 	return actor;
 }
 
@@ -474,7 +465,9 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
 
     actorDesc.globalPose.t = position;
 	NxActor *actor = scene->createActor(actorDesc);
-	actor->userData = (void*)0;
+
+    CustomData* cd = new CustomData(CustomData::MESH);    
+	actor->userData = (void*)cd;
 
 
      //actor->setRigidDynamicFlag(PxRigidDynamicFlag::eKINEMATIC,true);
@@ -523,9 +516,9 @@ NxActor* PhysicsEngine::createCarChassis()
     NxMat33 orient;
     orient.fromQuat(q);
 
-    CustomData* cd = new CustomData();
-    cd->type = cd->CAR;
-	actorDesc.userData = (void*)&cd;   
+    //This is done in the play state??
+    //CustomData* cd = new CustomData(CustomData::CAR);    
+	//actorDesc.userData = cd;   
 
 	NxActor *actor = scene->createActor(actorDesc);
     actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));

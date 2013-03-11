@@ -24,7 +24,7 @@ PlayState::PlayState()
         playerCar->rc.push_back(pc_rc);
     }
     
-    int num_AI = 0;
+    int num_AI = 1;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -50,7 +50,6 @@ PlayState::PlayState()
     renderingEngine->setPlayerNum(gameVariables->getPlayerNum());
 
     //set numPlayers
-	//renderingEngine->initializeGL();
     renderingEngine->createLight();
 
     //Create Track        
@@ -72,8 +71,7 @@ PlayState::PlayState()
     for (unsigned aa = 0; aa < entities.AIcars.size(); ++aa)
     {
         entities.AIcars.at(aa)->aAI->setActor(entities.AIcars.at(aa)->getActor());   //Assign actors to the entities's AI   
-        CustomData* customData = new CustomData();
-        customData->wp = track->getFirst();
+        CustomData* customData = new CustomData(CustomData::CAR,-1,0,track->getFirst());
 
         entities.AIcars.at(aa)->getActor()->userData = customData;
        // entities.AIcars.at(aa)->aAI->getActor()->userData = customData;
@@ -84,8 +82,7 @@ PlayState::PlayState()
     //Attach customData to car actors
     for (unsigned a = 0; a < entities.cars.size(); ++a)
     {
-        CustomData* customData = new CustomData();
-        customData->wp = track->getFirst();
+        CustomData* customData = new CustomData(CustomData::CAR,-1,0,track->getFirst());
 
         entities.cars.at(a)->getActor()->userData = customData;
     }
@@ -123,24 +120,20 @@ PlayState::PlayState()
 
 void PlayState::update(float dt)
 {    
-    //unsigned sizeOfVec = entities.cars.size();
-    //for(unsigned i=0;i<sizeOfVec;i++)
-    //{
-    //    if(!(entities.cars.at(i)->isAlive()))
-    //        physicsEngine->destroy(entities.cars.at(i)->getActor());
-    //}
+    unsigned numOfObjs = entities.DynamicObjs.size();
+    unsigned currObj = 0;
 
-    unsigned i = 0;
-    while(i<entities.DynamicObjs.size())
-    {        
-        if(!(entities.DynamicObjs.at(i)->isAlive()))
-        {
-            physicsEngine->destroy(entities.DynamicObjs.at(i)->getActor());
-            entities.DynamicObjs.erase(entities.DynamicObjs.begin()+i);
-            i = 0;
+    while(currObj<numOfObjs)
+    {    
+        NxActor* a = entities.DynamicObjs.at(currObj)->getActor();
+        if(!(entities.DynamicObjs.at(currObj)->isAlive()))
+        {            
+            numOfObjs--;
+            physicsEngine->destroy(entities.DynamicObjs.at(currObj)->getActor());
+            entities.DynamicObjs.erase(entities.DynamicObjs.begin()+currObj);
         }
         else
-            i++;
+            currObj++;
     }
 
     //Keyboard Controls
@@ -189,16 +182,6 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
         Entity* car = entities.cars[c];
-
-        NxVec3 vel = car->getActor()->getLinearVelocity();
-        NxReal mag = vel.magnitude();
-    
-        if(mag > 100)
-        {
-            vel.normalize();
-            car->getActor()->setLinearVelocity(vel * 100);
-        }
-
         if (car->getActor()->getGlobalPose().t.y < -20.0f)
         {
             //car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
@@ -225,15 +208,6 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.AIcars.size(); ++c)
     {
         Entity* car = entities.AIcars[c];
-
-        NxVec3 vel = car->getActor()->getLinearVelocity();
-        NxReal mag = vel.magnitude();
-    
-        if(mag > 120)
-        {
-            vel.normalize();
-            car->getActor()->setLinearVelocity(vel * 120);
-        }
         //Do AI thinking here!!!!!
         //car->aAI->
         //car->aAI->setWaypoint(&Waypoint(7.83703,0.413632,-101.592));
@@ -286,7 +260,7 @@ void PlayState::update(float dt)
 void PlayState::render()
 {    	    
 	NxScene* scene = physicsEngine->getScene();
-	renderingEngine->drawScene(scene, track, &entities);
+	renderingEngine->drawScene(scene, track, &entities);    
 }
 
 
@@ -667,11 +641,8 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             Entity::PickupType type = car->usePickup();
             if(type == Entity::MISSILE)
             {
-                Entity* e = new Entity(10000); //Missile will live for 10000 ms.
-                
-                printf("Missile Fired");
-                NxActor* actingCar = car->getActor();
-                e->setActor(physicsEngine->createMissile(actingCar));
+                Entity* e = new Entity(10000); //Missile will live for 10000 ms.                
+                e->setActor(physicsEngine->createMissile(car->getActor()));
                 e->setModel(renderingEngine->getModelManger().getModel("Missile.obj"));
                 entities.DynamicObjs.push_back(e);
             }
@@ -688,7 +659,6 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             else if(type == Entity::BARRIER)
             {
                 Entity* e = new Entity(10000); //Barrier will live for 10000 ms.                               
-                printf("Barrier Fired");
                 e->setActor(physicsEngine->createBarrier(car->getActor()));
                 e->setModel(renderingEngine->getModelManger().getModel("Barrier.obj"));
                 entities.DynamicObjs.push_back(e);

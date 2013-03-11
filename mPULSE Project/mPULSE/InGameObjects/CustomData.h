@@ -4,10 +4,21 @@
 
 class CustomData
 {
-    public:
-        Waypoint* wp;
-        enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC };
-        ObjTypes type;
-        int pickupType;
-        int laps;
+public:
+    typedef enum { 
+        CAR, 
+        TRACK,
+        OBSTACLE,
+        STATIC,
+        WAYPOINT,
+        MESH,
+        NONE
+    } ObjTypes;
+
+    CustomData(ObjTypes tmpType=NONE, int tmpPickup=-1, int lapCount=-1, Waypoint* waypoint=NULL);    
+    CustomData(Waypoint* waypoint);  
+    ObjTypes type;
+    int pickupType;
+    int laps;
+    Waypoint* wp;
 };

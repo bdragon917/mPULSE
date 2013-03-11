@@ -9,13 +9,11 @@
 #include <InGameObjects/TriggerCallback.h>
 #include <AI/Waypoint.h>
 #include <InGameObjects/CustomData.h>
-
 #include "stream.h"
 #include <cstdlib>
-
 #include <NxCooking.h>
-
 #include <vector>
+#include <InGameObjects/ContactReport.h>
 
 //#include <iostream>
 //#include "NxWheelDesc.h"
@@ -30,12 +28,13 @@ private:
 
 	NxActor* groundPlane;
 	NxActor* box;
-
+    ContactReport contactReport;
     NxMaterial* wsm;
 
 	TriggerCallback myTriggerCallback;
 
-
+    NxActorGroup carGroup;
+    NxActorGroup pickupsGroup;
 
     NxWheelShape* AddWheelToActor(NxActor* actor, float x,float y, float z);
 

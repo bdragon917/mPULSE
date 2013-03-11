@@ -1,6 +1,17 @@
-#include "CustomData.h"
+#include "InGameObjects\CustomData.h"
 
-CustomData::CustomData()
+CustomData::CustomData(ObjTypes tmpType, int tmpPickup, int lapCount, Waypoint* waypoint)
 {
-    laps = 0;
+    type = tmpType;
+    pickupType = tmpPickup;
+    laps = lapCount;
+    wp = waypoint;
+}
+
+CustomData::CustomData(Waypoint* waypoint)
+{
+    type = NONE;
+    pickupType = -1;
+    laps = -1;
+    wp = waypoint;
 }

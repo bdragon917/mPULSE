@@ -1376,57 +1376,59 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
     //                NxMat34* aPose = &(entities->cars[0]->getActor()->getGlobalPose());
                     //drawModelPos(modelManager.getModel(1), aPose );
 
-                    //Shadow
+                    /*//Shadow
                      if (aShader != NULL)
                      {
                         aShader->off();
                      }
                     glPushMatrix();
 
-		            //drawModelShadow(modelManager.getModel(1), aPose );
+		            drawModelShadow(modelManager.getModel(1), aPose );
 
 		            glPopMatrix();
                     if (aShader != NULL)
                      {
                         aShader->on();
                      }
-
+                     */
 
                      //Map
+
                      if (aShader != NULL)
                      {
                         aShader->off();
                      }
                     glPushMatrix();
-                 	    glDisable(GL_TEXTURE_2D);
-	                    //const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
-                        const static float mapMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
-                        const NxVec3 v(1,0,0);  //Rotate the map
-                        const NxReal ang = 90;
 
-                        NxQuat q;
-                        q.fromAngleAxis(ang,v);
-                        NxMat33 o;
-                        o.fromQuat(q);
-                        //const static float rotMat[]={ o.getRow(0).x,o.getRow(0).y,o.getRow(0).z,0,
-                        //                                o.getRow(1).x,o.getRow(1).y,o.getRow(1).z,0,
-                        //                                o.getRow(2).x,o.getRow(2).y,o.getRow(2).z,0,
-                         //                               o.getRow(3).x,o.getRow(3).y,o.getRow(3).z,1 };
+                 	glDisable(GL_TEXTURE_2D);
+	                //const static float shadowMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
+                    const static float mapMat[]={ 1,0,0,0, 0,0,0,0, 0,0,1,0, 0,0,0,1 };
+                    const NxVec3 v(1,0,0);  //Rotate the map
+                    const NxReal ang = 90;
 
-                                        const static float rotMat[]={ 1,0,0,0,
-                                                        0,std::cos(ang),-std::sin(ang),0,
-                                                        0,std::sin(ang),std::cos(ang),0,
-                                                        0,0,0,1 };
+                    NxQuat q;
+                    q.fromAngleAxis(ang,v);
+                    NxMat33 o;
+                    o.fromQuat(q);
+                    //const static float rotMat[]={ o.getRow(0).x,o.getRow(0).y,o.getRow(0).z,0,
+                    //                                o.getRow(1).x,o.getRow(1).y,o.getRow(1).z,0,
+                    //                                o.getRow(2).x,o.getRow(2).y,o.getRow(2).z,0,
+                        //                               o.getRow(3).x,o.getRow(3).y,o.getRow(3).z,1 };
 
-	                    glMultMatrixf(mapMat);
-                        //glMultMatrixf(rotMat);
+                                    const static float rotMat[]={ 1,0,0,0,
+                                                    0,std::cos(ang),-std::sin(ang),0,
+                                                    0,std::sin(ang),std::cos(ang),0,
+                                                    0,0,0,1 };
+
+	                glMultMatrixf(mapMat);
+                    //glMultMatrixf(rotMat);
 	                
-                           glColor3f(1.0f,1.0f,1.0f);
-                           //drawCars(entities);
-                           //drawAICars(entities);
-                           //drawTrack(entities);
+                        glColor3f(1.0f,1.0f,1.0f);
+                        //drawCars(entities);
+                        //drawAICars(entities);
+                        //drawTrack(entities);
 
-                        glEnable(GL_TEXTURE_2D);
+                    glEnable(GL_TEXTURE_2D);
 		            glPopMatrix();
 
 

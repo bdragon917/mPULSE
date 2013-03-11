@@ -15,66 +15,48 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
 	if((status & NX_TRIGGER_ON_ENTER) && (triggerShape.getType() == NX_SHAPE_BOX)) 
 	{
 		NxActor& triggerActor = triggerShape.getActor();
+        NxActor& actingActor = actingShape.getActor();
 
-		if(triggerActor.userData != NULL) {
-			//Waypoint* wp = (Waypoint*)triggerActor.userData;
-            CustomData* triggerCd = (CustomData*)triggerActor.userData;
-			printf("Waypoint ID: %i\n", triggerCd->wp->id);
-            NxActor& actingActor = actingShape.getActor();
+		if(triggerActor.userData != NULL && actingActor.userData != NULL)
+        {
+            CustomData* triggerCd = (CustomData*)triggerActor.userData;            
+            CustomData* actingCd = (CustomData*)actingActor.userData;
 
-            if (actingActor.userData != NULL)
+            if (actingCd->type == CustomData::CAR)
             {
-                CustomData* actingCd = (CustomData*)actingActor.userData;
-                if (actingCd->type == actingCd->CAR)
+                //Waypoints
+                if(triggerCd->type == CustomData::WAYPOINT)
                 {
-                    //Waypoints
-                    if(actingCd->wp->nextId == triggerCd->wp->id)
+                    if(actingCd->wp->nextId == triggerCd->wp->id) //check if the car hit the next valid waypoint
 					{
-						if(actingCd->wp->id > triggerCd->wp->id)
+						if(actingCd->wp->id > triggerCd->wp->id)  //check if the car passed the finish line 
                         {
                             actingCd->laps++;
-                            if(actingCd->laps > 1)
-                            {
-                                //Somehow tell the rendering engine that the race ic complete for this car.
+                            if(actingCd->laps > 1)                                
                                 printf("You Win!");
-                            }
                         }
                         actingCd->wp = actingCd->wp->nextWaypoint;
 					}
-
-
-
-                   
-                    if ((actingCd->type == actingCd->OBSTACLE) && (actingCd->pickupType == 0))    //Missile on Car
-                    {
-                        triggerShape.getActor().addForce(NxVec3(0,50000,0));  //should go up, and slow down
-                        soundEngine->crashed(0);
-                        actingShape.getActor().getScene().releaseActor(triggerActor);
-                    }
-
-                    if ((actingCd->type == actingCd->OBSTACLE) && (actingCd->pickupType == 1))    //Shield vs car
-                    {
-                        
-                    }
-
-                    if ((actingCd->type == actingCd->CAR) && (triggerCd->pickupType == 2))    //Barrier vs car
-                    {
-                        actingShape.getActor().setLinearVelocity(actingShape.getActor().getLinearVelocity() * 0.3f);
-                        soundEngine->crashed(0);
-                    }
-                    
-
-                }
-
-
-
+                }              
+                //if ((actingCd->type == actingCd->OBSTACLE) && (actingCd->pickupType == 0))    //Missile on Car
+                //{
+                //    triggerShape.getActor().addForce(NxVec3(0,50000,0));  //should go up, and slow down
+                //    soundEngine->crashed(0);
+                //    actingShape.getActor().getScene().releaseActor(triggerActor);
+                //}
+                //if ((actingCd->type == actingCd->OBSTACLE) && (actingCd->pickupType == 1))    //Shield vs car
+                //{
+                //    
+                //}
+                //if ((actingCd->type == actingCd->CAR) && (triggerCd->pickupType == 2))    //Barrier vs car
+                //{
+                //    actingShape.getActor().setLinearVelocity(actingShape.getActor().getLinearVelocity() * 0.3f);
+                //    soundEngine->crashed(0);
+                //}
             }
-            else
-            {printf("TriggerCallback: actingActor.userData = NULL!\n");}
-
-
-		}
-		
+        }
+        else
+            printf("TriggerCallback: actingActor.userData = NULL!\n");		
 	}
 	else if((status & NX_TRIGGER_ON_ENTER) && (triggerShape.getType() == NX_SHAPE_SPHERE)) 
 	{
