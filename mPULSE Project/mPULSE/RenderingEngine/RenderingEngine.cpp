@@ -467,9 +467,23 @@ void RenderingEngine::drawHUD(NxActor* carActor, bool hasWon)
     int hundreds = (curSpd/100);
     int tens = (curSpd-(hundreds*100)) /10;
     int ones = (curSpd-((hundreds*100)+(tens*10)));
+    int tenth = ((carActor->getLinearVelocity().magnitude()*10)-((hundreds*1000)+(tens*100)+(ones*10)));
 
     drawText(850,-600, "Spd: " + FloatToString(hundreds) + " " + FloatToString(tens) + " " + FloatToString(ones));
 
+
+    //one
+    //0.1f assumes there is ten characters
+    float displaceTenths = 0.1f * tenth;
+
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
+    glBegin(GL_QUADS);
+        glColor3f(1.0f, 1.0f, 0.0);
+        glTexCoord2f(displaceTenths+0.1f, 0.0f);glVertex2f(0.95f, -0.90f);
+        glTexCoord2f(displaceTenths+0.1f, 1.0f);glVertex2f(0.95f, -0.75f);
+        glTexCoord2f(displaceTenths, 1.0f);glVertex2f(0.9f, -0.75f);
+        glTexCoord2f(displaceTenths, 0.0f);glVertex2f(0.9f, -0.90f);
+    glEnd();
     //one
     //0.1f assumes there is ten characters
     float displaceOnes = 0.1f * ones;
