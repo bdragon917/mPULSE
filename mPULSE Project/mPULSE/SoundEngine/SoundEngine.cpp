@@ -3,6 +3,7 @@
 SoundEngine::SoundEngine(void)
 {
 	initializeSound();
+    printf("Sound Initialized\n");
 }
 
 SoundEngine* SoundEngine::getInstance()
