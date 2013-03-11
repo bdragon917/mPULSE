@@ -57,6 +57,10 @@ int ModelManager::LoadModel(std::string fileName)
         numOfModels++;
         return currentModelNum++;
     }
+    else
+    {
+        printf("ModelManager: Cannot open file: %s\n", fileName);
+    }
     return -1;
 }
 

@@ -3,6 +3,9 @@
 RenderingEngine::RenderingEngine()
 {
     modelManager.loadModelsFromList(modelManager.MODEL_LIST_FILENAME);
+    string modelManageErr = modelManager.getErrorMessage();
+    cout << "modelManger: " << modelManageErr << "\n";
+
     showConsole = true;
     zRot = 0.0f;
     SCREEN_WIDTH = 1024;
@@ -214,6 +217,10 @@ string RenderingEngine::FloatToString(float input)
 
 void RenderingEngine::drawModel(ObjModel* model,int x,int y, int z, int scale)
 {
+    //Sanity Check
+    if (model == NULL)
+    {MessageBox(NULL, "Accessing invalid model....Did we loaded the models? Did we downloaded models....", NULL, NULL);}
+
     std::vector<std::vector<ObjModel::vertElements>>* faces = model->getFaces();
     std::vector<ObjModel::vertex3d>* verticies = model->getVerticies();
     std::vector<ObjModel::vertex3d>* norms = model->getVertexNormals();
@@ -1818,6 +1825,8 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
         //glRotatef(shipAngle,0.0f,0.0f,1.0f);
         //glScalef(0.0725f,0.0725f,0.0725f);
         //glTranslatef(-particles[x]->getLocation().x,-particles[x]->getLocation().y,-particles[x]->getLocation().z);
+        modelManager;
+
             drawModel(modelManager.getModel(0),0,0,0,1.0f);
         glPopMatrix();
     }

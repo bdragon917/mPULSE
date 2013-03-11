@@ -27,7 +27,11 @@ void MainMenuState::update(float dt)
 
 void MainMenuState::render()
 {   
-	if (renderingEngine->drawMainMenuScreen(curSelected, 0) == 1 || startGame)
+    int retMenuVal = renderingEngine->drawMainMenuScreen(curSelected, 0);
+
+
+
+	if ((retMenuVal == 1) || startGame)
     {
         switch (curSelected)
         {

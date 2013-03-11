@@ -22,7 +22,7 @@ void Particle::setVelocity(NxVec3 newVel)
 NxVec3 Particle::getLocation()
 {
     return location;
-    timeTilDeath = timeTilDeath - 1;
+    //timeTilDeath = timeTilDeath - 1;
 }
 
 void Particle::Move()
