@@ -119,8 +119,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[29];
-    glGenTextures(29, textureid_P1);
+    textureid_P1 = new GLuint[30];
+    glGenTextures(30, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -156,6 +156,8 @@ void RenderingEngine::initializeTexture()
 
     bindBMPtoTexture("./Images/motherShipHullUV.bmp", textureid_P1[27]);
     bindBMPtoTexture("./Images/motherShipEngineUV.bmp", textureid_P1[28]);
+
+    bindBMPtoTexture("./Images/SpdNumber.bmp", textureid_P1[29]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -424,7 +426,7 @@ void RenderingEngine::drawAllText()
      glEnable(GL_LIGHTING);
 }
 
-void RenderingEngine::drawHUD(bool hasWon)
+void RenderingEngine::drawHUD(NxActor* carActor, bool hasWon)
 {
     aHUDShader->on();
 
@@ -432,7 +434,8 @@ void RenderingEngine::drawHUD(bool hasWon)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(70, 1, 1, 100);
+    //gluPerspective(70, 1, 1, 100);
+    setPerspective( 70, 1, 1, 100, 1.0f, 1.0f );
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -447,7 +450,7 @@ void RenderingEngine::drawHUD(bool hasWon)
     glDisable(GL_DEPTH_TEST);
 
 
-    
+    /*
     glBindTexture(GL_TEXTURE_2D, textureid_P1[19]);
     glBegin(GL_QUADS);
         glColor3f(1.0f, 1.0f, 0.0);
@@ -456,6 +459,51 @@ void RenderingEngine::drawHUD(bool hasWon)
         glTexCoord2f(0.0f, 1.0f);glVertex2f(-1.0f, -0.5f);
         glTexCoord2f(0.0f, 0.0f);glVertex2f(-1.0f, -1.0f);
     glEnd();
+    */
+
+    //Display speed
+
+    int curSpd = (carActor->getLinearVelocity().magnitude());
+    int hundreds = (curSpd/100);
+    int tens = (curSpd-(hundreds*100)) /10;
+    int ones = (curSpd-((hundreds*100)+(tens*10)));
+
+    drawText(850,-600, "Spd: " + FloatToString(hundreds) + " " + FloatToString(tens) + " " + FloatToString(ones));
+
+    //one
+    //0.1f assumes there is ten characters
+    float displaceOnes = 0.1f * ones;
+
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
+    glBegin(GL_QUADS);
+        glColor3f(1.0f, 1.0f, 0.0);
+        glTexCoord2f(displaceOnes+0.1f, 0.0f);glVertex2f(0.9f, -0.90f);
+        glTexCoord2f(displaceOnes+0.1f, 1.0f);glVertex2f(0.9f, -0.75f);
+        glTexCoord2f(displaceOnes, 1.0f);glVertex2f(0.85f, -0.75f);
+        glTexCoord2f(displaceOnes, 0.0f);glVertex2f(0.85f, -0.90f);
+    glEnd();
+    //ten
+
+    float displaceTens = 0.1f * tens;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
+    glBegin(GL_QUADS);
+        glColor3f(1.0f, 1.0f, 0.0);
+        glTexCoord2f(displaceTens+0.1f, 0.0f);glVertex2f(0.85f, -0.90f);
+        glTexCoord2f(displaceTens+0.1f, 1.0f);glVertex2f(0.85f, -0.75f);
+        glTexCoord2f(displaceTens, 1.0f);glVertex2f(0.8f, -0.75f);
+        glTexCoord2f(displaceTens, 0.0f);glVertex2f(0.8f, -0.90f);
+    glEnd();
+    //hundred
+    float displaceHundred = 0.1f * hundreds;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
+    glBegin(GL_QUADS);
+        glColor3f(1.0f, 1.0f, 0.0);
+        glTexCoord2f(displaceHundred+0.1f, 0.0f);glVertex2f(0.8f, -0.90f);
+        glTexCoord2f(displaceHundred+0.1f, 1.0f);glVertex2f(0.8f, -0.75f);
+        glTexCoord2f(displaceHundred, 1.0f);glVertex2f(0.75f, -0.75f);
+        glTexCoord2f(displaceHundred, 0.0f);glVertex2f(0.75f, -0.90);
+    glEnd();
+
 
     if(hasWon)
     {
@@ -830,7 +878,8 @@ void RenderingEngine::setupMatrices(float position_x,float position_y,float posi
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45,RENDER_WIDTH/RENDER_HEIGHT,10,40000);
+	//gluPerspective(45,RENDER_WIDTH/RENDER_HEIGHT,10,40000);
+    setPerspective( 45,RENDER_WIDTH/RENDER_HEIGHT,10,40000, 1.0f, 1.0f );   //equivalent to gluPerspective
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(position_x,position_y,position_z,lookAt_x,lookAt_y,lookAt_z,0,1,0);
@@ -916,14 +965,16 @@ void RenderingEngine::setUpPerpView()
 		// In this case the w/h ratio is > 1
 		    float ratio = (float)w/(float)h;
 			//gluPerspective(60.0, ratio, 0.01, 800.0);
-			gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+			//gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+            setPerspective( 60.0, ratio, 1.0f, 10000.0f, 1.0f, 1.0f );
 			//glOrtho (-ratio, ratio, -1, 1, -10, 10);
 	}
 	else {
 		// In this case the h/w ratio is > 1
 		    float ratio = (float)h/(float)w;
 			//gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
-			gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+			//gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+            setPerspective( 60.0, ratio, 1.0f, 10000.0f, 1.0f, 1.0f );
 			//glOrtho (-ratio, ratio, -1, 1, -10, 10);
 	}
 
@@ -967,6 +1018,19 @@ void RenderingEngine::setUpOrthoView()
 	glMatrixMode (GL_MODELVIEW);
 }
 
+void RenderingEngine::setPerspective( GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar, float xStretch, float yStretch )
+{
+    GLdouble xmin, xmax, ymin, ymax;
+
+    ymax = zNear * tan( fovy * M_PI / 360.0 ) * xStretch;
+    ymin = -ymax;
+    xmin = ymin * aspect;
+    xmax = ymax * aspect;// * xStretch;
+
+
+    glFrustum( xmin, xmax, ymin, ymax, zNear, zFar );
+}
+
 void RenderingEngine::drawLoading()
 {
         glPushMatrix ();
@@ -986,7 +1050,8 @@ void RenderingEngine::drawLoading()
                 glDisable(GL_LIGHTING);
                 glMatrixMode(GL_PROJECTION);
                 glLoadIdentity();
-                gluPerspective(70, 1, 1, 100);
+                //gluPerspective(70, 1, 1, 100);
+                setPerspective( 70, 1, 1, 100, 1.0f, 1.0f );
                 glMatrixMode(GL_MODELVIEW);
                 glLoadIdentity();
 
@@ -1066,17 +1131,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
 	
 
-        //Infinite Plane!
-       // int groundxoffset = (int(entities->cars.at(curPlayerIndex)->getActor()->getGlobalPose().t.x));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x) - (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x));
-        //int groundyoffset = (int(entities->cars.at(curPlayerIndex)->getActor()->getGlobalPose().t.z));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.z) - );
 
-       // float gxo = groundxoffset;
-       // float gyo = groundyoffset;
-
-       // if ((groundxoffset % 2) == 0)
-       // {gxo = (groundxoffset) - 1.0f;}
-       // if ((groundyoffset % 2) == 0)
-       // {gyo = (groundyoffset) - 1.0f;}
 
 
 
@@ -1119,6 +1174,9 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
             NxVec3 pos = targetEntities.at(carIndex)->aCam->getCamLoc();
             NxVec3 at = targetEntities.at(carIndex)->aCam->getLookAt();
+            float camXStretch = targetEntities.at(carIndex)->aCam->getXStretch();
+            float camYStretch = targetEntities.at(carIndex)->aCam->getYStretch();
+
 	        //Cameras
 
             if (debugCamera)
@@ -1156,14 +1214,16 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 		                // In this case the w/h ratio is > 1
 		                    float ratio = (float)w/(float)h;
 			                //gluPerspective(60.0, ratio, 0.01, 800.0);
-			                gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+			                //gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+                            setPerspective( 60.0, ratio, 1.0f, 10000.0f, camXStretch, 1.0f );
 			                //glOrtho (-ratio, ratio, -1, 1, -10, 10);
 	                }
 	                else {
 		                // In this case the h/w ratio is > 1
 		                    float ratio = (float)h/(float)w;
 			                //gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
-			                gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+			                //gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+                            setPerspective( 60.0, ratio, 1.0f/ratio, 10000.0f, camXStretch, 1.0f );
 			                //glOrtho (-ratio, ratio, -1, 1, -10, 10);
 	                }
 
@@ -1189,14 +1249,16 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 		                // In this case the w/h ratio is > 1
 		                    float ratio = (float)w/(float)h;
 			                //gluPerspective(60.0, ratio, 0.01, 800.0);
-			                gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+			                //gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+                            setPerspective( 60.0, ratio, 1.0f, 10000.0f, camXStretch, 1.0f );
 			                //glOrtho (-ratio, ratio, -1, 1, -10, 10);
 	                }
 	                else {
 		                // In this case the h/w ratio is > 1
 		                    float ratio = (float)h/(float)w;
 			                //gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
-			                gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+			                //gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+                            setPerspective( 60.0, ratio, 1.0f/ratio, 10000.0f, camXStretch, 1.0f );
 			                //glOrtho (-ratio, ratio, -1, 1, -10, 10);
 	                }
 
@@ -1206,7 +1268,27 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
             }
             else
             {
-	            setUpPerpView();    //setup view for one player
+	            //setUpPerpView();    //setup view for one player
+                	// Switch to the projection matrix
+	                glMatrixMode (GL_PROJECTION);
+	                glLoadIdentity ();
+
+	                int w = SCREEN_WIDTH;
+	                int h = SCREEN_HEIGHT;
+
+	                glViewport (0, 0, w, h);
+
+	                if (w > h) {
+		                    float ratio = (float)w/(float)h;
+                            setPerspective( 60.0, ratio, 1.0f, 10000.0f, camXStretch, 1.0f );
+	                }
+	                else {
+		                    float ratio = (float)h/(float)w;
+                            setPerspective( 60.0, ratio, 1.0f, 10000.0f, camXStretch, 1.0f );
+	                }
+
+	                //Switch back to modelview matrix
+	                glMatrixMode (GL_MODELVIEW);
             }
 
 
@@ -1467,6 +1549,28 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                 drawStaticObjs(entities);
 
 
+
+                //Draw Asteroids and debris stuff
+                        //Infinite Plane!
+                int groundxoffset = (int(entities->cars.at(carIndex)->getActor()->getGlobalPose().t.x));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x) - (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x));
+                int groundyoffset = (int(entities->cars.at(carIndex)->getActor()->getGlobalPose().t.z));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.z) - );
+
+                float gxo = groundxoffset;
+                float gyo = groundyoffset;
+
+               // if ((groundxoffset % 2) == 0)
+               // {gxo = (groundxoffset) - 1.0f;}
+               // if ((groundyoffset % 2) == 0)
+               // {gyo = (groundyoffset) - 1.0f;}
+                if ((groundxoffset % 200) == 0)
+                {gxo = (groundxoffset) - 100.0f;}
+                if ((groundyoffset % 200) == 0)
+                {gyo = (groundyoffset) - 100.0f;}
+
+
+                //drawModel(modelManager.getModel(0), 0+gxo,0,0+gyo,1.0f);
+
+
                      //if (aShader != NULL)
                      //{
                      //   aShader->off();           //this give an interesting effect
@@ -1554,8 +1658,10 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
         if (cd->laps > 1)
             hasWon = true;
 
-         drawHUD(hasWon);
+        
+         drawHUD(entities->cars[carIndex]->getActor(), hasWon);
 
+         
          glDisable(GL_TEXTURE_2D);
         if (showConsole)
             displayConsole();
@@ -1564,6 +1670,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
         drawText(850,-700, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()));
         drawText(SCREEN_WIDTH-150,-50, FloatToString(cd->laps) + " / 2 Laps");
         drawText(150,-700, FloatToString(cd->wp->id));
+        
 
         //Ya...this should bwe put in a drawHUD element function later....
 

@@ -26,6 +26,9 @@ Camera::Camera(void)
         userCamControl = NxVec3(0,0,0);
         targetActor = NULL;
 
+        xStretch = 1.0f;
+        yStretch = 1.0f;
+
         lastCamLoc = NxVec3(-5.0f,3.5f,0);
 
 }
@@ -57,6 +60,15 @@ void Camera::AttachtoCar(NxActor* aActor)
 NxVec3 Camera::getLookAt()
 {
         return curCamLookAt;
+}
+float Camera::getXStretch()
+{
+        return xStretch;
+}
+
+float Camera::getYStretch()
+{
+        return yStretch;
 }
 
 NxVec3 Camera::getCamLoc()
@@ -92,6 +104,9 @@ void Camera::resetCamera()
 void Camera::updateCamera(float dt)
 {
     int mode = 4;       //Testing different camera styles here, change to different values for different test code
+
+    xStretch = 1.0f;
+    yStretch = 1.0f;
 
     switch (mode)
     {
@@ -368,20 +383,41 @@ void Camera::updateCamera(float dt)
                 float disAbove = 5.0f;
                 NxVec3 tarCamLoc = NxVec3(-targetDistance,disAbove,0.0f);
 
+                //NxVec3 tarCamSpd30 = NxVec3(-targetDistance,disAbove,0.0f);
+                //NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.75f,disAbove,0.0f);
+                //NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.60f,disAbove * 0.75f,0.0f);
                 NxVec3 tarCamSpd30 = NxVec3(-targetDistance,disAbove,0.0f);
-                NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.75f,disAbove,0.0f);
-                NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.60f,disAbove * 0.75f,0.0f);
-                NxVec3 tarCamSpdH = NxVec3(-targetDistance * 0.50f,disAbove * 0.5f,0.0f);       //add random jitter
+                NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 1.05f,disAbove,0.0f);
+                NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 1.15f,disAbove * 0.75f,0.0f);
+                NxVec3 tarCamSpdH = NxVec3(-targetDistance * 1.30f,disAbove * 0.5f,0.0f);       //add random jitter
 
                 float curActorSpd = targetActor->getLinearVelocity().magnitude();
+
+                //Change camera location based on speed
                 if (curActorSpd < 30.0f)
+                {
                     tarCamLoc = (tarCamLoc * (1 - (curActorSpd/30.0f))) + (tarCamSpd30 * (curActorSpd/30.0f));
+                }
                 else if (curActorSpd < 50.0f)
+                {
                     tarCamLoc = (tarCamSpd30 * (1 - ((curActorSpd-30.0f)/20.0f))) + (tarCamSpd50 * ((curActorSpd-30.0f)/20.0f));
+                }
                 else if (curActorSpd < 70.0f)
+                {
                     tarCamLoc = (tarCamSpd50 * (1 - ((curActorSpd-50.0f)/20.0f))) + (tarCamSpd70 * ((curActorSpd-50.0f)/20.0f));
+                }
                 else
+                {
                     tarCamLoc = tarCamSpdH;
+                }
+
+                //Change View based on speed
+               if (curActorSpd > 33.0f)
+                {
+                    //xStretch = 50.0f / curActorSpd;
+                    xStretch = (33.0f / curActorSpd);
+                }
+                
 
 
 

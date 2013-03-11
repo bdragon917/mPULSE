@@ -20,6 +20,9 @@ public:
         void updateCamera(float dt);
         void resetCamera();
 
+        float getXStretch();
+        float getYStretch();
+
 private:
         float EquilbriumSpeed;  //Should be between 0 and 1
         float targetDistance;
@@ -33,6 +36,8 @@ private:
         NxVec3 userCamControl;
 
         //For field of view (TO BE IMPLIMENTED)
+        float xStretch;
+        float yStretch;
         double nearVal;
         double farVal;
 

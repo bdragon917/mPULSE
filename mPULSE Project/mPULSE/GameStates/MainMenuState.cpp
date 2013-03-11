@@ -45,6 +45,7 @@ void MainMenuState::render()
                 printf("Only one player detected.\n");//TODO Tell the player on screen they need more controllers.
             else
             {
+                gameVariables->addPlayerTwo();
                 renderingEngine->startFadeOut();
                 changeState(PLAY); 
             }

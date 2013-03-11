@@ -52,6 +52,8 @@ public:
     void createLight_MainMenu();
     void setUpPerpView();
     void setUpOrthoView();
+    void RenderingEngine::setPerspective( GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar, float xStretch, float yStretch );
+
     //Draw Functions
     int drawIntro();
     void moveStuff(float &testF);
@@ -134,7 +136,7 @@ private:
     void drawStaticObjs(Entities* entities);
     void drawTrack(Track* track);
 
-    void drawHUD(bool hasWon);
+    void drawHUD(NxActor* carActor, bool hasWon);
     void drawAllText();
 
     void RenderDebugPhysic(const NxDebugRenderable* ndr);
@@ -178,6 +180,8 @@ private:
     #define RENDER_WIDTH 640.0
     #define RENDER_HEIGHT 480.0
     #define SHADOW_MAP_RATIO 2
+
+    #define M_PI 3.14159265358979323846
 
 
     //Camera position
