@@ -713,10 +713,11 @@ void PlayState::handleCollisionEvents()
         collision = collisions->at(i);
         if (collision->action == CollisionEvent::DESTROY_FIRST)
         {
+            collision->entity2->collide(collision->entity1);
             collision->entity1->kill();
         }
         else if (collision->action == CollisionEvent::DESTROY_SECOND)
-        {
+        {            
             collision->entity2->kill();
         }
         else if (collision->action == CollisionEvent::DESTROY_BOTH)
