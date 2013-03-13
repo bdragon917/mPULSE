@@ -14,9 +14,9 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     
     minSteering = 0.1f;
     maxSteering = 0.85f;
-
     maxTorque = 3000;
     minTorque = -3000;
+    shield = 0;
     pickup = NONE;
 
     timeToLive = tmpTimeToLive;
@@ -30,6 +30,13 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     }
 }
 
+bool Entity::hasShield()
+{
+    if (shield > 0)
+        return true;
+    else
+        return false;
+}
 void Entity::setTimeToLive(int tmpTime)
 {
     timeToLive = tmpTime;
@@ -177,6 +184,38 @@ void Entity::chargeBattery()
 	}
 }
 
+void Entity::collide(Entity* e)
+{
+    CustomData* cd = (CustomData*) e->getActor()->userData;
+    if (cd->type == CustomData::OBSTACLE)
+    {
+        if(!hasShield())
+        {
+            if (cd->pickupType == MISSILE)
+            {
+                //Knock the car into the air
+                actor->addForce(NxVec3(0,1000000,0));
+
+                //Slow the player down by 30%
+                NxVec3 unitDir = actor->getLinearVelocity();
+                float vel = actor->getLinearVelocity().magnitude();
+                unitDir.normalize();
+                actor->setLinearVelocity((vel*0.7f)*unitDir);
+            }
+            else if(cd->pickupType == BARRIER)
+            {
+                //Slow the player down by 70%
+                NxVec3 unitDir = actor->getLinearVelocity();
+                float vel = actor->getLinearVelocity().magnitude();
+                unitDir.normalize();
+                actor->setLinearVelocity((vel*0.3f)*unitDir);
+            }
+        }
+        else 
+            shield = 0;
+    }
+}
+
 void Entity::dischargeBattery()
 {
 	if(batteryCharged)
@@ -215,11 +254,7 @@ void Entity::setUsingDisplayList(bool status)
 {
     usingDisplayList = status;
 }
-void Entity::setDisplayListIndex(int index)
-{
-    setUsingDisplayList(true);
-    displayListIndex = index;
-}
+
 int Entity::getDisplayListIndex()
 {
     return displayListIndex;
@@ -228,7 +263,11 @@ bool Entity::getUsingDisplayList()
 {
     return usingDisplayList;
 }
-
+void Entity::setDisplayListIndex(int index)
+{
+    setUsingDisplayList(true);
+    displayListIndex = index;
+}
 void Entity::setActor(NxActor* a)
 {
     if(a != NULL)

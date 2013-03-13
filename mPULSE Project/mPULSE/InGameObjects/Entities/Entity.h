@@ -65,9 +65,11 @@ public:
     void setTimeToLive(int tmpTime);
     void setCustomData(CustomData* cd);
     void kill();
+    void collide(Entity* e);
     int getTimeToLive();
     void reset();
     bool isAlive();
+    bool hasShield();
     bool isBatteryCharged();
 
 
@@ -75,16 +77,20 @@ private:
 	bool batteryCharged;
     bool usingDisplayList;
     bool alive;
+
     int displayListIndex;
     int torque;
     int maxTorque;
     int minTorque;
+    int timeToLive;
+    int timeCreated;
+    int shield;
+    int health;
+
     float maxSteeringAngle;
     float minSteering;
     float maxSteering;
 	float charge;
-    int timeToLive;
-    int timeCreated;
 
     Clock clock;
     PickupType pickup;

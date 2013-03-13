@@ -632,12 +632,14 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             else if(type == Entity::SHIELD)
             {                
                 //FIXME: Broken right now because when the shield is deleted the car's actor is also deleted causing the game to crash.
+                //car->setShield(100);
+                //Add a new renderable component
 
-                //Entity* e = new Entity(10000); //Shield will live for 10000 ms.
-                //printf("Shield Fired");                                
-                //e->setActor(car->getActor());
-                //e->setModel(renderingEngine->getModelManger().getModel("Shield.obj"));
-                //entities.DynamicObjs.push_back(e);
+                /*Entity* e = new Entity(10000,
+                    car->getActor(),
+                    renderingEngine->getModelManger().getModel("Shield.obj")); //Shield will live for 10000 ms.                              
+                
+                entities.DynamicObjs.push_back(e);*/
             }
             else if(type == Entity::BARRIER)
             {
@@ -710,9 +712,13 @@ void PlayState::handleCollisionEvents()
     {
         collision = collisions->at(i);
         if (collision->action == CollisionEvent::DESTROY_FIRST)
+        {
             collision->entity1->kill();
+        }
         else if (collision->action == CollisionEvent::DESTROY_SECOND)
+        {
             collision->entity2->kill();
+        }
         else if (collision->action == CollisionEvent::DESTROY_BOTH)
         {
             collision->entity1->kill();
