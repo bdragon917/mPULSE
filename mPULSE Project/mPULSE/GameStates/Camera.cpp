@@ -29,6 +29,7 @@ Camera::Camera(void)
         xStretch = 1.0f;
         yStretch = 1.0f;
 
+
         lastCamLoc = NxVec3(-5.0f,3.5f,0);
 
 }
@@ -99,14 +100,15 @@ void Camera::resetCamera()
         curCamLookAt = actorPose * NxVec3(0,0,0);
         curOrientation = actorPose * NxVec3(0,0,0);
         userCamControl = NxVec3(0,0,0);
+        xStretch = 1.0f;
 }
 
 void Camera::updateCamera(float dt)
 {
-    int mode = 2;       //Testing different camera styles here, change to different values for different test code
+    int mode = 4;       //Testing different camera styles here, change to different values for different test code
 
-    xStretch = 1.0f;
-    yStretch = 1.0f;
+    //xStretch = 1.0f;
+    //yStretch = 1.0f;
 
     switch (mode)
     {
@@ -386,10 +388,12 @@ void Camera::updateCamera(float dt)
                 //NxVec3 tarCamSpd30 = NxVec3(-targetDistance,disAbove,0.0f);
                 //NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.75f,disAbove,0.0f);
                 //NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.60f,disAbove * 0.75f,0.0f);
-                NxVec3 tarCamSpd30 = NxVec3(-targetDistance,disAbove,0.0f);
-                NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 1.05f,disAbove,0.0f);
-                NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 1.15f,disAbove * 0.75f,0.0f);
-                NxVec3 tarCamSpdH = NxVec3(-targetDistance * 1.30f,disAbove * 0.5f,0.0f);       //add random jitter
+                NxVec3 tarCamSpd30 = NxVec3(-targetDistance * 0.80f,disAbove,0.0f);
+                NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.60f,disAbove,0.0f);
+                NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.20f,disAbove * 0.75f,0.0f);
+
+
+                NxVec3 tarCamSpdH = NxVec3(-targetDistance * 0.10f,disAbove * 0.5f,0.0f);       //add random jitter
 
                 float curActorSpd = targetActor->getLinearVelocity().magnitude();
 
@@ -411,13 +415,38 @@ void Camera::updateCamera(float dt)
                     tarCamLoc = tarCamSpdH;
                 }
 
+                float rate = 0.1f;  //rate of camera view change
+                float slowrate = 0.1f;  //rate of camera view change
+                //float slowrate = 0.3f;  //rate of camera view change
+
+                float tarStretch = 1.0f;
                 //Change View based on speed
                if (curActorSpd > 33.0f)
                 {
                     //xStretch = 50.0f / curActorSpd;
-                    xStretch = (33.0f / curActorSpd);
+                    //xStretch = (33.0f / curActorSpd) * (1/10.0f);
+                    tarStretch = (curActorSpd / 33.0f);
                 }
-                
+
+               //You get about 3.0 stretch at around 1000, so lets double the effect at this speed XD
+               if (tarStretch > 3.0f)
+               {tarStretch = tarStretch * (1.0f + ((tarStretch - 3.0f) * 3.0f));rate = 0.5f;}
+
+
+
+               //Smooth rate of change by linear amount
+               //xStretch = ((xStretch * 0.75f) + (tarStretch * 0.25f));
+               
+               printf("tarStretch: %f\n", tarStretch);
+
+                printf("xStretch1: %f\n", xStretch);
+                if (xStretch < (tarStretch-rate))
+                {xStretch = xStretch + rate;}
+                else if (xStretch > (tarStretch+slowrate))
+                {xStretch = xStretch - slowrate;}
+                else
+                {xStretch = tarStretch;}
+                printf("xStretch2: %f\n", xStretch);
 
 
 

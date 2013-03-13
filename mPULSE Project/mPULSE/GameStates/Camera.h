@@ -38,6 +38,9 @@ private:
         //For field of view (TO BE IMPLIMENTED)
         float xStretch;
         float yStretch;
+
+        float curStretch;       //smooths camera
+
         double nearVal;
         double farVal;
 
