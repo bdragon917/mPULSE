@@ -312,7 +312,7 @@ void PhysicsEngine::createBoxes(float x, float y, float z, int num, float radius
     {
         float rndx = ((rand() % 100) / 100) * radius;
         float rndz = ((rand() % 100) / 100) * radius;
-        Entity* aEntity = new Entity(createBox(x + rndx, y, z + rndz));
+        Entity* aEntity = new Entity(-1,createBox(x + rndx, y, z + rndz));
         //aEntity->rc.push_back(&(RenderableComponent(0,6)));
         RenderableComponent* rc = new RenderableComponent(0,6);
         aEntity->rc.push_back(rc);

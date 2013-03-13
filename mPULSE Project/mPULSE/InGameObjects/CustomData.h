@@ -1,6 +1,8 @@
 #pragma once
-#include "../AI/Waypoint.h"
+#include "AI\Waypoint.h"
+#include "InGameObjects\Entities\Entity.h"
 
+class Entity;
 
 class CustomData
 {
@@ -21,4 +23,5 @@ public:
     int pickupType;
     int laps;
     Waypoint* wp;
+    Entity* e;
 };

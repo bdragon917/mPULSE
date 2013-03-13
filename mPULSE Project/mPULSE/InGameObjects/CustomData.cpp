@@ -6,6 +6,7 @@ CustomData::CustomData(ObjTypes tmpType, int tmpPickup, int lapCount, Waypoint* 
     pickupType = tmpPickup;
     laps = lapCount;
     wp = waypoint;
+    e = NULL;
 }
 
 CustomData::CustomData(Waypoint* waypoint)
@@ -14,4 +15,5 @@ CustomData::CustomData(Waypoint* waypoint)
     pickupType = -1;
     laps = -1;
     wp = waypoint;
+    e = NULL;
 }

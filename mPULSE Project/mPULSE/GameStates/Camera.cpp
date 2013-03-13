@@ -103,7 +103,7 @@ void Camera::resetCamera()
 
 void Camera::updateCamera(float dt)
 {
-    int mode = 4;       //Testing different camera styles here, change to different values for different test code
+    int mode = 1;       //Testing different camera styles here, change to different values for different test code
 
     xStretch = 1.0f;
     yStretch = 1.0f;

@@ -1,33 +1,14 @@
 #include <InGameObjects/Entities/Entity.h>
 
-Entity::Entity()
-{
-	batteryCharged = false;
-	charge = 0.0;
-    usingDisplayList = false;
-    displayListIndex = -1;
-
-    torque = 0;
-    
-    minSteering = 0.07f;
-    maxSteering = 0.85f;
-
-    maxTorque = 3000;
-    minTorque = -3000;
-    pickup = NONE;
-
-    timeToLive = -1;
-    alive = true;
-    timeCreated = clock.getCurrentTime();
-}
-
-Entity::Entity(int tmpTimeToLive)
+Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
 {
     alive = true;
 	batteryCharged = false;
 	charge = 0.0f;
     usingDisplayList = false;
     displayListIndex = -1;
+    actor = a;
+    model = tmpModel;
 
     torque = 0;
     
@@ -40,14 +21,13 @@ Entity::Entity(int tmpTimeToLive)
 
     timeToLive = tmpTimeToLive;
     timeCreated = clock.getCurrentTime();
-}
 
-Entity::Entity(NxActor* a)
-{
-    alive = true;
-    timeToLive = -1;
-    timeCreated = clock.getCurrentTime();
-    actor = a;
+    if(actor != NULL)
+    {
+        CustomData* cd = (CustomData*) actor->userData;
+        if(cd != NULL)
+            cd->e = this;
+    }
 }
 
 void Entity::setTimeToLive(int tmpTime)

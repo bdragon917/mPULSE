@@ -24,7 +24,7 @@ PlayState::PlayState()
         playerCar->rc.push_back(pc_rc);
     }
     
-    int num_AI = 1;
+    int num_AI = 6;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -97,7 +97,7 @@ PlayState::PlayState()
 
 	soundEngine = SoundEngine::getInstance();
 	soundEngine->initializeSound();
-    soundEngine->stopMusic();
+    //soundEngine->stopMusic();
 	soundEngine->toggleMusic();
     soundEngine->engineNoise();
     soundEngine->engineVol(1, 0);
@@ -641,9 +641,10 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             Entity::PickupType type = car->usePickup();
             if(type == Entity::MISSILE)
             {
-                Entity* e = new Entity(10000); //Missile will live for 10000 ms.                
-                e->setActor(physicsEngine->createMissile(car->getActor()));
-                e->setModel(renderingEngine->getModelManger().getModel("Missile.obj"));
+                Entity* e = new Entity(10000,
+                    physicsEngine->createMissile(car->getActor()),
+                    renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 10000 ms.
+
                 entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::SHIELD)
@@ -658,9 +659,10 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
             else if(type == Entity::BARRIER)
             {
-                Entity* e = new Entity(10000); //Barrier will live for 10000 ms.                               
-                e->setActor(physicsEngine->createBarrier(car->getActor()));
-                e->setModel(renderingEngine->getModelManger().getModel("Barrier.obj"));
+                Entity* e = new Entity(10000,
+                    physicsEngine->createBarrier(car->getActor()),
+                    renderingEngine->getModelManger().getModel("Barrier.obj")); //Barrier will live for 10000 ms.                               
+
                 entities.DynamicObjs.push_back(e);
             }
         }

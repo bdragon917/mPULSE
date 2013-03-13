@@ -9,7 +9,10 @@
 #include <AI/AI.h>
 #include <InGameObjects/Pickups/Pickup.h>
 #include "Util\Clock.h"
+#include "InGameObjects\CustomData.h"
 
+
+class AI;
 class Entity
 {
 public:
@@ -21,10 +24,7 @@ public:
         NONE
     } PickupType;
 
-    Entity();
-    Entity(NxActor* a);
-    Entity(int tmpTimeToLive);
-
+    Entity(int tmpTimeToLive = -1, NxActor* a = NULL, ObjModel* tmpModel = NULL);
     NxVec3 carStartPos;
     //std::vector<EntityComponent*> components;
     Camera* aCam;
