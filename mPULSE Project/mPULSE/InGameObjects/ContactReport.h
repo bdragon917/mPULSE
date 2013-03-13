@@ -1,7 +1,14 @@
 #pragma once
 #include "nxusercontactreport.h"
-class ContactReport :
-    public NxUserContactReport
+#include "EventManager/SoundEvent.h"
+#include "EventManager/CollisionEvent.h"
+#include "EventManager/WaypointEvent.h"
+#include "EventManager/EventManager.h"
+#include "CustomData.h"
+#include "stdio.h"
+#include "NxActor.h"
+
+class ContactReport : public NxUserContactReport
 {
 public:
     ContactReport(void);

@@ -6,6 +6,10 @@
 #include "CustomData.h"
 #include "Entities\Entity.h"
 #include "SoundEngine\SoundEngine.h"
+#include "EventManager/SoundEvent.h"
+#include "EventManager/CollisionEvent.h"
+#include "EventManager/WaypointEvent.h"
+#include "EventManager/EventManager.h"
 
 class TriggerCallback : public NxUserTriggerReport 
 {

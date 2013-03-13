@@ -2,6 +2,7 @@
 
 PlayState::PlayState()
 {
+    eventManager = EventManager::getInstance();
     gameVariables = GameVariables::getInstance();
     keyAPressed = false;
     keyDPressed = false;
@@ -72,19 +73,13 @@ PlayState::PlayState()
     {
         entities.AIcars.at(aa)->aAI->setActor(entities.AIcars.at(aa)->getActor());   //Assign actors to the entities's AI   
         CustomData* customData = new CustomData(CustomData::CAR,-1,0,track->getFirst());
-
-        entities.AIcars.at(aa)->getActor()->userData = customData;
-       // entities.AIcars.at(aa)->aAI->getActor()->userData = customData;
+        entities.AIcars.at(aa)->setCustomData(customData);
     }
-
-
-
     //Attach customData to car actors
     for (unsigned a = 0; a < entities.cars.size(); ++a)
     {
         CustomData* customData = new CustomData(CustomData::CAR,-1,0,track->getFirst());
-
-        entities.cars.at(a)->getActor()->userData = customData;
+        entities.cars.at(a)->setCustomData(customData);
     }
 
     //*/
@@ -120,6 +115,10 @@ PlayState::PlayState()
 
 void PlayState::update(float dt)
 {    
+    //Handle Events
+    handleEvents();
+
+    //Handle all dead entities
     unsigned numOfObjs = entities.DynamicObjs.size();
     unsigned currObj = 0;
 
@@ -611,23 +610,6 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
         car->addTorque(rTriggMag - lTriggMag);        
         car->setSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
 
-        //TEST CODE FOR DELETING THE WHEELS OF AN ACTOR.
-        //if(state->rb)
-        //{
-        //    Entity* car2 = cars[1];
-
-        //    NxShape * const * shapes = car2->getActor()->getShapes();
-
-        //    for(unsigned i=0;i<car2->getActor()->getNbShapes();i++)
-        //    {
-        //        if(shapes[i]->isWheel())
-        //        {
-        //            NxShape* s = shapes[i];
-        //            car2->getActor()->releaseShape(*s);
-        //        }
-        //    }
-        //}
-
 		if(state->x)
 			car->chargeBattery();
 		if(state->y)
@@ -712,6 +694,71 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
     }
 }
 
+void PlayState::handleEvents()
+{
+    handleCollisionEvents();
+    handleSoundEvents();
+    handleWaypointEvents();
+}
+
+void PlayState::handleCollisionEvents()
+{
+    std::vector<CollisionEvent*>* collisions = eventManager->getCollisionEvents();
+    CollisionEvent* collision;
+
+    for(unsigned i=0;i<collisions->size();i++)
+    {
+        collision = collisions->at(i);
+        if (collision->action == CollisionEvent::DESTROY_FIRST)
+            collision->entity1->kill();
+        else if (collision->action == CollisionEvent::DESTROY_SECOND)
+            collision->entity2->kill();
+        else if (collision->action == CollisionEvent::DESTROY_BOTH)
+        {
+            collision->entity1->kill();
+            collision->entity2->kill();
+        }
+    }
+
+    collisions->clear();
+}
+
+void PlayState::handleSoundEvents()
+{
+    std::vector<SoundEvent*>* sounds = eventManager->getSoundEvents();    
+    SoundEvent* sound;
+    for(unsigned i=0;i<sounds->size();i++)
+    {
+        sound = sounds->at(i);
+        //********Handle sound events here***********
+        //soundEngine->playSound(sound->getSound);        
+    }    
+    sounds->clear();
+}
+
+void PlayState::handleTriggerEvents()
+{
+    std::vector<TriggerEvent*>* triggers = eventManager->getTriggerEvents();
+    TriggerEvent* trigger;
+    for(unsigned i=0;i<triggers->size();i++)
+    {
+        trigger = triggers->at(i);
+        //*********Handle trigger events here***********
+    }
+    triggers->clear();
+}
+
+void PlayState::handleWaypointEvents()
+{
+    std::vector<WaypointEvent*>* waypoints = eventManager->getWaypointEvents();
+    WaypointEvent* waypoint;
+    for(unsigned i=0;i<waypoints->size();i++)
+    {
+        waypoint = waypoints->at(i);
+        //********Handle waypoint events here***********
+    }
+    waypoints->clear();
+}
 
 void PlayState::logReplay(int player, XboxController* state, float dt)
 {

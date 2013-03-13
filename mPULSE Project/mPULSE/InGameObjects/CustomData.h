@@ -23,5 +23,5 @@ public:
     int pickupType;
     int laps;
     Waypoint* wp;
-    Entity* e;
+    Entity* entity;
 };

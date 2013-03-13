@@ -26,7 +26,7 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     {
         CustomData* cd = (CustomData*) actor->userData;
         if(cd != NULL)
-            cd->e = this;
+            cd->entity = this;
     }
 }
 
@@ -53,13 +53,16 @@ void Entity::kill()
 
 bool Entity::isAlive()
 {
-    if(timeToLive==-1)
-        alive = true;
+    if(alive)
+    {
+        if(timeToLive==-1)
+            alive = true;
     
-    if((int)clock.getCurrentTime() - timeCreated >= timeToLive)
-        alive = false;
-    else
-        alive = true;
+        if((int)clock.getCurrentTime() - timeCreated >= timeToLive)
+            alive = false;
+        else
+            alive = true;
+    }
 
     return alive;
 }
@@ -228,7 +231,19 @@ bool Entity::getUsingDisplayList()
 
 void Entity::setActor(NxActor* a)
 {
+    if(a != NULL)
+    {
+        CustomData* cd = (CustomData*) a->userData;
+        if(cd != NULL)
+            cd->entity = this;
+    }
     actor = a;
+}
+
+void Entity::setCustomData(CustomData* cd)
+{
+    cd->entity = this;
+    actor->userData = cd;
 }
 
 void Entity::setModel(ObjModel* m)

@@ -79,6 +79,12 @@
     <Filter Include="Source Files\InGameObjects\Entities">
       <UniqueIdentifier>{a3582aa2-f59e-4c94-9992-439e7d449509}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\EventManager">
+      <UniqueIdentifier>{95432579-2f22-4c3e-a52d-6c8df4ca7560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\EventManager">
+      <UniqueIdentifier>{190d400a-46f1-480e-be07-e9ebc7b9ab51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mPULSE.cpp">
@@ -180,6 +186,21 @@
     <ClCompile Include="InGameObjects\ContactReport.cpp">
       <Filter>Source Files\InGameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="EventManager\WaypointEvent.cpp">
+      <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager\CollisionEvent.cpp">
+      <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager\EventManager.cpp">
+      <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager\SoundEvent.cpp">
+      <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager\TriggerEvent.cpp">
+      <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -280,6 +301,21 @@
     </ClInclude>
     <ClInclude Include="InGameObjects\ContactReport.h">
       <Filter>Header Files\InGameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager\CollisionEvent.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager\WaypointEvent.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager\EventManager.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager\SoundEvent.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager\TriggerEvent.h">
+      <Filter>Header Files\EventManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

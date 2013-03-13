@@ -22,6 +22,12 @@
 #include <InGameObjects/Pickups/MissileLauncher.h>
 #include <InGameObjects/Pickups/Shield.h>
 
+#include "EventManager/SoundEvent.h"
+#include "EventManager/CollisionEvent.h"
+#include "EventManager/WaypointEvent.h"
+#include "EventManager/TriggerEvent.h"
+#include "EventManager/EventManager.h"
+
 class PlayState : public GameState
 {
 public:
@@ -33,6 +39,12 @@ public:
     void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,XboxController* state, bool isHuman);
     void InitializeConsoleCommands();
     void setNumberOfPlayers(int numOfPlayers);
+
+    void handleEvents();
+    void handleCollisionEvents();
+    void handleSoundEvents();
+    void handleTriggerEvents();
+    void handleWaypointEvents();
 
 private:
 
@@ -53,6 +65,7 @@ private:
 	SoundEngine* soundEngine;
     RenderingEngine* renderingEngine;
     GameVariables* gameVariables;
+    EventManager* eventManager;
 
     void PlayState::logReplay(int player, XboxController* state, float dt);
     void PlayState::logWayPoint(int player);

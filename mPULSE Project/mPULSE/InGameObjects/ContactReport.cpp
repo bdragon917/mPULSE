@@ -1,7 +1,4 @@
 #include "ContactReport.h"
-#include "CustomData.h"
-#include "stdio.h"
-#include "NxActor.h"
 
 ContactReport::ContactReport(void)
 {
@@ -14,6 +11,8 @@ ContactReport::~ContactReport(void)
 
 void ContactReport::onContactNotify(NxContactPair& pair, NxU32 events)
 {
+    EventManager* eventManager = EventManager::getInstance();
+
     NxActor* actor1 = NULL;
     NxActor* actor2 = NULL;
     CustomData* actor1CustomData = NULL;
@@ -40,7 +39,9 @@ void ContactReport::onContactNotify(NxContactPair& pair, NxU32 events)
                     float vel = actor2->getLinearVelocity().magnitude();
                     unitDir.normalize();
                     actor2->setLinearVelocity((vel*0.7f)*unitDir);
-                    actor1->raiseActorFlag(NX_AF_DISABLE_COLLISION);
+                    //actor1->raiseActorFlag(NX_AF_DISABLE_COLLISION);
+
+                    eventManager->addEvent(new CollisionEvent(actor1CustomData->entity,actor2CustomData->entity, CollisionEvent::DESTROY_FIRST));
                 }
                 else if(actor1CustomData->pickupType == 2) //Car hit a barrier
                 {
@@ -49,7 +50,9 @@ void ContactReport::onContactNotify(NxContactPair& pair, NxU32 events)
                     float vel = actor2->getLinearVelocity().magnitude();
                     unitDir.normalize();
                     actor2->setLinearVelocity((vel*0.3f)*unitDir);
-                    actor1->raiseActorFlag(NX_AF_DISABLE_COLLISION);
+                    //actor1->raiseActorFlag(NX_AF_DISABLE_COLLISION);
+
+                    eventManager->addEvent(new CollisionEvent(actor1CustomData->entity,actor2CustomData->entity, CollisionEvent::DESTROY_FIRST));
                 }
             }
         }

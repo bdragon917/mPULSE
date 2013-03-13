@@ -91,6 +91,11 @@
     <ClCompile Include="AI\Waypoints.cpp" />
     <ClCompile Include="Components\GraphicalComponent.cpp" />
     <ClCompile Include="Components\PhysicalComponent.cpp" />
+    <ClCompile Include="EventManager\CollisionEvent.cpp" />
+    <ClCompile Include="EventManager\EventManager.cpp" />
+    <ClCompile Include="EventManager\SoundEvent.cpp" />
+    <ClCompile Include="EventManager\TriggerEvent.cpp" />
+    <ClCompile Include="EventManager\WaypointEvent.cpp" />
     <ClCompile Include="GameStates\Camera.cpp" />
     <ClCompile Include="GameStates\Console.cpp" />
     <ClCompile Include="GameStates\Game.cpp" />
@@ -126,6 +131,11 @@
     <ClInclude Include="AI\Waypoints.h" />
     <ClInclude Include="Components\GraphicalComponent.h" />
     <ClInclude Include="Components\PhysicalComponent.h" />
+    <ClInclude Include="EventManager\CollisionEvent.h" />
+    <ClInclude Include="EventManager\EventManager.h" />
+    <ClInclude Include="EventManager\SoundEvent.h" />
+    <ClInclude Include="EventManager\TriggerEvent.h" />
+    <ClInclude Include="EventManager\WaypointEvent.h" />
     <ClInclude Include="GameStates\Camera.h" />
     <ClInclude Include="GameStates\Console.h" />
     <ClInclude Include="GameStates\Game.h" />

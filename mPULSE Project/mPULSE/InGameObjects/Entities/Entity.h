@@ -11,8 +11,10 @@
 #include "Util\Clock.h"
 #include "InGameObjects\CustomData.h"
 
-
+//Forward declarations
 class AI;
+class CustomData;
+
 class Entity
 {
 public:
@@ -61,6 +63,7 @@ public:
     //rotation data    
     AI* aAI;
     void setTimeToLive(int tmpTime);
+    void setCustomData(CustomData* cd);
     void kill();
     int getTimeToLive();
     void reset();
