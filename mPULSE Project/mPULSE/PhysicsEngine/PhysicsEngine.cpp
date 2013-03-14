@@ -269,16 +269,16 @@ void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
         if(waypoints[i]->type == Waypoint::WAYPOINT)
         {
 		    NxVec3 position(waypoints[i]->pos);
-			float angle = acos(waypoints[i]->ori.dot(NxVec3(1,0,0)));
+			//float angle = acos(waypoints[i]->ori.dot(NxVec3(1,0,0)));
 
-			NxQuat q;
-            q.fromAngleAxis(angle*(180.0f/3.14f), NxVec3(0,1,0));
-			NxMat33 orient;
-            orient.fromQuat(q);
+			//NxQuat q;
+            //q.fromAngleAxis(angle*(180.0f/3.14f), NxVec3(0,1,0));
+			NxMat33 orient(waypoints[i]->ori);
+            //orient.fromQuat(q);
 
 		    //The actor has one shape, a box, 1m on a side
 		    NxBoxShapeDesc boxDesc;
-		    boxDesc.dimensions.set(25.0,25.0,1.0);
+		    boxDesc.dimensions.set(1.0,100.0,100.0);
 		    boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
 
 		    NxActorDesc actorDesc;
@@ -528,7 +528,7 @@ NxActor* PhysicsEngine::createCarChassis()
 	//actorDesc.userData = cd;   
 
 	NxActor *actor = scene->createActor(actorDesc);
-    actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));
+    actor->setCMassOffsetLocalPosition(NxVec3(0, -1.5, 0));
     //actor->setCMassOffsetLocalPosition(NxVec3(0, 0, 0));
     //actor->setCMassOffsetLocalPosition(NxVec3(0.25f, -4.0, 0));   //True Front Weel Drive =)
 

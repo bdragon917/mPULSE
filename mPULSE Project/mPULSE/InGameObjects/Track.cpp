@@ -77,8 +77,13 @@ void Track::loadTrackInfo(std::string filename)
                 Waypoint* wp = new Waypoint();
                 wp->type = type;
 
+				NxVec3 col0 = NxVec3(0,0,0);
+				NxVec3 col1 = NxVec3(0,0,0);
+				NxVec3 col2 = NxVec3(0,0,0);
+
                 bool startSeen = true;
                 startFlag = i;
+				/*
                 while((parsing && i < tmpLine.size()) && j < 8)
 	            {
                     ch = tmpLine.at(i);
@@ -112,8 +117,12 @@ void Track::loadTrackInfo(std::string filename)
 
                     i++;
 	            }
-                if(startSeen)
-                {
+				*/
+				while((parsing && i < tmpLine.size()) && j < 14)
+	            {
+                    ch = tmpLine.at(i);
+                    if((ch == ' ' || ch == '\t') && startSeen)
+                    {
                         if (j == 0)
                             wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                         else if(j == 1)
@@ -121,16 +130,48 @@ void Track::loadTrackInfo(std::string filename)
                         else if(j == 2)
                             wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                         else if(j == 3)
-                            wp->ori.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            col0.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                         else if(j == 4)
-                            wp->ori.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            col0.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                         else if(j == 5)
-                            wp->ori.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 6)
-                            wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                            col0.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+						else if(j == 6)
+                            col1.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
                         else if(j == 7)
+                            col1.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                        else if(j == 8)
+                            col1.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+						else if(j == 9)
+                            col2.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                        else if(j == 10)
+                            col2.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                        else if(j == 11)
+                            col2.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                        else if(j == 12)
+                            wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                        else if(j == 13)
                             wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+
+                        j++;
+                        startSeen = false;
+                    }
+                    else if ((ch != ' ' && ch != '\t') && !startSeen)
+                    {
+                        startSeen = true;
+                        startFlag = i;
+                    }
+
+                    i++;
+	            }
+                if(startSeen)
+                {
+                    if(j == 13)
+                        wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
                 }
+
+				wp->ori.setColumn(0, col0);
+				wp->ori.setColumn(1, col1);
+				wp->ori.setColumn(2, col2);
 
                 addWaypoint(wp);
             }
@@ -161,7 +202,7 @@ void Track::addWaypoint(Waypoint* wp)
 {
     waypoints.push_back(wp);
 }
-
+/*
 void Track::addWaypoint(float xPos, float yPos, float zPos,float xOri, float yOri,float zOri,int tmpId,int tmpNext,Waypoint::TYPE type)
 {
     Waypoint* w = new Waypoint();
@@ -177,7 +218,7 @@ void Track::addWaypoint(float xPos, float yPos, float zPos,float xOri, float yOr
 
     waypoints.push_back(w);
 }
-
+*/
 std::vector<Waypoint*>* Track::getWaypoints()
 {
     return &waypoints;

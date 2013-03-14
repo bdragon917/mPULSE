@@ -437,16 +437,16 @@ void Camera::updateCamera(float dt)
                //Smooth rate of change by linear amount
                //xStretch = ((xStretch * 0.75f) + (tarStretch * 0.25f));
                
-               printf("tarStretch: %f\n", tarStretch);
+               //printf("tarStretch: %f\n", tarStretch);
 
-                printf("xStretch1: %f\n", xStretch);
+                //printf("xStretch1: %f\n", xStretch);
                 if (xStretch < (tarStretch-rate))
                 {xStretch = xStretch + rate;}
                 else if (xStretch > (tarStretch+slowrate))
                 {xStretch = xStretch - slowrate;}
                 else
                 {xStretch = tarStretch;}
-                printf("xStretch2: %f\n", xStretch);
+                //printf("xStretch2: %f\n", xStretch);
 
 
 
