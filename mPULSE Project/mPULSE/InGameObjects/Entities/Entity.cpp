@@ -4,8 +4,11 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
 {
     alive = true;
 	batteryCharged = false;
-	charge = 0.0f;
     usingDisplayList = false;
+    steering = true;
+    shunting = false;
+
+	charge = 0.0f;
     displayListIndex = -1;
     actor = a;
     model = tmpModel;
@@ -18,6 +21,10 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     minTorque = -3000;
     shield = 0;
     pickup = NONE;
+
+    shuntStartTime = 0;
+    maxShuntTime = 200;
+    shuntPower = 50;
 
     timeToLive = tmpTimeToLive;
     timeCreated = clock.getCurrentTime();
@@ -98,6 +105,99 @@ Entity::PickupType Entity::usePickup()
         return NONE;
 }
 
+void Entity::shuntRight()
+{
+
+    if(!shunting)
+    {
+        shuntStartTime = clock.getCurrentTime();
+        shunting=true;
+        steering = false;
+
+        NxReal angle = 0;
+        NxVec3 newDir(0,0,0);
+        NxVec3 shuntValue = actor->getGlobalOrientation()*NxVec3(0,0,shuntPower);
+        NxVec3 carDir;
+
+        if(actor->getLinearVelocity().magnitude() < 1)
+            carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
+        else
+            carDir = actor->getLinearVelocity();
+
+        newDir.add(carDir,shuntValue);
+        angle = -acos(newDir.dot(carDir) / (newDir.magnitude()*carDir.magnitude()));
+        
+        unsigned size = getDriveWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getDriveWheels()->at(i)->setSteerAngle(angle);
+
+        size = getSteerWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getSteerWheels()->at(i)->setSteerAngle(angle);
+
+        size = getPassiveWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getPassiveWheels()->at(i)->setSteerAngle(angle);
+
+        actor->setLinearVelocity(newDir);
+    }    
+}
+
+void Entity::shuntLeft()
+{
+    if(!shunting)
+    {
+        shuntStartTime = clock.getCurrentTime();
+        shunting=true;
+        steering = false;
+
+        NxReal angle = 0;
+        NxVec3 newDir(0,0,0);
+        NxVec3 shuntValue = actor->getGlobalOrientation()*NxVec3(0,0,-shuntPower);
+        NxVec3 carDir;
+
+        if(actor->getLinearVelocity().magnitude() < 1)
+            carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
+        else
+            carDir = actor->getLinearVelocity();
+
+        newDir.add(carDir,shuntValue);
+        angle = acos(newDir.dot(carDir) / (newDir.magnitude()*carDir.magnitude()));
+        
+        unsigned size = getDriveWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getDriveWheels()->at(i)->setSteerAngle(angle);
+
+        size = getSteerWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getSteerWheels()->at(i)->setSteerAngle(angle);
+
+        size = getPassiveWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getPassiveWheels()->at(i)->setSteerAngle(angle);
+
+        actor->setLinearVelocity(newDir);
+    }
+}
+
+void Entity::deshunt()
+{
+    NxVec3 carVel = actor->getLinearVelocity();
+    NxVec3 carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
+
+    carVel.normalize();
+    carDir.normalize();
+    NxReal angle = acos(carVel.dot(carDir));    
+
+    actor->setLinearVelocity(carDir*(actor->getLinearVelocity().magnitude()*cos(angle)));
+
+    steering = true;
+    shunting = false;
+
+    for(unsigned i = 0;i<getPassiveWheels()->size();i++)
+        getPassiveWheels()->at(i)->setSteerAngle(0);
+}
+
 void Entity::addSteerWheel(NxWheelShape* wheel)
 {
     steerWheels.push_back(wheel);
@@ -164,14 +264,19 @@ float Entity::convertVel(float vel)
 
 void Entity::setSteeringAngle(float percent)
 {
-    float maxDeltaAngle = 0;
-    float steeringAngle = 0;
+    if(shunting && clock.getCurrentTime() - shuntStartTime > maxShuntTime)
+        deshunt();
 
-    steeringAngle = convertVel(getActor()->getLinearVelocity().magnitude()) * percent;
+    if(steering)
+    {
+        float maxDeltaAngle = 0;
+        float steeringAngle = 0;
 
-    for (unsigned i = 0; i < steerWheels.size(); ++i)
-        steerWheels[i]->setSteerAngle(steeringAngle);
+        steeringAngle = convertVel(getActor()->getLinearVelocity().magnitude()) * percent;
 
+        for (unsigned i = 0; i < steerWheels.size(); ++i)
+            steerWheels[i]->setSteerAngle(steeringAngle);
+    }
     //printf("percent: %f angle: %f vel: %f\n",percent,steeringAngle,getActor()->getLinearVelocity().magnitude());
 }
 

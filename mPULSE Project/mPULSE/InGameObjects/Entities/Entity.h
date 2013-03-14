@@ -68,18 +68,23 @@ public:
     void setCustomData(CustomData* cd);
     void kill();
     void collide(Entity* e);
+
+    void shuntRight();
+    void shuntLeft();
+    void deshunt();
+
     int getTimeToLive();
     void reset();
     bool isAlive();
     bool hasShield();
     bool isBatteryCharged();
 
-
 private:
 	bool batteryCharged;
     bool usingDisplayList;
     bool alive;
     bool shunting;
+    bool steering;
 
     int displayListIndex;
     int torque;
@@ -94,6 +99,10 @@ private:
     float minSteering;
     float maxSteering;
 	float charge;
+
+    unsigned shuntStartTime;
+    unsigned maxShuntTime;
+    NxReal shuntPower;
 
     Clock clock;
     PickupType pickup;

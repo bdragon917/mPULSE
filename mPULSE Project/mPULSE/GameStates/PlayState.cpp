@@ -580,7 +580,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
     {
         if((player == 0) && (isHuman))
         {
-            if (state->rb && !rbPressed)
+            if (state->rs && !rbPressed)
             {
 
                 logWayPoint(0);
@@ -588,7 +588,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 printf("Point logged pressed\n");
             }
 
-            else if (!state->rb)
+            else if (!state->rs)
                 rbPressed = false;  
 
             if (state->back)
@@ -618,6 +618,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             car->brake(5000);
         else
             car->brake(0);   
+
         if(state->a)
         {
             Entity::PickupType type = car->usePickup();
@@ -657,7 +658,13 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             car->givePickup(Entity::SHIELD);
         if(state->dpadLeft)
             car->givePickup(Entity::MISSILE);
-        if(state->lb) {
+        if(state->lb) 
+            car->shuntLeft();
+        if(state->rb)
+            car->shuntRight();
+        if(state->ls)
+        {
+            car->shuntLeft();
 			CustomData* cd = (CustomData*)car->getActor()->userData;
 
             NxVec3 respawnPt = cd->wp->pos;
