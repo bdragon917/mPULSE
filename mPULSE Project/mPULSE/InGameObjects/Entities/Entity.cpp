@@ -169,8 +169,8 @@ void Entity::setSteeringAngle(float percent)
 
     steeringAngle = convertVel(getActor()->getLinearVelocity().magnitude()) * percent;
 
-    for (unsigned i = 0; i < driveWheels.size(); ++i)
-        driveWheels[i]->setSteerAngle(steeringAngle);
+    for (unsigned i = 0; i < steerWheels.size(); ++i)
+        steerWheels[i]->setSteerAngle(steeringAngle);
 
     //printf("percent: %f angle: %f vel: %f\n",percent,steeringAngle,getActor()->getLinearVelocity().magnitude());
 }
