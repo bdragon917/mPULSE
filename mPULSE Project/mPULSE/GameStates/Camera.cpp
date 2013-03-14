@@ -388,12 +388,12 @@ void Camera::updateCamera(float dt)
                 //NxVec3 tarCamSpd30 = NxVec3(-targetDistance,disAbove,0.0f);
                 //NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.75f,disAbove,0.0f);
                 //NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.60f,disAbove * 0.75f,0.0f);
-                NxVec3 tarCamSpd30 = NxVec3(-targetDistance * 0.80f,disAbove,0.0f);
-                NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.60f,disAbove,0.0f);
-                NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.20f,disAbove * 0.75f,0.0f);
+                NxVec3 tarCamSpd30 = NxVec3(-targetDistance * 0.30f,disAbove,0.0f);
+                NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.1f,disAbove * 0.90f,0.0f);
+                NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.001f,disAbove * 0.80f,0.0f);
 
-
-                NxVec3 tarCamSpdH = NxVec3(-targetDistance * 0.10f,disAbove * 0.5f,0.0f);       //add random jitter
+                NxVec3 tarCamSpdH = NxVec3(-targetDistance * 0.0001f,disAbove * 0.70f,0.0f);       //add random jitter
+                //NxVec3 tarCamSpdH = NxVec3(-targetDistance * 0.10f,disAbove * 0.5f,0.0f);       //add random jitter
 
                 float curActorSpd = targetActor->getLinearVelocity().magnitude();
 
@@ -428,10 +428,11 @@ void Camera::updateCamera(float dt)
                     tarStretch = (curActorSpd / 33.0f);
                 }
 
-               //You get about 3.0 stretch at around 1000, so lets double the effect at this speed XD
+ //              //You get about 3.0 stretch at around 1000, so lets double the effect at this speed XD
+ //              if (tarStretch > 3.0f)
+ //              {tarStretch = tarStretch * (1.0f + ((tarStretch - 3.0f) * 3.0f));rate = 0.5f;}
                if (tarStretch > 3.0f)
-               {tarStretch = tarStretch * (1.0f + ((tarStretch - 3.0f) * 3.0f));rate = 0.5f;}
-
+               {rate = 0.5f;}
 
 
                //Smooth rate of change by linear amount

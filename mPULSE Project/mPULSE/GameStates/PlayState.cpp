@@ -253,6 +253,8 @@ void PlayState::update(float dt)
     //*/
     //Display FPS
     renderingEngine->drawText(100,-50,"FPS: "+renderingEngine->FloatToString(1000.0f/dt));
+    //physicsEngine->step(dt/1000.0f);
+    //physicsEngine->step(0.33f);
     physicsEngine->step(dt/1000.0f);
 }
 

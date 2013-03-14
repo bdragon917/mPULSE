@@ -3,7 +3,7 @@
 Game::Game()
 {
     state = InitState::getInstance();
-    gameClock = new Clock(60);
+    gameClock = new Clock(60.0f);
 }
 void Game::update()
 {       
