@@ -1659,10 +1659,10 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
          {
               RenderDebugPhysic(scene->getDebugRenderable());
             drawText(800,-600, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
-            drawText(800,-620, FloatToString(entities->cars[carIndex]->getDriveWheels()[0]->getAxleSpeed()) + " :W0_d_Rot");
-            drawText(800,-640, FloatToString(entities->cars[carIndex]->getDriveWheels()[1]->getAxleSpeed()) + " :W1_d_Rot");
-            drawText(800,-660, FloatToString(entities->cars[carIndex]->getPassiveWheels()[0]->getAxleSpeed()) + " :W2_p_Rot");
-            drawText(800,-680, FloatToString(entities->cars[carIndex]->getPassiveWheels()[1]->getAxleSpeed()) + " :W3-p_Rot");
+            drawText(800,-620, FloatToString(entities->cars[carIndex]->getDriveWheels()->at(0)->getAxleSpeed()) + " :W0_d_Rot");
+            drawText(800,-640, FloatToString(entities->cars[carIndex]->getDriveWheels()->at(1)->getAxleSpeed()) + " :W1_d_Rot");
+            drawText(800,-660, FloatToString(entities->cars[carIndex]->getPassiveWheels()->at(0)->getAxleSpeed()) + " :W2_p_Rot");
+            drawText(800,-680, FloatToString(entities->cars[carIndex]->getPassiveWheels()->at(1)->getAxleSpeed()) + " :W3-p_Rot");
          }
 
 
@@ -2045,22 +2045,22 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 
 void RenderingEngine::drawWheels(Entity* entity, int model, int texture)
 {
-    if (entity->getDriveWheels().size() > 0)
+    if (entity->getDriveWheels()->size() > 0)
     {
-        for (unsigned d = 0; d < entity->getDriveWheels().size(); ++d)
+        for (unsigned d = 0; d < entity->getDriveWheels()->size(); ++d)
         {
             glBindTexture(GL_TEXTURE_2D, textureid_P1[texture]);
-            NxMat34* aPose = &(entity->getDriveWheels().at(d)->getGlobalPose());
+            NxMat34* aPose = &(entity->getDriveWheels()->at(d)->getGlobalPose());
             drawModelPos(modelManager.getModel(model), aPose );
         }
     }
 
-    if (entity->getPassiveWheels().size() > 0)
+    if (entity->getPassiveWheels()->size() > 0)
     {
-        for (unsigned d = 0; d < entity->getPassiveWheels().size(); ++d)
+        for (unsigned d = 0; d < entity->getPassiveWheels()->size(); ++d)
         {
             glBindTexture(GL_TEXTURE_2D, textureid_P1[texture]);
-            NxMat34* aPose = &(entity->getPassiveWheels().at(d)->getGlobalPose());
+            NxMat34* aPose = &(entity->getPassiveWheels()->at(d)->getGlobalPose());
             drawModelPos(modelManager.getModel(model), aPose );
         }
     }
