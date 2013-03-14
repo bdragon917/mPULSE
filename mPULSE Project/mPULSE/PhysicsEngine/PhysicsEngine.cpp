@@ -94,7 +94,11 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
         //RenderableComponent* rc = new RenderableComponent(1,3);
         //entityCar1->rc.push_back(rc);
         entityCar1->addDriveWheel(wheel);
+        entityCar1->addSteerWheel(wheel);
+
 	    entityCar1->addDriveWheel(wheel2);
+        entityCar1->addSteerWheel(wheel2);
+
         entityCar1->addPassiveWheel(wheel3);
 	    entityCar1->addPassiveWheel(wheel4);
 

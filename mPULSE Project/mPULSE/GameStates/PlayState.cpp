@@ -170,7 +170,7 @@ void PlayState::update(float dt)
 
 
     //soundengine p1
-    float vol = entities.cars.at(0)->getDriveWheels().at(0)->getAxleSpeed() * 0.75f;
+    float vol = entities.cars.at(0)->getDriveWheels()->at(0)->getAxleSpeed() * 0.75f;
     if (vol > 128){vol=128.0f;}
     soundEngine->engineVol(1, vol);
 
@@ -294,7 +294,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 if (renderingEngine->aConsole.consoleString == "off g")
                 {
                     physicsEngine->getScene()->setGravity(NxVec3(0,0,0));
-                    physicsEngine->getScene()->releaseActor(entities.cars.at(1)->getPassiveWheels().at(1)->getActor());
+                    physicsEngine->getScene()->releaseActor(entities.cars.at(1)->getPassiveWheels()->at(1)->getActor());
                 }
                 if (renderingEngine->aConsole.consoleString == "on g")
                 {
@@ -824,8 +824,8 @@ void PlayState::logWayPoint(int player)
     NxVec3 spd = car->getActor()->getLinearVelocity();
     float spdF = car->getActor()->getLinearVelocity().magnitude();
 
-    float brk0 = car->getDriveWheels().at(0)->getBrakeTorque();
-    float brk1 = car->getDriveWheels().at(1)->getBrakeTorque();
+    float brk0 = car->getDriveWheels()->at(0)->getBrakeTorque();
+    float brk1 = car->getDriveWheels()->at(1)->getBrakeTorque();
 
         std::ofstream out;
         out.open( "replay.txt", std::ios_base::app );

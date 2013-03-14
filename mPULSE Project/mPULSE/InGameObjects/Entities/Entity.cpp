@@ -98,6 +98,11 @@ Entity::PickupType Entity::usePickup()
         return NONE;
 }
 
+void Entity::addSteerWheel(NxWheelShape* wheel)
+{
+    steerWheels.push_back(wheel);
+}
+
 void Entity::addDriveWheel(NxWheelShape* wheel)
 {
     driveWheels.push_back(wheel);
@@ -164,8 +169,8 @@ void Entity::setSteeringAngle(float percent)
 
     steeringAngle = convertVel(getActor()->getLinearVelocity().magnitude()) * percent;
 
-    for (unsigned i = 0; i < driveWheels.size(); ++i)
-        driveWheels[i]->setSteerAngle(steeringAngle);
+    for (unsigned i = 0; i < steerWheels.size(); ++i)
+        steerWheels[i]->setSteerAngle(steeringAngle);
 
     //printf("percent: %f angle: %f vel: %f\n",percent,steeringAngle,getActor()->getLinearVelocity().magnitude());
 }
@@ -244,11 +249,20 @@ ObjModel* Entity::getModel()
     return model;
 }
 
-std::vector<NxWheelShape*> Entity::getDriveWheels()
-{return driveWheels;}
+std::vector<NxWheelShape*>* Entity::getSteerWheels()
+{
+    return &steerWheels;
+}
 
-std::vector<NxWheelShape*> Entity::getPassiveWheels()
-{return passiveWheels;}
+std::vector<NxWheelShape*>* Entity::getDriveWheels()
+{
+    return &driveWheels;
+}
+
+std::vector<NxWheelShape*>* Entity::getPassiveWheels()
+{
+    return &passiveWheels;
+}
 
 void Entity::setUsingDisplayList(bool status)
 {
