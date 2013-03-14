@@ -102,6 +102,7 @@ private:
 
     unsigned shuntStartTime;
     unsigned maxShuntTime;
+    unsigned shuntReloadTime;
     NxReal shuntPower;
 
     Clock clock;

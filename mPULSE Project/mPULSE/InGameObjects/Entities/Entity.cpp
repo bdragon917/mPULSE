@@ -25,6 +25,7 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     shuntStartTime = 0;
     maxShuntTime = 200;
     shuntPower = 50;
+    shuntReloadTime = 400;
 
     timeToLive = tmpTimeToLive;
     timeCreated = clock.getCurrentTime();
@@ -107,8 +108,11 @@ Entity::PickupType Entity::usePickup()
 
 void Entity::shuntRight()
 {
+    NxWheelContactData nxwcd; 
+    driveWheels[0]->getContact(nxwcd); //get contact data
 
-    if(!shunting)
+    //Check if already shunting or if off the ground
+    if(!shunting && (driveWheels[0]->getContact(nxwcd) != NULL) && (clock.getCurrentTime() - shuntStartTime > shuntReloadTime))
     {
         shuntStartTime = clock.getCurrentTime();
         shunting=true;
@@ -145,7 +149,11 @@ void Entity::shuntRight()
 
 void Entity::shuntLeft()
 {
-    if(!shunting)
+    NxWheelContactData nxwcd; 
+    driveWheels[0]->getContact(nxwcd); //get contact data
+
+    //Check if already shunting or if off the ground
+    if(!shunting && (driveWheels[0]->getContact(nxwcd) != NULL) && (clock.getCurrentTime() - shuntStartTime > shuntReloadTime))
     {
         shuntStartTime = clock.getCurrentTime();
         shunting=true;
@@ -215,13 +223,6 @@ void Entity::addPassiveWheel(NxWheelShape* wheel)
 
 void Entity::addTorque(int tmpTorque)
 {
-    ///* Can use this to keep better contact with the ground
-    NxWheelContactData nxwcd; //memory for contact data
-    //driveWheels[0]->getContact(nxwcd); //get contact data
-    //if (!(driveWheels[0]->getContact(nxwcd) == NULL)) //get contact data. ==NULL if tires not in contact with anything
-    //{driveWheels[0]->getActor().addForce(NxVec3(0,-getActor()->getLinearVelocity().magnitude()*1000,0));}; //apply force to hold it to the track
-   // */
-
     if(tmpTorque == 0)
     {
         if (torque > 200)
@@ -277,7 +278,6 @@ void Entity::setSteeringAngle(float percent)
         for (unsigned i = 0; i < steerWheels.size(); ++i)
             steerWheels[i]->setSteerAngle(steeringAngle);
     }
-    //printf("percent: %f angle: %f vel: %f\n",percent,steeringAngle,getActor()->getLinearVelocity().magnitude());
 }
 
 void Entity::chargeBattery()
