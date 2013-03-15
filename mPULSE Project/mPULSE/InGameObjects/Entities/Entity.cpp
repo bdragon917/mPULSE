@@ -44,13 +44,6 @@ void Entity::update()
         shield -= 5;
 }
 
-bool Entity::hasShield()
-{
-    if (shield > 0)
-        return true;
-    else
-        return false;
-}
 void Entity::setTimeToLive(int tmpTime)
 {
     timeToLive = tmpTime;
@@ -305,7 +298,7 @@ void Entity::collide(Entity* e)
     CustomData* cd = (CustomData*) e->getActor()->userData;
     if (cd->type == CustomData::OBSTACLE)
     {
-        if(!hasShield())
+        if(shield == 0)
         {
             if (cd->pickupType == MISSILE)
             {
@@ -328,7 +321,7 @@ void Entity::collide(Entity* e)
             }
         }
         else 
-            shield = 0;
+            shield -= 50;
     }
 }
 
