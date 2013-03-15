@@ -170,7 +170,7 @@ void PlayState::update(float dt)
 
 
     //soundengine p1
-    float vol = entities.cars.at(0)->getDriveWheels().at(0)->getAxleSpeed() * 0.75f;
+    float vol = entities.cars.at(0)->getDriveWheels()->at(0)->getAxleSpeed() * 0.75f;
     if (vol > 128){vol=128.0f;}
     soundEngine->engineVol(1, vol);
 
@@ -181,22 +181,23 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
         Entity* car = entities.cars[c];
+        car->update();
         if (car->getActor()->getGlobalPose().t.y < -20.0f)
         {
             //car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
             CustomData* cd = (CustomData*)car->getActor()->userData;
 
             NxVec3 respawnPt = cd->wp->pos;
-            NxVec3 ori = cd->wp->ori;
-            float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
+            //NxVec3 ori = cd->wp->ori;
+            //float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
 
             car->getActor()->setGlobalPosition(respawnPt);
-            NxVec3 v(0,1,0);
+            //NxVec3 v(0,1,0);
 
-            NxQuat q;
-            q.fromAngleAxis(angle*(180.0f/3.14f), v);
-            NxMat33 orient;
-            orient.fromQuat(q);
+            //NxQuat q;
+            //q.fromAngleAxis(angle*(180.0f/3.14f), v);
+			NxMat33 orient(cd->wp->ori);
+            //orient.fromQuat(q);
 
             car->getActor()->setGlobalOrientation(orient);
             car->getActor()->setLinearVelocity(NxVec3(0,0,0));
@@ -207,6 +208,7 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.AIcars.size(); ++c)
     {
         Entity* car = entities.AIcars[c];
+        car->update();
         //Do AI thinking here!!!!!
         //car->aAI->
         //car->aAI->setWaypoint(&Waypoint(7.83703,0.413632,-101.592));
@@ -223,16 +225,16 @@ void PlayState::update(float dt)
             CustomData* cd = (CustomData*)car->getActor()->userData;
 
             NxVec3 respawnPt = cd->wp->pos;
-            NxVec3 ori = cd->wp->ori;
-            float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
+            //NxVec3 ori = cd->wp->ori;
+            //float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
             car->getActor()->setGlobalPosition(respawnPt);
             
-            NxVec3 v(0,1,0);
+            //NxVec3 v(0,1,0);
 
-            NxQuat q;
-            q.fromAngleAxis(angle*(180.0f/3.14f), v);
-            NxMat33 orient;
-            orient.fromQuat(q);
+            //NxQuat q;
+            //q.fromAngleAxis(angle*(180.0f/3.14f), v);
+			NxMat33 orient(cd->wp->ori);
+            //orient.fromQuat(q);
 
             car->getActor()->setGlobalOrientation(orient);
             car->getActor()->setLinearVelocity(NxVec3(0,0,0));
@@ -296,7 +298,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 if (renderingEngine->aConsole.consoleString == "off g")
                 {
                     physicsEngine->getScene()->setGravity(NxVec3(0,0,0));
-                    physicsEngine->getScene()->releaseActor(entities.cars.at(1)->getPassiveWheels().at(1)->getActor());
+                    physicsEngine->getScene()->releaseActor(entities.cars.at(1)->getPassiveWheels()->at(1)->getActor());
                 }
                 if (renderingEngine->aConsole.consoleString == "on g")
                 {
@@ -582,7 +584,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
     {
         if((player == 0) && (isHuman))
         {
-            if (state->rb && !rbPressed)
+            if (state->rs && !rbPressed)
             {
 
                 logWayPoint(0);
@@ -590,7 +592,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 printf("Point logged pressed\n");
             }
 
-            else if (!state->rb)
+            else if (!state->rs)
                 rbPressed = false;  
 
             if (state->back)
@@ -620,6 +622,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             car->brake(5000);
         else
             car->brake(0);   
+
         if(state->a)
         {
             Entity::PickupType type = car->usePickup();
@@ -633,15 +636,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
             else if(type == Entity::SHIELD)
             {                
-                //FIXME: Broken right now because when the shield is deleted the car's actor is also deleted causing the game to crash.
-                //car->setShield(100);
-                //Add a new renderable component
-
-                /*Entity* e = new Entity(10000,
-                    car->getActor(),
-                    renderingEngine->getModelManger().getModel("Shield.obj")); //Shield will live for 10000 ms.                              
-                
-                entities.DynamicObjs.push_back(e);*/
+                car->setShieldValue(2000);
             }
             else if(type == Entity::BARRIER)
             {
@@ -659,20 +654,33 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             car->givePickup(Entity::SHIELD);
         if(state->dpadLeft)
             car->givePickup(Entity::MISSILE);
-        if(state->lb) {
+        if(state->lb) 
+            car->shuntLeft();
+        if(state->rb)
+            car->shuntRight();
+        if(state->ls)
+        {
+            car->shuntLeft();
 			CustomData* cd = (CustomData*)car->getActor()->userData;
 
             NxVec3 respawnPt = cd->wp->pos;
-            NxVec3 ori = cd->wp->ori;
-            float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
+            //NxVec3 ori = cd->wp->ori;
+            //float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
 
             car->getActor()->setGlobalPosition(respawnPt);
-            NxVec3 v(0,1,0);
+            //NxVec3 v(0,1,0);
 
-            NxQuat q;
-            q.fromAngleAxis(angle*(180.0f/3.14f), v);
-            NxMat33 orient;
-            orient.fromQuat(q);
+            //NxQuat q;
+            //q.fromAngleAxis(angle*(180.0f/3.14f), v);
+			NxMat33 orient(cd->wp->ori);
+			/*
+			NxVec3 temp1 = orient.getColumn(0);
+			NxVec3 temp2 = orient.getColumn(1);
+			NxVec3 temp3 = orient.getColumn(2);
+			printf("%f %f %f\n%f %f %f\n%f %f %f\n\n", temp1[0],temp1[1],temp1[2],temp2[0],temp2[1],temp2[2],temp3[0],temp3[1],temp3[2]);
+			*/
+
+            //orient.fromQuat(q);
 
             car->getActor()->setGlobalOrientation(orient);
             car->getActor()->setLinearVelocity(NxVec3(0,0,0));
@@ -809,14 +817,18 @@ void PlayState::logWayPoint(int player)
 
     Entity* car = entities.cars[player];
     
+	
     NxVec3 loc = car->getActor()->getGlobalPose().t;
-    NxVec3 ori = car->getActor()->getGlobalOrientation()*NxVec3(1,0,0);
+    //NxVec3 ori = car->getActor()->getGlobalOrientation()*NxVec3(1,0,0);
+	NxVec3 col0 = car->getActor()->getGlobalOrientation().getColumn(0);
+	NxVec3 col1 = car->getActor()->getGlobalOrientation().getColumn(1);
+	NxVec3 col2 = car->getActor()->getGlobalOrientation().getColumn(2);
 
     NxVec3 spd = car->getActor()->getLinearVelocity();
     float spdF = car->getActor()->getLinearVelocity().magnitude();
 
-    float brk0 = car->getDriveWheels().at(0)->getBrakeTorque();
-    float brk1 = car->getDriveWheels().at(1)->getBrakeTorque();
+    float brk0 = car->getDriveWheels()->at(0)->getBrakeTorque();
+    float brk1 = car->getDriveWheels()->at(1)->getBrakeTorque();
 
         std::ofstream out;
         out.open( "replay.txt", std::ios_base::app );
@@ -827,7 +839,10 @@ void PlayState::logWayPoint(int player)
         else
         {
            out << "WAYPOINT " << renderingEngine->FloatToString(loc.x) + " " + renderingEngine->FloatToString(loc.y) + " " + renderingEngine->FloatToString(loc.z);
-           out << " "+renderingEngine->FloatToString(ori.x) + " " + renderingEngine->FloatToString(ori.y) + " " + renderingEngine->FloatToString(ori.z);
+           //out << " "+renderingEngine->FloatToString(ori.x) + " " + renderingEngine->FloatToString(ori.y) + " " + renderingEngine->FloatToString(ori.z);
+		   out << " "+renderingEngine->FloatToString(col0[0]) + " " + renderingEngine->FloatToString(col0[1]) + " " + renderingEngine->FloatToString(col0[2]);
+		   out << " "+renderingEngine->FloatToString(col1[0]) + " " + renderingEngine->FloatToString(col1[1]) + " " + renderingEngine->FloatToString(col1[2]);
+		   out << " "+renderingEngine->FloatToString(col2[0]) + " " + renderingEngine->FloatToString(col2[1]) + " " + renderingEngine->FloatToString(col2[2]);
            out << " "+renderingEngine->FloatToString(id)+" "+renderingEngine->FloatToString(id+1)+"\n";
            id++;
            //out << "loc: " + renderingEngine->FloatToString(loc.x) + " " + renderingEngine->FloatToString(loc.y) + " " + renderingEngine->FloatToString(loc.z) + char(10) + char(13);

@@ -18,7 +18,7 @@ void ContactReport::onContactNotify(NxContactPair& pair, NxU32 events)
     CustomData* actor1CustomData = NULL;
     CustomData* actor2CustomData = NULL;
 
-    if(!pair.isDeletedActor[0] && !pair.isDeletedActor[1])
+    if(!(pair.isDeletedActor[0] || pair.isDeletedActor[1]))
     {
         actor1 = pair.actors[0];
         actor2 = pair.actors[1];

@@ -4,8 +4,11 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
 {
     alive = true;
 	batteryCharged = false;
-	charge = 0.0f;
     usingDisplayList = false;
+    steering = true;
+    shunting = false;
+
+	charge = 0.0f;
     displayListIndex = -1;
     actor = a;
     model = tmpModel;
@@ -19,6 +22,11 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     shield = 0;
     pickup = NONE;
 
+    shuntStartTime = 0;
+    maxShuntTime = 200;
+    shuntPower = 50;
+    shuntReloadTime = 400;
+
     timeToLive = tmpTimeToLive;
     timeCreated = clock.getCurrentTime();
 
@@ -28,6 +36,12 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
         if(cd != NULL)
             cd->entity = this;
     }
+}
+
+void Entity::update()
+{
+    if (shield > 0)
+        shield -= 5;
 }
 
 bool Entity::hasShield()
@@ -98,6 +112,111 @@ Entity::PickupType Entity::usePickup()
         return NONE;
 }
 
+void Entity::shuntRight()
+{
+    NxWheelContactData nxwcd; 
+    driveWheels[0]->getContact(nxwcd); //get contact data
+
+    //Check if already shunting or if off the ground
+    if(!shunting && (driveWheels[0]->getContact(nxwcd) != NULL) && (clock.getCurrentTime() - shuntStartTime > shuntReloadTime))
+    {
+        shuntStartTime = clock.getCurrentTime();
+        shunting=true;
+        steering = false;
+
+        NxReal angle = 0;
+        NxVec3 newDir(0,0,0);
+        NxVec3 shuntValue = actor->getGlobalOrientation()*NxVec3(0,0,shuntPower);
+        NxVec3 carDir;
+
+        if(actor->getLinearVelocity().magnitude() < 1)
+            carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
+        else
+            carDir = actor->getLinearVelocity();
+
+        newDir.add(carDir,shuntValue);
+        angle = -acos(newDir.dot(carDir) / (newDir.magnitude()*carDir.magnitude()));
+        
+        unsigned size = getDriveWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getDriveWheels()->at(i)->setSteerAngle(angle);
+
+        size = getSteerWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getSteerWheels()->at(i)->setSteerAngle(angle);
+
+        size = getPassiveWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getPassiveWheels()->at(i)->setSteerAngle(angle);
+
+        actor->setLinearVelocity(newDir);
+    }    
+}
+
+void Entity::shuntLeft()
+{
+    NxWheelContactData nxwcd; 
+    driveWheels[0]->getContact(nxwcd); //get contact data
+
+    //Check if already shunting or if off the ground
+    if(!shunting && (driveWheels[0]->getContact(nxwcd) != NULL) && (clock.getCurrentTime() - shuntStartTime > shuntReloadTime))
+    {
+        shuntStartTime = clock.getCurrentTime();
+        shunting=true;
+        steering = false;
+
+        NxReal angle = 0;
+        NxVec3 newDir(0,0,0);
+        NxVec3 shuntValue = actor->getGlobalOrientation()*NxVec3(0,0,-shuntPower);
+        NxVec3 carDir;
+
+        if(actor->getLinearVelocity().magnitude() < 1)
+            carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
+        else
+            carDir = actor->getLinearVelocity();
+
+        newDir.add(carDir,shuntValue);
+        angle = acos(newDir.dot(carDir) / (newDir.magnitude()*carDir.magnitude()));
+        
+        unsigned size = getDriveWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getDriveWheels()->at(i)->setSteerAngle(angle);
+
+        size = getSteerWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getSteerWheels()->at(i)->setSteerAngle(angle);
+
+        size = getPassiveWheels()->size();
+        for(unsigned i = 0;i<size;i++)
+            getPassiveWheels()->at(i)->setSteerAngle(angle);
+
+        actor->setLinearVelocity(newDir);
+    }
+}
+
+void Entity::deshunt()
+{
+    NxVec3 carVel = actor->getLinearVelocity();
+    NxVec3 carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
+
+    carVel.normalize();
+    carDir.normalize();
+    NxReal angle = acos(carVel.dot(carDir));    
+
+    actor->setLinearVelocity(carDir*(actor->getLinearVelocity().magnitude()*cos(angle)));
+
+    steering = true;
+    shunting = false;
+
+    for(unsigned i = 0;i<getPassiveWheels()->size();i++)
+        getPassiveWheels()->at(i)->setSteerAngle(0);
+}
+
+void Entity::addSteerWheel(NxWheelShape* wheel)
+{
+    steerWheels.push_back(wheel);
+}
+
 void Entity::addDriveWheel(NxWheelShape* wheel)
 {
     driveWheels.push_back(wheel);
@@ -110,13 +229,6 @@ void Entity::addPassiveWheel(NxWheelShape* wheel)
 
 void Entity::addTorque(int tmpTorque)
 {
-    ///* Can use this to keep better contact with the ground
-    NxWheelContactData nxwcd; //memory for contact data
-    //driveWheels[0]->getContact(nxwcd); //get contact data
-    //if (!(driveWheels[0]->getContact(nxwcd) == NULL)) //get contact data. ==NULL if tires not in contact with anything
-    //{driveWheels[0]->getActor().addForce(NxVec3(0,-getActor()->getLinearVelocity().magnitude()*1000,0));}; //apply force to hold it to the track
-   // */
-
     if(tmpTorque == 0)
     {
         if (torque > 200)
@@ -159,15 +271,19 @@ float Entity::convertVel(float vel)
 
 void Entity::setSteeringAngle(float percent)
 {
-    float maxDeltaAngle = 0;
-    float steeringAngle = 0;
+    if(shunting && clock.getCurrentTime() - shuntStartTime > maxShuntTime)
+        deshunt();
 
-    steeringAngle = convertVel(getActor()->getLinearVelocity().magnitude()) * percent;
+    if(steering)
+    {
+        float maxDeltaAngle = 0;
+        float steeringAngle = 0;
 
-    for (unsigned i = 0; i < driveWheels.size(); ++i)
-        driveWheels[i]->setSteerAngle(steeringAngle);
+        steeringAngle = convertVel(getActor()->getLinearVelocity().magnitude()) * percent;
 
-    //printf("percent: %f angle: %f vel: %f\n",percent,steeringAngle,getActor()->getLinearVelocity().magnitude());
+        for (unsigned i = 0; i < steerWheels.size(); ++i)
+            steerWheels[i]->setSteerAngle(steeringAngle);
+    }
 }
 
 void Entity::chargeBattery()
@@ -244,11 +360,20 @@ ObjModel* Entity::getModel()
     return model;
 }
 
-std::vector<NxWheelShape*> Entity::getDriveWheels()
-{return driveWheels;}
+std::vector<NxWheelShape*>* Entity::getSteerWheels()
+{
+    return &steerWheels;
+}
 
-std::vector<NxWheelShape*> Entity::getPassiveWheels()
-{return passiveWheels;}
+std::vector<NxWheelShape*>* Entity::getDriveWheels()
+{
+    return &driveWheels;
+}
+
+std::vector<NxWheelShape*>* Entity::getPassiveWheels()
+{
+    return &passiveWheels;
+}
 
 void Entity::setUsingDisplayList(bool status)
 {
@@ -283,6 +408,16 @@ void Entity::setCustomData(CustomData* cd)
 {
     cd->entity = this;
     actor->userData = cd;
+}
+
+int Entity::getShieldValue()
+{
+    return shield;
+}
+
+void Entity::setShieldValue(int value)
+{
+    shield += value;
 }
 
 void Entity::setModel(ObjModel* m)

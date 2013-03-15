@@ -94,7 +94,11 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
         //RenderableComponent* rc = new RenderableComponent(1,3);
         //entityCar1->rc.push_back(rc);
         entityCar1->addDriveWheel(wheel);
+        entityCar1->addSteerWheel(wheel);
+
 	    entityCar1->addDriveWheel(wheel2);
+        entityCar1->addSteerWheel(wheel2);
+
         entityCar1->addPassiveWheel(wheel3);
 	    entityCar1->addPassiveWheel(wheel4);
 
@@ -269,20 +273,27 @@ void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
         if(waypoints[i]->type == Waypoint::WAYPOINT)
         {
 		    NxVec3 position(waypoints[i]->pos);
+			//float angle = acos(waypoints[i]->ori.dot(NxVec3(1,0,0)));
+
+			//NxQuat q;
+            //q.fromAngleAxis(angle*(180.0f/3.14f), NxVec3(0,1,0));
+			NxMat33 orient(waypoints[i]->ori);
+            //orient.fromQuat(q);
 
 		    //The actor has one shape, a box, 1m on a side
 		    NxBoxShapeDesc boxDesc;
-		    boxDesc.dimensions.set(25.0,25.0,25.0);
+		    boxDesc.dimensions.set(1.0,100.0,100.0);
 		    boxDesc.shapeFlags |= NX_TRIGGER_ENABLE;
 
 		    NxActorDesc actorDesc;
 		    actorDesc.shapes.pushBack(&boxDesc);
 		    actorDesc.globalPose.t = position;
     
-		    NxActor *actor = scene->createActor(actorDesc);		
+		    NxActor *actor = scene->createActor(actorDesc);	
             CustomData* cd = new CustomData(CustomData::WAYPOINT,-1,-1,waypoints[i]);
 
 		    actor->userData = cd; 
+			actor->setGlobalOrientation(orient);
         }
         else if(waypoints[i]->type == Waypoint::PICKUP_SPAWN)
         {
@@ -521,7 +532,7 @@ NxActor* PhysicsEngine::createCarChassis()
 	//actorDesc.userData = cd;   
 
 	NxActor *actor = scene->createActor(actorDesc);
-    actor->setCMassOffsetLocalPosition(NxVec3(0, -2.5, 0));
+    actor->setCMassOffsetLocalPosition(NxVec3(0, -1.5, 0));
     //actor->setCMassOffsetLocalPosition(NxVec3(0, 0, 0));
     //actor->setCMassOffsetLocalPosition(NxVec3(0.25f, -4.0, 0));   //True Front Weel Drive =)
 

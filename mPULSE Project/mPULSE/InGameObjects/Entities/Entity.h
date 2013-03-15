@@ -33,6 +33,7 @@ public:
     //void addComponent(EntityComponent* com);
     void addDriveWheel(NxWheelShape* wheel);
     void addPassiveWheel(NxWheelShape* wheel);
+    void addSteerWheel(NxWheelShape* wheel);
     void addTorque(int tmpTorque);
 	void brake(int tmpTorque);
     void setSteeringAngle(float angle);
@@ -53,8 +54,9 @@ public:
 	NxActor* getActor();
     ObjModel* getModel();
     float convertVel(float vel);
-    std::vector<NxWheelShape*> getDriveWheels();
-    std::vector<NxWheelShape*> getPassiveWheels();    
+    std::vector<NxWheelShape*>* getDriveWheels();
+    std::vector<NxWheelShape*>* getPassiveWheels();    
+    std::vector<NxWheelShape*>* getSteerWheels();
     //Drawing stuff
     //list of renderableElements [model index, texture index]
     std::vector<RenderableComponent*> rc;
@@ -66,17 +68,28 @@ public:
     void setCustomData(CustomData* cd);
     void kill();
     void collide(Entity* e);
+
+    void shuntRight();
+    void shuntLeft();
+    void deshunt();
+
     int getTimeToLive();
+
+    int getShieldValue();
+    void setShieldValue(int value);
+    void update();
+
     void reset();
     bool isAlive();
     bool hasShield();
     bool isBatteryCharged();
 
-
 private:
 	bool batteryCharged;
     bool usingDisplayList;
     bool alive;
+    bool shunting;
+    bool steering;
 
     int displayListIndex;
     int torque;
@@ -92,10 +105,16 @@ private:
     float maxSteering;
 	float charge;
 
+    unsigned shuntStartTime;
+    unsigned maxShuntTime;
+    unsigned shuntReloadTime;
+    NxReal shuntPower;
+
     Clock clock;
     PickupType pickup;
     NxActor* actor;
     ObjModel* model;
     std::vector<NxWheelShape*> driveWheels;
+    std::vector<NxWheelShape*> steerWheels;
     std::vector<NxWheelShape*> passiveWheels;
 };
