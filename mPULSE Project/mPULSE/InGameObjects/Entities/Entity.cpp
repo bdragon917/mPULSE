@@ -38,6 +38,12 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     }
 }
 
+void Entity::update()
+{
+    if (shield > 0)
+        shield -= 5;
+}
+
 bool Entity::hasShield()
 {
     if (shield > 0)
@@ -402,6 +408,16 @@ void Entity::setCustomData(CustomData* cd)
 {
     cd->entity = this;
     actor->userData = cd;
+}
+
+int Entity::getShieldValue()
+{
+    return shield;
+}
+
+void Entity::setShieldValue(int value)
+{
+    shield += value;
 }
 
 void Entity::setModel(ObjModel* m)

@@ -74,6 +74,11 @@ public:
     void deshunt();
 
     int getTimeToLive();
+
+    int getShieldValue();
+    void setShieldValue(int value);
+    void update();
+
     void reset();
     bool isAlive();
     bool hasShield();

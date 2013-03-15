@@ -2139,7 +2139,8 @@ void RenderingEngine::drawCars(Entities* entities)
                     NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
                     //drawModel(modelManager.getModel(entities->cars[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
                     drawModelPos(modelManager.getModel(entities->cars[i]->rc[r]->modelID), aPose );
-
+                    if(entities->cars[i]->getShieldValue() > 0)
+                        drawModelPos(modelManager.getModel("Shield.obj"), aPose );
                     //Particles
                     //Particle* newParticle = new Particle(entities->cars[i]->getActor()->getGlobalPose().t.x, entities->cars[i]->getActor()->getGlobalPose().t.y,entities->cars[i]->getActor()->getGlobalPose().t.z);
                     //particles.push_back(newParticle);
@@ -2177,6 +2178,9 @@ void RenderingEngine::drawAICars(Entities* entities)
                     NxMat34* aPose = &(entities->AIcars[i]->getActor()->getGlobalPose());
                     //drawModel(modelManager.getModel(entities->AIcars[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
                     drawModelPos(modelManager.getModel(entities->AIcars[i]->rc[r]->modelID), aPose );
+
+                    if(entities->AIcars[i]->getShieldValue() > 0)
+                        drawModelPos(modelManager.getModel("Shield.obj"), aPose );
 
                     //myTargetVector
                     glBindTexture(GL_TEXTURE_2D, 5);

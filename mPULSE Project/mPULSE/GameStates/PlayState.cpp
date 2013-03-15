@@ -181,6 +181,7 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
         Entity* car = entities.cars[c];
+        car->update();
         if (car->getActor()->getGlobalPose().t.y < -20.0f)
         {
             //car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
@@ -207,6 +208,7 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.AIcars.size(); ++c)
     {
         Entity* car = entities.AIcars[c];
+        car->update();
         //Do AI thinking here!!!!!
         //car->aAI->
         //car->aAI->setWaypoint(&Waypoint(7.83703,0.413632,-101.592));
@@ -632,15 +634,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
             else if(type == Entity::SHIELD)
             {                
-                //FIXME: Broken right now because when the shield is deleted the car's actor is also deleted causing the game to crash.
-                //car->setShield(100);
-                //Add a new renderable component
-
-                /*Entity* e = new Entity(10000,
-                    car->getActor(),
-                    renderingEngine->getModelManger().getModel("Shield.obj")); //Shield will live for 10000 ms.                              
-                
-                entities.DynamicObjs.push_back(e);*/
+                car->setShieldValue(2000);
             }
             else if(type == Entity::BARRIER)
             {
