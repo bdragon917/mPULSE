@@ -232,6 +232,7 @@ NxActor* PhysicsEngine::createBarrier(NxActor* car )
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
 	bodyDesc.angularDamping	= 0.5f;
+    bodyDesc.flags = NX_BF_FROZEN_POS;
 
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions.set(0.5,0.5,1.0);
@@ -240,7 +241,7 @@ NxActor* PhysicsEngine::createBarrier(NxActor* car )
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&boxDesc);
 	actorDesc.body = &bodyDesc;
-	actorDesc.density = 500.0f;
+	actorDesc.density = 0.1f;
     actorDesc.globalPose = car->getGlobalPose();
 	actorDesc.globalPose.t = pos;
     

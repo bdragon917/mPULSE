@@ -2148,7 +2148,7 @@ void RenderingEngine::drawCars(Entities* entities)
                     NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
                     //drawModel(modelManager.getModel(entities->cars[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
                     drawModelPos(modelManager.getModel(entities->cars[i]->rc[r]->modelID), aPose );
-                    if(entities->cars[i]->getShieldValue() > 0)
+                    if(entities->cars[i]->getShield())
                         drawModelPos(modelManager.getModel("Shield.obj"), aPose );
                     //Particles
                     //Particle* newParticle = new Particle(entities->cars[i]->getActor()->getGlobalPose().t.x, entities->cars[i]->getActor()->getGlobalPose().t.y,entities->cars[i]->getActor()->getGlobalPose().t.z);
@@ -2188,7 +2188,7 @@ void RenderingEngine::drawAICars(Entities* entities)
                     //drawModel(modelManager.getModel(entities->AIcars[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
                     drawModelPos(modelManager.getModel(entities->AIcars[i]->rc[r]->modelID), aPose );
 
-                    if(entities->AIcars[i]->getShieldValue() > 0)
+                    if(entities->AIcars[i]->getShield())
                         drawModelPos(modelManager.getModel("Shield.obj"), aPose );
 
                     //myTargetVector
