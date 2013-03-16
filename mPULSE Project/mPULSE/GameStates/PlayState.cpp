@@ -634,7 +634,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
             else if(type == Entity::SHIELD)
             {                
-                car->setShieldValue(2000);
+                car->setShield(true);
             }
             else if(type == Entity::BARRIER)
             {

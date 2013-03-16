@@ -23,6 +23,8 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     pickup = NONE;
 
     shuntStartTime = 0;
+    shieldActivatedTime = 0;
+    shieldTimeout = 10000;
     maxShuntTime = 200;
     shuntPower = 50;
     shuntReloadTime = 600;
@@ -40,8 +42,8 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
 
 void Entity::update()
 {
-    if (shield > 0)
-        shield -= 5;
+    if (clock.getCurrentTime() - shieldActivatedTime > shieldTimeout)
+        shield = false;
 }
 
 void Entity::setTimeToLive(int tmpTime)
@@ -298,7 +300,7 @@ void Entity::collide(Entity* e)
     CustomData* cd = (CustomData*) e->getActor()->userData;
     if (cd->type == CustomData::OBSTACLE)
     {
-        if(shield == 0)
+        if(!shield)
         {
             if (cd->pickupType == MISSILE)
             {
@@ -320,8 +322,8 @@ void Entity::collide(Entity* e)
                 actor->setLinearVelocity((vel*0.3f)*unitDir);
             }
         }
-        else 
-            shield -= 50;
+        else
+            setShield(false);
     }
     else if(cd->type == CustomData::CAR && e->isShunting() && !isShunting()) //If both cars are shunting it will cancel the effect
     {
@@ -420,14 +422,16 @@ void Entity::setCustomData(CustomData* cd)
     actor->userData = cd;
 }
 
-int Entity::getShieldValue()
+bool Entity::getShield()
 {
     return shield;
 }
 
-void Entity::setShieldValue(int value)
+void Entity::setShield(bool active)
 {
-    shield += value;
+    if(active)
+        shieldActivatedTime = clock.getCurrentTime();
+    shield = active;
 }
 
 void Entity::setModel(ObjModel* m)

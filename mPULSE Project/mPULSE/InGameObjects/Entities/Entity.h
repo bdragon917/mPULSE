@@ -75,8 +75,8 @@ public:
 
     int getTimeToLive();
 
-    int getShieldValue();
-    void setShieldValue(int value);
+    bool getShield();
+    void setShield(bool active);
     void update();
 
     void reset();
@@ -91,6 +91,7 @@ private:
     bool alive;
     bool shunting;
     bool steering;
+    bool shield;
 
     int displayListIndex;
     int torque;
@@ -98,7 +99,7 @@ private:
     int minTorque;
     int timeToLive;
     int timeCreated;
-    int shield;
+    int shieldActivatedTime;     
     int health;
 
     float maxSteeringAngle;
@@ -109,6 +110,7 @@ private:
     unsigned shuntStartTime;
     unsigned maxShuntTime;
     unsigned shuntReloadTime;
+    unsigned shieldTimeout;   
     NxReal shuntPower;
 
     Clock clock;
