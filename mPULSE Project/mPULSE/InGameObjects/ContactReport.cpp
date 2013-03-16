@@ -38,6 +38,15 @@ void ContactReport::onContactNotify(NxContactPair& pair, NxU32 events)
                     eventManager->addEvent(new CollisionEvent(actor1CustomData->entity,actor2CustomData->entity, CollisionEvent::DESTROY_FIRST));
                 }
             }
+            else if(actor1CustomData->type == CustomData::CAR && actor2CustomData->type == CustomData::CAR)
+            {
+                eventManager->addEvent(new CollisionEvent(actor1CustomData->entity,actor2CustomData->entity, CollisionEvent::DESTROY_NONE));
+            }
+            else if(actor1CustomData->type == CustomData::OBSTACLE && actor2CustomData->type == CustomData::OBSTACLE)
+            {
+                if(actor1CustomData->pickupType == 0 || actor2CustomData == 0) //If a missile is involved destroy both obstacles
+                    eventManager->addEvent(new CollisionEvent(actor1CustomData->entity,actor2CustomData->entity, CollisionEvent::DESTROY_BOTH));
+            }
         }
     }
 }
