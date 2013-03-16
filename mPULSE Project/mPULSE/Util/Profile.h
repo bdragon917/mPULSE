@@ -11,6 +11,7 @@ public:
     std::string driverName;
     int carModel;
     int carTexture;
+    bool isAI;
 
 private:
 

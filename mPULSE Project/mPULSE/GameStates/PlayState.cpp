@@ -48,7 +48,7 @@ PlayState::PlayState()
     physicsEngine->setupCars(&entities.AIcars);  //Assign actors to the entities without the initalization of the engine
 
     renderingEngine = RenderingEngine::getInstance();
-    renderingEngine->setPlayerNum(gameVariables->getPlayerNum());
+//    renderingEngine->setPlayerNum(gameVariables->getPlayerNum());     //RenderingEngine now reads from gameVariables directly
 
     //set numPlayers
     renderingEngine->createLight();
@@ -213,7 +213,10 @@ void PlayState::update(float dt)
         //car->aAI->
         //car->aAI->setWaypoint(&Waypoint(7.83703,0.413632,-101.592));
         //car->aAI->setWaypoint(&Waypoint(entities.cars[0]->getActor()->getGlobalPose().t,,0,0));
-        car->aAI->update();
+
+        
+
+        car->aAI->update(entities.cars, entities.AIcars);
 
         //Do AI Controller stuff
         handleXboxController(c, entities.AIcars ,entities.AIcars.at(c)->aAI->getControl(), false);
@@ -654,6 +657,8 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             car->givePickup(Entity::SHIELD);
         if(state->dpadLeft)
             car->givePickup(Entity::MISSILE);
+        if(state->dpadDown)
+            car->getActor()->setLinearVelocity((car->getActor()->getLinearVelocity() * 1.2f));
         if(state->lb) 
             car->shuntLeft();
         if(state->rb)

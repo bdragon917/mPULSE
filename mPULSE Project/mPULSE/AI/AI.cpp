@@ -17,7 +17,7 @@ XboxController* AI::getControl()
     return xController;
 }
 
-void AI::update()
+void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
 {
     xController->initializeVariables();
 
@@ -40,7 +40,14 @@ void AI::update()
     myTarget.normalize();
     //myTarget = myTarget / myTarget.normalize();
 
-    myTargetVector = myTarget;      //for debug
+
+
+    myTarget = addBoydFlocking(myTarget, AIs, players);
+
+    //applySpeedBoost(AIs);
+
+
+    myTargetVector = myTarget;      //myTargetVector for debug
 
     //float angleToTarget = myDirection.dot(myTarget);
     float angleToTarget = myTarget.dot(myDirection);
@@ -50,44 +57,68 @@ void AI::update()
 
     //angleToTarget = acos((angleToTarget) / (myDirection.magnitude() * myTarget.magnitude()));
     //angleToTarget = acos((angleToTarget)/(myTarget.magnitude()*myDirection.magnitude()));
-    //printf("AI: AngleToTarget%f\n", angleToTarget);
+    printf("AI: AngleToTarget%f\n", angleToTarget);
+    // -1.0 < AngleTotarget < 1.0 
 
-    if (angleToTarget > 0.01f)
+    float SteerSenstivity = 0.03f;
+
+    if (angleToTarget > SteerSenstivity)
     {
-        //std::cout << "AI: Steering right" << std::endl;
         //steer right
         myTarget.normalize();
-        //xController->leftStick.x = myTarget.x;
-        //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
+
+        //Steering
         xController->leftStick.x = 1;
+
+        //finalize Steering
         if (xController->leftStick.x > 1.0f)
             xController->leftStick.x = 1.0f;
         else if (xController->leftStick.x < -1.0f)
             xController->leftStick.x = -1.0f;
         //xController->leftStick.y = myTarget.z;
         //xController->leftStick.magnitude = angleToTarget * 24000;
-        xController->leftStick.magnitude = 24000;
+        xController->leftStick.magnitude = 24000 * (((angleToTarget) / 2) + 0.5f);
 
-        xController->rTrigger = 75;
+        //This will change the amount of accelerate depending on angle steer
+        //1.0 > angleToTarget > 0.03
+        if (angleToTarget < 0.25f)
+            xController->rTrigger = 175;
+        else if (angleToTarget < 0.5f)
+            xController->rTrigger = 135;
+        else if (angleToTarget < 0.75f)
+            xController->rTrigger = 75;
+        else
+            xController->rTrigger = 35;
+        
 
     }
-    else if (angleToTarget < -0.01f)
+    else if (angleToTarget < -SteerSenstivity)
     {
         //steer left
-        //std::cout << "AI: Steering left" << std::endl;
         myTarget.normalize();
-        //xController->leftStick.x = myTarget.x;
-        //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
+
+        //steering
         xController->leftStick.x = -1;
+
+        //finalize Steering
         if (xController->leftStick.x > 1.0f)
             xController->leftStick.x = 1.0f;
         else if (xController->leftStick.x < -1.0f)
             xController->leftStick.x = -1.0f;
         //xController->leftStick.y = myTarget.z;
         //xController->leftStick.magnitude = angleToTarget * 24000;
-        xController->leftStick.magnitude = 24000;
+        xController->leftStick.magnitude = 24000 * (((-angleToTarget) / 2) + 0.5f);
 
-        xController->rTrigger = 75;
+        //This will change the amount of accelerate depending on angle steer
+        //-1.0 > angleToTarget > -0.03
+        if (angleToTarget > -0.25f)
+            xController->rTrigger = 175;
+        else if (angleToTarget > -0.5f)
+            xController->rTrigger = 135;
+        else if (angleToTarget > -0.75f)
+            xController->rTrigger = 75;
+        else
+            xController->rTrigger = 35;
 
     }
     else
@@ -98,13 +129,114 @@ void AI::update()
         //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
         xController->leftStick.x = 0;
         xController->rTrigger = 255;
+
+        if (xController->leftStick.y < 0)   //If y is negative, probably due to ai logic /slow down
+        {
+            xController->rTrigger = (int) (xController->rTrigger - ((xController->leftStick.y + 1) * 10));    //slight decelertion
+        }
     }
 //if (myActor->getGlobalOrientation
     
-    
-    
-    
 }
+
+NxVec3 AI::addBoydFlocking(NxVec3 curTargetVector, std::vector<Entity*> AIs, std::vector<Entity*> players)
+{
+    const float viewDistance = 60.0f;
+    const float seperateIntensity = 60.0f;
+    const float lookAheadDistance = 0.0f;
+
+   
+
+    NxVec3 retVector = curTargetVector;
+    NxVec3 myLoc = myActor->getGlobalPose().t;
+    NxVec3 LookAtLoc = myActor->getGlobalPose() * NxVec3(0.0f, 0.0f, lookAheadDistance );
+
+    
+
+
+    NxVec3 acumVector = NxVec3(0.0f,0.0f,0.0f);
+
+    //Look at AI's
+    for (unsigned int i=0;i<AIs.size();i++)
+    {
+        NxVec3 otherLoc = AIs[i]->getActor()->getGlobalPose().t;
+
+        //Boid Separation
+        //Currently, this calculate distance from a circle, thats ahead by lookAheadDistance
+        if (LookAtLoc.distance(otherLoc) < viewDistance)
+        {
+            acumVector = acumVector - (myLoc - otherLoc);
+        }
+
+    }
+
+    //Look at Players
+    for (unsigned int i=0;i<players.size();i++)
+    {
+        NxVec3 otherLoc = players[i]->getActor()->getGlobalPose().t;
+
+        //Boid Separation
+        //Currently, this calculate distance from a circle, thats ahead by lookAheadDistance
+        if (LookAtLoc.distance(otherLoc) < viewDistance)
+        {
+            acumVector = acumVector - (myLoc - otherLoc);
+        }
+
+    }
+
+
+    //Type1
+
+    acumVector = acumVector * seperateIntensity;
+
+
+
+    //return acumVector;
+
+    //Type 2a
+    return (retVector);
+    //return (retVector - acumVector);
+
+    //Type 2b
+    //return (retVector + acumVector);
+
+    //type 3
+    //if (acumVector.x > 0)
+    //{myActor->addLocalForce(NxVec3(1000.0f, 0, 0));}
+    //else if (acumVector.x < 0)
+    //    {myActor->addLocalForce(NxVec3(-1000.0f, 0, 0));}
+    //return retVector;
+}
+
+//Not complete
+//Applies speed boost if behind =)
+//Currently only works linearly tho...
+void AI::applySpeedBoost(std::vector<Entity*> AIs)
+{
+    NxVec3 myLoc = myActor->getGlobalPose().t;
+
+    NxVec3 genLoc = NxVec3(0.0f,0.0f,0.0f);
+ 
+    for (unsigned int i=0;i<AIs.size();i++)
+    {
+        NxVec3 otherLoc = AIs[i]->getActor()->getGlobalPose().t;
+
+        genLoc = genLoc + otherLoc;
+    }
+    genLoc = genLoc / (NxReal) AIs.size();
+
+
+    if (myLoc.distance(genLoc) > 90)
+    {
+        //Cheat =)
+        //more gravity?
+        myActor->addForce(NxVec3(0.0f, -100.0f, 0.0f));
+
+
+    }
+
+}
+
 
 NxActor* AI::getActor()
 {

@@ -129,9 +129,6 @@
     <ClCompile Include="GameStates\Camera.cpp">
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsEngine\Stream.cpp">
-      <Filter>Source Files\PhysicsEngine</Filter>
-    </ClCompile>
     <ClCompile Include="GameStates\MainMenuState.cpp">
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
@@ -200,6 +197,12 @@
     </ClCompile>
     <ClCompile Include="EventManager\TriggerEvent.cpp">
       <Filter>Source Files\EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameObjects\Entities\Entities.cpp">
+      <Filter>Source Files\InGameObjects\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsEngine\Stream.cpp">
+      <Filter>Source Files\PhysicsEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -316,6 +319,9 @@
     </ClInclude>
     <ClInclude Include="EventManager\TriggerEvent.h">
       <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameObjects\Entities\Entities.h">
+      <Filter>Header Files\InGameObjects\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

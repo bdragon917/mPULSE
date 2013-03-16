@@ -25,9 +25,14 @@
 #include <ModelLoader/ModelManager.h>
 #include <ModelLoader/ObjModel.h>
 
+#include <InGameObjects\Entities\Entities.h>
+
+#include <GameStates\GameVariables.h>
+
 class RenderingEngine
 {
 public:
+    /*
     typedef struct
     {
         std::vector<Entity*> cars;
@@ -37,6 +42,8 @@ public:
         std::vector<Entity*> DynamicObjs;
         std::vector<Entity*> Track;
     } Entities;
+    */
+    Entities entities;
 
     static RenderingEngine* getInstance();
     float zRot;
@@ -102,7 +109,7 @@ public:
 
     ModelManager getModelManger();
 
-    void setPlayerNum(int num);
+    void setGameVariables(GameVariables* inGameVaribles);
 
     bool debugCam;
 
@@ -148,7 +155,9 @@ private:
     void bindBMPtoTexture(char* filename, GLuint textures);
     void initializeTexture();
 
-    int playerNum;
+    //game Variables;
+    GameVariables* gameVariables;
+
 
     void RenderingEngine::initializeMainMenuVariables();
     //MainMenu stuff

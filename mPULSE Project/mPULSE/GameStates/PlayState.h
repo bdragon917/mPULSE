@@ -28,6 +28,8 @@
 #include "EventManager/TriggerEvent.h"
 #include "EventManager/EventManager.h"
 
+#include <InGameObjects\Entities\Entities.h>
+
 class PlayState : public GameState
 {
 public:
@@ -60,7 +62,7 @@ private:
     PlayState();
     float id;
     Track* track;
-    RenderingEngine::Entities entities;
+    Entities entities;
     PhysicsEngine* physicsEngine;
 	SoundEngine* soundEngine;
     RenderingEngine* renderingEngine;

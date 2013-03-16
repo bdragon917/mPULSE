@@ -24,6 +24,9 @@ public:
 
     int getPlayerNum();
 
+
+    bool player2isAI;       //debug??
+
     typedef enum {
         STANDARD,
         LAPTOP,

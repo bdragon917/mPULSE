@@ -1,18 +1,20 @@
 #include <PhysicsEngine/PhysicsEngine.h>
 
-std::vector<NxVec3*> spawnPoints;
-int curSP;
-int maxSP;
+//std::vector<NxVec3*> spawnPoints;
+//int curSP;
+//int maxSP;
 
 
 PhysicsEngine::PhysicsEngine()
 {
 	sceneSetup();
-    NxReal startX = 9;
-    NxReal startZ = -3;
-    NxReal offset = -6;
-    curSP = 0;
-    maxSP = 9;
+    startX = 9;
+    startZ = -3;
+    offset = -6;
+    //curSP = 0;
+    //maxSP = 9;
+    
+    /*
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset; 
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset; 
@@ -22,8 +24,26 @@ PhysicsEngine::PhysicsEngine()
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
+    */
 
 }
+
+NxVec3 PhysicsEngine::getNewSpawnPoint()
+{
+
+    NxVec3 retValue = NxVec3(startX,3,startZ);
+
+    //if (startX == 9)
+    {startX+=offset;}
+    //else
+    //{
+    //    startX-=offset;
+    //    startX = 7;
+   // }
+    
+    return retValue;
+}
+
 
 PhysicsEngine* PhysicsEngine::getInstance()
 {
@@ -116,9 +136,11 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
 	    box->setSleepEnergyThreshold(0);
 
 
-        if(curSP>maxSP){curSP=0;}
+        //if(curSP>maxSP){curSP=0;}
 
-        entityCar1->getActor()->setGlobalPosition(*spawnPoints[curSP++]);      
+        //entityCar1->getActor()->setGlobalPosition(*spawnPoints[curSP++]);   
+        entityCar1->getActor()->setGlobalPosition(getNewSpawnPoint());      //new spawnFunction
+        
     }
 }
 
@@ -505,9 +527,11 @@ NxActor* PhysicsEngine::createCarChassis()
 
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxShapes[2];
-	boxShapes[0].dimensions.set(2.2f, 0.4f, 1.2f);
+	
+    //boxShapes[0].dimensions.set(2.2f, 0.8f, 1.2f);
 	//boxShapes[1].dimensions.set(1.f, 0.3f, 1.1f);
-	//boxShapes[1].localPose.t.set(-0.3f, 0.7f, 0.f);
+    boxShapes[0].dimensions.set(2.2f, 0.7f, 1.3f);          //This might make it harder to fall trhough stage????
+	boxShapes[0].localPose.t.set(0.0f, 0.7f, 0.0f);
 
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&boxShapes[0]);

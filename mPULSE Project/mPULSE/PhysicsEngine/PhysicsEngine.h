@@ -38,6 +38,11 @@ private:
 
     NxWheelShape* AddWheelToActor(NxActor* actor, float x,float y, float z);
 
+    //Creating spawnpoints
+    NxReal startX;
+    NxReal startZ;
+    NxReal offset;
+
 public:
 
     //enum  ObjTypes { CAR, TRACK, OBSTACLE, STATIC };
@@ -50,6 +55,9 @@ public:
        
 
     PhysicsEngine();
+
+    NxVec3 PhysicsEngine::getNewSpawnPoint();
+
 	static PhysicsEngine* getInstance();
 	void sceneSetup();
     void step(float deltaTime);//float dt, Physics* physData);
@@ -72,6 +80,7 @@ public:
     void resetBoxHigh();
 
 	NxScene* getScene();
+
 
 };
 

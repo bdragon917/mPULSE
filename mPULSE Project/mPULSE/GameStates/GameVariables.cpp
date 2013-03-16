@@ -19,6 +19,8 @@ void GameVariables::initialize()
         numPlayers = 1;
         Profile* defaultProfile = new Profile();
         players.push_back(defaultProfile);
+
+        player2isAI = false;
     }
 }
 

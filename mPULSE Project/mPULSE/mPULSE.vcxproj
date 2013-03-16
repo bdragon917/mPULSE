@@ -106,6 +106,7 @@
     <ClCompile Include="GameStates\PlayState.cpp" />
     <ClCompile Include="InGameObjects\ContactReport.cpp" />
     <ClCompile Include="InGameObjects\CustomData.cpp" />
+    <ClCompile Include="InGameObjects\Entities\Entities.cpp" />
     <ClCompile Include="InGameObjects\Entities\Entity.cpp" />
     <ClCompile Include="InGameObjects\Entities\EntityComponent.cpp" />
     <ClCompile Include="InGameObjects\Entities\RenderableComponent.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="GameStates\PlayState.h" />
     <ClInclude Include="InGameObjects\ContactReport.h" />
     <ClInclude Include="InGameObjects\CustomData.h" />
+    <ClInclude Include="InGameObjects\Entities\Entities.h" />
     <ClInclude Include="InGameObjects\Entities\Entity.h" />
     <ClInclude Include="InGameObjects\Entities\EntityComponent.h" />
     <ClInclude Include="InGameObjects\Entities\RenderableComponent.h" />

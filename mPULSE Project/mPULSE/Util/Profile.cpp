@@ -6,4 +6,5 @@ Profile::Profile()
     carModel = 1;
     carTexture = 3;
     Obs = 0;
+    isAI = false;
 }

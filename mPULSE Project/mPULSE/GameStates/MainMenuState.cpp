@@ -42,7 +42,13 @@ void MainMenuState::render()
         case 1:
             //This should bring up a profile screen
             if (gameVariables->getPlayerNum() < 2)
+            {
                 printf("Only one player detected.\n");//TODO Tell the player on screen they need more controllers.
+                gameVariables->addPlayerTwo();
+                gameVariables->player2isAI = true;
+                renderingEngine->startFadeOut();
+                changeState(PLAY); 
+            }
             else
             {
                 gameVariables->addPlayerTwo();
@@ -101,7 +107,10 @@ void MainMenuState::handleXboxEvents(int player,XboxController* state)
         bool* controllers = gameVariables->getControllers();
 
         if(state->start && !controllers[player])
+        {
+            //TODO: ask for player profile
             gameVariables->addPlayer(player);
+        }
         if(state->back && controllers[player])
             gameVariables->removePlayer(player);
 

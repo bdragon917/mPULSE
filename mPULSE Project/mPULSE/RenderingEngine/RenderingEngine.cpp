@@ -695,9 +695,9 @@ void RenderingEngine::displayConsole()
 
 }
 
-void RenderingEngine::setPlayerNum(int num)
+void RenderingEngine::setGameVariables(GameVariables* newGameVaribles)
 {
-    playerNum = num;
+    gameVariables = newGameVaribles;
 }
 
 void RenderingEngine::quickInitialize()
@@ -746,7 +746,8 @@ void RenderingEngine::initializeGL()
 	glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-    setPlayerNum(1);    //initalize player numbers  //Hopefully this is only called in init state
+    //setPlayerNum(1);    //initalize player numbers  //Hopefully this is only called in init state
+    gameVariables = GameVariables::getInstance();
 
     quickInitialize();
 
@@ -1114,21 +1115,28 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (playerNum == 2)
+    if (gameVariables->getPlayerNum() == 2)
     {
-        //PlayerMode
-        for (int activePlayers=0;activePlayers<2;activePlayers++)
+
+        if (gameVariables->player2isAI)
         {
-            bool isTop = false;
-            if (activePlayers == 0)
-            {isTop = true;}
-            drawScene_ForPlayer(scene, track, entities, activePlayers, true, isTop, entities->cars);
+            //AI Mode
+            drawScene_ForPlayer(scene, track, entities, 0, true, true, entities->cars);
+            entities->AIcars.at(0)->aCam->updateCamera(16);
+            drawScene_ForPlayer(scene, track, entities, 0, true, false, entities->AIcars);
+        }
+        else
+        {
+            //PlayerMode
+            for (int activePlayers=0;activePlayers<2;activePlayers++)
+            {
+                bool isTop = false;
+                if (activePlayers == 0)
+                {isTop = true;}
+                drawScene_ForPlayer(scene, track, entities, activePlayers, true, isTop, entities->cars);
+            }
         }
 
-        //AI Mode
-        //drawScene_ForPlayer(scene, track, entities, 0, true, true, entities->cars);
-        //entities->AIcars.at(0)->aCam->updateCamera(16);
-        //drawScene_ForPlayer(scene, track, entities, 0, true, false, entities->AIcars);
     }
     else
     {
@@ -1658,22 +1666,23 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
          if (debugPhysX) //If debugPhyX then
          {
               RenderDebugPhysic(scene->getDebugRenderable());
-            drawText(800,-600, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
-            drawText(800,-620, FloatToString(entities->cars[carIndex]->getDriveWheels()->at(0)->getAxleSpeed()) + " :W0_d_Rot");
-            drawText(800,-640, FloatToString(entities->cars[carIndex]->getDriveWheels()->at(1)->getAxleSpeed()) + " :W1_d_Rot");
-            drawText(800,-660, FloatToString(entities->cars[carIndex]->getPassiveWheels()->at(0)->getAxleSpeed()) + " :W2_p_Rot");
-            drawText(800,-680, FloatToString(entities->cars[carIndex]->getPassiveWheels()->at(1)->getAxleSpeed()) + " :W3-p_Rot");
+            drawText(800,-600, FloatToString(targetEntities[carIndex]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
+            drawText(800,-620, FloatToString(targetEntities[carIndex]->getDriveWheels()->at(0)->getAxleSpeed()) + " :W0_d_Rot");
+            drawText(800,-640, FloatToString(targetEntities[carIndex]->getDriveWheels()->at(1)->getAxleSpeed()) + " :W1_d_Rot");
+            drawText(800,-660, FloatToString(targetEntities[carIndex]->getPassiveWheels()->at(0)->getAxleSpeed()) + " :W2_p_Rot");
+            drawText(800,-680, FloatToString(targetEntities[carIndex]->getPassiveWheels()->at(1)->getAxleSpeed()) + " :W3-p_Rot");
          }
 
 
-        CustomData* cd = (CustomData*)entities->cars[carIndex]->getActor()->userData;
+        CustomData* cd = (CustomData*)targetEntities[carIndex]->getActor()->userData;
         bool hasWon = false;
 
         if (cd->laps > 1)
             hasWon = true;
 
         
-         drawHUD(entities->cars[carIndex]->getActor(), hasWon);
+         drawHUD(targetEntities[carIndex]->getActor(), hasWon);
+         //drawHUD(entities->cars[carIndex]->getActor(), hasWon);
 
          
          glDisable(GL_TEXTURE_2D);
