@@ -714,27 +714,37 @@ void PlayState::handleEvents()
 void PlayState::handleCollisionEvents()
 {
     std::vector<CollisionEvent*>* collisions = eventManager->getCollisionEvents();
+    Entity* e1;
+    Entity* e2;
     CollisionEvent* collision;
 
     for(unsigned i=0;i<collisions->size();i++)
     {
         collision = collisions->at(i);
+        e1 = collision->entity1;
+        e2 = collision->entity2;
+
         if (collision->action == CollisionEvent::DESTROY_FIRST)
         {
-            collision->entity2->collide(collision->entity1);
-            collision->entity1->kill();
+            e1->kill();
+            e2->collide(e1);            
         }
         else if (collision->action == CollisionEvent::DESTROY_SECOND)
         {            
-            collision->entity2->kill();
+            e1->collide(e2);
+            e2->kill();
         }
         else if (collision->action == CollisionEvent::DESTROY_BOTH)
         {
-            collision->entity1->kill();
-            collision->entity2->kill();
+            e1->kill();
+            e2->kill();
+        }
+        else if (collision->action == CollisionEvent::DESTROY_NONE)
+        {
+            e2->collide(e1);
+            e1->collide(e2);
         }
     }
-
     collisions->clear();
 }
 

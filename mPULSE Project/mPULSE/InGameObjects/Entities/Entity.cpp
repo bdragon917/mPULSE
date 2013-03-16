@@ -25,7 +25,7 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     shuntStartTime = 0;
     maxShuntTime = 200;
     shuntPower = 50;
-    shuntReloadTime = 400;
+    shuntReloadTime = 600;
 
     timeToLive = tmpTimeToLive;
     timeCreated = clock.getCurrentTime();
@@ -192,8 +192,8 @@ void Entity::deshunt()
     NxVec3 carVel = actor->getLinearVelocity();
     NxVec3 carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
 
-    carVel.normalize();
-    carDir.normalize();
+    carVel.normalize(); 
+    carDir.normalize(); 
     NxReal angle = acos(carVel.dot(carDir));    
 
     actor->setLinearVelocity(carDir*(actor->getLinearVelocity().magnitude()*cos(angle)));
@@ -281,7 +281,7 @@ void Entity::setSteeringAngle(float percent)
 
 void Entity::chargeBattery()
 {
-	if(!batteryCharged)
+	if(!batteryCharged && !shunting)
 	{
 		batteryCharged = true;
 		NxVec3 lin_vel = actor->getLinearVelocity();
@@ -323,19 +323,36 @@ void Entity::collide(Entity* e)
         else 
             shield -= 50;
     }
+    else if(cd->type == CustomData::CAR && e->isShunting() && !isShunting()) //If both cars are shunting it will cancel the effect
+    {
+        NxVec3 dir = (actor->getGlobalPosition() - e->getActor()->getGlobalPosition());        
+        actor->addForce(dir * 1000000);
+
+        NxVec3 unitDir = actor->getLinearVelocity();
+        float vel = actor->getLinearVelocity().magnitude();
+        unitDir.normalize();
+        actor->setLinearVelocity((vel*0.7f)*unitDir);
+    }
 }
 
 void Entity::dischargeBattery()
 {
-	if(batteryCharged)
+	if(batteryCharged && !shunting)
 	{
 		batteryCharged = false;
+        NxVec3 dir = actor->getGlobalOrientation() * NxVec3(1,0,0);
 		NxVec3 lin_vel = actor->getLinearVelocity();
-		NxReal speed = lin_vel.magnitude();
-		lin_vel.setMagnitude(speed + charge);
 
-		actor->setLinearVelocity(lin_vel);
+		//NxReal speed = lin_vel.magnitude();
+		//lin_vel.setMagnitude(speed + charge);
+
+		actor->setLinearVelocity(lin_vel + dir*charge);
 	}
+}
+
+bool Entity::isShunting()
+{
+    return shunting;
 }
 
 bool Entity::isBatteryCharged()

@@ -83,6 +83,7 @@ public:
     bool isAlive();
     bool hasShield();
     bool isBatteryCharged();
+    bool isShunting();
 
 private:
 	bool batteryCharged;
