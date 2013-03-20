@@ -24,7 +24,7 @@ public:
 private:
     MainMenuState();
     bool buttonPressed;
-    bool startGame;
+    bool endState;
     bool lockControls;
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;

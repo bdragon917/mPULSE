@@ -17,7 +17,7 @@ MainMenuState::MainMenuState()
     WAIT_TIME = 50;
     MAX_SELECTED = 4;
     buttonPressed = false;
-    startGame = false;          //might not be used....
+    endState = false;          //might not be used....
     lockControls = false;
 }
 
@@ -28,18 +28,36 @@ void MainMenuState::update(float dt)
 
 void MainMenuState::render()
 {   
+    //Construct ProfileScreenInfo (Using this to tell renderingHowTo draw profile
+    //Not reallly used excepted for .isActive, but good to initial the variables
+    ProfileScreenInfo psi = ProfileScreenInfo();
+    psi.isActive = false;
+    psi.title = "Player 1 Profile";
+    psi.profilesOnScreen[0] = "";
+    psi.profilesOnScreen[1] = "";
+    psi.profilesOnScreen[2] = "";
+    psi.profilesOnScreen[3] = "";
+    psi.profilesOnScreen[4] = "";
+    psi.selectedItem = 0;
+    psi.selectedTextTexture = 1;
+    psi.selectedButtonTexture = 1;
+
+
+
     //asumes myDt is updated
-    int retMenuVal = renderingEngine->drawMainMenuScreen(curSelected, 0, myDt);     //retMenuVal returns 1 if it is finished (This means change screen!)
+    int retMenuVal = renderingEngine->drawMainMenuScreen(curSelected, 0, myDt, psi);     //retMenuVal returns 1 if it is finished (This means change screen!)
 
 
     //If all animation is finished, run the command
-	if ((retMenuVal == 1))
+	if ((retMenuVal == 1) || endState)
     {
         lockControls = false;    //Unlock controls so main menu can be used again later
+        endState = false;        //reset so it doesn't prevent this state from shuttingdown right away if called again
+
         switch (curSelected)
         {
         case 0:
-            changeState(PLAY);
+            changeState(PROFILE);
             break;
         case 1:
             //This should bring up a profile screen
@@ -48,12 +66,12 @@ void MainMenuState::render()
                 printf("Only one player detected.\n");//TODO Tell the player on screen they need more controllers.
                 gameVariables->addPlayerTwo();
                 gameVariables->player2isAI = true;
-                changeState(PLAY); 
+                changeState(PROFILE); 
             }
             else
             {
                 gameVariables->addPlayerTwo();
-                changeState(PLAY); 
+                changeState(PROFILE); 
             }
             break;
         case 2:
@@ -67,8 +85,7 @@ void MainMenuState::render()
             break;
         }
     }
-     
-    startGame = false;
+
 }
 
 bool MainMenuState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
@@ -154,8 +171,19 @@ void MainMenuState::keySelectRight()
 
 void MainMenuState::keySelectTarget()
 {
-    renderingEngine->startFadeOut();
-    lockControls = true;
+    if (curSelected == 0)
+    {
+        endState = true;
+    }
+    else if (curSelected == 1)
+    {
+        endState = true;
+    }
+    else
+    {
+        renderingEngine->startFadeOut();
+        lockControls = true;
+    }
     //lock controls
 }
 

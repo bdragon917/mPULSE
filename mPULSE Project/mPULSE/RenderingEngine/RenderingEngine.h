@@ -27,6 +27,8 @@
 
 #include <InGameObjects\Entities\Entities.h>
 
+#include <RenderingEngine\ProfileScreenInfo.h>
+
 #include <GameStates\GameVariables.h>
 
 class RenderingEngine
@@ -66,15 +68,20 @@ public:
     void moveStuff(float &testF);
 
     void RenderingEngine::drawLoading();
+
     void drawScene(NxScene* scene,Track* track, Entities* entities);
     void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, bool topScreen, std::vector<Entity*> targetEntities);
-    int drawMainMenuScreen(int curMenuButton, bool clicked, float dt);
+    int drawMainMenuScreen(int curMenuButton, bool clicked, float dt, ProfileScreenInfo psi);
+
+    void drawProfileOverlay(ProfileScreenInfo psi);
+
     void drawActor(NxActor* actor);
     void drawActor_Safe(NxActor* actor);
     void drawShape(NxShape* shape);
     void drawBox(NxBoxShape* box);
     void drawBox_Generic(float size);
     void drawSquare(float x, float y, float z, float half_width, float half_height);
+    void drawSquareUVRev(float x, float y, float z, float half_width, float half_height);
     void drawModel(ObjModel* model,int x,int y, int z, int scale);
     void drawModelPos(ObjModel* model, NxMat34* aMatrix);
     void drawModelShadow(ObjModel* model, NxMat34* aPose);

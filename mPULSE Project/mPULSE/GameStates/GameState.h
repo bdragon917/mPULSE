@@ -10,7 +10,11 @@ public:
     typedef enum {
         INIT,
         MAIN_MENU,
+        STORY,
+        SETTING,
+        PROFILE,
         PLAY,
+        RESULT,
         PAUSE,
         GAMEOVER
     } StateType;

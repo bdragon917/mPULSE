@@ -105,6 +105,11 @@
     <ClCompile Include="GameStates\InitState.cpp" />
     <ClCompile Include="GameStates\MainMenuState.cpp" />
     <ClCompile Include="GameStates\PlayState.cpp" />
+    <ClCompile Include="GameStates\ProfileState.cpp" />
+    <ClCompile Include="GameStates\ResultState.cpp" />
+    <ClCompile Include="GameStates\SettingState.cpp" />
+    <ClCompile Include="GameStates\ShopState.cpp" />
+    <ClCompile Include="GameStates\StoryState.cpp" />
     <ClCompile Include="InGameObjects\ContactReport.cpp" />
     <ClCompile Include="InGameObjects\CustomData.cpp" />
     <ClCompile Include="InGameObjects\Entities\Entities.cpp" />
@@ -147,6 +152,11 @@
     <ClInclude Include="GameStates\InitState.h" />
     <ClInclude Include="GameStates\MainMenuState.h" />
     <ClInclude Include="GameStates\PlayState.h" />
+    <ClInclude Include="GameStates\ProfileState.h" />
+    <ClInclude Include="GameStates\ResultState.h" />
+    <ClInclude Include="GameStates\SettingState.h" />
+    <ClInclude Include="GameStates\ShopState.h" />
+    <ClInclude Include="GameStates\StoryState.h" />
     <ClInclude Include="InGameObjects\ContactReport.h" />
     <ClInclude Include="InGameObjects\CustomData.h" />
     <ClInclude Include="InGameObjects\Entities\Entities.h" />
@@ -162,6 +172,7 @@
     <ClInclude Include="PhysicsEngine\stream.h" />
     <ClInclude Include="RenderingEngine\BMP.h" />
     <ClInclude Include="RenderingEngine\Particle.h" />
+    <ClInclude Include="RenderingEngine\ProfileScreenInfo.h" />
     <ClInclude Include="RenderingEngine\RenderingEngine.h" />
     <ClInclude Include="RenderingEngine\Shader.h" />
     <ClInclude Include="SoundEngine\Sound.h" />

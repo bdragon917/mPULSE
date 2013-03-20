@@ -119,8 +119,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[33];
-    glGenTextures(33, textureid_P1);
+    textureid_P1 = new GLuint[34];
+    glGenTextures(34, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -164,6 +164,8 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/outUVBarrierDisc.bmp", textureid_P1[30]);
     bindBMPtoTexture("./Images/outUVBarrierScreen.bmp", textureid_P1[31]);
     bindBMPtoTexture("./Images/outUVMissile.bmp", textureid_P1[32]);
+
+    bindBMPtoTexture("./Images/Menu/Profiles/LoadProfile.bmp", textureid_P1[33]);
 
 
 	//"/Images/textureTest.bmp"
@@ -1841,7 +1843,7 @@ void RenderingEngine::initializeMainMenuVariables()
     particles.clear();
 }
 
-int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float dt)
+int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float dt, ProfileScreenInfo psi)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -2022,6 +2024,14 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     }
 
 
+    if (psi.isActive)
+    {
+        drawProfileOverlay(psi);
+    }
+
+
+
+
     //Fader
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
@@ -2059,6 +2069,81 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 }
 
 
+void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
+{
+    //clear depth buffer
+    //glClear(GL_DEPTH_BUFFER_BIT);
+
+
+    //Initialize a new coordinate system
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    //glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1.0f, 1.0f);
+    glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    //clear depth buffer
+    glPushAttrib(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    //declare some common variables
+    const float half_height = SCREEN_HEIGHT / 2.0f;
+    const float half_width = SCREEN_WIDTH / 2.0f;
+
+    const float button_width = SCREEN_WIDTH / 6.0f;     //button width is /3, but also /2 as drawSquare uses half
+
+    const float dec_height = SCREEN_HEIGHT / 40.0f;
+    const float butWidthOffset = half_width + (SCREEN_WIDTH / 96.0f);  //128 64
+    const float butHeightOffset = (SCREEN_HEIGHT / 4.0f);
+
+    //draw transparent blackground
+        glColor4f(0.0f,0.0f,0.0f, 0.5f);
+        drawSquare(half_width, half_height, 0.0f, half_width, half_height);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+    //draw profile info
+        aHUDShader->on();
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[33]);
+        glColor4f(0.0f,0.0f,0.0f, 1.0f);
+        drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
+
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*0), 0.0f, button_width, dec_height);
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*2), 0.0f, button_width, dec_height);
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*4), 0.0f, button_width, dec_height);
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*6), 0.0f, button_width, dec_height);
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*8), 0.0f, button_width, dec_height);
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*12), 0.0f, button_width, dec_height);
+
+
+
+        aHUDShader->off();
+
+    //reset to previous state
+    glPopAttrib();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+     glEnable(GL_LIGHTING);
+
+}
 
 
 
@@ -2549,6 +2634,18 @@ void RenderingEngine::drawSquare(float x, float y, float z, float half_width, fl
 		glTexCoord2d(0.0,1.0); glVertex3f(   (x+half_width),    (y+half_height),    (z)   );
 		glTexCoord2d(0.0,0.0); glVertex3f(   (x+half_width),    (y-half_height),    (z)   );
 		glTexCoord2d(1.0,0.0); glVertex3f(   (x-half_width),    (y-half_height),    (z)   );
+		glEnd();
+}
+
+void RenderingEngine::drawSquareUVRev(float x, float y, float z, float half_width, float half_height)
+{
+		glBegin(GL_QUADS);
+		//Bottom
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glTexCoord2d(0.0,0.0); glVertex3f(   (x-half_width),    (y+half_height),    (z)   );
+		glTexCoord2d(1.0,0.0); glVertex3f(   (x+half_width),    (y+half_height),    (z)   );
+		glTexCoord2d(1.0,1.0); glVertex3f(   (x+half_width),    (y-half_height),    (z)   );
+		glTexCoord2d(0.0,1.0); glVertex3f(   (x-half_width),    (y-half_height),    (z)   );
 		glEnd();
 }
 

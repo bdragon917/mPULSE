@@ -207,6 +207,21 @@
     <ClCompile Include="AI\AIPersonality.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
+    <ClCompile Include="GameStates\ProfileState.cpp">
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\ResultState.cpp">
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\SettingState.cpp">
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\ShopState.cpp">
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\StoryState.cpp">
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -328,6 +343,24 @@
     </ClInclude>
     <ClInclude Include="AI\AIPersonality.h">
       <Filter>Header Files\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine\ProfileScreenInfo.h">
+      <Filter>Header Files\RenderingEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStates\ProfileState.h">
+      <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStates\ResultState.h">
+      <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStates\SettingState.h">
+      <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStates\ShopState.h">
+      <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStates\StoryState.h">
+      <Filter>Header Files\GameStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

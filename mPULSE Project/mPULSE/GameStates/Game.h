@@ -8,6 +8,7 @@
 #include <GameStates/InitState.h>
 #include <GameStates/PlayState.h>
 #include <GameStates/MainMenuState.h>
+#include <GameStates/ProfileState.h>
 #include <Util/Clock.h>
 
 class Game
