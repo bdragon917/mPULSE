@@ -1841,7 +1841,7 @@ void RenderingEngine::initializeMainMenuVariables()
     particles.clear();
 }
 
-int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
+int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float dt)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -2024,7 +2024,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 
     //Fader
     //float FadeCtrl = 0.0f;
-    glColor4f(0.0f,0.0f,0.0f, updateFade());
+    glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
             glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
 		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
@@ -2032,7 +2032,10 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
 		glEnd();
 
-        if (FadeCtrl >= 1.0f){FadeCtrl=0.0f;fadeMode=0;return 1;}
+        if (FadeCtrl >= 1.0f)
+            {
+                FadeCtrl=0.0f;fadeMode=0;return 1;
+            }
 
 
     if (aShader != NULL)
@@ -2784,7 +2787,7 @@ void RenderingEngine::startFadeOut()
     }
 }
 
-float RenderingEngine::updateFade()
+float RenderingEngine::updateFade(float dt)
 {
     switch (fadeMode)
     {

@@ -204,6 +204,9 @@
     <ClCompile Include="PhysicsEngine\Stream.cpp">
       <Filter>Source Files\PhysicsEngine</Filter>
     </ClCompile>
+    <ClCompile Include="AI\AIPersonality.cpp">
+      <Filter>Source Files\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -322,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="InGameObjects\Entities\Entities.h">
       <Filter>Header Files\InGameObjects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="AI\AIPersonality.h">
+      <Filter>Header Files\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

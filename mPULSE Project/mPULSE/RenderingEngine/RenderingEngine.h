@@ -68,7 +68,7 @@ public:
     void RenderingEngine::drawLoading();
     void drawScene(NxScene* scene,Track* track, Entities* entities);
     void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, bool topScreen, std::vector<Entity*> targetEntities);
-    int drawMainMenuScreen(int curMenuButton, bool clicked);
+    int drawMainMenuScreen(int curMenuButton, bool clicked, float dt);
     void drawActor(NxActor* actor);
     void drawActor_Safe(NxActor* actor);
     void drawShape(NxShape* shape);
@@ -168,7 +168,7 @@ private:
     //Used for Fade In and Out
     float FadeCtrl;
     int fadeMode;
-    float updateFade();
+    float updateFade(float dt);
 
     
         
