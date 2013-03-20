@@ -141,11 +141,19 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
 
 NxVec3 AI::addBoydFlocking(NxVec3 curTargetVector, std::vector<Entity*> AIs, std::vector<Entity*> players)
 {
-    const float viewDistance = 60.0f;
+    float viewDistance = 60.0f;
     const float seperateIntensity = 60.0f;
-    const float lookAheadDistance = 0.0f;
+    float lookAheadDistance = 0.0f;
 
    
+
+    //Lets try to look more ahead if going faster
+    //If (
+        lookAheadDistance =+ (myActor->getLinearVelocity().magnitude() / 10.0f);
+        viewDistance =+ (myActor->getLinearVelocity().magnitude() / 20.0f);
+
+
+
 
     NxVec3 retVector = curTargetVector;
     NxVec3 myLoc = myActor->getGlobalPose().t;

@@ -34,6 +34,8 @@ public:
     NxVec3 myOrientation;
 private:
 
+
+
     Waypoint* targetWaypoint;
     NxActor* myActor;
     NxVec3 myLocation;
