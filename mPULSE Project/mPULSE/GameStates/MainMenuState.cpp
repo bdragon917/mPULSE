@@ -32,12 +32,13 @@ void MainMenuState::render()
     int retMenuVal = renderingEngine->drawMainMenuScreen(curSelected, 0, myDt);     //retMenuVal returns 1 if it is finished (This means change screen!)
 
 
+    //If all animation is finished, run the command
 	if ((retMenuVal == 1))
     {
+        lockControls = false;    //Unlock controls so main menu can be used again later
         switch (curSelected)
         {
         case 0:
-            lockControls = false;    //Unlock controls
             changeState(PLAY);
             break;
         case 1:
@@ -47,13 +48,11 @@ void MainMenuState::render()
                 printf("Only one player detected.\n");//TODO Tell the player on screen they need more controllers.
                 gameVariables->addPlayerTwo();
                 gameVariables->player2isAI = true;
-                lockControls = false;    //Unlock controls
                 changeState(PLAY); 
             }
             else
             {
                 gameVariables->addPlayerTwo();
-                lockControls = false;    //Unlock controls
                 changeState(PLAY); 
             }
             break;
