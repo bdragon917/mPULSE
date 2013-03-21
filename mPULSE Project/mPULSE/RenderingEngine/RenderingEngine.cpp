@@ -119,8 +119,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[34];
-    glGenTextures(34, textureid_P1);
+    textureid_P1 = new GLuint[37];
+    glGenTextures(37, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -166,6 +166,10 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/outUVMissile.bmp", textureid_P1[32]);
 
     bindBMPtoTexture("./Images/Menu/Profiles/LoadProfile.bmp", textureid_P1[33]);
+
+    bindBMPtoTexture("./Images/FontTexture.bmp", textureid_P1[34]);
+    bindBMPtoTexture("./Images/FontSelectedTexture.bmp", textureid_P1[35]);
+    bindBMPtoTexture("./Images/FontTitleTexture.bmp", textureid_P1[36]);
 
 
 	//"/Images/textureTest.bmp"
@@ -370,6 +374,47 @@ void RenderingEngine::drawModelShadow(ObjModel* model, NxMat34* aPose)
 }
 
 
+
+void RenderingEngine::renderText(float startX, float startY, float fontHeight, float FontWidth, int fontTexture, string str, bool invert)
+{
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[fontTexture]);
+
+    float curXOffset = 0;
+
+    //Select Correct UV coordinates, draw a square with that coordiate, inc location
+    for (unsigned i = 0; i < str.size(); i++)
+    {
+        char c = str[i];
+
+        const float border = 1/ 256.0f;
+
+        float y = 1.0f - (((c / 16) + 1) / 16.0f);
+        float x = (c % 16) / 16.0f + border;
+        const float gridSpacing = (1.0f / 16.0f) - border;    //size of cell
+
+        glBegin(GL_QUADS);
+        glNormal3f(0.0f, 0.0f, 1.0f);
+        if (invert)
+        {
+		    glTexCoord2d(x,y);                              glVertex3f(   (startX)       + curXOffset,          (startY+fontHeight),    (0)   );        //upperleft
+		    glTexCoord2d(x,y+gridSpacing);                  glVertex3f(   (startX)       + curXOffset,          (startY),               (0)   );        //lowerleft
+		    glTexCoord2d(x+gridSpacing,y+gridSpacing);      glVertex3f(   (startX+FontWidth) + curXOffset,      (startY),               (0)   );        //lowerright
+		    glTexCoord2d(x+gridSpacing,y);                  glVertex3f(   (startX+FontWidth) + curXOffset,      (startY+fontHeight),    (0)   );        //upperright
+        }
+        else
+        {
+		    glTexCoord2d(x,y);                              glVertex3f(   (startX)       + curXOffset,          (startY),               (0)   );        //lowerleft
+		    glTexCoord2d(x,y+gridSpacing);                  glVertex3f(   (startX)       + curXOffset,          (startY+fontHeight),    (0)   );        //upperleft
+		    glTexCoord2d(x+gridSpacing,y+gridSpacing);      glVertex3f(   (startX+FontWidth) + curXOffset,      (startY+fontHeight),    (0)   );        //upperright
+		    glTexCoord2d(x+gridSpacing,y);                  glVertex3f(   (startX+FontWidth) + curXOffset,      (startY),               (0)   );        //lowerright
+        }
+        glEnd();
+
+        curXOffset = curXOffset + FontWidth;
+    }
+
+
+}
 
 /**
 *	This draws a string on screen
@@ -2094,10 +2139,15 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
     const float half_width = SCREEN_WIDTH / 2.0f;
 
     const float button_width = SCREEN_WIDTH / 6.0f;     //button width is /3, but also /2 as drawSquare uses half
+    float const textWidth = button_width * 1.6f;
 
     const float dec_height = SCREEN_HEIGHT / 40.0f;
     const float butWidthOffset = half_width + (SCREEN_WIDTH / 96.0f);  //128 64
     const float butHeightOffset = (SCREEN_HEIGHT / 4.0f);
+
+    const float titleHeightOffset = (SCREEN_HEIGHT / 8.0f);
+    //const float doneHeightOffset = (3.0f * SCREEN_HEIGHT / 4.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+    const float doneHeightOffset = (13.0f * SCREEN_HEIGHT / 16.0f);// + (SCREEN_HEIGHT / 32.0f) ;
 
     //draw transparent blackground
         glColor4f(0.0f,0.0f,0.0f, 0.5f);
@@ -2111,26 +2161,81 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
         glColor4f(0.0f,0.0f,0.0f, 1.0f);
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
+        //Title
+        string title = "Profile: Player 1";
+        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
+        //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+
+        //Profiles
+        title = "Default";
+        if (psi.selectedItem == 1)
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*3), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
+        else
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*3), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
+
+        title = "Ankle Skylocker";
+        if (psi.selectedItem == 2)
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*5), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
+        else
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*5), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
+
+        title = "Shinobi Kanobi";
+        if (psi.selectedItem == 3)
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*7), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
+        else
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*7), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
+
+        title = "Doda";
+        if (psi.selectedItem == 4)
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*9), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
+        else
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*9), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
+        /*
+        if (psi.selectedItem == 1)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+        else
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
         drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*0), 0.0f, button_width, dec_height);
+        
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        if (psi.selectedItem == 2)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+        else
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
         drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*2), 0.0f, button_width, dec_height);
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        if (psi.selectedItem == 3)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+        else
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
         drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*4), 0.0f, button_width, dec_height);
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        if (psi.selectedItem == 4)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+        else
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
         drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*6), 0.0f, button_width, dec_height);
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+       if (psi.selectedItem == 5)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+        else
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
         drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*8), 0.0f, button_width, dec_height);
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
-        drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*12), 0.0f, button_width, dec_height);
+        if (psi.selectedItem == 6)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+        else
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        drawSquareUVRev(butWidthOffset, butHeightOffset + (dec_height*10), 0.0f, button_width, dec_height);
+        */
 
-
+        //Done Button
+       if (psi.selectedItem == 0)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+        else
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+        drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
 
         aHUDShader->off();
 
