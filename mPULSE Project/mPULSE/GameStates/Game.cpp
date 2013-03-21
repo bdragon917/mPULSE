@@ -47,6 +47,12 @@ void Game::checkStateChange()
         case GameState::MAIN_MENU:
             state = MainMenuState::getInstance();                
             break;
+        case GameState::STORY:
+            state = StoryState::getInstance();
+            break;
+        case GameState::SETTING:
+            state = SettingState::getInstance();
+            break;
         case GameState::PROFILE:
             state = ProfileState::getInstance();                
             break;   

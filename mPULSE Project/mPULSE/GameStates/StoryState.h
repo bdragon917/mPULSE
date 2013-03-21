@@ -25,8 +25,6 @@ public:
 private:
     StoryState();
 
-    ProfileScreenInfo psi;
-
     bool lockControls;
     bool endState;
 
