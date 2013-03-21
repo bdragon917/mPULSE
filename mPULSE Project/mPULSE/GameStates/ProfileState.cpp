@@ -4,10 +4,10 @@ ProfileState::ProfileState()
 {
     changeState(MAIN_MENU); 
     gameVariables = GameVariables::getInstance();
-;
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
+
     //renderingEngine->createLight_MainMenu();
 
     //Load Profiles

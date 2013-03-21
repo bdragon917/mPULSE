@@ -44,6 +44,8 @@ private:
 
     float myDt; //hack for update
 
+    int targetPlayer;
+
     int curSelected;
     int MAX_SELECTED;
 
