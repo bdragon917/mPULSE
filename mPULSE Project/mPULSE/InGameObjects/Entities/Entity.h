@@ -63,6 +63,9 @@ public:
     //NxVec3 location for rendering
     //int rotation mode
     //rotation data    
+
+	NxVec3* linearSweep(float dt);
+
     AI* aAI;
     void setTimeToLive(int tmpTime);
     void setCustomData(CustomData* cd);

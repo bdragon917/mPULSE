@@ -181,6 +181,10 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
         Entity* car = entities.cars[c];
+		if(car->linearSweep(dt) != NULL)
+		{
+			printf("Hit detected!\n");
+		}
         car->update();
         if (car->getActor()->getGlobalPose().t.y < -20.0f)
         {
