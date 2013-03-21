@@ -170,13 +170,14 @@ NxVec3 AI::attackPlayerInRange(NxVec3 myTarget, std::vector<Entity*> players)
         {
             //And is closest
             if (LookAtLoc.distance(otherLoc) < LookAtLoc.distance(retValue))
-            retValue = otherLoc;
+            {
+                retValue = otherLoc;
+                retValue = retValue - myLoc;
+            }
         }
 
     }
     
-    
-    retValue = retValue - myLoc;
 
     return retValue;
 }

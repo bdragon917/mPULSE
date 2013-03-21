@@ -28,6 +28,7 @@
 #include <InGameObjects\Entities\Entities.h>
 
 #include <RenderingEngine\ProfileScreenInfo.h>
+#include <RenderingEngine\DynamicImage.h>
 
 #include <GameStates\GameVariables.h>
 
@@ -85,6 +86,7 @@ public:
     void drawSquare(float x, float y, float z, float half_width, float half_height);
     void drawSquareUVRev(float x, float y, float z, float half_width, float half_height);
     void drawModel(ObjModel* model,int x,int y, int z, int scale);
+    void drawModelPosRotationEnhanced(ObjModel* model, Entity* anEntity);
     void drawModelPos(ObjModel* model, NxMat34* aMatrix);
     void drawModelShadow(ObjModel* model, NxMat34* aPose);
     void drawDynamicObjects(std::vector<Entity*>* dObjs);
@@ -131,6 +133,8 @@ private:
     };
 
     std::vector<drawableText> textQueue;
+
+    std::vector<DynamicImage> dImages;
 
     RenderingEngine();
 
