@@ -25,11 +25,18 @@ private:
     MainMenuState();
     bool buttonPressed;
     bool startGame;
+    bool lockControls;
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
     GameVariables* gameVariables;
     Clock clock;
     unsigned prevTime;
+
+    void keySelectLeft();
+    void keySelectRight();
+    void keySelectTarget();
+
+    float myDt;
 
     int curSelected;
     int WAIT_TIME;

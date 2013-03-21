@@ -636,6 +636,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                     physicsEngine->createMissile(car->getActor()),
                     renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 10000 ms.
 
+                e->rc.push_back(new RenderableComponent(4,32));      //Missile
+                entities.DynamicObjs.push_back(e);
+
                 entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::SHIELD)
@@ -646,8 +649,11 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             {
                 Entity* e = new Entity(10000,
                     physicsEngine->createBarrier(car->getActor()),
-                    renderingEngine->getModelManger().getModel("Barrier.obj")); //Barrier will live for 10000 ms.                               
+                    renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live for 10000 ms.         
 
+                
+                e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
+                e->rc.push_back(new RenderableComponent(10,31));     //BarrierScreen
                 entities.DynamicObjs.push_back(e);
             }
         }

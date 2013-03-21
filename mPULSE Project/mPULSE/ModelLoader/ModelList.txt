@@ -7,3 +7,5 @@ ModelLoader\\Models\\Barrier.obj
 ModelLoader\\Models\\Shield.obj
 ModelLoader\\Models\\mothershipHull.obj
 ModelLoader\\Models\\mothershipEngine.obj
+ModelLoader\\Models\\BarrierDisc.obj
+ModelLoader\\Models\\BarrierScreen.obj

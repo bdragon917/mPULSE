@@ -11,15 +11,19 @@
 //#include <InGameObjects/Track.h>
 //#include <InGameObjects/Entities/Entity.h>
 #include <vector>
+#include <AI\AIPersonality.h>
 //#include <InGameObjects\Entities\Entities.h>
 
 class Entity;
+
 
 
 class AI
 {
 public:
     AI();
+
+    AIPersonality myPesonality;
 
     XboxController* getControl();
     void update(std::vector<Entity*> players, std::vector<Entity*> AIs);
@@ -34,11 +38,14 @@ public:
     NxVec3 myOrientation;
 private:
 
+
+
     Waypoint* targetWaypoint;
     NxActor* myActor;
     NxVec3 myLocation;
     
     NxVec3 addBoydFlocking(NxVec3 curTargetVector, std::vector<Entity*> AIs, std::vector<Entity*> Players);
+    NxVec3 attackPlayerInRange(NxVec3 myTarget, std::vector<Entity*> Players);
     void AI::applySpeedBoost(std::vector<Entity*> AIs);
 
 

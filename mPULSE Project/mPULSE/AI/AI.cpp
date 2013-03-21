@@ -10,7 +10,9 @@ float angle = acos(cosangle);
 #include <iostream>
 
 AI::AI()
-{xController = new XboxController(5);myTargetVector = NxVec3(0,0,0);myOrientation = NxVec3(0,0,0);}
+{
+    xController = new XboxController(5);myTargetVector = NxVec3(0,0,0);myOrientation = NxVec3(0,0,0);myPesonality = AIPersonality();
+}
 
 XboxController* AI::getControl()
 {
@@ -37,17 +39,22 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
 
     myTarget = myTarget - myActor->getGlobalPose().t;
     //myTarget = NxVec3(1.0f, 0.0f, 1.0f);
-    myTarget.normalize();
+    
     //myTarget = myTarget / myTarget.normalize();
 
 
 
     myTarget = addBoydFlocking(myTarget, AIs, players);
+    myTarget = attackPlayerInRange(myTarget, players);
+
+    myTargetVector = myTarget;      //myTargetVector for debug
+
+    myTarget.normalize();
 
     //applySpeedBoost(AIs);
 
 
-    myTargetVector = myTarget;      //myTargetVector for debug
+    //myTargetVector = myTarget;      //myTargetVector for debug
 
     //float angleToTarget = myDirection.dot(myTarget);
     float angleToTarget = myTarget.dot(myDirection);
@@ -139,13 +146,58 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
     
 }
 
+
+NxVec3 AI::attackPlayerInRange(NxVec3 myTarget, std::vector<Entity*> players)
+{
+    NxVec3 retValue = myTarget;
+
+    float viewDistance = 60.0f;
+    const float seperateIntensity = 60.0f;
+    float lookAheadDistance = 0.0f;
+
+
+    NxVec3 myLoc = myActor->getGlobalPose().t;
+    NxVec3 LookAtLoc = myActor->getGlobalPose() * NxVec3(0.0f, 0.0f, lookAheadDistance );
+
+    //Look at Players
+    
+    for (unsigned int i=0;i<players.size();i++)
+    {
+        NxVec3 otherLoc = players[i]->getActor()->getGlobalPose().t;
+
+        //Set to player if in range
+        if (LookAtLoc.distance(otherLoc) < viewDistance)
+        {
+            //And is closest
+            if (LookAtLoc.distance(otherLoc) < LookAtLoc.distance(retValue))
+            retValue = otherLoc;
+        }
+
+    }
+    
+    
+    retValue = retValue - myLoc;
+
+    return retValue;
+}
+
+
 NxVec3 AI::addBoydFlocking(NxVec3 curTargetVector, std::vector<Entity*> AIs, std::vector<Entity*> players)
 {
-    const float viewDistance = 60.0f;
-    const float seperateIntensity = 60.0f;
-    const float lookAheadDistance = 0.0f;
+    float viewDistance = 60.0f;
+    const float seperateIntensity = 1.0f;
+    float lookAheadDistance = 0.0f;
+    const float BoydAmount = 0.5f;      //within 0 to 1
 
    
+
+    //Lets try to look more ahead if going faster
+    //If (
+        lookAheadDistance =+ (myActor->getLinearVelocity().magnitude() / 10.0f);
+        viewDistance =+ (myActor->getLinearVelocity().magnitude() / 20.0f);
+
+
+
 
     NxVec3 retVector = curTargetVector;
     NxVec3 myLoc = myActor->getGlobalPose().t;
@@ -165,7 +217,8 @@ NxVec3 AI::addBoydFlocking(NxVec3 curTargetVector, std::vector<Entity*> AIs, std
         //Currently, this calculate distance from a circle, thats ahead by lookAheadDistance
         if (LookAtLoc.distance(otherLoc) < viewDistance)
         {
-            acumVector = acumVector - (myLoc - otherLoc);
+            NxVec3 vectorAway = (myLoc - otherLoc);
+            acumVector = acumVector - vectorAway;
         }
 
     }
@@ -179,7 +232,8 @@ NxVec3 AI::addBoydFlocking(NxVec3 curTargetVector, std::vector<Entity*> AIs, std
         //Currently, this calculate distance from a circle, thats ahead by lookAheadDistance
         if (LookAtLoc.distance(otherLoc) < viewDistance)
         {
-            acumVector = acumVector - (myLoc - otherLoc);
+            NxVec3 vectorAway = (myLoc - otherLoc);
+            acumVector = acumVector - vectorAway;
         }
 
     }
@@ -191,7 +245,7 @@ NxVec3 AI::addBoydFlocking(NxVec3 curTargetVector, std::vector<Entity*> AIs, std
 
 
 
-    //return acumVector;
+    retVector = ((1.0f-BoydAmount) * retVector) + ( (BoydAmount) *acumVector);
 
     //Type 2a
     return (retVector);

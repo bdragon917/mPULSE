@@ -17,26 +17,28 @@ MainMenuState::MainMenuState()
     WAIT_TIME = 50;
     MAX_SELECTED = 4;
     buttonPressed = false;
-    startGame = false;
+    startGame = false;          //might not be used....
+    lockControls = false;
 }
 
 void MainMenuState::update(float dt)
 {    
-
+    myDt = dt;
 }
 
 void MainMenuState::render()
 {   
-    int retMenuVal = renderingEngine->drawMainMenuScreen(curSelected, 0);
+    //asumes myDt is updated
+    int retMenuVal = renderingEngine->drawMainMenuScreen(curSelected, 0, myDt);     //retMenuVal returns 1 if it is finished (This means change screen!)
 
 
-
-	if ((retMenuVal == 1) || startGame)
+    //If all animation is finished, run the command
+	if ((retMenuVal == 1))
     {
+        lockControls = false;    //Unlock controls so main menu can be used again later
         switch (curSelected)
         {
         case 0:
-            renderingEngine->startFadeOut();
             changeState(PLAY);
             break;
         case 1:
@@ -46,13 +48,11 @@ void MainMenuState::render()
                 printf("Only one player detected.\n");//TODO Tell the player on screen they need more controllers.
                 gameVariables->addPlayerTwo();
                 gameVariables->player2isAI = true;
-                renderingEngine->startFadeOut();
                 changeState(PLAY); 
             }
             else
             {
                 gameVariables->addPlayerTwo();
-                renderingEngine->startFadeOut();
                 changeState(PLAY); 
             }
             break;
@@ -73,35 +73,35 @@ void MainMenuState::render()
 
 bool MainMenuState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
-    startGame = false;
+    if (!lockControls)  //Allow control if user hasn't chose an option yet
+    {
 
-    //Non-Console
-    if (KeyboardMouseEvents.type == SDL_KEYDOWN)
-        {
-        SDLKey keyPressed = KeyboardMouseEvents.key.keysym.sym;
+        //Non-Console
+        if (KeyboardMouseEvents.type == SDL_KEYDOWN)
+            {
+            SDLKey keyPressed = KeyboardMouseEvents.key.keysym.sym;
 
-        if ((keyPressed == SDLK_LEFT) || (keyPressed == SDLK_a))
-        {
-            curSelected = curSelected - 1;
-            if (curSelected < 0){curSelected = MAX_SELECTED;}
+            if ((keyPressed == SDLK_LEFT) || (keyPressed == SDLK_a))
+            {
+                keySelectLeft();
                 
+            }
+            else if ((keyPressed == SDLK_RIGHT) || (keyPressed == SDLK_d))
+            {
+                keySelectRight();
+            }
+            else if ((keyPressed == SDLK_RETURN) || (keyPressed == SDLK_SPACE))
+                keySelectTarget();
+            //else if(keyPressed == SDLK_n)
+            //    gameVariables->addPlayer(1);
         }
-        else if ((keyPressed == SDLK_RIGHT) || (keyPressed == SDLK_d))
-        {
-            curSelected = curSelected + 1;
-            if (curSelected > MAX_SELECTED){curSelected = 0;}
-        }
-        else if ((keyPressed == SDLK_RETURN) || (keyPressed == SDLK_SPACE))
-            startGame = true;
-        else if(keyPressed == SDLK_n)
-            gameVariables->addPlayer(1);
     }
     return true;
 }
 
 void MainMenuState::handleXboxEvents(int player,XboxController* state)
 {   
-    if(!startGame)
+    if(!lockControls)
     {
         
         bool* controllers = gameVariables->getControllers();
@@ -120,8 +120,7 @@ void MainMenuState::handleXboxEvents(int player,XboxController* state)
             {
                 if(!buttonPressed)
                     buttonPressed = true;
-                curSelected = curSelected - 1;
-                if (curSelected < 0){curSelected = MAX_SELECTED;}
+                keySelectLeft();
             }
             prevTime = clock.getCurrentTime();
         }
@@ -131,17 +130,35 @@ void MainMenuState::handleXboxEvents(int player,XboxController* state)
             {
                 if(!buttonPressed)
                     buttonPressed = true;
-                curSelected = curSelected + 1;
-                if (curSelected > MAX_SELECTED){curSelected = 0;}
+                keySelectRight();
             }
             prevTime = clock.getCurrentTime();
         }
         else if (state->a)
-            startGame = true;
-        else
-            startGame = false;
+            keySelectTarget();
     }
 }
+
+
+void MainMenuState::keySelectLeft()
+{
+    curSelected = curSelected - 1;
+    if (curSelected < 0){curSelected = MAX_SELECTED;}
+}
+
+void MainMenuState::keySelectRight()
+{
+    curSelected = curSelected + 1;
+    if (curSelected > MAX_SELECTED){curSelected = 0;}
+}
+
+void MainMenuState::keySelectTarget()
+{
+    renderingEngine->startFadeOut();
+    lockControls = true;
+    //lock controls
+}
+
 
 MainMenuState* MainMenuState::getInstance()
 {    

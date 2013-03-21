@@ -87,6 +87,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI\AI.cpp" />
+    <ClCompile Include="AI\AIPersonality.cpp" />
     <ClCompile Include="AI\Waypoint.cpp" />
     <ClCompile Include="AI\Waypoints.cpp" />
     <ClCompile Include="Components\GraphicalComponent.cpp" />
@@ -128,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI\AI.h" />
+    <ClInclude Include="AI\AIPersonality.h" />
     <ClInclude Include="AI\Waypoint.h" />
     <ClInclude Include="AI\Waypoints.h" />
     <ClInclude Include="Components\GraphicalComponent.h" />

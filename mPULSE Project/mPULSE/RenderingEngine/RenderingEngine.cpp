@@ -119,8 +119,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[30];
-    glGenTextures(30, textureid_P1);
+    textureid_P1 = new GLuint[33];
+    glGenTextures(33, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -158,6 +158,14 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/motherShipEngineUV.bmp", textureid_P1[28]);
 
     bindBMPtoTexture("./Images/SpdNumber.bmp", textureid_P1[29]);
+
+
+    /////
+    bindBMPtoTexture("./Images/outUVBarrierDisc.bmp", textureid_P1[30]);
+    bindBMPtoTexture("./Images/outUVBarrierScreen.bmp", textureid_P1[31]);
+    bindBMPtoTexture("./Images/outUVMissile.bmp", textureid_P1[32]);
+
+
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -1833,7 +1841,7 @@ void RenderingEngine::initializeMainMenuVariables()
     particles.clear();
 }
 
-int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
+int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float dt)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -2016,7 +2024,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 
     //Fader
     //float FadeCtrl = 0.0f;
-    glColor4f(0.0f,0.0f,0.0f, updateFade());
+    glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
             glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
 		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
@@ -2024,7 +2032,10 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked)
 		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
 		glEnd();
 
-        if (FadeCtrl >= 1.0f){FadeCtrl=0.0f;fadeMode=0;return 1;}
+        if (FadeCtrl >= 1.0f)
+            {
+                FadeCtrl=0.0f;fadeMode=0;return 1;
+            }
 
 
     if (aShader != NULL)
@@ -2169,7 +2180,14 @@ void RenderingEngine::drawDynamicObjects(std::vector<Entity*>* dObjs)
     for(unsigned i=0;i<dObjs->size();i++)
     {
         if(dObjs->at(i)->isAlive())
-            drawModelPos(dObjs->at(i)->getModel(),&(dObjs->at(i)->getActor()->getGlobalPose()));
+        {
+            for (unsigned r=0; r < dObjs->at(i)->rc.size();r++)
+            {
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[dObjs->at(i)->rc[r]->textureID]);
+                drawModelPos(modelManager.getModel(dObjs->at(i)->rc[r]->modelID),&(dObjs->at(i)->getActor()->getGlobalPose()));
+            }
+        }
+            //drawModelPos(dObjs->at(i)->getModel(),&(dObjs->at(i)->getActor()->getGlobalPose()));
     }
 }
 
@@ -2769,7 +2787,7 @@ void RenderingEngine::startFadeOut()
     }
 }
 
-float RenderingEngine::updateFade()
+float RenderingEngine::updateFade(float dt)
 {
     switch (fadeMode)
     {
