@@ -1,0 +1,91 @@
+#include <RenderingEngine/DynamicImage.h>
+
+
+	DynamicImage::DynamicImage(float inx, float iny, float inz, float inWidth, float inHeight, int textureIndex, int inMode)
+    {
+        curPos.x = inx;
+        curPos.y = iny;
+        curPos.z = inz;
+
+        tarPos.x = inx;
+        tarPos.y = iny;
+        tarPos.z = inz;
+
+        width = inWidth;
+        height = inHeight;
+    
+        tIndex = textureIndex;
+
+        mode = inMode;
+
+        sleep = true;       //Sleep is true if curPos == tarPos
+    }
+
+    void DynamicImage::update()
+    {
+        const float LINEAR_VELOCITY = 0.01f;
+        const float THRESHOLD = 0.01f;
+
+
+        if (!sleep)
+        {
+            NxVec3 towardsVector = tarPos - curPos;
+
+            switch (mode)
+            {
+            case 0:     //Linear
+                if (towardsVector.magnitude() < LINEAR_VELOCITY)
+                {
+                    curPos = tarPos;
+                    sleep = true;
+                }
+                else
+                {
+                    towardsVector.normalize();
+                    curPos = towardsVector * LINEAR_VELOCITY;
+                }
+                break;
+
+
+            case 1:     //Halfling
+                if (towardsVector.magnitude() < THRESHOLD)
+                {
+                    curPos = tarPos;
+                    sleep = true;
+                }
+                else
+                {
+                    curPos = towardsVector * 0.033f;
+                }
+                break;
+
+            }
+        }
+    }
+
+
+
+
+    void DynamicImage::setTargetLocation(float newX, float newY, float newZ)
+    {
+        tarPos.x = newX;
+        tarPos.y = newY;
+        tarPos.z = newZ;
+    }
+    float DynamicImage::getX()
+    {
+        return curPos.x;
+    }
+    float DynamicImage::getY()
+    {
+        return curPos.y;
+    }
+    float DynamicImage::getZ()
+    {
+        return curPos.z;
+    }
+
+    NxVec3 DynamicImage::getCurPos()
+    {
+        return curPos;
+    }

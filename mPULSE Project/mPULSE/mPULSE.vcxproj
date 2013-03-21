@@ -124,6 +124,7 @@
     <ClCompile Include="mPULSE.cpp" />
     <ClCompile Include="PhysicsEngine\PhysicsEngine.cpp" />
     <ClCompile Include="PhysicsEngine\Stream.cpp" />
+    <ClCompile Include="RenderingEngine\DynamicImage.cpp" />
     <ClCompile Include="RenderingEngine\Particle.cpp" />
     <ClCompile Include="RenderingEngine\RenderingEngine.cpp" />
     <ClCompile Include="RenderingEngine\Shader.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="PhysicsEngine\PhysicsEngine.h" />
     <ClInclude Include="PhysicsEngine\stream.h" />
     <ClInclude Include="RenderingEngine\BMP.h" />
+    <ClInclude Include="RenderingEngine\DynamicImage.h" />
     <ClInclude Include="RenderingEngine\Particle.h" />
     <ClInclude Include="RenderingEngine\ProfileScreenInfo.h" />
     <ClInclude Include="RenderingEngine\RenderingEngine.h" />

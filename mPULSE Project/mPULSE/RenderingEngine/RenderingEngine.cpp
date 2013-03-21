@@ -321,6 +321,81 @@ void RenderingEngine::drawModelPos(ObjModel* model, NxMat34* aPose)
     glPopMatrix();
 }
 
+void RenderingEngine::drawModelPosRotationEnhanced(ObjModel* model, Entity* anEntity)
+{
+    NxActor* actor = anEntity->getActor();
+
+    NxMat34* aPose = &(actor->getGlobalPose());
+
+    glPushMatrix();
+
+ 	float mat[16];
+	aPose->getColumnMajor44(mat);
+    
+    glMultMatrixf(mat);
+
+    //
+    NxMat33 orient;
+    NxVec3 xaxis, yaxis, zaxis;
+
+    orient = actor->getGlobalOrientation();
+    orient.getRow(0, xaxis);
+    orient.getRow(1, yaxis);
+    orient.getRow(2, zaxis);
+
+    float steerAngle = anEntity->getSteerWheels()->at(0)->getSteerAngle();
+    steerAngle *= -3 * anEntity->getActor()->getLinearVelocity().magnitude();
+    NxQuat q;
+    NxReal ang = steerAngle;        //get angle of rotation
+    //q.fromAngleAxis(ang, zaxis);
+    q.fromAngleAxis(ang, NxVec3(1.0f,0.0f,0.0f));
+
+    orient.fromQuat(q);
+
+    NxMat34 newPose = NxMat34(orient,NxVec3(0,0,0));
+    newPose.getColumnMajor44(mat);
+    glMultMatrixf(mat);
+
+    //
+
+    std::vector<std::vector<ObjModel::vertElements>>* faces = model->getFaces();
+    std::vector<ObjModel::vertex3d>* verticies = model->getVerticies();
+    std::vector<ObjModel::vertex3d>* norms = model->getVertexNormals();
+    std::vector<ObjModel::vertex2d>* texs = model->getVertexTextureCoords();
+
+    ObjModel::vertElements face;
+    ObjModel::vertex3d  vert;
+    ObjModel::vertex3d  norm;
+    ObjModel::vertex2d  tex;
+
+    glColor3f(1,1,1);
+    glBegin(GL_TRIANGLES);
+    for (unsigned i = 0; i < faces->size(); ++i)
+    {
+        for (unsigned j = 0; j < faces->at(i).size(); ++j)
+        {            
+            face = faces->at(i).at(j);
+            vert = verticies->at(face.vertIndex);
+
+            if(model->getNormalsEnabled())            
+            {
+                norm = norms->at(face.vertNormalIndex);
+                glNormal3f(norm.x,norm.y,norm.z);
+            }
+            if(model->getTextureCoordsEnabled())
+            {
+                tex = texs->at(face.vertTextureIndex);
+                glTexCoord2d(tex.x,tex.y);
+            }
+
+            glVertex3f((vert.x),(vert.y),(vert.z));
+        }
+    }
+    glEnd();
+
+    glPopMatrix();
+}
+
 void RenderingEngine::drawModelShadow(ObjModel* model, NxMat34* aPose)
 {
     glPushMatrix();
@@ -2041,10 +2116,14 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     glTranslatef(0,newY,-5.0f);
     */
 
+    //Depth buffer to allow the ship to be dfisplayed correctly
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
     //draw ship
     glTranslatef(0,-newY,5.0f);
     glRotatef(75.0f,0.0f,1.0f,0.0f);
-    glRotatef(shipAngle,0.0f,0.0f,1.0f);
+    glRotatef(-shipAngle,0.0f,0.0f,1.0f);
     glScalef(0.0925f,0.0925f,0.0925f);
     glTranslatef(0,newY,-5.0f);
 
@@ -2053,6 +2132,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     glBindTexture(GL_TEXTURE_2D, textureid_P1[28]);
     drawModel(modelManager.getModel(8),0,0,0,1.0f);     //engine
 
+    glDisable(GL_DEPTH_TEST);
 
     glPopAttrib();
     glPopMatrix();
@@ -2348,7 +2428,10 @@ void RenderingEngine::drawCars(Entities* entities)
                     glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->cars[i]->rc[r]->textureID]);
                     NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
                     //drawModel(modelManager.getModel(entities->cars[i]->rc[i]->modelID), aPose->t.x, aPose->t.y, aPose->t.z, 1.0f );
-                    drawModelPos(modelManager.getModel(entities->cars[i]->rc[r]->modelID), aPose );
+
+                    //drawModelPos(modelManager.getModel(entities->cars[i]->rc[r]->modelID), aPose );
+                    drawModelPosRotationEnhanced(modelManager.getModel(entities->cars[i]->rc[r]->modelID), entities->cars[i]);
+
                     if(entities->cars[i]->getShield())
                         drawModelPos(modelManager.getModel("Shield.obj"), aPose );
                     //Particles

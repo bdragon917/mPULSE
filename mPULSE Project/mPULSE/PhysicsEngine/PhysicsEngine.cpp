@@ -612,7 +612,8 @@ NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, fl
     latff.asymptoteValue = 0.01f;
     latff.extremumSlip = 1.0f;
     latff.extremumValue = 0.05f;
-    latff.stiffnessFactor = 1000000.0f;
+    //latff.stiffnessFactor = 1000000.0f;
+    latff.stiffnessFactor = 750000.0f;
 
     //Along the tire??
     NxTireFunctionDesc lotff;
@@ -620,7 +621,7 @@ NxWheelShape* PhysicsEngine::AddWheelToActor(NxActor* actor, float x,float y, fl
     lotff.asymptoteValue = 0.01f;
     lotff.extremumSlip = 1.0f;
     lotff.extremumValue = 0.02f;
-    lotff.stiffnessFactor = 1000000.0f;
+    lotff.stiffnessFactor = 1250000.0f;
 
     wheelShapeDesc.lateralTireForceFunction = latff;	//TODO
 	wheelShapeDesc.longitudalTireForceFunction = lotff;	//TODO
