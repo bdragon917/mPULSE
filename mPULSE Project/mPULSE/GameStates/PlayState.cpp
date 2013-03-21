@@ -260,7 +260,8 @@ void PlayState::update(float dt)
     renderingEngine->drawText(100,-50,"FPS: "+renderingEngine->FloatToString(1000.0f/dt));
     //physicsEngine->step(dt/1000.0f);
     //physicsEngine->step(0.33f);
-    physicsEngine->step(dt/1000.0f);
+    //physicsEngine->step(1.0f/60.0f);
+	physicsEngine->step(dt/1000.0f);
 }
 
 void PlayState::render()
