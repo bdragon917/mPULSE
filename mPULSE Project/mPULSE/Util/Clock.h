@@ -6,7 +6,7 @@ public:
     Clock();
     Clock(float frameRateLimit);
     unsigned getCurrentTime();
-    unsigned getDeltaTime();
+    float getDeltaTime();
     int getDeltaTime(unsigned prevTime);
     void reset();
     void stop();

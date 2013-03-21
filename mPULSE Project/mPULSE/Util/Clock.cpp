@@ -18,17 +18,28 @@ unsigned Clock::getCurrentTime()
     return SDL_GetTicks();
 }
 
-unsigned Clock::getDeltaTime()
+float Clock::getDeltaTime()
 {
-    unsigned dt = SDL_GetTicks()-time;
+	
+    float dt = (float)(SDL_GetTicks()-time);
     if(milliSecPerFrame > dt)//Cap the clock at 60FPS
     {
-        SDL_Delay((unsigned)milliSecPerFrame-dt); //Wait for the difference
-        dt = SDL_GetTicks()-time;   //Calculate new dt
-    }        
+        SDL_Delay((unsigned)(milliSecPerFrame-dt)); //Wait for the difference
+        dt = milliSecPerFrame;   //Calculate new dt
+    }
+	else if(2.0f*milliSecPerFrame > dt)
+	{
+		SDL_Delay((unsigned)((2.0f*milliSecPerFrame)-dt)); //Wait for the difference
+        dt = 2.0f*milliSecPerFrame;   //Calculate new dt
+	}
+	else if(3.0f*milliSecPerFrame > dt)
+	{
+		SDL_Delay((unsigned)((3.0f*milliSecPerFrame)-dt)); //Wait for the difference
+        dt = 3.0f*milliSecPerFrame;   //Calculate new dt
+	}
     time = SDL_GetTicks(); //update previous time
 
-return dt;
+	return dt;
 
 }
 
