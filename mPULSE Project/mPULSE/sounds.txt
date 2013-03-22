@@ -5,3 +5,7 @@ SoundEngine\\Sounds\\scifiEngine2speedUp3.wav
 SoundEngine\\Sounds\\scifiEngine2speedUp4.wav
 SoundEngine\\Sounds\\crash.wav
 SoundEngine\\Sounds\\PowerUp.wav
+SoundEngine\\Sounds\\MenuSound.wav
+SoundEngine\\Sounds\\Missile.wav
+SoundEngine\\Sounds\\Shield.wav
+SoundEngine\\Sounds\\Barrier.wav

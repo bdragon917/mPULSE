@@ -9,6 +9,7 @@ MainMenuState::MainMenuState()
     physicsEngine = PhysicsEngine::getInstance();
     //physicsEngine->setupPlayScene(&entities.cars);
     renderingEngine = RenderingEngine::getInstance();
+    soundEngine = SoundEngine::getInstance();
 	//renderingEngine->initializeGL();
     renderingEngine->createLight_MainMenu();
 
@@ -161,12 +162,14 @@ void MainMenuState::handleXboxEvents(int player,XboxController* state)
 
 void MainMenuState::keySelectLeft()
 {
+    soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelected = curSelected - 1;
     if (curSelected < 0){curSelected = MAX_SELECTED;}
 }
 
 void MainMenuState::keySelectRight()
 {
+    soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelected = curSelected + 1;
     if (curSelected > MAX_SELECTED){curSelected = 0;}
 }

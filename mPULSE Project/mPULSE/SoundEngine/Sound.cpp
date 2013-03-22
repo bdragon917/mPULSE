@@ -128,6 +128,11 @@ void Sound::playCrash(int index)
 	crashChannel = Mix_PlayChannel( 2, chunks.at(5 + index), 0);
 }
 
+void Sound::playSound(int inChannel, int inIndex)
+{
+    Mix_PlayChannel(inChannel, chunks.at(inIndex), 0);
+}
+
 void Sound::crashVolume(int newV)
 {
 	Mix_Volume(crashChannel, newV);

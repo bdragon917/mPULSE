@@ -17,6 +17,8 @@ public:
 	void engineNoise();
 	void engineVol(int engine, int newV);
 
+    void playSound(int channel, int index);
+
 	void crashed(int index);
 	void crashV(int newV);
 

@@ -35,7 +35,9 @@ void ShopState::render()
 
     if (retMenuVal == 1)
     {
-        changeState(MAIN_MENU);
+
+        gameVariables->resetRace();
+        changeState(PLAY);
     }
 
 
@@ -165,8 +167,7 @@ void ShopState::keySelectDown()
 
 void ShopState::keySelectTarget()
 {
-    changeState(PLAY);
-    //renderingEngine->startFadeOut();
+    renderingEngine->startFadeOut();
 }
 
 void ShopState::backPressed()

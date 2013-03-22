@@ -23,6 +23,7 @@ class Sound
 		void engine2Volume(int newV);
 
 		void playCrash(int index);
+        void playSound(int channel, int index);
 		void crashVolume(int newV);
 
         void startMusic0();

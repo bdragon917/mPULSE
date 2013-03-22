@@ -14,4 +14,6 @@ public:
         std::vector<Entity*> StaticObjs;
         std::vector<Entity*> DynamicObjs;
         std::vector<Entity*> Track;
+
+        void clearAll();
 };

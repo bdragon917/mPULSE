@@ -48,6 +48,11 @@ void SoundEngine::crashed(int index)
 	song->playCrash(index);
 }
 
+void SoundEngine::playSound(int channel, int index)
+{
+    song->playSound(channel, index);
+}
+
 void SoundEngine::initializeSound()
 {
 	if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1 )  

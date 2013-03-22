@@ -17,6 +17,7 @@ public:
         void setUserCamControl(NxVec3 userControl);
         void setDistance(float inDistance);
         void setMaxDistance(float inDistance);
+        void Camera::setMode(int newMode);
         void updateCamera(float dt);
         void resetCamera();
 
@@ -34,6 +35,8 @@ private:
         NxActor* targetActor;
 
         NxVec3 userCamControl;
+
+        int mode;
 
         //For field of view (TO BE IMPLIMENTED)
         float xStretch;

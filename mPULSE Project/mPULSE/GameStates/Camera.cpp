@@ -29,6 +29,7 @@ Camera::Camera(void)
         xStretch = 1.0f;
         yStretch = 1.0f;
 
+        mode = 4;
 
         lastCamLoc = NxVec3(-5.0f,3.5f,0);
 
@@ -47,6 +48,7 @@ Camera::Camera(NxActor* aActor)
 
         lastCamLoc = NxVec3(-5.0f,3.5f,0);
 
+        mode = 4;
 }
 
 Camera::~Camera(void)
@@ -92,6 +94,11 @@ void Camera::setUserCamControl(NxVec3 uControl)
     userCamControl = uControl;
 }
 
+void Camera::setMode(int newMode)
+{
+    mode = newMode;
+}
+
 void Camera::resetCamera()
 {
         NxMat34 actorPose = targetActor->getGlobalPose();
@@ -105,7 +112,8 @@ void Camera::resetCamera()
 
 void Camera::updateCamera(float dt)
 {
-    int mode = 4;       //Testing different camera styles here, change to different values for different test code
+    //int mode = 4;       //Testing different camera styles here, change to different values for different test code
+    //mode is now a CLASS VARIABLE!!!! WOOOT!!!!!!!!! XDDDDDDDDD
 
     //xStretch = 1.0f;
     //yStretch = 1.0f;
@@ -570,6 +578,62 @@ void Camera::updateCamera(float dt)
                 curCamLoc = gyroCam;
 
        }
+       case 6:         //Side Camera
+            {
+
+                //Set target camera location in local space
+                float disAbove = 5.0f;
+                NxVec3 tarCamLoc = NxVec3(0.0f,disAbove,-targetDistance);
+
+                //set look at in local space
+                NxVec3 tarCamLookAt = NxVec3(targetDistance / 3,(disAbove * 3 / 4),0.0f);
+
+                //Transform to car's location
+                tarCamLoc = targetActor->getGlobalPose() * tarCamLoc;
+                tarCamLookAt = targetActor->getGlobalPose() * tarCamLookAt;
+                
+
+                float rate = 0.1f;  //rate of camera view change
+                float slowrate = 0.1f;  //rate of camera view change
+                //float slowrate = 0.3f;  //rate of camera view change
+
+                float tarStretch = 1.0f;
+                float curActorSpd = targetActor->getLinearVelocity().magnitude();
+                //Change View based on speed
+               if (curActorSpd > 33.0f)
+                {
+                    tarStretch = (curActorSpd / 33.0f);
+                }
+
+               if (tarStretch > 3.0f)
+               {rate = 0.5f;}
+
+
+
+                if (xStretch < (tarStretch-rate))
+                {xStretch = xStretch + rate;}
+                else if (xStretch > (tarStretch+slowrate))
+                {xStretch = xStretch - slowrate;}
+                else
+                {xStretch = tarStretch;}
+                //printf("xStretch2: %f\n", xStretch);
+
+
+                //NxVec3 
+
+                curCamLoc = tarCamLoc;
+                curCamLookAt = tarCamLookAt;
+
+
+                if (userCamControl.magnitude() > 0.2f)
+                {
+                    NxVec3 newCam = targetActor->getGlobalPose() * (NxVec3(userCamControl.x * 10.0f,3.5f,-userCamControl.z * 10.0f));
+                    curCamLoc = newCam;
+                }
+                break;
+            }
+
+
 
    }//EndSwitch
 

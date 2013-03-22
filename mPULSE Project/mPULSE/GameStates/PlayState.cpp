@@ -14,6 +14,7 @@ PlayState::PlayState()
     rbPressed = false;
 
     gameVariables->resetRace();     //Clears victory flags
+    entities.clearAll();
 
     changeState(PLAY); 
     numPlayers = gameVariables->getPlayerNum();
@@ -21,6 +22,8 @@ PlayState::PlayState()
     for(int i=0;i<numPlayers;i++)
     {
         Entity* playerCar = new Entity();
+        playerCar->aAI = new AI();
+
         entities.cars.push_back(playerCar);
 
         RenderableComponent* pc_rc = new RenderableComponent(1,3);
@@ -101,6 +104,12 @@ PlayState::PlayState()
     track = new Track(".\\InGameObjects\\Race1.txt",aTrack);
 	physicsEngine->createWaypoints(track->getWaypoints());
 
+    //Attach AI to the player cars
+    for (unsigned pcai = 0; pcai < entities.cars.size();++pcai)
+    {
+        entities.cars[pcai]->aAI->setActor(entities.cars[pcai]->getActor());
+    }
+
     //Attach AI to the cars
     for (unsigned aa = 0; aa < entities.AIcars.size(); ++aa)
     {
@@ -125,7 +134,7 @@ PlayState::PlayState()
 
 	soundEngine = SoundEngine::getInstance();
 	soundEngine->initializeSound();
-    //soundEngine->stopMusic();
+    soundEngine->stopMusic();
 	soundEngine->toggleMusic();
     soundEngine->engineNoise();
     soundEngine->engineVol(1, 0);
@@ -159,7 +168,10 @@ void PlayState::update(float dt)
         CustomData* cd = (CustomData*)entities.cars[playa]->getActor()->userData;
 
         if (cd->laps > 1)
+        {
             gameVariables->becomeFinished(playa);
+            entities.cars[playa]->aCam->setMode(6);
+        }
 
         //gameVariables->becomeFinished(playa);
     }
@@ -169,7 +181,10 @@ void PlayState::update(float dt)
         CustomData* cd = (CustomData*)entities.AIcars[0]->getActor()->userData;
 
         if (cd->laps > 1)
+        {
             gameVariables->becomeFinished(1);
+            entities.AIcars[0]->aCam->setMode(6);
+        }
     }
 
     
@@ -248,6 +263,7 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
         Entity* car = entities.cars[c];
+        entities.cars[c]->aAI->update(entities.cars, entities.AIcars);
 		if(car->linearSweep(dt) != NULL)
 		{
 			printf("Hit detected!\n");
@@ -642,7 +658,16 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void PlayState::handleXboxEvents(int player,XboxController* state)
 {
-    handleXboxController(player, entities.cars , state, true);
+    if (!gameVariables->isFinished(player))
+    {
+        handleXboxController(player, entities.cars , state, true);
+    }
+    else
+    {
+        //Do AI Controller stuff
+        handleXboxController(player, entities.cars ,entities.cars.at(player)->aAI->getControl(), false);
+
+    }
     
 }
 
@@ -703,6 +728,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             Entity::PickupType type = car->usePickup();
             if(type == Entity::MISSILE)
             {
+                soundEngine->playSound(4, 8);       //play missile, on channel 4
                 Entity* e = new Entity(10000,
                     physicsEngine->createMissile(car->getActor()),
                     renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 10000 ms.
@@ -713,11 +739,13 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::SHIELD)
-            {                
+            {
+                soundEngine->playSound(4, 9);       //play missile, on channel 4
                 car->setShield(true);
             }
             else if(type == Entity::BARRIER)
             {
+                soundEngine->playSound(4, 10);       //play missile, on channel 4
                 Entity* e = new Entity(10000,
                     physicsEngine->createBarrier(car->getActor()),
                     renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live for 10000 ms.         
