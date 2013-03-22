@@ -28,6 +28,8 @@ void MainMenuState::update(float dt)
 
 void MainMenuState::render()
 {   
+    renderingEngine->createLight_MainMenu();
+
     //Construct ProfileScreenInfo (Using this to tell renderingHowTo draw profile
     //Not reallly used excepted for .isActive, but good to initial the variables
     ProfileScreenInfo psi = ProfileScreenInfo();
@@ -75,10 +77,10 @@ void MainMenuState::render()
             }
             break;
         case 2:
-            //changeState(MAIN_MENU); 
+            changeState(STORY);
             break;
         case 3:
-            //changeState(MAIN_MENU); 
+            changeState(SETTING); 
             break;
         case 4:
             //changeState(MAIN_MENU); 

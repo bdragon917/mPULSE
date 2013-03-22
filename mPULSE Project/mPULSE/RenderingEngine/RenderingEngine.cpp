@@ -119,8 +119,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[37];
-    glGenTextures(37, textureid_P1);
+    textureid_P1 = new GLuint[47];
+    glGenTextures(47, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -171,7 +171,17 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/FontSelectedTexture.bmp", textureid_P1[35]);
     bindBMPtoTexture("./Images/FontTitleTexture.bmp", textureid_P1[36]);
 
+    bindBMPtoTexture("./Images/Menu/Done.bmp", textureid_P1[37]);
+    bindBMPtoTexture("./Images/Menu/DoneS.bmp", textureid_P1[38]);
 
+    bindBMPtoTexture("./Images/Menu/Story/Story.bmp", textureid_P1[39]);
+    bindBMPtoTexture("./Images/Menu/Settings/Settings.bmp", textureid_P1[40]);
+    bindBMPtoTexture("./Images/Menu/Shop/Shop.bmp", textureid_P1[41]);
+    bindBMPtoTexture("./Images/Menu/Shop/Mechanic1.bmp", textureid_P1[42]);
+    bindBMPtoTexture("./Images/Menu/Shop/Mechanic2.bmp", textureid_P1[43]);
+    bindBMPtoTexture("./Images/Menu/Shop/InvAmt.bmp", textureid_P1[44]);
+    bindBMPtoTexture("./Images/Menu/Shop/ArrowButton.bmp", textureid_P1[45]);
+    bindBMPtoTexture("./Images/Menu/Shop/ShopBG.bmp", textureid_P1[46]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -1046,7 +1056,7 @@ void RenderingEngine::createLight()
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-	//glLightfv(GL_LIGHT0, GL_AMBIENT, light_position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_position);
 	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_position);
 	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_position);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
@@ -1963,7 +1973,8 @@ void RenderingEngine::initializeMainMenuVariables()
     particles.clear();
 }
 
-int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float dt, ProfileScreenInfo psi)
+
+int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -1971,6 +1982,270 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 	glLoadIdentity ();
 	
 
+    gluLookAt(0, 0, -2,  // Eye/camera position
+	0 ,0, 0,		// Look-at position 
+	0.0,1.0,0.0); 		// "Up" vector
+	
+	//set view
+	setUpPerpView();
+    //glEnable(GL_LIGHTING);
+    //glDisable(GL_NORMALIZE);
+    //glDisable(GL_TEXTURE);
+	
+    if (aShader != NULL)
+         {
+            glEnable(GL_TEXTURE_2D);
+            aHUDShader->on();
+         }
+
+
+   //Initialize a new coordinate system
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    //glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1.0f, 1.0f);
+    glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    //clear depth buffer
+    glPushAttrib(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    //declare some common variables
+    const float half_height = SCREEN_HEIGHT / 2.0f;
+    const float half_width = SCREEN_WIDTH / 2.0f;
+
+    const float button_width = SCREEN_WIDTH / 6.0f;     //button width is /3, but also /2 as drawSquare uses half
+    float const textWidth = button_width * 1.6f;
+
+    const float dec_height = SCREEN_HEIGHT / 40.0f;
+    const float butWidthOffset = half_width + (SCREEN_WIDTH / 96.0f);  //128 64
+    const float butHeightOffset = (SCREEN_HEIGHT / 4.0f);
+
+    const float titleHeightOffset = (SCREEN_HEIGHT / 8.0f);
+    //const float doneHeightOffset = (3.0f * SCREEN_HEIGHT / 4.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+    const float doneHeightOffset = (13.0f * SCREEN_HEIGHT / 16.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+
+    //draw transparent blackground
+        glColor4f(0.0f,0.0f,0.0f, 0.5f);
+        drawSquare(half_width, half_height, 0.0f, half_width, half_height);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+    //draw profile info
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[40]);
+        glColor4f(0.0f,0.0f,0.0f, 1.0f);
+        drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
+
+        //Title
+        string title = "Setting!";
+        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
+        //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
+
+
+   
+
+
+        //Done Button
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
+
+            drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
+
+        //aHUDShader->off();
+
+    //reset to previous state
+    glPopAttrib();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+     glEnable(GL_LIGHTING);
+
+
+
+    if (aShader != NULL)
+    {
+        aHUDShader->off();
+    }
+
+
+
+
+
+    
+    //Fader
+    //float FadeCtrl = 0.0f;
+    glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
+    	glBegin(GL_QUADS);
+            glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
+		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
+		glEnd();
+
+        if (FadeCtrl >= 1.0f)
+            {
+                FadeCtrl=0.0f;fadeMode=0;return 1;
+            }
+
+
+            
+    if (aShader != NULL)
+    {
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
+	glPopMatrix();
+
+    return 0;
+}
+
+
+int RenderingEngine::drawStoryScreen(float dt)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix ();
+	glLoadIdentity ();
+	
+
+    gluLookAt(0, 0, -2,  // Eye/camera position
+	0 ,0, 0,		// Look-at position 
+	0.0,1.0,0.0); 		// "Up" vector
+	
+	//set view
+	setUpPerpView();
+    //glEnable(GL_LIGHTING);
+    //glDisable(GL_NORMALIZE);
+    //glDisable(GL_TEXTURE);
+	
+    if (aShader != NULL)
+         {
+            glEnable(GL_TEXTURE_2D);
+            aShader->on();
+         }
+
+
+   //Initialize a new coordinate system
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    //glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1.0f, 1.0f);
+    glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    //clear depth buffer
+    glPushAttrib(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    //declare some common variables
+    const float half_height = SCREEN_HEIGHT / 2.0f;
+    const float half_width = SCREEN_WIDTH / 2.0f;
+
+    const float button_width = SCREEN_WIDTH / 6.0f;     //button width is /3, but also /2 as drawSquare uses half
+    float const textWidth = button_width * 1.6f;
+
+    const float dec_height = SCREEN_HEIGHT / 40.0f;
+    const float butWidthOffset = half_width + (SCREEN_WIDTH / 96.0f);  //128 64
+    const float butHeightOffset = (SCREEN_HEIGHT / 4.0f);
+
+    const float titleHeightOffset = (SCREEN_HEIGHT / 8.0f);
+    //const float doneHeightOffset = (3.0f * SCREEN_HEIGHT / 4.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+    const float doneHeightOffset = (13.0f * SCREEN_HEIGHT / 16.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+
+    //draw transparent blackground
+        glColor4f(0.0f,0.0f,0.0f, 0.5f);
+        drawSquare(half_width, half_height, 0.0f, half_width, half_height);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+    //draw profile info
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[39]);
+        glColor4f(0.0f,0.0f,0.0f, 1.0f);
+        drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
+
+        //Title
+        string title = "Hi! This is story Mode!";
+        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
+        //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
+
+
+   
+
+
+        //Done Button
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
+
+            drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
+
+        aShader->off();
+
+    //reset to previous state
+    glPopAttrib();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+     glEnable(GL_LIGHTING);
+
+
+
+    if (aShader != NULL)
+    {
+        aShader->off();
+    }
+
+
+
+
+
+    
+    //Fader
+    //float FadeCtrl = 0.0f;
+    glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
+    	glBegin(GL_QUADS);
+            glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
+		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
+		glEnd();
+
+        if (FadeCtrl >= 1.0f)
+            {
+                FadeCtrl=0.0f;fadeMode=0;return 1;
+            }
+
+
+            
+    if (aShader != NULL)
+    {
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
+	glPopMatrix();
+
+    return 0;
+}
+
+
+
+int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float dt, ProfileScreenInfo psi)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix ();
+	glLoadIdentity ();
+	
+    glDisable(GL_LIGHTING);
+        glDisable(GL_DEPTH_TEST);
     gluLookAt(0, 0, -2,  // Eye/camera position
 	0 ,0, 0,		// Look-at position 
 	0.0,1.0,0.0); 		// "Up" vector
@@ -2134,6 +2409,8 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
     glDisable(GL_DEPTH_TEST);
 
+    glEnable(GL_LIGHTING);
+
     glPopAttrib();
     glPopMatrix();
     //end particles
@@ -2192,6 +2469,9 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
     return 0;
 }
+
+
+
 
 
 void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
@@ -2312,9 +2592,9 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
 
         //Done Button
        if (psi.selectedItem == 0)
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
         else
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[0]);
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[37]);
         drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
 
         aHUDShader->off();
@@ -2331,7 +2611,135 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
 }
 
 
+int RenderingEngine::drawShopScreen(float dt)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glPushMatrix ();
+	glLoadIdentity ();
+	
+
+    gluLookAt(0, 0, -2,  // Eye/camera position
+	0 ,0, 0,		// Look-at position 
+	0.0,1.0,0.0); 		// "Up" vector
+	
+	//set view
+	setUpPerpView();
+    //glEnable(GL_LIGHTING);
+    //glDisable(GL_NORMALIZE);
+    //glDisable(GL_TEXTURE);
+	
+    if (aShader != NULL)
+         {
+            glEnable(GL_TEXTURE_2D);
+            aShader->on();
+         }
+
+
+   //Initialize a new coordinate system
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    //glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1.0f, 1.0f);
+    glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    //clear depth buffer
+    glPushAttrib(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    //declare some common variables
+    const float half_height = SCREEN_HEIGHT / 2.0f;
+    const float half_width = SCREEN_WIDTH / 2.0f;
+
+    const float button_width = SCREEN_WIDTH / 6.0f;     //button width is /3, but also /2 as drawSquare uses half
+    float const textWidth = button_width * 1.6f;
+
+    const float dec_height = SCREEN_HEIGHT / 40.0f;
+    const float butWidthOffset = half_width + (SCREEN_WIDTH / 96.0f);  //128 64
+    const float butHeightOffset = (SCREEN_HEIGHT / 4.0f);
+
+    const float titleHeightOffset = (SCREEN_HEIGHT / 8.0f);
+    //const float doneHeightOffset = (3.0f * SCREEN_HEIGHT / 4.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+    const float doneHeightOffset = (13.0f * SCREEN_HEIGHT / 16.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+
+    //draw transparent blackground
+        glColor4f(0.0f,0.0f,0.0f, 0.5f);
+        drawSquare(half_width, half_height, 0.0f, half_width, half_height);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+    //draw profile info
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[45]);
+        glColor4f(0.0f,0.0f,0.0f, 1.0f);
+        drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
+
+        //Title
+        string title = "Hi! This is shop Mode!";
+        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
+        //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
+
+
+   
+
+
+        //Done Button
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+
+            drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
+
+        aHUDShader->off();
+
+    //reset to previous state
+    glPopAttrib();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+     glEnable(GL_LIGHTING);
+
+
+
+    if (aShader != NULL)
+    {
+        aShader->off();
+    }
+
+
+
+
+
+    
+    //Fader
+    //float FadeCtrl = 0.0f;
+    glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
+    	glBegin(GL_QUADS);
+            glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
+		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
+		glEnd();
+
+        if (FadeCtrl >= 1.0f)
+            {
+                FadeCtrl=0.0f;fadeMode=0;return 1;
+            }
+
+
+            
+    if (aShader != NULL)
+    {
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
+	glPopMatrix();
+
+    return 0;
+}
 
 void RenderingEngine::drawWheels(Entity* entity, int model, int texture)
 {

@@ -8,7 +8,7 @@ StoryState::StoryState()
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
  
-    curSelected = 1;
+    curSelected = 0;
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
     WAIT_TIME = 50;
@@ -26,7 +26,15 @@ void StoryState::update(float dt)
 
 void StoryState::render()
 {   
-    int retMenuVal = renderingEngine->drawMainMenuScreen(5, 0, myDt, psi);     //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
+    renderingEngine->createLight_MainMenu();
+    int retMenuVal = renderingEngine->drawStoryScreen(myDt);     //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
+
+    if (retMenuVal == 1)
+    {
+        changeState(MAIN_MENU);
+    }
+
+
 }
 
 bool StoryState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
@@ -102,7 +110,8 @@ void StoryState::keySelectRight()
 
 void StoryState::keySelectTarget()
 {
-    changeState(PLAY);
+    //changeState(PLAY);
+    renderingEngine->startFadeOut();
 }
 
 void StoryState::backPressed()
@@ -111,7 +120,7 @@ void StoryState::backPressed()
 }
 StoryState* StoryState::getInstance()
 {    
-     printf("Profile state\n");
+     printf("Story state\n");
     static StoryState StoryState;
     StoryState.changeState(STORY);
     return &StoryState;
