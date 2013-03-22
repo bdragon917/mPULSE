@@ -91,18 +91,18 @@ void Entity::givePickup(Entity::PickupType p)
     cd->pickupType = p;
 }
 
-NxVec3* Entity::linearSweep(float dt)
+NxSweepQueryHit* Entity::linearSweep(float dt)
 {
 	NxU32 flags = NX_SF_STATICS;
-    NxSweepQueryHit result;
+    NxSweepQueryHit* result = new NxSweepQueryHit();
 	
     NxVec3* impactPoint = NULL;
 	NxVec3 vec = actor->getLinearVelocity()*(dt/1000.0f);
-	if(actor->linearSweep(vec, flags, NULL, 1, &result, NULL) > 0)
+	if(actor->linearSweep(vec, flags, NULL, 1, result, NULL) > 0)
 	{
-		impactPoint = &result.point;
+		return result;
 	}
-	return impactPoint;
+	return NULL;
 }
 
 Entity::PickupType Entity::usePickup()
@@ -446,6 +446,56 @@ void Entity::setShield(bool active)
     if(active)
         shieldActivatedTime = clock.getCurrentTime();
     shield = active;
+}
+
+bool Entity::getSweepCollision()
+{
+	return sweepCollision;
+}
+
+void Entity::setSweepCollision(bool b)
+{
+	sweepCollision = b;
+}
+
+NxVec3 Entity::getImpactPoint()
+{
+	return impactPoint;
+}
+
+void Entity::setImpactPoint(NxVec3 point)
+{
+	impactPoint = point;
+}
+
+NxVec3 Entity::getImpactNormal()
+{
+	return impactNormal;
+}
+
+void Entity::setImpactNormal(NxVec3 normal)
+{
+	impactNormal = normal;
+}
+
+NxVec3 Entity::getOldVelocity()
+{
+	return oldVelocity;
+}
+
+void Entity::setOldVelocity(NxVec3 vel)
+{
+	oldVelocity = vel;
+}
+
+NxReal Entity::getDotResult()
+{
+	return dotResult;
+}
+
+void Entity::setDotResult(NxReal result)
+{
+	dotResult = result;
 }
 
 void Entity::setModel(ObjModel* m)

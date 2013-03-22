@@ -264,11 +264,28 @@ void PlayState::update(float dt)
     {
         Entity* car = entities.cars[c];
         entities.cars[c]->aAI->update(entities.cars, entities.AIcars);
-		if(car->linearSweep(dt) != NULL)
+		NxSweepQueryHit* sweepResult = car->linearSweep(dt);
+		car->setSweepCollision(false);
+		if(sweepResult != NULL)
 		{
-			printf("Hit detected!\n");
+			NxVec3 impactPoint = sweepResult->point;
+			NxVec3 normal = sweepResult->normal;
+			NxVec3 currPos = car->getActor()->getGlobalPose().t;
+
+			NxVec3 testVec = impactPoint - currPos;
+			NxReal dotResult = testVec.dot(normal);
+
+			car->setSweepCollision(true);
+			car->setImpactPoint(impactPoint);
+			car->setImpactNormal(normal);
+			car->setDotResult(dotResult);
+			car->setOldVelocity(car->getActor()->getLinearVelocity());
+			
+			printf("Sweep collision!\n");
 		}
+		
         car->update();
+		
         if (car->getActor()->getGlobalPose().t.y < -20.0f)
         {
             //car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
@@ -349,6 +366,54 @@ void PlayState::update(float dt)
     //physicsEngine->step(0.33f);
     //physicsEngine->step(1.0f/60.0f);
 	physicsEngine->step(dt/1000.0f);
+
+	
+	for (unsigned c = 0; c < entities.cars.size(); ++c)
+    {
+		Entity* car = entities.cars[c];
+
+		if(car->getSweepCollision())
+		{
+			NxVec3 impactPoint = car->getImpactPoint();
+			NxVec3 normal = car->getImpactNormal();
+			NxVec3 newPos = car->getActor()->getGlobalPose().t;
+
+			NxVec3 testVec = impactPoint - newPos;
+			NxReal dotResult = testVec.dot(normal);
+
+			if((dotResult * car->getDotResult()) < 0)
+			{
+				NxVec3 oldVelUnit = -car->getOldVelocity();
+				oldVelUnit.normalize();
+				normal.normalize();
+				double angle = oldVelUnit.dot(normal)*90.0f;
+
+				double scale = car->getOldVelocity().magnitude() * cos(angle);
+				NxVec3 scaledNormal = scale * normal;
+				NxVec3 newVelVec = car->getOldVelocity() + (2.0f * scaledNormal);
+
+				//This definitely need some tweaking.  When I set it to bounce back at the appropriate angle it didn't work
+				//too well either.  We'll have to play around with it a bit.  Sometimes falls through the ground when you
+				//run into a wall really fast.
+				car->getActor()->setLinearVelocity(NxVec3(0,0,0)); 
+				newVelVec.normalize();
+				NxVec3 newPos = car->getImpactPoint() + (newVelVec * 5.0f);
+				car->getActor()->setGlobalPosition(newPos);
+				
+				//Pseudo-code of how to do this:
+				// find angle by dot product normal with car->getOldVelocity()
+				// scale = car->getOldVelocity().magnitude() * cos(the angle between )
+				// newNormal = scale * normal
+				// newVelVector = car->getOldVelocity() + (2*newNormal)
+				// set position to impact point + newVelVector
+				// set linearVelocity to newVelVector
+				// adjust orientation somehow
+
+				printf("You definitely went through a wall.\n");
+			}
+		}
+	}
+	
 }
 
 void PlayState::render()

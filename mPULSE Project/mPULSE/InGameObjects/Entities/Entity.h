@@ -64,7 +64,7 @@ public:
     //int rotation mode
     //rotation data    
 
-	NxVec3* linearSweep(float dt);
+	NxSweepQueryHit* linearSweep(float dt);
 
     AI* aAI;
     void setTimeToLive(int tmpTime);
@@ -88,6 +88,17 @@ public:
     bool isBatteryCharged();
     bool isShunting();
 
+	bool getSweepCollision();
+	void setSweepCollision(bool b);
+	NxVec3 getImpactPoint();
+	void setImpactPoint(NxVec3 point);
+	NxVec3 getImpactNormal();
+	void setImpactNormal(NxVec3 normal);
+	NxVec3 getOldVelocity();
+	void setOldVelocity(NxVec3 oldVelocity);
+	NxReal getDotResult();
+	void setDotResult(NxReal result);
+
 private:
 	bool batteryCharged;
     bool usingDisplayList;
@@ -95,6 +106,7 @@ private:
     bool shunting;
     bool steering;
     bool shield;
+	bool sweepCollision;
 
     int displayListIndex;
     int torque;
@@ -115,6 +127,11 @@ private:
     unsigned shuntReloadTime;
     unsigned shieldTimeout;   
     NxReal shuntPower;
+
+	NxVec3 impactPoint;
+	NxVec3 impactNormal;
+	NxVec3 oldVelocity;
+	NxReal dotResult;
 
     Clock clock;
     PickupType pickup;
