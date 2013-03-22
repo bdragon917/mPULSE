@@ -11,13 +11,20 @@ float angle = acos(cosangle);
 
 AI::AI()
 {
-    xController = new XboxController(5);myTargetVector = NxVec3(0,0,0);myOrientation = NxVec3(0,0,0);myPesonality = AIPersonality();
+    xController = new XboxController(5);myTargetVector = NxVec3(0,0,0);myOrientation = NxVec3(0,0,0);myPersonality = AIPersonality();
 }
 
 XboxController* AI::getControl()
 {
     return xController;
 }
+
+void AI::setPersonality(int type)
+{
+    myPersonality.setPersonality(type);
+}
+
+
 
 void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
 {
@@ -43,9 +50,14 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
     //myTarget = myTarget / myTarget.normalize();
 
 
+   myTarget = (myPersonality.Boidness * addBoydFlocking(myTarget, AIs, players)) + ((1 - myPersonality.Boidness) * myTarget);
+   myTarget = (myPersonality.PlayerHate * attackPlayerInRange(myTarget, players)) + ((1 - myPersonality.PlayerHate) * myTarget);
 
+
+        /*
     myTarget = addBoydFlocking(myTarget, AIs, players);
     myTarget = attackPlayerInRange(myTarget, players);
+    */
 
     myTargetVector = myTarget;      //myTargetVector for debug
 

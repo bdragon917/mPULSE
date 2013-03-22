@@ -14,6 +14,9 @@ public:
     // 
     //
 
+    float Boidness;     //used
+    float PlayerHate;   //Used
+
     float AHFactor;         //Steer in front of you
     float Safeness;         //Avoidance tendecy
     float Jerk;             //Chance of Jerk moves

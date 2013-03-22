@@ -29,11 +29,40 @@ PlayState::PlayState()
 
     for (int a=0;a<num_AI;a++)
     {
+        int AIType = rand() % 4;
 
         Entity* newAIrCar = new Entity();
-        RenderableComponent* newRc = new RenderableComponent(1, 5);
-
+        RenderableComponent* newRc;
         newAIrCar->aAI = new AI();
+        
+        switch (AIType)
+        {
+        case 0:
+            newRc = new RenderableComponent(1, 0);
+            newAIrCar->aAI->myPersonality.setPersonality(AIType);
+            break;
+
+        case 1:
+            newRc = new RenderableComponent(1, 4);
+            newAIrCar->aAI->myPersonality.setPersonality(AIType);
+            break;
+
+        case 2:
+            newRc = new RenderableComponent(1, 5);
+            newAIrCar->aAI->myPersonality.setPersonality(AIType);
+            break;
+
+        case 3:
+            newRc = new RenderableComponent(1, 6);
+            newAIrCar->aAI->myPersonality.setPersonality(AIType);
+            break;
+        
+        default:
+            newRc = new RenderableComponent(1, 5);
+            newAIrCar->aAI->myPersonality.setPersonality(AIType);
+            break;
+
+        }
 
         newAIrCar->rc.push_back(newRc);
         //entities.cars.push_back(newAIrCar);

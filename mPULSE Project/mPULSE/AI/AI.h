@@ -23,13 +23,16 @@ class AI
 public:
     AI();
 
-    AIPersonality myPesonality;
+    AIPersonality myPersonality;
 
     XboxController* getControl();
     void update(std::vector<Entity*> players, std::vector<Entity*> AIs);
 
     void setWaypoint(Waypoint* aW);
     void setActor(NxActor* aA);
+    
+    void setPersonality(int type);
+
     NxActor* getActor();
 
     Entity* anEntity;
