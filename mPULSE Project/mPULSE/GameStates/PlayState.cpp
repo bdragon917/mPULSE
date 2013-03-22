@@ -25,7 +25,7 @@ PlayState::PlayState()
         playerCar->rc.push_back(pc_rc);
     }
     
-    int num_AI = 6;
+    int num_AI = 0;
 
     for (int a=0;a<num_AI;a++)
     {

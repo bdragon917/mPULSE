@@ -263,7 +263,7 @@ void Entity::brake(int tmpTorque)
 float Entity::convertVel(float vel)
 {
     float deltaSteer = 0.0;
-    float sensitivity = 7.0;
+    float sensitivity = 12.0;
 
     if(vel == 0)
         deltaSteer = minSteering;

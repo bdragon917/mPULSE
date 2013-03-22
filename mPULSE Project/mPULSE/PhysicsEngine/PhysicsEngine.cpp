@@ -119,7 +119,10 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
 	    entityCar1->addDriveWheel(wheel2);
         entityCar1->addSteerWheel(wheel2);
 
+		entityCar1->addDriveWheel(wheel3);
         entityCar1->addPassiveWheel(wheel3);
+
+		entityCar1->addDriveWheel(wheel4);
 	    entityCar1->addPassiveWheel(wheel4);
 
         //Camera newCamera = Camera(box);
@@ -557,7 +560,7 @@ NxActor* PhysicsEngine::createCarChassis()
 	//actorDesc.userData = cd;   
 
 	NxActor *actor = scene->createActor(actorDesc);
-    actor->setCMassOffsetLocalPosition(NxVec3(0, -1.5, 0));
+    actor->setCMassOffsetLocalPosition(NxVec3(0, -1.0, 0));
     //actor->setCMassOffsetLocalPosition(NxVec3(0, 0, 0));
     //actor->setCMassOffsetLocalPosition(NxVec3(0.25f, -4.0, 0));   //True Front Weel Drive =)
 
