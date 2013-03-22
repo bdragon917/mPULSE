@@ -25,7 +25,7 @@ PlayState::PlayState()
         playerCar->rc.push_back(pc_rc);
     }
     
-    int num_AI = 6;
+    int num_AI = 0;
 
     for (int a=0;a<num_AI;a++)
     {
@@ -210,6 +210,10 @@ void PlayState::update(float dt)
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
         Entity* car = entities.cars[c];
+		if(car->linearSweep(dt) != NULL)
+		{
+			printf("Hit detected!\n");
+		}
         car->update();
         if (car->getActor()->getGlobalPose().t.y < -20.0f)
         {

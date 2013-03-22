@@ -76,7 +76,7 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
 
     //angleToTarget = acos((angleToTarget) / (myDirection.magnitude() * myTarget.magnitude()));
     //angleToTarget = acos((angleToTarget)/(myTarget.magnitude()*myDirection.magnitude()));
-    printf("AI: AngleToTarget%f\n", angleToTarget);
+    //printf("AI: AngleToTarget%f\n", angleToTarget);
     // -1.0 < AngleTotarget < 1.0 
 
     float SteerSenstivity = 0.03f;

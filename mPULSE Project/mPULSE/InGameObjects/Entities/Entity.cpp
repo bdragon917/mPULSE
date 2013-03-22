@@ -91,6 +91,20 @@ void Entity::givePickup(Entity::PickupType p)
     cd->pickupType = p;
 }
 
+NxVec3* Entity::linearSweep(float dt)
+{
+	NxU32 flags = NX_SF_STATICS;
+    NxSweepQueryHit result;
+	
+    NxVec3* impactPoint = NULL;
+	NxVec3 vec = actor->getLinearVelocity()*(dt/1000.0f);
+	if(actor->linearSweep(vec, flags, NULL, 1, &result, NULL) > 0)
+	{
+		impactPoint = &result.point;
+	}
+	return impactPoint;
+}
+
 Entity::PickupType Entity::usePickup()
 {
     CustomData* cd = (CustomData*) actor->userData;
@@ -249,7 +263,7 @@ void Entity::brake(int tmpTorque)
 float Entity::convertVel(float vel)
 {
     float deltaSteer = 0.0;
-    float sensitivity = 7.0;
+    float sensitivity = 12.0;
 
     if(vel == 0)
         deltaSteer = minSteering;
