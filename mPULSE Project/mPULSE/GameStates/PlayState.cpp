@@ -330,6 +330,23 @@ void PlayState::update(float dt)
 
 			if((dotResult * car->getDotResult()) < 0)
 			{
+				NxVec3 oldVelUnit = -car->getOldVelocity();
+				oldVelUnit.normalize();
+				normal.normalize();
+				double angle = oldVelUnit.dot(normal)*90.0f;
+
+				double scale = car->getOldVelocity().magnitude() * cos(angle);
+				NxVec3 scaledNormal = scale * normal;
+				NxVec3 newVelVec = car->getOldVelocity() + (2.0f * scaledNormal);
+
+				//This definitely need some tweaking.  When I set it to bounce back at the appropriate angle it didn't work
+				//too well either.  We'll have to play around with it a bit.  Sometimes falls through the ground when you
+				//run into a wall really fast.
+				car->getActor()->setLinearVelocity(NxVec3(0,0,0)); 
+				newVelVec.normalize();
+				NxVec3 newPos = car->getImpactPoint() + (newVelVec * 5.0f);
+				car->getActor()->setGlobalPosition(newPos);
+				
 				//Pseudo-code of how to do this:
 				// find angle by dot product normal with car->getOldVelocity()
 				// scale = car->getOldVelocity().magnitude() * cos(the angle between )
