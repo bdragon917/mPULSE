@@ -8,6 +8,8 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     steering = true;
     shunting = false;
 
+    tiltAngle = 0.0f;   //used in rendering for Tilt
+
 	charge = 0.0f;
     displayListIndex = -1;
     actor = a;

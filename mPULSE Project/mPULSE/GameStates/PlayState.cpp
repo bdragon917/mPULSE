@@ -731,7 +731,6 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
     {
         //Do AI Controller stuff
         handleXboxController(player, entities.cars ,entities.cars.at(player)->aAI->getControl(), false);
-
     }
     
 }

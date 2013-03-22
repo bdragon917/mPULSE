@@ -76,6 +76,8 @@ public:
     void shuntLeft();
     void deshunt();
 
+    float tiltAngle;
+
     int getTimeToLive();
 
     bool getShield();

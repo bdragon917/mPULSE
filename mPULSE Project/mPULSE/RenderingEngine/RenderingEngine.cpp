@@ -358,7 +358,12 @@ void RenderingEngine::drawModelPosRotationEnhanced(ObjModel* model, Entity* anEn
     float steerAngle = anEntity->getSteerWheels()->at(0)->getSteerAngle();
     steerAngle *= -3 * anEntity->getActor()->getLinearVelocity().magnitude();
     NxQuat q;
-    NxReal ang = steerAngle;        //get angle of rotation
+
+
+
+    anEntity->tiltAngle = (anEntity->tiltAngle*0.75f) + (steerAngle*0.25f);
+
+    NxReal ang = anEntity->tiltAngle;        //get angle of rotation
     //q.fromAngleAxis(ang, zaxis);
     q.fromAngleAxis(ang, NxVec3(1.0f,0.0f,0.0f));
 
