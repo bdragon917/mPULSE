@@ -18,13 +18,13 @@ ProfileState::ProfileState()
     //Not reallly used excepted for .isActive, but good to initial the variables
     ProfileScreenInfo psi = ProfileScreenInfo();
     psi.isActive = true;
-    psi.title = "Player 1 Profile";
+    psi.title = "Player " + renderingEngine->FloatToString(gameVariables->profileTargetPlayer) + " Profile";
     psi.profilesOnScreen[0] = "";
     psi.profilesOnScreen[1] = "";
     psi.profilesOnScreen[2] = "";
     psi.profilesOnScreen[3] = "";
     psi.profilesOnScreen[4] = "";
-    psi.selectedItem = 0;               //0 is the done button, the others are used for the possible items
+    psi.selectedItem = 1;               //0 is the done button, the others are used for the possible items
     psi.selectedTextTexture = 1;
     psi.selectedButtonTexture = 1;
 
@@ -49,7 +49,7 @@ void ProfileState::render()
     psi.isActive = true;
     psi.selectedItem = curSelected;
 
-
+    psi.title = "Player " + renderingEngine->FloatToString(gameVariables->profileTargetPlayer) + " Profile";
     //asumes myDt is updated
     int retMenuVal = renderingEngine->drawMainMenuScreen(5, 0, myDt, psi);     //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
 
@@ -63,7 +63,17 @@ void ProfileState::render()
         switch (curSelected)
         {
         case 0:
-            //changeState(PLAY);
+            //Finish Profile state
+            if ((gameVariables->profileTargetPlayer == 1)&&(gameVariables->getPlayerNum() == 2))
+            {
+                gameVariables->profileTargetPlayer = 2;
+                changeState(PROFILE);
+            }
+            else
+            {
+                gameVariables->profileTargetPlayer = 1;
+                changeState(SHOP);
+            }
             break;
         case 1:
             //This should bring up a profile screen
@@ -177,8 +187,7 @@ void ProfileState::keySelectTarget()
 {
     if (curSelected == 0)
     {
-        //Finish Profile state
-        changeState(PLAY);
+        renderingEngine->startFadeOut();
     }
     else
     {

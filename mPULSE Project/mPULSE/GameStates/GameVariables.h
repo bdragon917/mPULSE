@@ -24,6 +24,9 @@ public:
 
     int getPlayerNum();
 
+    //This is for profiles =)
+    int profileTargetPlayer;
+
 
     bool player2isAI;       //debug??
 
@@ -36,7 +39,20 @@ public:
 
     Resolution curResolution;
 
+    //determines finished race
+    void GameVariables::resetRace();
+    bool GameVariables::isFinishedRace();
+    bool GameVariables::isFinished(int player);
+    void GameVariables::becomeFinished(int player);
+    unsigned int finishTime;
+    //
+
 private:
+
+    //Race Variables
+    bool finishedPlayers[4];        //Should be the number of players
+    //
+
     std::vector<Profile*> players; 
     int numPlayers;
     bool* controllers;

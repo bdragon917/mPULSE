@@ -177,6 +177,7 @@
     <ClInclude Include="RenderingEngine\ProfileScreenInfo.h" />
     <ClInclude Include="RenderingEngine\RenderingEngine.h" />
     <ClInclude Include="RenderingEngine\Shader.h" />
+    <ClInclude Include="RenderingEngine\ShopScreenInfo.h" />
     <ClInclude Include="SoundEngine\Sound.h" />
     <ClInclude Include="SoundEngine\SoundEngine.h" />
     <ClInclude Include="Util\Clock.h" />

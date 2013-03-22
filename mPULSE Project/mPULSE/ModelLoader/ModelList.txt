@@ -9,3 +9,4 @@ ModelLoader\\Models\\mothershipHull.obj
 ModelLoader\\Models\\mothershipEngine.obj
 ModelLoader\\Models\\BarrierDisc.obj
 ModelLoader\\Models\\BarrierScreen.obj
+ModelLoader\\Models\\Claymore.obj

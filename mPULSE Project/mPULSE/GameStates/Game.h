@@ -11,6 +11,8 @@
 #include <GameStates/StoryState.h>
 #include <GameStates/SettingState.h>
 #include <GameStates/ProfileState.h>
+#include <GameStates/ShopState.h>
+#include <GameStates/ResultState.h>
 #include <Util/Clock.h>
 
 class Game

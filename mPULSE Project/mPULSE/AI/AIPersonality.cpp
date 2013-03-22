@@ -6,6 +6,9 @@ AIPersonality::AIPersonality()
     Boidness = 1.0f;     //used
     PlayerHate = 0.1f;   //Used
 
+    lookAhead = 20.0f;
+    lookRadius = 50.0f;
+
     AHFactor = 0.0f;         //Steer in front of you
     Safeness = 0.0f;         //Avoidance tendecy
     Jerk = 0.0f;             //Chance of Jerk moves

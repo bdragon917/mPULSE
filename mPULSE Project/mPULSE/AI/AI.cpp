@@ -163,9 +163,8 @@ NxVec3 AI::attackPlayerInRange(NxVec3 myTarget, std::vector<Entity*> players)
 {
     NxVec3 retValue = myTarget;
 
-    float viewDistance = 60.0f;
-    const float seperateIntensity = 60.0f;
-    float lookAheadDistance = 0.0f;
+    float viewDistance = myPersonality.lookRadius;
+    float lookAheadDistance = myPersonality.lookAhead;
 
 
     NxVec3 myLoc = myActor->getGlobalPose().t;
@@ -197,9 +196,9 @@ NxVec3 AI::attackPlayerInRange(NxVec3 myTarget, std::vector<Entity*> players)
 
 NxVec3 AI::addBoydFlocking(NxVec3 curTargetVector, std::vector<Entity*> AIs, std::vector<Entity*> players)
 {
-    float viewDistance = 60.0f;
+    float viewDistance = myPersonality.lookRadius;
     const float seperateIntensity = 1.0f;
-    float lookAheadDistance = 0.0f;
+    float lookAheadDistance = myPersonality.lookAhead;
     const float BoydAmount = 0.5f;      //within 0 to 1
 
    
@@ -258,7 +257,7 @@ NxVec3 AI::addBoydFlocking(NxVec3 curTargetVector, std::vector<Entity*> AIs, std
 
 
 
-    retVector = ((1.0f-BoydAmount) * retVector) + ( (BoydAmount) *acumVector);
+    //retVector = ((1.0f-BoydAmount) * retVector) + ( (BoydAmount) *acumVector);
 
     //Type 2a
     return (retVector);

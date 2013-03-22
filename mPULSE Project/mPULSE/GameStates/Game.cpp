@@ -53,13 +53,19 @@ void Game::checkStateChange()
         case GameState::SETTING:
             state = SettingState::getInstance();
             break;
+        case GameState::SHOP:
+            state = ShopState::getInstance();
+            break;
         case GameState::PROFILE:
             state = ProfileState::getInstance();                
             break;   
         case GameState::PLAY:
             state = PlayState::getInstance();                
             break;
-     
+        case GameState::RESULT:
+            state = ResultState::getInstance();                
+            break;
+
         }
     }
 }

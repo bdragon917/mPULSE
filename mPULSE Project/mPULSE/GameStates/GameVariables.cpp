@@ -21,6 +21,9 @@ void GameVariables::initialize()
         players.push_back(defaultProfile);
 
         player2isAI = false;
+        profileTargetPlayer = 1;
+
+        finishTime = NULL;
     }
 }
 
@@ -93,4 +96,36 @@ int GameVariables::setPlayers(Profile* aPlayer, int index)
 int GameVariables::getPlayerNum()
 {
     return players.size();
+}
+
+void GameVariables::resetRace()
+{
+    finishedPlayers[0] = false;
+    finishedPlayers[1] = false;
+    finishedPlayers[2] = false;
+    finishedPlayers[3] = false;
+
+}
+
+bool GameVariables::isFinishedRace()
+{
+    bool retValue = true;
+
+    for (int p=0;p<numPlayers;p++)
+    {
+        if (!finishedPlayers[p])
+            retValue = false;
+    }
+
+    return retValue;
+}
+
+void GameVariables::becomeFinished(int player)
+{
+    finishedPlayers[player] = true;
+}
+
+bool GameVariables::isFinished(int player)
+{
+    return finishedPlayers[player];
 }

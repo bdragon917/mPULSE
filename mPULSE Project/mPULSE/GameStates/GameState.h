@@ -11,6 +11,7 @@ public:
         INIT,
         MAIN_MENU,
         STORY,
+        SHOP,
         SETTING,
         PROFILE,
         PLAY,

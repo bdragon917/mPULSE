@@ -76,6 +76,7 @@ public:
     int drawStoryScreen(float dt);
     int drawSettingScreen(float dt, int selectX, int selectY);
     int drawShopScreen(float dt);
+    int drawResultScreen(float dt);
 
     void drawProfileOverlay(ProfileScreenInfo psi);
 

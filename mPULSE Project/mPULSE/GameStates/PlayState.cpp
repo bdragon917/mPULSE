@@ -13,6 +13,8 @@ PlayState::PlayState()
     showConsole = true;
     rbPressed = false;
 
+    gameVariables->resetRace();     //Clears victory flags
+
     changeState(PLAY); 
     numPlayers = gameVariables->getPlayerNum();
 
@@ -25,11 +27,13 @@ PlayState::PlayState()
         playerCar->rc.push_back(pc_rc);
     }
     
-    int num_AI = 0;
+    int num_AI = 6;
 
     for (int a=0;a<num_AI;a++)
     {
         int AIType = rand() % 4;
+
+        AIType = 2;
 
         Entity* newAIrCar = new Entity();
         RenderableComponent* newRc;
@@ -48,7 +52,7 @@ PlayState::PlayState()
             break;
 
         case 2:
-            newRc = new RenderableComponent(1, 5);
+            newRc = new RenderableComponent(11, 5);
             newAIrCar->aAI->myPersonality.setPersonality(AIType);
             break;
 
@@ -146,6 +150,40 @@ void PlayState::update(float dt)
 {    
     //Handle Events
     handleEvents();
+
+    //deal with end of race
+    
+    for (int playa=0;playa<gameVariables->getPlayerNum();playa++)
+    {
+
+        CustomData* cd = (CustomData*)entities.cars[playa]->getActor()->userData;
+
+        if (cd->laps > 1)
+            gameVariables->becomeFinished(playa);
+
+        //gameVariables->becomeFinished(playa);
+    }
+
+    if (gameVariables->player2isAI)
+    {
+        CustomData* cd = (CustomData*)entities.AIcars[0]->getActor()->userData;
+
+        if (cd->laps > 1)
+            gameVariables->becomeFinished(1);
+    }
+
+    
+    if (gameVariables->isFinishedRace())
+    {
+        if (gameVariables->finishTime == NULL)
+        {gameVariables->finishTime = time.getCurrentTime();}
+
+        const unsigned int FINISH_DELAY = 3000;
+
+        if (time.getDeltaTime(gameVariables->finishTime) > FINISH_DELAY)
+        {changeState(RESULT);}
+    }
+    //
 
     //Handle all dead entities
     unsigned numOfObjs = entities.DynamicObjs.size();
