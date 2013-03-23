@@ -100,6 +100,7 @@ public:
 	void setOldVelocity(NxVec3 oldVelocity);
 	NxReal getDotResult();
 	void setDotResult(NxReal result);
+    int rank;
 
 private:
 	bool batteryCharged;
@@ -118,7 +119,7 @@ private:
     int timeCreated;
     int shieldActivatedTime;     
     int health;
-
+    
     float maxSteeringAngle;
     float minSteering;
     float maxSteering;

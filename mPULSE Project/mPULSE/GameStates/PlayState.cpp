@@ -18,20 +18,19 @@ PlayState::PlayState()
 
     changeState(PLAY); 
     numPlayers = gameVariables->getPlayerNum();
+    int num_AI = 6;
 
+    rankings = new std::vector<Entity*>;
     for(int i=0;i<numPlayers;i++)
     {
         Entity* playerCar = new Entity();
         playerCar->aAI = new AI();
-
+        rankings->push_back(playerCar);
         entities.cars.push_back(playerCar);
 
         RenderableComponent* pc_rc = new RenderableComponent(1,3);
         playerCar->rc.push_back(pc_rc);
-    }
-    
-    int num_AI = 6;
-
+    }   
     for (int a=0;a<num_AI;a++)
     {
         int AIType = rand() % 4;
@@ -41,7 +40,8 @@ PlayState::PlayState()
         Entity* newAIrCar = new Entity();
         RenderableComponent* newRc;
         newAIrCar->aAI = new AI();
-        
+        rankings->push_back(newAIrCar);
+
         switch (AIType)
         {
         case 0:
@@ -166,7 +166,8 @@ void PlayState::update(float dt)
     handleEvents();
 
     //deal with end of race
-    
+    calculateRankings();
+
     for (int playa=0;playa<gameVariables->getPlayerNum();playa++)
     {
 
@@ -1047,10 +1048,64 @@ void PlayState::logWayPoint(int player)
         out.close();
 }
 
-PlayState* PlayState::getInstance()
+PlayState* PlayState::getInstance() 
 {    
      printf("play state\n");
     static PlayState playState;
     playState.changeState(PLAY);
     return &playState;
+}
+
+
+void PlayState::calculateRankings()
+{
+    unsigned numCars = rankings->size();
+
+    int tmpLap = 0;
+    int j = 1;
+
+    Waypoint* tmpWp;
+
+    for(unsigned i=0;i<numCars;i++)
+        rankings->at(i)->rank = i+1;
+}
+
+std::vector<Entity*>* PlayState::getPlayersOnLap(int lap)
+{
+    unsigned numCars = rankings->size();
+    std::vector<Entity*>* players = new std::vector<Entity*>;
+    CustomData* cd;
+
+    for(unsigned i = 0; i < numCars; i++)
+    {
+        cd = (CustomData*) rankings->at(i)->getActor()->userData;
+        if (cd->laps == lap)
+            players->push_back(rankings->at(i));
+    }
+
+    return players;
+}
+
+std::vector<Entity*>* PlayState::sortPlayersByWaypoint(std::vector<Entity*>* players)
+{
+    CustomData* tmpCdi;
+    CustomData* tmpCdj;
+    Entity* tmpEntity;
+
+    unsigned numCars = rankings->size();
+
+    for(unsigned i = 0; i < numCars; i++)
+    {
+        tmpCdi = (CustomData*) rankings->at(i)->getActor()->userData;
+        for(unsigned j = i; j < numCars; j++)
+        {
+            tmpCdj = (CustomData*) rankings->at(j)->getActor()->userData;
+            if(tmpCdi->wp->id < tmpCdj->wp->id) //Handle racers on a different lap
+            {
+                    tmpEntity = rankings->at(i);
+                    rankings->at(i) = rankings->at(j);            
+                    rankings->at(j) = tmpEntity;
+            }
+        }
+    }
 }

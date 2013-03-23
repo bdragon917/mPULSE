@@ -577,8 +577,10 @@ void RenderingEngine::drawAllText()
      glEnable(GL_LIGHTING);
 }
 
-void RenderingEngine::drawHUD(NxActor* carActor, bool hasWon)
+void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
 {
+    NxActor* carActor = carEntity->getActor();
+
     aHUDShader->on();
 
     glDisable(GL_LIGHTING);
@@ -600,7 +602,6 @@ void RenderingEngine::drawHUD(NxActor* carActor, bool hasWon)
     glPushAttrib(GL_DEPTH_TEST);
     glDisable(GL_DEPTH_TEST);
 
-
     /*
     glBindTexture(GL_TEXTURE_2D, textureid_P1[19]);
     glBegin(GL_QUADS);
@@ -619,7 +620,7 @@ void RenderingEngine::drawHUD(NxActor* carActor, bool hasWon)
     int tens = (curSpd-(hundreds*100)) /10;
     int ones = (curSpd-((hundreds*100)+(tens*10)));
     int tenth = ((carActor->getLinearVelocity().magnitude()*10)-((hundreds*1000)+(tens*100)+(ones*10)));
-
+    drawText(50,-50, "Rank " + FloatToString(carEntity->rank));
     drawText(850,-600, "Spd: " + FloatToString(hundreds) + " " + FloatToString(tens) + " " + FloatToString(ones));
 
 
@@ -1833,7 +1834,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
         
         // bool hasWon = gameVariables->isFinished(carIndex);
 
-         drawHUD(targetEntities[carIndex]->getActor(), gameVariables->isFinished(carIndex));
+         drawHUD(targetEntities[carIndex], gameVariables->isFinished(carIndex));
          //drawHUD(targetEntities[carIndex]->getActor(), hasWon);
          //drawHUD(entities->cars[carIndex]->getActor(), hasWon);
 
