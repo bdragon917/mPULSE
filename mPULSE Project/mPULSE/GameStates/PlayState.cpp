@@ -1063,13 +1063,20 @@ PlayState* PlayState::getInstance()
 void PlayState::calculateRankings()
 {
     unsigned numCars = rankings->size();
+    std::vector<Entity*>* newRankings = new std::vector<Entity*>;
+    std::vector<Entity*>* players;
 
-    int tmpLap = 0;
-    int j = 1;
+    for(int i=3; i >= 0; i--)
+    {
+        players = getPlayersOnLap(i);
+        sortPlayersByWaypoint(players);
+        newRankings->insert(newRankings->end(), players->begin(), players->end());
+    }
 
-    Waypoint* tmpWp;
+    rankings->clear();
+    rankings->insert(rankings->begin(), newRankings->begin(), newRankings->end());
 
-    for(unsigned i=0;i<numCars;i++)
+    for(unsigned i=0;i<rankings->size();i++)
         rankings->at(i)->rank = i+1;
 }
 
@@ -1089,25 +1096,24 @@ std::vector<Entity*>* PlayState::getPlayersOnLap(int lap)
     return players;
 }
 
-std::vector<Entity*>* PlayState::sortPlayersByWaypoint(std::vector<Entity*>* players)
+void PlayState::sortPlayersByWaypoint(std::vector<Entity*>* players)
 {
     CustomData* tmpCdi;
     CustomData* tmpCdj;
     Entity* tmpEntity;
 
-    unsigned numCars = rankings->size();
-
+    unsigned numCars = players->size();
     for(unsigned i = 0; i < numCars; i++)
     {
-        tmpCdi = (CustomData*) rankings->at(i)->getActor()->userData;
+        tmpCdi = (CustomData*) players->at(i)->getActor()->userData;
         for(unsigned j = i; j < numCars; j++)
         {
-            tmpCdj = (CustomData*) rankings->at(j)->getActor()->userData;
+            tmpCdj = (CustomData*) players->at(j)->getActor()->userData;
             if(tmpCdi->wp->id < tmpCdj->wp->id) //Handle racers on a different lap
             {
                     tmpEntity = rankings->at(i);
-                    rankings->at(i) = rankings->at(j);            
-                    rankings->at(j) = tmpEntity;
+                    players->at(i) = players->at(j);            
+                    players->at(j) = tmpEntity;
             }
         }
     }
