@@ -581,7 +581,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
 {
     NxActor* carActor = carEntity->getActor();
 
-    aHUDShader->on();
+    
 
     glDisable(GL_LIGHTING);
 
@@ -602,6 +602,24 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
     glPushAttrib(GL_DEPTH_TEST);
     glDisable(GL_DEPTH_TEST);
 
+
+
+
+
+            glColor4f(0.0f,0.0f,0.0f, updateFade(16));      //dt not passed in
+    	    glBegin(GL_QUADS);
+                glVertex3f(   (1.0f),       (-1.0f),       (0.0f)   );
+		        glVertex3f(   (1.0f),       (1.0f),        (0.0f)   );
+		        glVertex3f(   (-1.0f),      (1.0f),       (0.0f)   );
+		        glVertex3f(   (-1.0f),      (-1.0f),      (0.0f)   );
+		    glEnd();
+
+        if (FadeCtrl >= 1.0f)
+            {
+                FadeCtrl=0.0f;fadeMode=0;
+            }
+
+        aHUDShader->on();
     /*
     glBindTexture(GL_TEXTURE_2D, textureid_P1[19]);
     glBegin(GL_QUADS);
@@ -612,67 +630,12 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         glTexCoord2f(0.0f, 0.0f);glVertex2f(-1.0f, -1.0f);
     glEnd();
     */
-
-    //Display speed
-
-    int curSpd = (carActor->getLinearVelocity().magnitude());
-    int hundreds = (curSpd/100);
-    int tens = (curSpd-(hundreds*100)) /10;
-    int ones = (curSpd-((hundreds*100)+(tens*10)));
-    int tenth = ((carActor->getLinearVelocity().magnitude()*10)-((hundreds*1000)+(tens*100)+(ones*10)));
-    drawText(50,-50, "Rank " + FloatToString(carEntity->rank));
-    drawText(850,-600, "Spd: " + FloatToString(hundreds) + " " + FloatToString(tens) + " " + FloatToString(ones));
-
-
-    //one
-    //0.1f assumes there is ten characters
-    float displaceTenths = 0.1f * tenth;
-
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
-    glBegin(GL_QUADS);
-        glColor3f(1.0f, 1.0f, 0.0);
-        glTexCoord2f(displaceTenths+0.1f, 0.0f);glVertex2f(0.95f, -0.90f);
-        glTexCoord2f(displaceTenths+0.1f, 1.0f);glVertex2f(0.95f, -0.75f);
-        glTexCoord2f(displaceTenths, 1.0f);glVertex2f(0.9f, -0.75f);
-        glTexCoord2f(displaceTenths, 0.0f);glVertex2f(0.9f, -0.90f);
-    glEnd();
-    //one
-    //0.1f assumes there is ten characters
-    float displaceOnes = 0.1f * ones;
-
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
-    glBegin(GL_QUADS);
-        glColor3f(1.0f, 1.0f, 0.0);
-        glTexCoord2f(displaceOnes+0.1f, 0.0f);glVertex2f(0.9f, -0.90f);
-        glTexCoord2f(displaceOnes+0.1f, 1.0f);glVertex2f(0.9f, -0.75f);
-        glTexCoord2f(displaceOnes, 1.0f);glVertex2f(0.85f, -0.75f);
-        glTexCoord2f(displaceOnes, 0.0f);glVertex2f(0.85f, -0.90f);
-    glEnd();
-    //ten
-
-    float displaceTens = 0.1f * tens;
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
-    glBegin(GL_QUADS);
-        glColor3f(1.0f, 1.0f, 0.0);
-        glTexCoord2f(displaceTens+0.1f, 0.0f);glVertex2f(0.85f, -0.90f);
-        glTexCoord2f(displaceTens+0.1f, 1.0f);glVertex2f(0.85f, -0.75f);
-        glTexCoord2f(displaceTens, 1.0f);glVertex2f(0.8f, -0.75f);
-        glTexCoord2f(displaceTens, 0.0f);glVertex2f(0.8f, -0.90f);
-    glEnd();
-    //hundred
-    float displaceHundred = 0.1f * hundreds;
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
-    glBegin(GL_QUADS);
-        glColor3f(1.0f, 1.0f, 0.0);
-        glTexCoord2f(displaceHundred+0.1f, 0.0f);glVertex2f(0.8f, -0.90f);
-        glTexCoord2f(displaceHundred+0.1f, 1.0f);glVertex2f(0.8f, -0.75f);
-        glTexCoord2f(displaceHundred, 1.0f);glVertex2f(0.75f, -0.75f);
-        glTexCoord2f(displaceHundred, 0.0f);glVertex2f(0.75f, -0.90);
-    glEnd();
-
-
     if(hasWon)
     {
+        //Fader
+        //float FadeCtrl = 0.0f;
+        
+        
         glBindTexture(GL_TEXTURE_2D, textureid_P1[26]);
         glBegin(GL_QUADS);
             glColor3f(1.0f, 1.0f, 0.0);
@@ -681,7 +644,69 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             glTexCoord2f(0.0f, 1.0f);glVertex2f(-1.0f, 1.0f);
             glTexCoord2f(0.0f, 0.0f);glVertex2f(-1.0f, -1.0f);
         glEnd();
+
+
     }
+    else
+    {
+        //Display speed
+        int curSpd = (carActor->getLinearVelocity().magnitude());
+        int hundreds = (curSpd/100);
+        int tens = (curSpd-(hundreds*100)) /10;
+        int ones = (curSpd-((hundreds*100)+(tens*10)));
+        int tenth = ((carActor->getLinearVelocity().magnitude()*10)-((hundreds*1000)+(tens*100)+(ones*10)));
+        drawText(50,-50, "Rank " + FloatToString(carEntity->rank));
+        drawText(850,-600, "Spd: " + FloatToString(hundreds) + " " + FloatToString(tens) + " " + FloatToString(ones));
+
+
+        //one
+        //0.1f assumes there is ten characters
+        float displaceTenths = 0.1f * tenth;
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
+        glBegin(GL_QUADS);
+            glColor3f(1.0f, 1.0f, 0.0);
+            glTexCoord2f(displaceTenths+0.1f, 0.0f);glVertex2f(0.95f, -0.90f);
+            glTexCoord2f(displaceTenths+0.1f, 1.0f);glVertex2f(0.95f, -0.75f);
+            glTexCoord2f(displaceTenths, 1.0f);glVertex2f(0.9f, -0.75f);
+            glTexCoord2f(displaceTenths, 0.0f);glVertex2f(0.9f, -0.90f);
+        glEnd();
+        //one
+        //0.1f assumes there is ten characters
+        float displaceOnes = 0.1f * ones;
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
+        glBegin(GL_QUADS);
+            glColor3f(1.0f, 1.0f, 0.0);
+            glTexCoord2f(displaceOnes+0.1f, 0.0f);glVertex2f(0.9f, -0.90f);
+            glTexCoord2f(displaceOnes+0.1f, 1.0f);glVertex2f(0.9f, -0.75f);
+            glTexCoord2f(displaceOnes, 1.0f);glVertex2f(0.85f, -0.75f);
+            glTexCoord2f(displaceOnes, 0.0f);glVertex2f(0.85f, -0.90f);
+        glEnd();
+        //ten
+
+        float displaceTens = 0.1f * tens;
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
+        glBegin(GL_QUADS);
+            glColor3f(1.0f, 1.0f, 0.0);
+            glTexCoord2f(displaceTens+0.1f, 0.0f);glVertex2f(0.85f, -0.90f);
+            glTexCoord2f(displaceTens+0.1f, 1.0f);glVertex2f(0.85f, -0.75f);
+            glTexCoord2f(displaceTens, 1.0f);glVertex2f(0.8f, -0.75f);
+            glTexCoord2f(displaceTens, 0.0f);glVertex2f(0.8f, -0.90f);
+        glEnd();
+        //hundred
+        float displaceHundred = 0.1f * hundreds;
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[29]);
+        glBegin(GL_QUADS);
+            glColor3f(1.0f, 1.0f, 0.0);
+            glTexCoord2f(displaceHundred+0.1f, 0.0f);glVertex2f(0.8f, -0.90f);
+            glTexCoord2f(displaceHundred+0.1f, 1.0f);glVertex2f(0.8f, -0.75f);
+            glTexCoord2f(displaceHundred, 1.0f);glVertex2f(0.75f, -0.75f);
+            glTexCoord2f(displaceHundred, 0.0f);glVertex2f(0.75f, -0.90);
+        glEnd();
+    }
+
+//////
     glPopAttrib();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -920,6 +945,7 @@ void RenderingEngine::initializeGL()
             aShadowShader = new Shader("shaders/shadow.frag", "shaders/shadow.vert");
             aHUDShader = new Shader("shaders/BlueColorKey.frag", "shaders/BlueColorKey.vert");
 			flatten = new Shader("shaders/flatten.frag", "shaders/flatten.vert");
+            testRTShader = new Shader("shaders/UnderWater.frag", "shaders/texture.vert");
         }
     else
     {fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
@@ -1920,6 +1946,10 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
 
         drawAllText();
+
+
+
+
  //       glutStrokeCharacter(GLUT_STROKE_ROMAN, FloatToString(cd->pickupType)[0]);
 
  //   glPopAttrib();
@@ -2271,15 +2301,17 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 	
 	//set view
 	setUpPerpView();
+
     //glEnable(GL_LIGHTING);
     //glDisable(GL_NORMALIZE);
     //glDisable(GL_TEXTURE);
 	
-    if (aShader != NULL)
+    if (aSkyBoxShader != NULL)
          {
             glEnable(GL_TEXTURE_2D);
-            aShader->on();
+            aSkyBoxShader->on();
          }
+
 
 
     //Draw Background
@@ -2328,6 +2360,20 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     drawSquare(1.2f - ((((half_width * 0.175f) * 2) + pad) * 4.0f), yLoc, 0, half_width * 0.175f, half_height * 0.0625f);
     
 
+    aSkyBoxShader->off();
+    aShader->on();
+        //if (testRTShader != NULL)
+         //{
+         //   glEnable(GL_TEXTURE_2D);
+         //   testRTShader->on();
+                            ///////////////////////TESTING SHADERS HERE!
+            //float myFloats[1] = {1.0f};
+            //float myFloats = 1.0f;
+           // GLint myLoc = testRTShader->getUniLoc("time");
+            //glProgramUniform4fv(testRTShader->f, myLoc, 1, myFloats);
+           // glProgramUniform1f(testRTShader->f, myLoc, myFloats);
+
+         //}
 
     //ship
     glPushMatrix();
@@ -2439,10 +2485,11 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
 
 
-    if (aShader != NULL)
-    {
-        aShader->off();
-    }
+    //if (testRTShader != NULL)
+    //{
+    //    testRTShader->off();
+   // }
+    aShader->off();
 
 
     if (psi.isActive)
@@ -3741,6 +3788,11 @@ int RenderingEngine::drawIntro()
 //	return 1;
 //
 //}
+
+void RenderingEngine::resetFade()
+{
+    FadeCtrl=0.0f;fadeMode=0;
+}
 
 void RenderingEngine::startFadeIn()
 {

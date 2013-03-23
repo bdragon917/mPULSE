@@ -34,10 +34,21 @@ void StageSelectState::render()
 
     if (retMenuVal == 1)
     {
-        gameVariables->resetRace();
-        PlayState* pStage = PlayState::getInstance();
-        pStage->resetAll();
-        changeState(PLAY);
+        switch (curSelectedY)
+        {
+        case -1:
+            curSelectedY = 1;
+            lockControls = false;
+            changeState(SHOP);
+            break;
+        default:
+            PlayState* pStage = PlayState::getInstance();
+            pStage->resetAll();
+            renderingEngine->resetFade();   //In case
+            lockControls = false;
+            changeState(PLAY);
+            break;
+        }
     }
 
 
@@ -47,7 +58,6 @@ bool StageSelectState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
     if (!lockControls)  //Allow control if user hasn't chose an option yet
     {
-        lockControls = false;
         //Non-Console
         if (KeyboardMouseEvents.type == SDL_KEYDOWN)
             {
@@ -123,8 +133,9 @@ void StageSelectState::keySelectTarget()
 
 void StageSelectState::backPressed()
 {
-    lockControls = false;
-    changeState(SHOP);
+    curSelectedY = -1;
+    renderingEngine->startFadeOut();
+    lockControls = true;
 }
 StageSelectState* StageSelectState::getInstance()
 {    

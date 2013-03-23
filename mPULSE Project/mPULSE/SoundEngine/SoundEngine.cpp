@@ -27,6 +27,13 @@ void SoundEngine::stopMusic()
 	song->stopMusic();
 }
 
+void SoundEngine::FadeOutMusic(int ms)
+{
+	song->fadeOutMusic(ms);
+}
+
+
+
 void SoundEngine::engineNoise()
 {
 	song->playEngine(0);

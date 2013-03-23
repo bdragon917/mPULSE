@@ -101,6 +101,11 @@ void Sound::startMusic2()
 	Mix_FadeInMusic(music2, 1, 10000);
 }
 
+void Sound::fadeOutMusic(int ms)
+{
+    Mix_FadeOutMusic(ms);
+}
+
 void Sound::stopMusic()
 {
     Mix_HaltMusic();

@@ -31,6 +31,7 @@ void ResultState::render()
 
     if (retMenuVal == 1)
     {
+        lockControls = false;
         changeState(SHOP);
     }
 
@@ -41,7 +42,6 @@ bool ResultState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
     if (!lockControls)  //Allow control if user hasn't chose an option yet
     {
-        lockControls = false;
         //Non-Console
         if (KeyboardMouseEvents.type == SDL_KEYDOWN)
             {

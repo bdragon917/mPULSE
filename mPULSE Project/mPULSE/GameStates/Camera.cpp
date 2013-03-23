@@ -389,6 +389,7 @@ void Camera::updateCamera(float dt)
             {
 
 
+
                 //Set target camera location in local space
                 float disAbove = 5.0f;
                 NxVec3 tarCamLoc = NxVec3(-targetDistance,disAbove,0.0f);
@@ -397,10 +398,12 @@ void Camera::updateCamera(float dt)
                 //NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.75f,disAbove,0.0f);
                 //NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.60f,disAbove * 0.75f,0.0f);
                 NxVec3 tarCamSpd30 = NxVec3(-targetDistance * 0.30f,disAbove,0.0f);
-                NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.1f,disAbove * 0.90f,0.0f);
+                NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.01f,disAbove * 0.90f,0.0f);
                 NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.001f,disAbove * 0.80f,0.0f);
 
                 NxVec3 tarCamSpdH = NxVec3(-targetDistance * 0.0001f,disAbove * 0.70f,0.0f);       //add random jitter
+
+                NxVec3 tarCamSpdInsane = NxVec3(-30.0f,disAbove * 0.80f,0.0f);
                 //NxVec3 tarCamSpdH = NxVec3(-targetDistance * 0.10f,disAbove * 0.5f,0.0f);       //add random jitter
 
                 float curActorSpd = targetActor->getLinearVelocity().magnitude();
@@ -422,6 +425,7 @@ void Camera::updateCamera(float dt)
                 {
                     tarCamLoc = tarCamSpdH;
                 }
+                
 
                 float rate = 0.1f;  //rate of camera view change
                 float slowrate = 0.1f;  //rate of camera view change
@@ -468,17 +472,23 @@ void Camera::updateCamera(float dt)
                 tarCamLoc = targetActor->getGlobalPose() * tarCamLoc;
                 tarCamLookAt = targetActor->getGlobalPose() * tarCamLookAt;
 
-
+                //NxVec3 debugCarLoc = targetActor->getGlobalPose().t;
 
                 //calculate a vector to tarCamLoc
                 NxVec3 vecCamLoc = tarCamLoc - curCamLoc;
 
 
-
-                //Spring
+                //Spring for main camera
                 float mass = 50.0f;
                 float stiffness = 2000.0f;
+                if (curActorSpd < 200.0f)       //Try to keep camera close, but no use after 200, so let try to maintain stability
+                    stiffness = 2000.0f + (curActorSpd) * 50.0f;
                 float damping = 30.0f;
+
+                //Spring
+                //float mass = 50.0f;
+                //float stiffness = 2000.0f;
+                //float damping = 30.0f;
                 NxVec3 stretch = (curCamLoc - tarCamLoc);//position - desiredPosition;
                 NxVec3 force = (-stiffness * stretch) - (damping * vecCamLoc);
 
@@ -523,8 +533,10 @@ void Camera::updateCamera(float dt)
 
 //                if (lastCamLoc != NULL)
 //                {vecCamLoc = ((lastCamLoc * 0.9) + (vecCamLoc * 0.1));}
-
-                curCamLoc = curCamLoc + (vecCamLoc);
+                if (curActorSpd < 300.0f)       //Try to keep camera close, but no use after 200, so let try to maintain stability
+                    curCamLoc = curCamLoc + (vecCamLoc);
+                else
+                    curCamLoc = targetActor->getGlobalPose() * tarCamSpdInsane;
                 //curCamLoc = (curCamLoc * 0.5f) + (tarCamLoc * 0.5f);
 
                 //curCamLoc = curCamLoc + targetActor->getLinearVelocity() ;

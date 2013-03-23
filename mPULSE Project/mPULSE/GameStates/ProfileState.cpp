@@ -67,11 +67,13 @@ void ProfileState::render()
             if ((gameVariables->profileTargetPlayer == 1)&&(gameVariables->getPlayerNum() == 2))
             {
                 gameVariables->profileTargetPlayer = 2;
+                curSelected = 1;
                 changeState(PROFILE);
             }
             else
             {
                 gameVariables->profileTargetPlayer = 1;
+                curSelected = 1;
                 changeState(SHOP);
             }
             break;
@@ -188,6 +190,7 @@ void ProfileState::keySelectTarget()
     if (curSelected == 0)
     {
         renderingEngine->startFadeOut();
+        lockControls = true;
     }
     else
     {
@@ -198,6 +201,7 @@ void ProfileState::keySelectTarget()
 
 void ProfileState::backPressed()
 {
+    curSelected = 1;
     changeState(MAIN_MENU);
 }
 ProfileState* ProfileState::getInstance()

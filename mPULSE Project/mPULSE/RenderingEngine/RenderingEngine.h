@@ -108,6 +108,8 @@ public:
     Shader* aHUDShader;
 	Shader* flatten;
 
+    Shader* testRTShader;
+
     string FloatToString(float input);
 
     //used for scene display
@@ -119,6 +121,7 @@ public:
     GLuint* textureid_P1;
 
     //Fade stuff
+    void resetFade();
     void startFadeIn();
     void startFadeOut();
 

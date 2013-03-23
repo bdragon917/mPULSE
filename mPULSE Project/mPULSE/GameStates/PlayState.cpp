@@ -19,7 +19,7 @@ void PlayState::resetAll()
     rbPressed = false;
 
     gameVariables->resetRace();     //Clears victory flags
-    gameVariables->finishTime = 0;
+    gameVariables->finishTime = NULL;
     entities.clearAll();
 
     time.reset();
@@ -200,9 +200,9 @@ void PlayState::update(float dt)
     if (gameVariables->isFinishedRace())
     {
         if (gameVariables->finishTime == NULL)
-        {gameVariables->finishTime = time.getCurrentTime();}
+        {gameVariables->finishTime = time.getCurrentTime();soundEngine->FadeOutMusic(4000);renderingEngine->startFadeOut();}
 
-        const unsigned int FINISH_DELAY = 3000;
+        const unsigned int FINISH_DELAY = 5000;
 
         if (time.getDeltaTime(gameVariables->finishTime) > FINISH_DELAY)
         {changeState(RESULT);}

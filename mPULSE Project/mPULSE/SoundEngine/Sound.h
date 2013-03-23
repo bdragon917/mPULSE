@@ -26,6 +26,8 @@ class Sound
         void playSound(int channel, int index);
 		void crashVolume(int newV);
 
+        void fadeOutMusic(int ms);
+
         void startMusic0();
 		void startMusic1();
 		void startMusic2();

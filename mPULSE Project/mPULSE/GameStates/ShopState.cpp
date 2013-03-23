@@ -35,8 +35,18 @@ void ShopState::render()
 
     if (retMenuVal == 1)
     {
-
-        changeState(STAGE);
+        switch (curSelectedY)
+        {
+        case -1:    //back
+            lockControls = false;
+            curSelectedY = 1;
+            changeState(MAIN_MENU);
+            break;
+        default:
+            lockControls = false;
+            curSelectedY = 1;
+            changeState(STAGE);
+        }
     }
 
 
@@ -46,7 +56,6 @@ bool ShopState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
     if (!lockControls)  //Allow control if user hasn't chose an option yet
     {
-        lockControls = false;
         //Non-Console
         if (KeyboardMouseEvents.type == SDL_KEYDOWN)
             {
@@ -176,7 +185,9 @@ void ShopState::keySelectTarget()
 
 void ShopState::backPressed()
 {
-    changeState(MAIN_MENU);
+    lockControls = true;
+    curSelectedY = -1;
+    renderingEngine->startFadeOut();
 }
 ShopState* ShopState::getInstance()
 {    
