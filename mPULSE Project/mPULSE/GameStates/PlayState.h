@@ -51,7 +51,7 @@ public:
     void handleWaypointEvents();
     void calculateRankings();
     std::vector<Entity*>* getPlayersOnLap(int lap);
-    std::vector<Entity*>* sortPlayersByWaypoint(std::vector<Entity*>* players);
+    void sortPlayersByWaypoint(std::vector<Entity*>* players);
 
 private:
 
