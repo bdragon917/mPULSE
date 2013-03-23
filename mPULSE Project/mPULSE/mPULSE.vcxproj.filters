@@ -228,6 +228,9 @@
     <ClCompile Include="GameStates\StageSelectState.cpp">
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
+    <ClCompile Include="InGameObjects\Tracks.cpp">
+      <Filter>Source Files\InGameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -376,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="GameStates\StageSelectState.h">
       <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameObjects\Tracks.h">
+      <Filter>Header Files\InGameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

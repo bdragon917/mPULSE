@@ -147,6 +147,7 @@ void ShopState::handleXboxEvents(int player,XboxController* state)
 
 void ShopState::keySelectLeft()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelectedX -= 1;
 
     if (curSelectedX < 0)
@@ -155,6 +156,7 @@ void ShopState::keySelectLeft()
 
 void ShopState::keySelectRight()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelectedX += 1;
 
     if (curSelectedX > MAX_X_SELECTED)
@@ -163,6 +165,7 @@ void ShopState::keySelectRight()
 
 void ShopState::keySelectUp()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelectedY -= 1;
 
     if (curSelectedY < 0)
@@ -171,6 +174,7 @@ void ShopState::keySelectUp()
 
 void ShopState::keySelectDown()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelectedY += 1;
 
     if (curSelectedY > MAX_Y_SELECTED)
@@ -179,6 +183,7 @@ void ShopState::keySelectDown()
 
 void ShopState::keySelectTarget()
 {
+    soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
     renderingEngine->startFadeOut();
     lockControls = true;
 }

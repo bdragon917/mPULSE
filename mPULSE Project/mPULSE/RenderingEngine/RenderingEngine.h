@@ -77,7 +77,7 @@ public:
     int drawSettingScreen(float dt, int selectX, int selectY);
     int drawShopScreen(float dt);
     int drawResultScreen(float dt);
-    int drawStageSelectScreen(float dt);
+    int drawStageSelectScreen(float dt, int curSelected);
 
     void drawProfileOverlay(ProfileScreenInfo psi);
 

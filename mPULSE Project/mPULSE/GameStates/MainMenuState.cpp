@@ -176,6 +176,7 @@ void MainMenuState::keySelectRight()
 
 void MainMenuState::keySelectTarget()
 {
+    soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
     if (curSelected == 0)
     {
         endState = true;

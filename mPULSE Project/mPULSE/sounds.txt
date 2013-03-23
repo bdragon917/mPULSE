@@ -9,3 +9,5 @@ SoundEngine\\Sounds\\MenuSound.wav
 SoundEngine\\Sounds\\Missile.wav
 SoundEngine\\Sounds\\Shield.wav
 SoundEngine\\Sounds\\Barrier.wav
+SoundEngine\\Sounds\\MenuPress.wav
+SoundEngine\\Sounds\\HowieScream.mp3

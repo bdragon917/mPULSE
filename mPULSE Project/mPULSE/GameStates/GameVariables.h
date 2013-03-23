@@ -1,6 +1,7 @@
 #pragma once
 #include <Util/Profile.h>
 #include <vector>
+#include <InGameObjects\Tracks.h>
 
 class GameVariables
 {
@@ -51,6 +52,8 @@ public:
 
     int numberOfAIs;
 
+    Tracks* loadedTracks;
+
 private:
 
     //Race Variables
@@ -58,6 +61,7 @@ private:
     //
 
     std::vector<Profile*> players; 
+    
     int numPlayers;
     bool* controllers;
 };

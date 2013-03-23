@@ -133,6 +133,7 @@ void SettingState::handleXboxEvents(int player,XboxController* state)
 
 void SettingState::keySelectLeft()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     if (curSelectedY == 1)
     {
         //Does Resolution Stuff
@@ -152,7 +153,7 @@ void SettingState::keySelectLeft()
 
 void SettingState::keySelectRight()
 {
- 
+  soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     if (curSelectedY == 1)
     {
         int index = gameVariables->curResolution + 1;
@@ -174,6 +175,7 @@ void SettingState::keySelectRight()
 
 void SettingState::keySelectUp()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelectedY -= 1;
 
     if (curSelectedY < 0)
@@ -182,6 +184,7 @@ void SettingState::keySelectUp()
 
 void SettingState::keySelectDown()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelectedY += 1;
 
     if (curSelectedY > MAX_Y_SELECTED)
@@ -191,6 +194,7 @@ void SettingState::keySelectDown()
 void SettingState::keySelectTarget()
 {
     //changeState(PLAY);
+    soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
     renderingEngine->startFadeOut();
 }
 

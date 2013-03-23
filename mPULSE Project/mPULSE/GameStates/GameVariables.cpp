@@ -26,6 +26,7 @@ void GameVariables::initialize()
         finishTime = NULL;
     }
     numberOfAIs = 6;
+    loadedTracks = new Tracks("tracks.txt");
 }
 
 int GameVariables::addPlayer(int controllerIndex)

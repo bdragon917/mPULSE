@@ -111,6 +111,7 @@ void StoryState::keySelectRight()
 void StoryState::keySelectTarget()
 {
     //changeState(PLAY);
+    soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
     renderingEngine->startFadeOut();
 }
 

@@ -8,6 +8,8 @@
 #include <math.h>
 #include <InGameObjects/CustomData.h>
 
+#include <SoundEngine\SoundEngine.h>
+
 //#include <InGameObjects/Track.h>
 //#include <InGameObjects/Entities/Entity.h>
 #include <vector>
@@ -49,6 +51,9 @@ private:
     
     NxVec3 addBoydFlocking(NxVec3 curTargetVector, std::vector<Entity*> AIs, std::vector<Entity*> Players);
     NxVec3 attackPlayerInRange(NxVec3 myTarget, std::vector<Entity*> Players);
+
+    void AI::playSounds();
+
     void AI::applySpeedBoost(std::vector<Entity*> AIs);
 
 

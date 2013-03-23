@@ -2808,7 +2808,7 @@ int RenderingEngine::drawShopScreen(float dt)
 }
 
 
-int RenderingEngine::drawStageSelectScreen(float dt)
+int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -2869,7 +2869,7 @@ int RenderingEngine::drawStageSelectScreen(float dt)
 
     //draw profile info
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[48]);
         glColor4f(0.0f,0.0f,0.0f, 1.0f);
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
@@ -2878,12 +2878,30 @@ int RenderingEngine::drawStageSelectScreen(float dt)
         renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
         //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
 
+        int numberoftracks = gameVariables->loadedTracks->getNumberofTracks();
 
+        float x_TrackColumn = (butWidthOffset);
+
+        float but_offset = titleHeightOffset + ((butHeightOffset)* 0.25f);        //starting offset
+
+        for (int items=0;items<numberoftracks; items++)
+        {
+            string drawText = gameVariables->loadedTracks->getTrackFilename(items);
+            if ((curSelected - 1) == items) //this is selected
+            {renderText(x_TrackColumn, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
+            else
+            {renderText(x_TrackColumn, but_offset, dec_height*2.0f, (textWidth)/title.size(), 36, drawText, true);}
+
+            but_offset += (butHeightOffset)/4.0f;
+        }
    
 
 
         //Done Button
+        if (curSelected == 0)
             glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
+        else
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[37]);
 
             drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
 
