@@ -225,6 +225,9 @@
     <ClCompile Include="RenderingEngine\DynamicImage.cpp">
       <Filter>Source Files\RenderingEngine</Filter>
     </ClCompile>
+    <ClCompile Include="GameStates\StageSelectState.cpp">
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input\XboxController.h">
@@ -370,6 +373,9 @@
     </ClInclude>
     <ClInclude Include="RenderingEngine\ShopScreenInfo.h">
       <Filter>Header Files\RenderingEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStates\StageSelectState.h">
+      <Filter>Header Files\GameStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -155,6 +155,11 @@ PlayState::PlayState()
     InitializeConsoleCommands();    //Initalize Commands
 }
 
+void PlayState::resetAll()
+{
+
+}
+
 void PlayState::update(float dt)
 {    
     //Handle Events

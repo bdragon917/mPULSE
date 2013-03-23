@@ -12,6 +12,7 @@ public:
         MAIN_MENU,
         STORY,
         SHOP,
+        STAGE,
         SETTING,
         PROFILE,
         PLAY,

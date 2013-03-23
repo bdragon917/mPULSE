@@ -133,18 +133,43 @@ void SettingState::handleXboxEvents(int player,XboxController* state)
 
 void SettingState::keySelectLeft()
 {
+    if (curSelectedY == 1)
+    {
+        //Does Resolution Stuff
+        if (gameVariables->curResolution = gameVariables->LAST)
+        {gameVariables->curResolution = gameVariables->STANDARD;}
+    }
+    if (curSelectedY == 2)
+    {gameVariables->numberOfAIs -= 1;}
+    /*
     curSelectedX -= 1;
 
     if (curSelectedX < 0)
         curSelectedX = MAX_X_SELECTED;
+        */
+
 }
 
 void SettingState::keySelectRight()
 {
+ 
+    if (curSelectedY == 1)
+    {
+        int index = gameVariables->curResolution + 1;
+        gameVariables->curResolution = (GameVariables::Resolution)(gameVariables->curResolution + 1);
+        //Does Resolution Stuff
+        if (gameVariables->curResolution = gameVariables->LAST)
+        {gameVariables->curResolution = gameVariables->STANDARD;}
+    }
+    if (curSelectedY == 2)
+    {gameVariables->numberOfAIs += 1;}
+    
+    /*
     curSelectedX += 1;
 
     if (curSelectedX > MAX_X_SELECTED)
         curSelectedX = 0;
+        */
 }
 
 void SettingState::keySelectUp()

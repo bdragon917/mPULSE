@@ -13,6 +13,7 @@
 #include <GameStates/ProfileState.h>
 #include <GameStates/ShopState.h>
 #include <GameStates/ResultState.h>
+#include <GameStates/StageSelectState.h>
 #include <Util/Clock.h>
 
 class Game

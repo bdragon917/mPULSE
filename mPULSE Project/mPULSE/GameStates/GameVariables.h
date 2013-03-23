@@ -34,7 +34,8 @@ public:
         STANDARD,
         LAPTOP,
         GAMELAB,
-        FULLSCREEN
+        FULLSCREEN,
+        LAST
     } Resolution;
 
     Resolution curResolution;
@@ -46,6 +47,9 @@ public:
     void GameVariables::becomeFinished(int player);
     unsigned int finishTime;
     //
+
+
+    int numberOfAIs;
 
 private:
 

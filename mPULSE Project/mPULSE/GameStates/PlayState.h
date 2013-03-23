@@ -34,6 +34,8 @@ class PlayState : public GameState
 {
 public:
     static PlayState* getInstance();
+
+    void resetAll();
     void update(float dt);
     void render();
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);

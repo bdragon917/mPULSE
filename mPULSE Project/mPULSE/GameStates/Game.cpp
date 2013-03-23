@@ -65,7 +65,9 @@ void Game::checkStateChange()
         case GameState::RESULT:
             state = ResultState::getInstance();                
             break;
-
+        case GameState::STAGE:
+            state = StageSelectState::getInstance();                
+            break;
         }
     }
 }

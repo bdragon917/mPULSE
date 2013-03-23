@@ -109,6 +109,7 @@
     <ClCompile Include="GameStates\ResultState.cpp" />
     <ClCompile Include="GameStates\SettingState.cpp" />
     <ClCompile Include="GameStates\ShopState.cpp" />
+    <ClCompile Include="GameStates\StageSelectState.cpp" />
     <ClCompile Include="GameStates\StoryState.cpp" />
     <ClCompile Include="InGameObjects\ContactReport.cpp" />
     <ClCompile Include="InGameObjects\CustomData.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="GameStates\ResultState.h" />
     <ClInclude Include="GameStates\SettingState.h" />
     <ClInclude Include="GameStates\ShopState.h" />
+    <ClInclude Include="GameStates\StageSelectState.h" />
     <ClInclude Include="GameStates\StoryState.h" />
     <ClInclude Include="InGameObjects\ContactReport.h" />
     <ClInclude Include="InGameObjects\CustomData.h" />

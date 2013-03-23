@@ -36,8 +36,7 @@ void ShopState::render()
     if (retMenuVal == 1)
     {
 
-        gameVariables->resetRace();
-        changeState(PLAY);
+        changeState(STAGE);
     }
 
 

@@ -25,6 +25,7 @@ void GameVariables::initialize()
 
         finishTime = NULL;
     }
+    numberOfAIs = 6;
 }
 
 int GameVariables::addPlayer(int controllerIndex)
