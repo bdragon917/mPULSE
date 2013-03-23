@@ -35,8 +35,8 @@ void StageSelectState::render()
     if (retMenuVal == 1)
     {
         gameVariables->resetRace();
-        //PlayState* pStage = PlayState.getInstance();
-        //pStage->
+        PlayState* pStage = PlayState::getInstance();
+        pStage->resetAll();
         changeState(PLAY);
     }
 
@@ -47,7 +47,7 @@ bool StageSelectState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
     if (!lockControls)  //Allow control if user hasn't chose an option yet
     {
-
+        lockControls = false;
         //Non-Console
         if (KeyboardMouseEvents.type == SDL_KEYDOWN)
             {
@@ -97,11 +97,12 @@ void StageSelectState::handleXboxEvents(int player,XboxController* state)
             prevTime = clock.getCurrentTime();
         }
         else if (state->a)
+        {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME)
                 keySelectTarget();
+        }
         else if (state->b)
-            if(clock.getDeltaTime(prevTime) > WAIT_TIME)
-                backPressed();
+            backPressed();
     }
 }
 
@@ -117,11 +118,13 @@ void StageSelectState::keySelectRight()
 void StageSelectState::keySelectTarget()
 {
     renderingEngine->startFadeOut();
+    lockControls = true;
 }
 
 void StageSelectState::backPressed()
 {
-    changeState(MAIN_MENU);
+    lockControls = false;
+    changeState(SHOP);
 }
 StageSelectState* StageSelectState::getInstance()
 {    

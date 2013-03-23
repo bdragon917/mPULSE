@@ -41,7 +41,7 @@ bool ResultState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
     if (!lockControls)  //Allow control if user hasn't chose an option yet
     {
-
+        lockControls = false;
         //Non-Console
         if (KeyboardMouseEvents.type == SDL_KEYDOWN)
             {
@@ -111,6 +111,7 @@ void ResultState::keySelectRight()
 void ResultState::keySelectTarget()
 {
     renderingEngine->startFadeOut();
+    lockControls = true;
 }
 
 void ResultState::backPressed()

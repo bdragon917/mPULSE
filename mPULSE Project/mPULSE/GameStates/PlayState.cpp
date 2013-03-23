@@ -19,7 +19,10 @@ void PlayState::resetAll()
     rbPressed = false;
 
     gameVariables->resetRace();     //Clears victory flags
+    gameVariables->finishTime = 0;
     entities.clearAll();
+
+    time.reset();
 
     changeState(PLAY); 
     numPlayers = gameVariables->getPlayerNum();
@@ -40,7 +43,7 @@ void PlayState::resetAll()
     {
         int AIType = rand() % 4;
 
-        AIType = 2;
+        //AIType = 2;
 
         Entity* newAIrCar = new Entity();
         RenderableComponent* newRc;

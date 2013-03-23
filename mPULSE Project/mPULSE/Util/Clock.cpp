@@ -50,7 +50,7 @@ int Clock::getDeltaTime(unsigned prevTime)
 
 void Clock::reset()
 {
-
+    time = 0;
 }
 
 void Clock::stop()

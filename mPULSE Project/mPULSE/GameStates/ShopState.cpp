@@ -46,7 +46,7 @@ bool ShopState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 {
     if (!lockControls)  //Allow control if user hasn't chose an option yet
     {
-
+        lockControls = false;
         //Non-Console
         if (KeyboardMouseEvents.type == SDL_KEYDOWN)
             {
@@ -123,11 +123,15 @@ void ShopState::handleXboxEvents(int player,XboxController* state)
             prevTime = clock.getCurrentTime();
         }
         else if (state->a)
+        {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME)
                 keySelectTarget();
-        else if (state->b)
+        }
+        else if ((state->b)||(state->back))
+        {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME)
                 backPressed();
+        }
     }
 }
 
@@ -167,6 +171,7 @@ void ShopState::keySelectDown()
 void ShopState::keySelectTarget()
 {
     renderingEngine->startFadeOut();
+    lockControls = true;
 }
 
 void ShopState::backPressed()
