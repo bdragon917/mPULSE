@@ -35,8 +35,8 @@ void StageSelectState::render()
     if (retMenuVal == 1)
     {
         gameVariables->resetRace();
-        PlayState* pStage = PlayState.getInstance();
-        pStage->
+        //PlayState* pStage = PlayState.getInstance();
+        //pStage->
         changeState(PLAY);
     }
 

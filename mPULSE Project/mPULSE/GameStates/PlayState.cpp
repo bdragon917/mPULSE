@@ -2,6 +2,11 @@
 
 PlayState::PlayState()
 {
+    resetAll();
+}
+
+void PlayState::resetAll()
+{
     eventManager = EventManager::getInstance();
     gameVariables = GameVariables::getInstance();
     keyAPressed = false;
@@ -153,11 +158,6 @@ PlayState::PlayState()
     entities.StaticObjs.push_back(aEntity2);
     */
     InitializeConsoleCommands();    //Initalize Commands
-}
-
-void PlayState::resetAll()
-{
-
 }
 
 void PlayState::update(float dt)
