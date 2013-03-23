@@ -160,7 +160,7 @@ private:
     void drawStaticObjs(Entities* entities);
     void drawTrack(Track* track);
 
-    void drawHUD(NxActor* carActor, bool hasWon);
+    void drawHUD(Entity* carEntity, bool hasWon);
     void drawAllText();
 
     void RenderDebugPhysic(const NxDebugRenderable* ndr);

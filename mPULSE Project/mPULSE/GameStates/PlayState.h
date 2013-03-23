@@ -47,6 +47,9 @@ public:
     void handleSoundEvents();
     void handleTriggerEvents();
     void handleWaypointEvents();
+    void calculateRankings();
+    std::vector<Entity*>* getPlayersOnLap(int lap);
+    std::vector<Entity*>* sortPlayersByWaypoint(std::vector<Entity*>* players);
 
 private:
 
@@ -63,6 +66,8 @@ private:
     float id;
     Track* track;
     Entities entities;
+    std::vector<Entity*>* rankings;
+
     PhysicsEngine* physicsEngine;
 	SoundEngine* soundEngine;
     RenderingEngine* renderingEngine;
