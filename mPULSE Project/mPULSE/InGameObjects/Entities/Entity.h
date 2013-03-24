@@ -90,6 +90,10 @@ public:
     bool isBatteryCharged();
     bool isShunting();
 
+	void highSpeedCash();
+	float raceWinnings();
+	void missleCash();
+
 	bool getSweepCollision();
 	void setSweepCollision(bool b);
 	NxVec3 getImpactPoint();
@@ -101,8 +105,10 @@ public:
 	NxReal getDotResult();
 	void setDotResult(NxReal result);
     int rank;
+	Entity* parent;
 
 private:
+
 	bool batteryCharged;
     bool usingDisplayList;
     bool alive;
@@ -119,6 +125,10 @@ private:
     int timeCreated;
     int shieldActivatedTime;     
     int health;
+
+	unsigned obs;
+	unsigned highSpeedObsTime;
+	
     
     float maxSteeringAngle;
     float minSteering;

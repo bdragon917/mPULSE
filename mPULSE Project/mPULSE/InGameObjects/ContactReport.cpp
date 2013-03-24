@@ -32,6 +32,7 @@ void ContactReport::onContactNotify(NxContactPair& pair, NxU32 events)
                 if(actor1CustomData->pickupType == 0) //Car hit a missile
                 {
                     eventManager->addEvent(new CollisionEvent(actor1CustomData->entity,actor2CustomData->entity, CollisionEvent::DESTROY_FIRST));
+					actor1CustomData->entity->parent->missleCash();
                 }
                 else if(actor1CustomData->pickupType == 2) //Car hit a barrier
                 {

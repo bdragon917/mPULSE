@@ -808,7 +808,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
 
                 e->rc.push_back(new RenderableComponent(4,32));      //Missile
                 entities.DynamicObjs.push_back(e);
-
+				e->parent = car;
                 entities.DynamicObjs.push_back(e);
             }
             else if(type == Entity::SHIELD)

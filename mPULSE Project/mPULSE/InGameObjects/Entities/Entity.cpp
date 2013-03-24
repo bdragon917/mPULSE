@@ -9,6 +9,9 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     steering = true;
     shunting = false;
 
+	obs = 0; //money earned from current race.
+	highSpeedObsTime = 0;
+
     tiltAngle = 0.0f;   //used in rendering for Tilt
 
 	charge = 0.0f;
@@ -312,6 +315,34 @@ void Entity::chargeBattery()
 	}
 }
 
+float Entity::raceWinnings()
+{
+	return (float)obs;
+}
+
+void Entity::highSpeedCash()
+{
+	NxWheelContactData nxwcd; 
+    driveWheels[0]->getContact(nxwcd);
+
+	if (driveWheels[0]->getContact(nxwcd) != NULL)
+	{
+		if (actor->getLinearVelocity().magnitude() > 100.0f)
+		{
+			if (clock.getCurrentTime() - highSpeedObsTime > 2500)
+			{
+				obs = obs + 100;
+				highSpeedObsTime = clock.getCurrentTime();
+			}
+		}
+	}
+}
+
+void Entity::missleCash()
+{
+	obs = obs + 500;
+}
+
 void Entity::collide(Entity* e)
 {
     CustomData* cd = (CustomData*) e->getActor()->userData;
@@ -329,6 +360,9 @@ void Entity::collide(Entity* e)
                 float vel = actor->getLinearVelocity().magnitude();
                 unitDir.normalize();
                 actor->setLinearVelocity((vel*0.7f)*unitDir);
+
+				//e->missleCash();
+				//obs = obs + 500;
             }
             else if(cd->pickupType == BARRIER)
             {

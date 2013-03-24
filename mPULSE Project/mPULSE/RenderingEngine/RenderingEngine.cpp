@@ -658,6 +658,9 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         drawText(50,-50, "Rank " + FloatToString(carEntity->rank));
         drawText(850,-600, "Spd: " + FloatToString(hundreds) + " " + FloatToString(tens) + " " + FloatToString(ones));
 
+		//Display cash
+		drawText(850, -400, "Obs: " + FloatToString(carEntity->raceWinnings()));
+
 
         //one
         //0.1f assumes there is ten characters
@@ -1943,6 +1946,9 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
             drawText(200,-680, "Batt. CHARGED");
         else
             drawText(200,-680, "Batt. empty");
+
+		//add obs for high speed.
+		targetEntities[carIndex]->highSpeedCash();
 
 
         drawAllText();
