@@ -30,7 +30,7 @@ void StageSelectState::update(float dt)
 void StageSelectState::render()
 {   
     renderingEngine->createLight_MainMenu();
-    int retMenuVal = renderingEngine->drawStageSelectScreen(myDt);     //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
+    int retMenuVal = renderingEngine->drawStageSelectScreen(myDt, curSelectedY);     //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
 
     if (retMenuVal == 1)
     {
@@ -119,16 +119,32 @@ void StageSelectState::handleXboxEvents(int player,XboxController* state)
 
 void StageSelectState::keySelectLeft()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
+     curSelectedY = curSelectedY - 1;
+     if (curSelectedY < 0)
+     {curSelectedY = gameVariables->loadedTracks->getNumberofTracks();}
 }
 
 void StageSelectState::keySelectRight()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
+     curSelectedY = curSelectedY + 1;
+     if (curSelectedY > gameVariables->loadedTracks->getNumberofTracks())
+     {curSelectedY = 0;}
 }
 
 void StageSelectState::keySelectTarget()
 {
-    renderingEngine->startFadeOut();
-    lockControls = true;
+    if (curSelectedY == 0)
+    {
+        soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
+        renderingEngine->startFadeOut();
+        lockControls = true;
+    }
+    else
+    {
+        //load the selected track!!!
+    }
 }
 
 void StageSelectState::backPressed()

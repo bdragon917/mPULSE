@@ -118,6 +118,7 @@
     <ClCompile Include="InGameObjects\Entities\EntityComponent.cpp" />
     <ClCompile Include="InGameObjects\Entities\RenderableComponent.cpp" />
     <ClCompile Include="InGameObjects\Track.cpp" />
+    <ClCompile Include="InGameObjects\Tracks.cpp" />
     <ClCompile Include="InGameObjects\TriggerCallback.cpp" />
     <ClCompile Include="Input\XboxController.cpp" />
     <ClCompile Include="ModelLoader\ModelManager.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="InGameObjects\Entities\EntityComponent.h" />
     <ClInclude Include="InGameObjects\Entities\RenderableComponent.h" />
     <ClInclude Include="InGameObjects\Track.h" />
+    <ClInclude Include="InGameObjects\Tracks.h" />
     <ClInclude Include="InGameObjects\TriggerCallback.h" />
     <ClInclude Include="Input\XboxController.h" />
     <ClInclude Include="ModelLoader\ModelManager.h" />

@@ -52,7 +52,7 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
 
    myTarget = (myPersonality.Boidness * addBoydFlocking(myTarget, AIs, players)) + ((1 - myPersonality.Boidness) * myTarget);
    myTarget = (myPersonality.PlayerHate * attackPlayerInRange(myTarget, players)) + ((1 - myPersonality.PlayerHate) * myTarget);
-
+   playSounds();
 
         /*
     myTarget = addBoydFlocking(myTarget, AIs, players);
@@ -158,6 +158,24 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
     
 }
 
+
+void AI::playSounds()
+{
+    /*
+    CustomData* cs = (CustomData*) myActor->userData;
+
+    Entity* aEntity = cs->entity;
+
+    NxWheelContactData nxwcd; 
+    aEntity->getDriveWheels()->at(0)->getContact(nxwcd); //get contact data
+
+    if ( aEntity->getDriveWheels()->at(0)->getContact(nxwcd) == NULL)
+    {
+        SoundEngine* soundEngine = SoundEngine::getInstance();
+        soundEngine->playSound(3,12);    //3 is channel, 7 is index for MenuPress
+    }
+    */
+}
 
 NxVec3 AI::attackPlayerInRange(NxVec3 myTarget, std::vector<Entity*> players)
 {

@@ -33,6 +33,11 @@ ProfileState::ProfileState()
 
     WAIT_TIME = 50;
     MAX_SELECTED = 4;           //Change this depending on number of profiles avaliable
+
+    //MAX_SELECTED = Gamevariables.profileNum + 2;
+    //load profiles 0 to max, or 3 tp profiles on screen {not 0, not 1, 2 +}
+    //if more than number possible, add additional one that says "SHOW MORE", and increment MAX_SELECTED []
+
     buttonPressed = false;
     lockControls = false;
     endState = false;
@@ -175,12 +180,14 @@ void ProfileState::handleXboxEvents(int player,XboxController* state)
 
 void ProfileState::keySelectLeft()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelected = curSelected - 1;
     if (curSelected < 0){curSelected = MAX_SELECTED;}
 }
 
 void ProfileState::keySelectRight()
 {
+     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelected = curSelected + 1;
     if (curSelected > MAX_SELECTED){curSelected = 0;}
 }
@@ -189,6 +196,7 @@ void ProfileState::keySelectTarget()
 {
     if (curSelected == 0)
     {
+        soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
         renderingEngine->startFadeOut();
         lockControls = true;
     }

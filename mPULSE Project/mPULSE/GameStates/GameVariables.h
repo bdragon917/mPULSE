@@ -1,6 +1,9 @@
 #pragma once
 #include <Util/Profile.h>
 #include <vector>
+#include <InGameObjects\Tracks.h>
+#include <iostream>
+#include <fstream>
 
 class GameVariables
 {
@@ -9,6 +12,7 @@ public:
     
     void initialize();
 
+    void loadAllProfiles(std::string filename);
     int addPlayers(Profile* aPlayer);
     void setConnectedControllers(bool* controllerIndexes);
     bool* getConnectedControllers(bool* controllerIndexes);
@@ -41,23 +45,26 @@ public:
     Resolution curResolution;
 
     //determines finished race
-    void GameVariables::resetRace();
-    bool GameVariables::isFinishedRace();
-    bool GameVariables::isFinished(int player);
-    void GameVariables::becomeFinished(int player);
+    void resetRace();
+    bool isFinishedRace();
+    bool isFinished(int player);
+    void becomeFinished(int player);
     unsigned int finishTime;
     //
 
 
     int numberOfAIs;
+    void finalizeProfiles();
+    std::vector<std::string>* split(std::string line, char delimiter);
+
+    Tracks* loadedTracks;
 
 private:
 
     //Race Variables
     bool finishedPlayers[4];        //Should be the number of players
-    //
-
     std::vector<Profile*> players; 
+    std::vector<Profile*> profiles; 
     int numPlayers;
     bool* controllers;
 };

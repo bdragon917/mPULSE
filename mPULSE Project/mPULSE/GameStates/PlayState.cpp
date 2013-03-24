@@ -1101,7 +1101,7 @@ void PlayState::sortPlayersByWaypoint(std::vector<Entity*>* players)
     CustomData* tmpCdi;
     CustomData* tmpCdj;
     Entity* tmpEntity;
-
+    
     unsigned numCars = players->size();
     for(unsigned i = 0; i < numCars; i++)
     {
@@ -1111,9 +1111,21 @@ void PlayState::sortPlayersByWaypoint(std::vector<Entity*>* players)
             tmpCdj = (CustomData*) players->at(j)->getActor()->userData;
             if(tmpCdi->wp->id < tmpCdj->wp->id) //Handle racers on a different lap
             {
-                    tmpEntity = rankings->at(i);
+                    tmpEntity = players->at(i);
                     players->at(i) = players->at(j);            
                     players->at(j) = tmpEntity;
+            }
+            else if(tmpCdi->wp->id == tmpCdj->wp->id) //Handle racers on a different lap
+            {
+                float iDistanceToNextWp = (players->at(i)->getActor()->getGlobalPosition() - tmpCdi->wp->nextWaypoint->pos).magnitude();
+                float jDistanceToNextWp = (players->at(j)->getActor()->getGlobalPosition() - tmpCdj->wp->nextWaypoint->pos).magnitude();
+                
+                if(iDistanceToNextWp > jDistanceToNextWp)
+                {
+                    tmpEntity = players->at(i);
+                    players->at(i) = players->at(j);            
+                    players->at(j) = tmpEntity;
+                }
             }
         }
     }
