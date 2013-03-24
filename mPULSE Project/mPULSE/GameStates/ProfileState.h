@@ -48,9 +48,12 @@ private:
 
     int curSelected;
     int MAX_SELECTED;
+    unsigned profilesOffset; //Used to remember which range of profiles to display
 
     //xbox controller variables
     int WAIT_TIME;
     bool buttonPressed;
     unsigned prevTime;
+
+
 };

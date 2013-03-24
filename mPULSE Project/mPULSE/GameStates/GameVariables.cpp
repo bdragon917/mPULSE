@@ -45,6 +45,11 @@ int GameVariables::addPlayer(int controllerIndex)
     {printf("Hey! Too many human players! (GameVariables::addPlayers)\n");return -1;}                        //return -1 if too many players
 }
 
+Profile* GameVariables::getPlayerProfile(int player)
+{
+       return players.at(player);
+}
+
 void GameVariables::setControllers(bool* controllerArray)
 {
     controllers = controllerArray;

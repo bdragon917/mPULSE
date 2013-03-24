@@ -36,7 +36,8 @@ void PlayState::resetAll()
         rankings->push_back(playerCar);
         entities.cars.push_back(playerCar);
 
-        RenderableComponent* pc_rc = new RenderableComponent(1,3);
+        //RenderableComponent* pc_rc = new RenderableComponent(1,3);      //need to read from profile
+        RenderableComponent* pc_rc = new RenderableComponent(gameVariables->getPlayerProfile(i)->data.carModel,gameVariables->getPlayerProfile(i)->data.carTexture);      //need to read from profile
         playerCar->rc.push_back(pc_rc);
     }   
     for (int a=0;a<num_AI;a++)

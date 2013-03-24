@@ -7,6 +7,7 @@ ProfileState::ProfileState()
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
+    profilesOffset = 0;
 
     //renderingEngine->createLight_MainMenu();
 
@@ -16,14 +17,40 @@ ProfileState::ProfileState()
 
     //Construct ProfileScreenInfo (Using this to tell renderingHowTo draw profile
     //Not reallly used excepted for .isActive, but good to initial the variables
-    ProfileScreenInfo psi = ProfileScreenInfo();
+    //ProfileScreenInfo psi = ProfileScreenInfo();
     psi.isActive = true;
     psi.title = "Player " + renderingEngine->FloatToString(gameVariables->profileTargetPlayer) + " Profile";
-    psi.profilesOnScreen[0] = "";
-    psi.profilesOnScreen[1] = "";
-    psi.profilesOnScreen[2] = "";
-    psi.profilesOnScreen[3] = "";
-    psi.profilesOnScreen[4] = "";
+    psi.profilesOnScreen[0] = "Default";
+
+
+    const int MaxShown = 6;     //should be array - 2
+    if (gameVariables->profiles.size() < MaxShown)
+    {
+        MAX_SELECTED = gameVariables->profiles.size() + 1;           //Change this depending on number of profiles avaliable
+
+        for (unsigned p=0;p<gameVariables->profiles.size();p++)
+        {
+            psi.profilesOnScreen[p+1] = gameVariables->profiles.at(p)->data.driverName;
+        }
+    }
+    else
+    {
+        if (profilesOffset != 0)
+        {psi.profilesOnScreen[0] = "Move Up";}
+
+        for (int p=0;p<MaxShown;p++)
+        {
+            psi.profilesOnScreen[p+1] = gameVariables->profiles.at(p+profilesOffset)->data.driverName;
+        }
+        psi.profilesOnScreen[7] = "Scroll Down";
+        MAX_SELECTED = 8;           //Change this depending on number of profiles avaliable     //so 8 is a special case, this should move down
+    }
+
+
+
+
+
+
     psi.selectedItem = 1;               //0 is the done button, the others are used for the possible items
     psi.selectedTextTexture = 1;
     psi.selectedButtonTexture = 1;
@@ -32,7 +59,7 @@ ProfileState::ProfileState()
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
     WAIT_TIME = 50;
-    MAX_SELECTED = 4;           //Change this depending on number of profiles avaliable
+    
 
     //MAX_SELECTED = Gamevariables.profileNum + 2;
     //load profiles 0 to max, or 3 tp profiles on screen {not 0, not 1, 2 +}
@@ -55,6 +82,7 @@ void ProfileState::render()
     psi.selectedItem = curSelected;
 
     psi.title = "Player " + renderingEngine->FloatToString(gameVariables->profileTargetPlayer) + " Profile";
+
     //asumes myDt is updated
     int retMenuVal = renderingEngine->drawMainMenuScreen(5, 0, myDt, psi);     //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
 
@@ -187,6 +215,7 @@ void ProfileState::keySelectLeft()
 
 void ProfileState::keySelectRight()
 {
+    printf("curSelected: %i\n", curSelected);
      soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelected = curSelected + 1;
     if (curSelected > MAX_SELECTED){curSelected = 0;}
@@ -202,7 +231,95 @@ void ProfileState::keySelectTarget()
     }
     else
     {
+        if (curSelected == 1)
+        {
+                if (profilesOffset != 0)
+                {
+                    if (profilesOffset != 0)
+                    {profilesOffset = profilesOffset - 1;}
+
+                    
+
+                    printf("profilesOffset: %i\n", profilesOffset);
+                
+                        psi.profilesOnScreen[0] = "Default";
+
+                        const int MaxShown = 6;     //should be array - 2
+                        if (gameVariables->profiles.size() < MaxShown)
+                        {
+                            for (unsigned p=0;p<gameVariables->profiles.size();p++)
+                            {
+                                psi.profilesOnScreen[p+1] = gameVariables->profiles.at(p)->data.driverName;
+                            }
+                        }
+                        else
+                        {
+                            if (profilesOffset != 0)
+                            {psi.profilesOnScreen[0] = "Move Up";}
+
+                            for (int p=0;p<MaxShown;p++)
+                            {
+                                psi.profilesOnScreen[p+1] = gameVariables->profiles.at(p+profilesOffset)->data.driverName;
+                            }
+                            psi.profilesOnScreen[7] = "Scroll Down";
+                            MAX_SELECTED = 8;           //Change this depending on number of profiles avaliable     //so 8 is a special case, this should move down
+                        }
+                
+                }
+                else
+                {
+                    printf("use default");
+                    //use default
+                }
+        }
+        else if (curSelected == 8) 
+        {
+            const unsigned MaxShown = 6;     //should be array - 2
+
+                    if ((profilesOffset) < (gameVariables->profiles.size() - MaxShown))
+                    {profilesOffset = profilesOffset + 1;}
+                    printf("profilesOffset: %i\n", profilesOffset);
+                
+                        psi.profilesOnScreen[0] = "Default";
+
+                        
+                        if (gameVariables->profiles.size() < MaxShown)
+                        {
+                            for (unsigned p=0;p<gameVariables->profiles.size();p++)
+                            {
+                                psi.profilesOnScreen[p+1] = gameVariables->profiles.at(p)->data.driverName;
+                            }
+                        }
+                        else
+                        {
+                            if (profilesOffset != 0)
+                            {psi.profilesOnScreen[0] = "Move Up";}
+
+                            for (int p=0;p<MaxShown;p++)
+                            {
+                                psi.profilesOnScreen[p+1] = gameVariables->profiles.at(p+profilesOffset)->data.driverName;
+                            }
+                            psi.profilesOnScreen[7] = "Scroll Down";
+                            MAX_SELECTED = 8;           //Change this depending on number of profiles avaliable     //so 8 is a special case, this should move down
+                        }
+        }
+        else
+        {
+            //printf("load profile %i out of %i\n", profilesOffset + curSelected - 2, gameVariables->profiles.size() );
+
+            Profile* aProfile = gameVariables->profiles.at(profilesOffset + curSelected - 2);
+            Profile::profileData dataaaaa = aProfile->data;
+            std::string aNameeeee = dataaaaa.driverName;
+
+            gameVariables->setPlayers(aProfile, targetPlayer);
+
+            soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
+            renderingEngine->startFadeOut();
+            lockControls = true;
+               //printf("load profile %i \n" + aNameeeee, profilesOffset + curSelected - 2);
         //Load profile
+        }
+
     }
 
 }

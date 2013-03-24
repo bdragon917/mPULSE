@@ -52,10 +52,12 @@ public:
     unsigned int finishTime;
     //
 
+    Profile* getPlayerProfile(int player);
 
     int numberOfAIs;
     void finalizeProfiles();
     std::vector<std::string>* split(std::string line, char delimiter);
+    std::vector<Profile*> profiles; 
 
     Tracks* loadedTracks;
 
@@ -64,7 +66,7 @@ private:
     //Race Variables
     bool finishedPlayers[4];        //Should be the number of players
     std::vector<Profile*> players; 
-    std::vector<Profile*> profiles; 
+    
     int numPlayers;
     bool* controllers;
 };

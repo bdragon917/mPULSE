@@ -119,8 +119,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[49];
-    glGenTextures(49, textureid_P1);
+    textureid_P1 = new GLuint[50];
+    glGenTextures(50, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -186,6 +186,8 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/Menu/Result/ResultBG.bmp", textureid_P1[47]);
 
     bindBMPtoTexture("./Images/Menu/StageSelect/StageBG.bmp", textureid_P1[48]);
+
+    bindBMPtoTexture("./Images/Minimap.bmp", textureid_P1[49]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -2600,29 +2602,53 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
 
 
         //Profiles
-        title = "Default";
+        title = psi.profilesOnScreen[0];
         if (psi.selectedItem == 1)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*3), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*3), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
-        title = "Ankle Skylocker";
+        title = psi.profilesOnScreen[1];
         if (psi.selectedItem == 2)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*5), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*5), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
-        title = "Shinobi Kanobi";
+        title = psi.profilesOnScreen[2];
         if (psi.selectedItem == 3)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*7), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*7), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
-        title = "Doda";
+        title = psi.profilesOnScreen[3];
         if (psi.selectedItem == 4)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*9), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*9), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
+        
+        title = psi.profilesOnScreen[4];
+        if (psi.selectedItem == 5)
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*11), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
+        else
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*11), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
+
+        title = psi.profilesOnScreen[5];
+        if (psi.selectedItem == 6)
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*13), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
+        else
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*13), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
+
+        title = psi.profilesOnScreen[6];
+        if (psi.selectedItem == 7)
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*15), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
+        else
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*15), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
+
+        title = psi.profilesOnScreen[7];
+        if (psi.selectedItem == 8)
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*17), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
+        else
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*17), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
         /*
         if (psi.selectedItem == 1)
             glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);

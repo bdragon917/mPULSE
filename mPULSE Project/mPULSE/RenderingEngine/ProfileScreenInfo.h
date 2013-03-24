@@ -5,7 +5,7 @@ class ProfileScreenInfo {
 public:
 	bool isActive;
     std::string title;
-    std::string profilesOnScreen[6];
+    std::string profilesOnScreen[10];
     int selectedItem;
 
     int selectedTextTexture;
