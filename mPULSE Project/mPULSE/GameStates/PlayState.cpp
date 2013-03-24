@@ -165,6 +165,8 @@ void PlayState::resetAll()
 
 void PlayState::update(float dt)
 {    
+    //renderingEngine->drawText(100, -100, renderingEngine->FloatToString(
+    printf("x: %f y: %f z: %f",entities.cars.at(0)->getActor()->getGlobalPosition().x)+" "+renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPosition().y)+" "+renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPosition().z);
     //Handle Events
     handleEvents();
 
