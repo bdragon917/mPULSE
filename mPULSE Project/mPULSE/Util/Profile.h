@@ -1,17 +1,44 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <stdlib.h>
 
 class Profile
 {
 public:
-    Profile();
-    Profile(char* filename);
+    struct drivingStyle
+    {
+        int smoothness;
+        int wildness;
+        int accuracy; //ability to fall off the track
+        int steeringBehavior;
+        int pickupBehavior;
+    };
 
-    std::string driverName;
-    int carModel;
-    int carTexture;
-    bool isAI;
+    struct profileData
+    {
+   
+        std::string driverName;    
+        int carModel;
+        int carTexture;
+
+        int Obs;
+        int maxSpeed;
+        int missileLevel;
+        int barrierLevel;
+        int shieldLevel;
+        int shuntingLevel;
+        int batteryLevel;
+        drivingStyle style;
+
+        int isAI;
+    };
+
+    Profile();
+    void addData(profileData newData);
+    void addData(std::vector<std::string>* newData);    
+    profileData data;
 
 private:
 

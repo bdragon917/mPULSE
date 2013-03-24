@@ -201,9 +201,6 @@
     <ClCompile Include="InGameObjects\Entities\Entities.cpp">
       <Filter>Source Files\InGameObjects\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsEngine\Stream.cpp">
-      <Filter>Source Files\PhysicsEngine</Filter>
-    </ClCompile>
     <ClCompile Include="AI\AIPersonality.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
@@ -228,8 +225,13 @@
     <ClCompile Include="GameStates\StageSelectState.cpp">
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="InGameObjects\Tracks.cpp">
       <Filter>Source Files\InGameObjects</Filter>
+=======
+    <ClCompile Include="PhysicsEngine\Stream.cpp">
+      <Filter>Source Files\RenderingEngine</Filter>
+>>>>>>> db24f4a7b6a7e9aa6323eb6d21b4a8727808711f
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
