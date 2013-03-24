@@ -18,6 +18,8 @@ void PlayState::resetAll()
     showConsole = true;
     rbPressed = false;
 
+    CHEAT_InfPowUp = false;
+
     gameVariables->resetRace();     //Clears victory flags
     gameVariables->finishTime = NULL;
     entities.clearAll();
@@ -200,15 +202,18 @@ void PlayState::update(float dt)
     }
 
     
-    if (gameVariables->isFinishedRace())
+    if (gameVariables->isFinishedRace())                    ///Finish Race here
     {
         if (gameVariables->finishTime == NULL)
-        {gameVariables->finishTime = time.getCurrentTime();soundEngine->FadeOutMusic(4000);renderingEngine->startFadeOut();}
+        {gameVariables->finishTime = time.getCurrentTime();soundEngine->FadeOutMusic(4000);soundEngine->fadeOutAllSound(4000);renderingEngine->startFadeOut();}
 
         const unsigned int FINISH_DELAY = 5000;
 
         if (time.getDeltaTime(gameVariables->finishTime) > FINISH_DELAY)
-        {changeState(RESULT);}
+        {
+            soundEngine->fadeOutAllSound(10); //make sure they really are off
+            changeState(RESULT);
+        }
     }
     //
 
@@ -471,6 +476,12 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 if (renderingEngine->aConsole.consoleString == "on g")
                 {
                     physicsEngine->getScene()->setGravity(NxVec3(0,-9.81f,0));
+                }
+
+                if (renderingEngine->aConsole.consoleString == "cheat char")
+                {
+                    CHEAT_InfPowUp = true;
+                    renderingEngine->aConsole.propragateMsg("Char Cheat ENABLED!");
                 }
 
                 //Num Commands
@@ -813,6 +824,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 entities.DynamicObjs.push_back(e);
 				e->parent = car;
                 entities.DynamicObjs.push_back(e);
+
+                if (CHEAT_InfPowUp)
+                {car->givePickup(Entity::MISSILE);}
             }
             else if(type == Entity::SHIELD)
             {
@@ -830,6 +844,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
                 e->rc.push_back(new RenderableComponent(10,31));     //BarrierScreen
                 entities.DynamicObjs.push_back(e);
+
+                if (CHEAT_InfPowUp)
+                {car->givePickup(Entity::BARRIER);}
             }
         }
         

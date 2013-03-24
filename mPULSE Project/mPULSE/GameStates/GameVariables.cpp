@@ -6,6 +6,7 @@ GameVariables* GameVariables::getInstance()
 	return &gameVariables;
 }
 
+
 void GameVariables::initialize()
 {
     loadAllProfiles(".\\Util\\profiles.txt");

@@ -223,9 +223,15 @@ NxActor* PhysicsEngine::createGroundPlane()
 
 NxActor* PhysicsEngine::createBarrier(NxActor* car ) 
 {
-     float offset = -5.0f;
+    float spdMag = car->getLinearVelocity().magnitude();
+    float spdOffset = (1.0f / ((spdMag * 0.01f) + 1));
+    float offset = -5.0f;
+    if (spdOffset > 0.55f)
+        offset *= spdOffset;
+    else
+        offset *= 0.55f;
                                     
-     NxVec3 initPos(1,0,0); 
+     NxVec3 initPos(1.0f,0,0); 
      NxVec3 dir = car->getGlobalOrientation()*initPos;
      NxVec3 pos = car->getGlobalPose().t + (dir*offset); 
 
@@ -238,7 +244,7 @@ NxActor* PhysicsEngine::createBarrier(NxActor* car )
     bodyDesc.flags = NX_BF_FROZEN_POS;
 
 	NxBoxShapeDesc boxDesc;
-	boxDesc.dimensions.set(0.5,0.5,1.0);
+	boxDesc.dimensions.set(0.25f,1.0f,2.5f);
 	//boxDesc.localPose.t = position;
 
 	NxActorDesc actorDesc;
@@ -535,7 +541,8 @@ NxActor* PhysicsEngine::createCarChassis()
     //boxShapes[0].dimensions.set(2.2f, 0.8f, 1.2f);
 	//boxShapes[1].dimensions.set(1.f, 0.3f, 1.1f);
     boxShapes[0].dimensions.set(2.2f, 0.7f, 1.3f);          //This might make it harder to fall trhough stage????
-	boxShapes[0].localPose.t.set(0.0f, 0.7f, 0.0f);
+    //boxShapes[0].dimensions.set(1.7f, 0.7f, 1.3f);          //Tighter bounds, but....
+	boxShapes[0].localPose.t.set(0.2f, 0.7f, 0.0f);
 
 	NxActorDesc actorDesc;
 	actorDesc.shapes.pushBack(&boxShapes[0]);

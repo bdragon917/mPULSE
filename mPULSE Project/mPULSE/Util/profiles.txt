@@ -35,9 +35,9 @@ pickupBehavior|0
 steeringBehavior|0
 #
 #
-driveName|Player21
-carModel|1
-carTexture|3
+driveName|Charles
+carModel|12
+carTexture|50
 Obs|0
 isAI|0
 shuntingLevel|0

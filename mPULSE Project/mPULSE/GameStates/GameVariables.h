@@ -2,6 +2,7 @@
 #include <Util/Profile.h>
 #include <vector>
 #include <InGameObjects\Tracks.h>
+#include <InGameObjects\Entities\RenderableComponent.h>
 #include <iostream>
 #include <fstream>
 
@@ -59,9 +60,14 @@ public:
     std::vector<std::string>* split(std::string line, char delimiter);
     std::vector<Profile*> profiles; 
 
+
+
     Tracks* loadedTracks;
+    int physXTrackModel;
+    RenderableComponent* trackRC;
 
 private:
+
 
     //Race Variables
     bool finishedPlayers[4];        //Should be the number of players

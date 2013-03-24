@@ -53,6 +53,7 @@ public:
     std::vector<Entity*>* getPlayersOnLap(int lap);
     void sortPlayersByWaypoint(std::vector<Entity*>* players);
 
+
 private:
 
     //Custom Keyboard Variables for keyboard Controls
@@ -61,6 +62,7 @@ private:
     bool keyWPressed;
     bool keySPressed;
 
+    bool CHEAT_InfPowUp;
 
     bool showConsole;
     bool rbPressed;

@@ -32,6 +32,10 @@ void SoundEngine::FadeOutMusic(int ms)
 	song->fadeOutMusic(ms);
 }
 
+void SoundEngine::fadeOutAllSound(int ms)
+{
+    song->fadeOutAllSound(ms);
+}
 
 
 void SoundEngine::engineNoise()

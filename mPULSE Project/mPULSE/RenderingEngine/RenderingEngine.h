@@ -92,6 +92,8 @@ public:
     void drawSquareUVRev(float x, float y, float z, float half_width, float half_height);
     void drawModel(ObjModel* model,int x,int y, int z, int scale);
     void drawModelPosRotationEnhanced(ObjModel* model, Entity* anEntity);
+    void drawScaledModelPos(ObjModel* model, NxMat34* aPose, NxVec3 scale);
+    void drawModel(ObjModel* model,int x,int y, int z, NxVec3 scale);
     void drawModelPos(ObjModel* model, NxMat34* aMatrix);
     void drawModelShadow(ObjModel* model, NxMat34* aPose);
     void drawDynamicObjects(std::vector<Entity*>* dObjs);
@@ -100,6 +102,7 @@ public:
     void deleteDisplayList(GLuint index);
     void drawDisplayList(int index);
 	void drawShadow(Entities* entities, NxScene* scene);
+    void RenderingEngine::drawShadow2(Entities* entities, NxScene* scene);
 
     Console aConsole;    
     Shader* aShader;

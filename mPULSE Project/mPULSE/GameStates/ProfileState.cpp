@@ -95,6 +95,7 @@ void ProfileState::render()
 
         switch (curSelected)
         {
+            /*
         case 0:
             //Finish Profile state
             if ((gameVariables->profileTargetPlayer == 1)&&(gameVariables->getPlayerNum() == 2))
@@ -110,26 +111,45 @@ void ProfileState::render()
                 changeState(SHOP);
             }
             break;
-        case 1:
-            //This should bring up a profile screen
-            if (gameVariables->getPlayerNum() < 2)
+            */
+        case 1:         //Can be default or scroll up
+            if (profilesOffset != 0)    //is default
             {
-                //changeState(PLAY); 
+                //end state
+                if ((gameVariables->profileTargetPlayer == 1)&&(gameVariables->getPlayerNum() == 2))
+                {
+                    gameVariables->profileTargetPlayer = 2;
+                    curSelected = 1;
+                    changeState(PROFILE);
+                }
+                else
+                {
+                    gameVariables->profileTargetPlayer = 1;
+                    curSelected = 1;
+                    changeState(SHOP);
+                }
+            }
+            break;
+        case 8:         //scroll down
+                //Don't worry about it
+            break;
+
+
+        default:                //use profile
+            if ((gameVariables->profileTargetPlayer == 1)&&(gameVariables->getPlayerNum() == 2))
+            {
+                gameVariables->profileTargetPlayer = 2;
+                curSelected = 1;
+                changeState(PROFILE);
             }
             else
             {
-                //changeState(PLAY); 
+                gameVariables->profileTargetPlayer = 1;
+                curSelected = 1;
+                changeState(SHOP);
             }
             break;
-        case 2:
-            //changeState(MAIN_MENU); 
-            break;
-        case 3:
-            //changeState(MAIN_MENU); 
-            break;
-        case 4:
-            //changeState(MAIN_MENU); 
-            break;
+
         }
     }
      
@@ -269,6 +289,7 @@ void ProfileState::keySelectTarget()
                 else
                 {
                     printf("use default");
+                    gameVariables->setPlayers(new Profile(), targetPlayer);
                     //use default
                 }
         }
@@ -305,18 +326,14 @@ void ProfileState::keySelectTarget()
         }
         else
         {
-            //printf("load profile %i out of %i\n", profilesOffset + curSelected - 2, gameVariables->profiles.size() );
-
             Profile* aProfile = gameVariables->profiles.at(profilesOffset + curSelected - 2);
-            Profile::profileData dataaaaa = aProfile->data;
-            std::string aNameeeee = dataaaaa.driverName;
-
+            //Profile::profileData dataaaaa = aProfile->data;
+            //std::string aNameeeee = dataaaaa.driverName;
             gameVariables->setPlayers(aProfile, targetPlayer);
 
             soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
             renderingEngine->startFadeOut();
             lockControls = true;
-               //printf("load profile %i \n" + aNameeeee, profilesOffset + curSelected - 2);
         //Load profile
         }
 
