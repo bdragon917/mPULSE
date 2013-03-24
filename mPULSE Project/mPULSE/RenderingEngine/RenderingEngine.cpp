@@ -657,12 +657,9 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         int tens = (curSpd-(hundreds*100)) /10;
         int ones = (curSpd-((hundreds*100)+(tens*10)));
         int tenth = ((carActor->getLinearVelocity().magnitude()*10)-((hundreds*1000)+(tens*100)+(ones*10)));
-        drawText(50,-50, "Rank " + FloatToString(carEntity->rank));
+        drawText(50,-75, "Place: " + FloatToString(carEntity->rank));
+        drawText(50, -100, "Obs: " + FloatToString(carEntity->raceWinnings()));
         drawText(850,-600, "Spd: " + FloatToString(hundreds) + " " + FloatToString(tens) + " " + FloatToString(ones));
-
-		//Display cash
-		drawText(850, -400, "Obs: " + FloatToString(carEntity->raceWinnings()));
-
 
         //one
         //0.1f assumes there is ten characters
@@ -710,6 +707,18 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             glTexCoord2f(displaceHundred, 0.0f);glVertex2f(0.75f, -0.90);
         glEnd();
     }
+
+    //Draw the map
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
+    int offset = 50;
+    glBegin(GL_QUADS);
+        glColor3f(1.0f, 1.0f, 0.0);
+        glTexCoord2f(0.0f, 0.0f);   glVertex2f(50.0f, -100.0f);
+        glTexCoord2f(1.0f, 0.0f);   glVertex2f(50.0f+offset, -100.0f);
+        glTexCoord2f(1.0f, 1.0f);   glVertex2f(50.0f+offset, -100.0f+offset);
+        glTexCoord2f(0.0f, 1.0f);   glVertex2f(50.0f, -100.0f+offset);
+    glEnd();
+
 
 //////
     glPopAttrib();
@@ -1849,11 +1858,11 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
          if (debugPhysX) //If debugPhyX then
          {
               RenderDebugPhysic(scene->getDebugRenderable());
-            drawText(800,-600, FloatToString(targetEntities[carIndex]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
-            drawText(800,-620, FloatToString(targetEntities[carIndex]->getDriveWheels()->at(0)->getAxleSpeed()) + " :W0_d_Rot");
-            drawText(800,-640, FloatToString(targetEntities[carIndex]->getDriveWheels()->at(1)->getAxleSpeed()) + " :W1_d_Rot");
-            drawText(800,-660, FloatToString(targetEntities[carIndex]->getPassiveWheels()->at(0)->getAxleSpeed()) + " :W2_p_Rot");
-            drawText(800,-680, FloatToString(targetEntities[carIndex]->getPassiveWheels()->at(1)->getAxleSpeed()) + " :W3-p_Rot");
+            //drawText(800,-600, FloatToString(targetEntities[carIndex]->getActor()->getLinearVelocity().magnitude()) + ": car Spd");
+            //drawText(800,-620, FloatToString(targetEntities[carIndex]->getDriveWheels()->at(0)->getAxleSpeed()) + " :W0_d_Rot");
+            //drawText(800,-640, FloatToString(targetEntities[carIndex]->getDriveWheels()->at(1)->getAxleSpeed()) + " :W1_d_Rot");
+            //drawText(800,-660, FloatToString(targetEntities[carIndex]->getPassiveWheels()->at(0)->getAxleSpeed()) + " :W2_p_Rot");
+            //drawText(800,-680, FloatToString(targetEntities[carIndex]->getPassiveWheels()->at(1)->getAxleSpeed()) + " :W3-p_Rot");
          }
 
          //Need to move all of this into game varables
@@ -1875,9 +1884,9 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
             displayConsole();
 
         //HUD info
-        drawText(850,-700, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()));
+        //drawText(850,-700, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()));
         drawText(SCREEN_WIDTH-150,-50, FloatToString(cd->laps) + " / 2 Laps");
-        drawText(150,-700, FloatToString(cd->wp->id));
+        drawText(50,-700, "Waypoint: " + FloatToString(cd->wp->id));
         
 
         //Ya...this should bwe put in a drawHUD element function later....
@@ -1931,23 +1940,23 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
         {
         case 0: //missile
             //drawModel(modelManager.getModel(4), 0, 0, 0, 0.5f);
-            drawText(100,-680, "MISSILE");
+            drawText(50,-680, "MISSILE");
             break;
         case 1:
             //drawModel(modelManager.getModel(5), 0, 0, 0, 0.5f);
-            drawText(100,-680, "SHIELD");
+            drawText(50,-680, "SHIELD");
             break;
         case 2:
             //drawModel(modelManager.getModel(6), 0, 0, 0, 0.5f);
-            drawText(100,-680, "BARRIER");
+            drawText(50,-680, "BARRIER");
             break;
         }
 
         //This is code to be for battery
         if (targetEntities[carIndex]->isBatteryCharged())
-            drawText(200,-680, "Batt. CHARGED");
+            drawText(50,-655, "BATTERY CHARGED");
         else
-            drawText(200,-680, "Batt. empty");
+            drawText(50,-655, "BATTERY EMPTY");
 
 		//add obs for high speed.
 		targetEntities[carIndex]->highSpeedCash();

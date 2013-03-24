@@ -1,8 +1,8 @@
 #include <PhysicsEngine/PhysicsEngine.h>
 
-//std::vector<NxVec3*> spawnPoints;
-//int curSP;
-//int maxSP;
+std::vector<NxVec3*> spawnPoints;
+int curSP;
+int maxSP;
 
 
 PhysicsEngine::PhysicsEngine()
@@ -11,10 +11,10 @@ PhysicsEngine::PhysicsEngine()
     startX = 9;
     startZ = -3;
     offset = -6;
-    //curSP = 0;
-    //maxSP = 9;
+    curSP = 0;
+    maxSP = 8;
     
-    /*
+    
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset; 
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset; 
@@ -24,7 +24,7 @@ PhysicsEngine::PhysicsEngine()
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
     spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
-    */
+    
 
 }
 
@@ -139,10 +139,10 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
 	    box->setSleepEnergyThreshold(0);
 
 
-        //if(curSP>maxSP){curSP=0;}
+        if(curSP>maxSP){curSP=0;}
 
-        //entityCar1->getActor()->setGlobalPosition(*spawnPoints[curSP++]);   
-        entityCar1->getActor()->setGlobalPosition(getNewSpawnPoint());      //new spawnFunction
+        entityCar1->getActor()->setGlobalPosition(*spawnPoints[curSP++]);   
+        //entityCar1->getActor()->setGlobalPosition(getNewSpawnPoint());      //new spawnFunction
         
     }
 }
