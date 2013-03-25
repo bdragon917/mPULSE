@@ -11,10 +11,25 @@
 
 class Track
 {
+	struct rc
+	{
+		int m;
+		int t;
+	};
+
+	struct additional
+	{
+		int music;
+		std::vector<int> sky;
+		int physics;
+		std::vector<rc> pairs;
+	};
+
 public:   
     Track(std::string trackInfo, Entity* trackEntity);
 
     void loadTrackInfo(std::string fileName);
+	void loadTrackAdditions(std::string filename);
     //void addWaypoint(float xPos, float yPos, float zPos,float xOri, float yOri,float zOri,int tmpId,int next,Waypoint::TYPE type);
     void addWaypoint(Waypoint* wp);  
     std::vector<Waypoint*>* getWaypoints();  
@@ -26,6 +41,8 @@ public:
     NxActor* getActor();     
 
 private:
+	additional infoz;
+
     Waypoint::TYPE stringToType(std::string typeString);
     void finalizeWaypoints();
     std::string removeFilePath(std::string line);
