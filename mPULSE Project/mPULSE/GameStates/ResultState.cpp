@@ -19,6 +19,7 @@ ResultState::ResultState()
 
 }
 
+
 void ResultState::update(float dt)
 {    
 

@@ -36,6 +36,9 @@ public:
     };
 
     Profile();
+
+    Profile(std::string aName);
+
     void addData(profileData newData);
     void addData(std::vector<std::string>* newData);    
     profileData data;

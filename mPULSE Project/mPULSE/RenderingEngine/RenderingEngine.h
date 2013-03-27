@@ -31,6 +31,7 @@
 #include <RenderingEngine\DynamicImage.h>
 
 #include <GameStates\GameVariables.h>
+#include <RenderingEngine\ShopScreenInfo.h>
 
 class RenderingEngine
 {
@@ -46,7 +47,7 @@ public:
         std::vector<Entity*> Track;
     } Entities;
     */
-    Entities entities;
+    Entities* entities;
 
     static RenderingEngine* getInstance();
     float zRot;
@@ -62,8 +63,8 @@ public:
     void createLight_MainMenu();
     void setUpPerpView();
     void setUpOrthoView();
-    void RenderingEngine::setPerspective( GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar, float xStretch, float yStretch );
-
+    void setPerspective( GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar, float xStretch, float yStretch );
+    void setEntities(Entities* ents);
     //Draw Functions
     int drawIntro();
     void moveStuff(float &testF);
@@ -75,7 +76,7 @@ public:
     int drawMainMenuScreen(int curMenuButton, bool clicked, float dt, ProfileScreenInfo psi);
     int drawStoryScreen(float dt);
     int drawSettingScreen(float dt, int selectX, int selectY);
-    int drawShopScreen(float dt);
+    int drawShopScreen(float dt, ShopScreenInfo ssi);
     int drawResultScreen(float dt);
     int drawStageSelectScreen(float dt, int curSelected);
 
@@ -92,6 +93,8 @@ public:
     void drawSquareUVRev(float x, float y, float z, float half_width, float half_height);
     void drawModel(ObjModel* model,int x,int y, int z, int scale);
     void drawModelPosRotationEnhanced(ObjModel* model, Entity* anEntity);
+    void drawScaledModelPos(ObjModel* model, NxMat34* aPose, NxVec3 scale);
+    void drawModel(ObjModel* model,int x,int y, int z, NxVec3 scale);
     void drawModelPos(ObjModel* model, NxMat34* aMatrix);
     void drawModelShadow(ObjModel* model, NxMat34* aPose);
     void drawDynamicObjects(std::vector<Entity*>* dObjs);
@@ -100,6 +103,7 @@ public:
     void deleteDisplayList(GLuint index);
     void drawDisplayList(int index);
 	void drawShadow(Entities* entities, NxScene* scene);
+    void RenderingEngine::drawShadow2(Entities* entities, NxScene* scene);
 
     Console aConsole;    
     Shader* aShader;
@@ -184,6 +188,9 @@ private:
     //MainMenu stuff
     float shipAngle;
     float shipRotation;
+
+    //used to control the main texture alpha
+    GLint locShader_Alpha;
 
 
     //Used for Fade In and Out

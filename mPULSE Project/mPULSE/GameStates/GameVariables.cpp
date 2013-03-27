@@ -6,6 +6,7 @@ GameVariables* GameVariables::getInstance()
 	return &gameVariables;
 }
 
+
 void GameVariables::initialize()
 {
     loadAllProfiles(".\\Util\\profiles.txt");
@@ -27,6 +28,7 @@ void GameVariables::initialize()
         finishTime = NULL;
     }
     numberOfAIs = 6;
+    selectedTrack = 0;
     loadedTracks = new Tracks("tracks.txt");
 }
 
@@ -60,11 +62,13 @@ bool* GameVariables::getControllers()
     return controllers;
 }
 
-void GameVariables::removePlayer(int controllerIndex)
+void GameVariables::removePlayer(unsigned controllerIndex)
 {
     if(controllerIndex < 4)
     {
         players[controllerIndex] = false;
+        if (players.size() > controllerIndex)
+            players.erase( players.begin() + controllerIndex);
         numPlayers--;
     }
 }

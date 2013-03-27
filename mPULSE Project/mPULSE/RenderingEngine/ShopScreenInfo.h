@@ -7,7 +7,7 @@ class ShopScreenInfo {
 public:
 	bool isActive;
 
-    std::vector <DynamicImage> di;
+    std::vector <DynamicImage*> di;
 
     typedef enum {
         MAIN,

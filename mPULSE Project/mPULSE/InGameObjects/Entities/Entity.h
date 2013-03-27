@@ -107,6 +107,8 @@ public:
     int rank;
 	Entity* parent;
 
+    std::string rankingName;
+
 private:
 
 	bool batteryCharged;

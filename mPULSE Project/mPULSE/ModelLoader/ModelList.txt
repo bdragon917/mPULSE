@@ -10,3 +10,5 @@ ModelLoader\\Models\\mothershipEngine.obj
 ModelLoader\\Models\\BarrierDisc.obj
 ModelLoader\\Models\\BarrierScreen.obj
 ModelLoader\\Models\\Claymore.obj
+ModelLoader\\Models\\Nogard.obj
+ModelLoader\\Models\\Race1_Spiral.obj

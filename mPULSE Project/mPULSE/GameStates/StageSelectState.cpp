@@ -15,7 +15,7 @@ StageSelectState::StageSelectState()
 
     WAIT_TIME = 50;
     MAX_X_SELECTED = 4; 
-    MAX_Y_SELECTED = 4; 
+    MAX_Y_SELECTED = gameVariables->loadedTracks->getNumberofTracks() + 1; 
     buttonPressed = false;
     lockControls = false;
     endState = false;
@@ -143,6 +143,12 @@ void StageSelectState::keySelectTarget()
     }
     else
     {
+        gameVariables->selectedTrack = curSelectedY - 1;
+
+
+        soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
+        renderingEngine->startFadeOut();
+        lockControls = true;
         //load the selected track!!!
     }
 }

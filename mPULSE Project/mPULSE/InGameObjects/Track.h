@@ -38,10 +38,12 @@ public:
     Waypoint* getWaypoint(int index);
     std::string getName();
     Entity* getEntity();
-    NxActor* getActor();     
+    NxActor* getActor();   
+
+    additional infoz;
 
 private:
-	additional infoz;
+	
 
     Waypoint::TYPE stringToType(std::string typeString);
     void finalizeWaypoints();

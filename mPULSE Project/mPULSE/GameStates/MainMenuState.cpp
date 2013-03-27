@@ -64,18 +64,18 @@ void MainMenuState::render()
             break;
         case 1:
             //This should bring up a profile screen
-            if (gameVariables->getPlayerNum() < 2)
-            {
-                printf("Only one player detected.\n");//TODO Tell the player on screen they need more controllers.
+            //if (gameVariables->getPlayerNum() < 2)
+            //{
+            //    printf("Only one player detected.\n");//TODO Tell the player on screen they need more controllers.
+            //    gameVariables->addPlayerTwo();
+            //    gameVariables->player2isAI = true;
+            //    changeState(PROFILE); 
+            //}
+            //else
+            //{
                 gameVariables->addPlayerTwo();
-                gameVariables->player2isAI = true;
                 changeState(PROFILE); 
-            }
-            else
-            {
-                gameVariables->addPlayerTwo();
-                changeState(PROFILE); 
-            }
+           // }
             break;
         case 2:
             changeState(STORY);
@@ -126,13 +126,13 @@ void MainMenuState::handleXboxEvents(int player,XboxController* state)
         
         bool* controllers = gameVariables->getControllers();
 
-        if(state->start && !controllers[player])
-        {
-            //TODO: ask for player profile
-            gameVariables->addPlayer(player);
-        }
-        if(state->back && controllers[player])
-            gameVariables->removePlayer(player);
+        //if(state->start && !controllers[player])
+        //{
+        //    //TODO: ask for player profile
+        //    gameVariables->addPlayer(player);
+       // }
+        //if(state->back && controllers[player])
+       //     gameVariables->removePlayer(player);
 
         if(state->dpadLeft || state->leftStick.x < 0)
         {

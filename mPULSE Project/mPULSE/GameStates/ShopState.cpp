@@ -20,6 +20,37 @@ ShopState::ShopState()
     lockControls = false;
     endState = false;
 
+    //ssi = new ssi???
+    ssi.di.clear();
+
+    //texture 42 is mechanic =)
+    mechanicGirl = new DynamicImage(-125,400,0,20,20, 42,0 );   //will probably be overwritten in reset(), so change the values there
+    painterGirl = new DynamicImage(-50,50,0,20,20, 43,0 );
+
+    mechanicGirl->setTargetLocation(250,400,0);
+    mechanicGirl->setMode(1);
+
+    ssi.di.push_back(mechanicGirl);
+}
+
+void ShopState::reset()
+{
+    ssi.di.clear();
+    enterMechanic();
+}
+
+void ShopState::enterMechanic()
+{
+    mechanicGirl->setLocation(-125,600,0);
+    mechanicGirl->setTargetLocation(200,600,0);
+    ssi.di.push_back(mechanicGirl);
+}
+
+void ShopState::enterPainter()
+{
+    painterGirl->setLocation(-385.5f,96,0);
+    painterGirl->setTargetLocation(200.5f,600,0);
+    ssi.di.push_back(painterGirl);
 }
 
 void ShopState::update(float dt)
@@ -31,7 +62,7 @@ void ShopState::render()
 {   
     renderingEngine->createLight_MainMenu();
 
-    int retMenuVal = renderingEngine->drawShopScreen(myDt);    //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
+    int retMenuVal = renderingEngine->drawShopScreen(myDt, ssi);    //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
 
     if (retMenuVal == 1)
     {
@@ -199,5 +230,6 @@ ShopState* ShopState::getInstance()
      printf("Shop state\n");
     static ShopState ShopState;
     ShopState.changeState(SHOP);
+    ShopState.reset();
     return &ShopState;
 }

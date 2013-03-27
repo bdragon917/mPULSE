@@ -22,11 +22,15 @@ public:
     void render();
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);
     void handleXboxEvents(int player,XboxController* state);
+    void reset();
+
 
 private:
     ShopState();
 
     ShopScreenInfo ssi;
+    DynamicImage* mechanicGirl;
+    DynamicImage* painterGirl;
 
     bool lockControls;
     bool endState;
@@ -46,6 +50,9 @@ private:
 
 
     void backPressed();
+
+    void enterMechanic();
+    void enterPainter();
 
     float myDt; //hack for update
 

@@ -132,6 +132,7 @@
     <ClCompile Include="RenderingEngine\Shader.cpp" />
     <ClCompile Include="SoundEngine\Sound.cpp" />
     <ClCompile Include="SoundEngine\SoundEngine.cpp" />
+    <ClCompile Include="Util\AI_Names.cpp" />
     <ClCompile Include="Util\Clock.cpp" />
     <ClCompile Include="Util\Profile.cpp" />
   </ItemGroup>
@@ -184,6 +185,7 @@
     <ClInclude Include="RenderingEngine\ShopScreenInfo.h" />
     <ClInclude Include="SoundEngine\Sound.h" />
     <ClInclude Include="SoundEngine\SoundEngine.h" />
+    <ClInclude Include="Util\AI_Names.h" />
     <ClInclude Include="Util\Clock.h" />
     <ClInclude Include="Util\Profile.h" />
   </ItemGroup>

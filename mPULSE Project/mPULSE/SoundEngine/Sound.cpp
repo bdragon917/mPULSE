@@ -138,6 +138,16 @@ void Sound::playSound(int inChannel, int inIndex)
     Mix_PlayChannel(inChannel, chunks.at(inIndex), 0);
 }
 
+void Sound::playSound(int inIndex)
+{
+    Mix_PlayChannel(-1, chunks.at(inIndex), 0);
+}
+
+void Sound::fadeOutAllSound(int ms)
+{
+    Mix_FadeOutChannel(-1, ms);
+}
+
 void Sound::crashVolume(int newV)
 {
 	Mix_Volume(crashChannel, newV);

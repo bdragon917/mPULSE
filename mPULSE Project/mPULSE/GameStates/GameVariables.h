@@ -2,6 +2,7 @@
 #include <Util/Profile.h>
 #include <vector>
 #include <InGameObjects\Tracks.h>
+#include <InGameObjects\Entities\RenderableComponent.h>
 #include <iostream>
 #include <fstream>
 
@@ -21,7 +22,7 @@ public:
     bool* getControllers();
 
     int addPlayer(int controllerIndex);
-    void removePlayer(int controllerIndex);    
+    void removePlayer(unsigned controllerIndex);    
 
     int addPlayerTwo();     //Add default profile
     int setPlayers(Profile* aPlayer, int index);
@@ -59,9 +60,18 @@ public:
     std::vector<std::string>* split(std::string line, char delimiter);
     std::vector<Profile*> profiles; 
 
+
+
     Tracks* loadedTracks;
+    int selectedTrack;      //int points to loadedTracks
+    int physXTrackModel;
+    RenderableComponent* trackRC;
+
+
+    std::vector<std::string> rankings;      //used to display the ranking at results
 
 private:
+
 
     //Race Variables
     bool finishedPlayers[4];        //Should be the number of players

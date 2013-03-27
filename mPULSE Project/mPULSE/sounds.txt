@@ -11,3 +11,14 @@ SoundEngine\\Sounds\\Shield.wav
 SoundEngine\\Sounds\\Barrier.wav
 SoundEngine\\Sounds\\MenuPress.wav
 SoundEngine\\Sounds\\HowieScream.mp3
+SoundEngine\\Sounds\\scifiEngine2.wav
+SoundEngine\\Sounds\\scifiEngine2_1.wav
+SoundEngine\\Sounds\\scifiEngine2_2.wav
+SoundEngine\\Sounds\\scifiEngine2_3.wav
+SoundEngine\\Sounds\\scifiEngine2_4.wav
+SoundEngine\\Sounds\\scifiEngine2_5.wav
+SoundEngine\\Sounds\\scifiEngine2_6.wav
+SoundEngine\\Sounds\\scifiEngine2_7.wav
+SoundEngine\\Sounds\\scifiEngine2_8.wav
+SoundEngine\\Sounds\\scifiEngine2_9.wav
+SoundEngine\\Sounds\\scifiEngine2_10.wav

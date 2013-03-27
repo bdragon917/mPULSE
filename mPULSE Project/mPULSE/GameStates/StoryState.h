@@ -12,6 +12,7 @@
 #include <InGameObjects/Entities/Entity.h>
 #include <InGameObjects/Entities/RenderableComponent.h>
 #include <GameStates/GameVariables.h>
+#include <RenderingEngine\DynamicImage.h>
 
 class StoryState : public GameState
 {
