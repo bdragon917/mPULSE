@@ -1,4 +1,5 @@
 varying vec3 lightDir,normal;
+uniform float alpha = 1.0f;
 uniform sampler2D tex;
  
 void main()
@@ -14,7 +15,8 @@ void main()
     texel = texture2D(tex,gl_TexCoord[0].st);
  
     ct = texel.rgb;
-    at = texel.a;
+    //at = texel.a;
+	at = alpha;
     gl_FragColor = vec4(ct * cf, at * af);
  
 }
