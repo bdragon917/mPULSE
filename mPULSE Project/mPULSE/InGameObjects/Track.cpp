@@ -2,10 +2,7 @@
 
 Track::Track(std::string infoFilename, Entity* trackEntity)
 {
-    //loadTrackInfo(infoFilename);
-
-	//loadTrackAdditions("trackInfo.txt");
-	loadTrackAdditions(infoFilename);
+    loadTrackInfo(infoFilename);
     entity = trackEntity;
 }
 
@@ -185,6 +182,7 @@ void Track::loadTrackInfo(std::string filename)
     {printf("Track checkpoints didn't open, can't find maybe??\n"); }
     finalizeWaypoints();        
 }
+
 
 void Track::loadTrackAdditions(std::string filename)
 {

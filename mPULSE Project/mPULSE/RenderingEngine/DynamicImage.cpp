@@ -16,6 +16,9 @@
     
         tIndex = textureIndex;
 
+        LINEAR_VELOCITY = 1.00f;
+        THRESHOLD = 0.01f;
+
         mode = inMode;
 
         sleep = true;       //Sleep is true if curPos == tarPos
@@ -23,8 +26,7 @@
 
     void DynamicImage::update()
     {
-        const float LINEAR_VELOCITY = 0.01f;
-        const float THRESHOLD = 0.01f;
+        
 
 
         if (!sleep)
@@ -42,7 +44,7 @@
                 else
                 {
                     towardsVector.normalize();
-                    curPos = towardsVector * LINEAR_VELOCITY;
+                    curPos = curPos + (towardsVector * LINEAR_VELOCITY);
                 }
                 break;
 
@@ -55,7 +57,7 @@
                 }
                 else
                 {
-                    curPos = towardsVector * 0.033f;
+                    curPos = curPos + (towardsVector * 0.033f);
                 }
                 break;
 
@@ -63,14 +65,29 @@
         }
     }
 
+    int DynamicImage::getTextureIndex()
+    {
+        return tIndex;
+    }
 
+    void DynamicImage::setMode(int inMode)
+    {
+        mode = inMode;
+    }
 
+    void DynamicImage::setLocation(float newX, float newY, float newZ)
+    {
+        curPos.x = newX;
+        curPos.y = newY;
+        curPos.z = newZ;
+    }
 
     void DynamicImage::setTargetLocation(float newX, float newY, float newZ)
     {
         tarPos.x = newX;
         tarPos.y = newY;
         tarPos.z = newZ;
+        sleep = false;
     }
     float DynamicImage::getX()
     {

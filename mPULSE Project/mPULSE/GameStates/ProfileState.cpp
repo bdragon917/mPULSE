@@ -20,8 +20,11 @@ ProfileState::ProfileState()
     //ProfileScreenInfo psi = ProfileScreenInfo();
     psi.isActive = true;
     psi.title = "Player " + renderingEngine->FloatToString(gameVariables->profileTargetPlayer) + " Profile";
-    psi.profilesOnScreen[0] = "Default";
 
+    if (gameVariables->profileTargetPlayer == 1)
+        psi.profilesOnScreen[0] = "Default";
+    else
+        psi.profilesOnScreen[0] = "Set as AI";
 
     const int MaxShown = 6;     //should be array - 2
     if (gameVariables->profiles.size() < MaxShown)
@@ -78,6 +81,15 @@ void ProfileState::update(float dt)
 
 void ProfileState::render()
 {   
+    if (gameVariables->profileTargetPlayer == 2)
+    {
+        gameVariables->player2isAI = false;     //initializtion HACk
+    }
+
+    psi.title = "Player " + renderingEngine->FloatToString(gameVariables->profileTargetPlayer) + " Profile";        //initialization hAck
+
+
+
     psi.isActive = true;
     psi.selectedItem = curSelected;
 
@@ -95,6 +107,7 @@ void ProfileState::render()
 
         switch (curSelected)
         {
+            /*
         case 0:
             //Finish Profile state
             if ((gameVariables->profileTargetPlayer == 1)&&(gameVariables->getPlayerNum() == 2))
@@ -110,26 +123,61 @@ void ProfileState::render()
                 changeState(SHOP);
             }
             break;
-        case 1:
-            //This should bring up a profile screen
-            if (gameVariables->getPlayerNum() < 2)
+            */
+        case 1:         //Can be default or scroll up
+            if (profilesOffset == 0)    //is default
             {
-                //changeState(PLAY); 
+                printf("Default or setAI selected");
+
+                //end state
+                if ((gameVariables->profileTargetPlayer == 2)&&(gameVariables->getPlayerNum() == 2))
+                {
+                    //set as AI
+                    gameVariables->player2isAI = true;
+                    printf("PLAYER 2 is now AI");
+                    gameVariables->profileTargetPlayer = 1;
+                    curSelected = 1;
+                    changeState(SHOP);
+                    printf("menu1");
+                }
+                else if ((gameVariables->profileTargetPlayer == 1)&&(gameVariables->getPlayerNum() == 2))
+                {
+                    gameVariables->profileTargetPlayer = 2;
+                    curSelected = 1;
+                    changeState(PROFILE);
+                    printf("menu2");
+                }
+                else
+                {
+                    gameVariables->profileTargetPlayer = 1;
+                    curSelected = 1;
+                    changeState(SHOP);
+                    printf("menu3");
+                }
+            }
+            break;
+        case 8:         //scroll down
+                //Don't worry about it
+            break;
+
+
+        default:                //use profile
+            if ((gameVariables->profileTargetPlayer == 1)&&(gameVariables->getPlayerNum() == 2))
+            {
+                gameVariables->profileTargetPlayer = 2;
+                curSelected = 1;
+                changeState(PROFILE);
+                printf("menu4");
             }
             else
             {
-                //changeState(PLAY); 
+                gameVariables->profileTargetPlayer = 1;
+                curSelected = 1;
+                changeState(SHOP);
+                printf("menu5");
             }
             break;
-        case 2:
-            //changeState(MAIN_MENU); 
-            break;
-        case 3:
-            //changeState(MAIN_MENU); 
-            break;
-        case 4:
-            //changeState(MAIN_MENU); 
-            break;
+
         }
     }
      
@@ -199,7 +247,15 @@ void ProfileState::handleXboxEvents(int player,XboxController* state)
             prevTime = clock.getCurrentTime();
         }
         else if (state->a)
-            keySelectTarget();
+        {
+            if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
+            {
+                if(!buttonPressed)
+                    buttonPressed = true;
+                keySelectTarget();
+            }
+            prevTime = clock.getCurrentTime();
+        }
         else if (state->b)
             backPressed();
     }
@@ -211,18 +267,29 @@ void ProfileState::keySelectLeft()
      soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelected = curSelected - 1;
     if (curSelected < 0){curSelected = MAX_SELECTED;}
+    printf("curSelected: %i\n", curSelected);
 }
 
 void ProfileState::keySelectRight()
 {
-    printf("curSelected: %i\n", curSelected);
      soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
     curSelected = curSelected + 1;
     if (curSelected > MAX_SELECTED){curSelected = 0;}
+    printf("curSelected: %i\n", curSelected);
 }
 
 void ProfileState::keySelectTarget()
 {
+
+    std::string defaultString0;
+    if (gameVariables->profileTargetPlayer == 1)
+        defaultString0 = "Default";
+    else
+        defaultString0 = "Set as AI";
+    
+
+
+
     if (curSelected == 0)
     {
         soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
@@ -242,7 +309,7 @@ void ProfileState::keySelectTarget()
 
                     printf("profilesOffset: %i\n", profilesOffset);
                 
-                        psi.profilesOnScreen[0] = "Default";
+                        psi.profilesOnScreen[0] = defaultString0;
 
                         const int MaxShown = 6;     //should be array - 2
                         if (gameVariables->profiles.size() < MaxShown)
@@ -268,8 +335,9 @@ void ProfileState::keySelectTarget()
                 }
                 else
                 {
-                    printf("use default");
                     //use default
+                    renderingEngine->startFadeOut();
+                    lockControls = true;
                 }
         }
         else if (curSelected == 8) 
@@ -280,7 +348,7 @@ void ProfileState::keySelectTarget()
                     {profilesOffset = profilesOffset + 1;}
                     printf("profilesOffset: %i\n", profilesOffset);
                 
-                        psi.profilesOnScreen[0] = "Default";
+                        psi.profilesOnScreen[0] = defaultString0;
 
                         
                         if (gameVariables->profiles.size() < MaxShown)
@@ -305,18 +373,14 @@ void ProfileState::keySelectTarget()
         }
         else
         {
-            //printf("load profile %i out of %i\n", profilesOffset + curSelected - 2, gameVariables->profiles.size() );
-
             Profile* aProfile = gameVariables->profiles.at(profilesOffset + curSelected - 2);
-            Profile::profileData dataaaaa = aProfile->data;
-            std::string aNameeeee = dataaaaa.driverName;
-
+            //Profile::profileData dataaaaa = aProfile->data;
+            //std::string aNameeeee = dataaaaa.driverName;
             gameVariables->setPlayers(aProfile, targetPlayer);
 
             soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
             renderingEngine->startFadeOut();
             lockControls = true;
-               //printf("load profile %i \n" + aNameeeee, profilesOffset + curSelected - 2);
         //Load profile
         }
 
@@ -327,6 +391,18 @@ void ProfileState::keySelectTarget()
 void ProfileState::backPressed()
 {
     curSelected = 1;
+
+    if (gameVariables->profileTargetPlayer == 2)
+    {
+        gameVariables->profileTargetPlayer = 1;
+    }
+
+    if (gameVariables->profileTargetPlayer == 1)
+    {
+        gameVariables->removePlayer(1); //remove player 2
+        gameVariables->profileTargetPlayer = 1;
+    }
+    printf("profileTargetPlayer:%i\n", gameVariables->profileTargetPlayer);
     changeState(MAIN_MENU);
 }
 ProfileState* ProfileState::getInstance()
@@ -334,5 +410,7 @@ ProfileState* ProfileState::getInstance()
      printf("Profile state\n");
     static ProfileState ProfileState;
     ProfileState.changeState(PROFILE);
+
+
     return &ProfileState;
 }

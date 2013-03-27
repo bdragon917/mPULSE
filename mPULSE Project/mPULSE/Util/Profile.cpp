@@ -22,6 +22,29 @@ Profile::Profile()
     data.style.steeringBehavior = 0;
 }
 
+
+Profile::Profile(std::string aName)
+{
+    data.driverName = aName;
+    data.carModel = 1;
+    data.carTexture = 3;
+    data.Obs = 0;
+    data.isAI = 0;
+
+    data.shuntingLevel = 0;
+    data.batteryLevel = 0;
+    data.maxSpeed = 0;
+    data.missileLevel = 0;
+    data.barrierLevel = 0;
+    data.shieldLevel = 0;
+
+    data.style.smoothness = 0;
+    data.style.wildness = 0;
+    data.style.accuracy = 0;
+    data.style.pickupBehavior = 0;
+    data.style.steeringBehavior = 0;
+}
+
 void Profile::addData(std::vector<std::string>* newData)
 {
     if(newData->size() > 1)

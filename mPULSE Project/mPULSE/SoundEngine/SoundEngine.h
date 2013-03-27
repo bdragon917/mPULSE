@@ -14,6 +14,7 @@ public:
 	void toggleMusic();
 	void stopMusic();
     void FadeOutMusic(int ms);
+    void fadeOutAllSound(int ms);
 
     void SoundEngine::playFinalCountDown();
 	void engineNoise();

@@ -22,6 +22,11 @@ RenderingEngine::RenderingEngine()
     debugCamera = false;
 }
 
+void RenderingEngine::setEntities(Entities* ents)
+{
+    entities = ents;
+}
+
 RenderingEngine* RenderingEngine::getInstance()
 {
     static RenderingEngine renderer;
@@ -119,8 +124,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[50];
-    glGenTextures(50, textureid_P1);
+    textureid_P1 = new GLuint[53];
+    glGenTextures(53, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -188,6 +193,12 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/Menu/StageSelect/StageBG.bmp", textureid_P1[48]);
 
     bindBMPtoTexture("./Images/Minimap.bmp", textureid_P1[49]);
+
+    bindBMPtoTexture("./Images/outUVNogard.bmp", textureid_P1[50]);
+
+    bindBMPtoTexture("./Images/black.bmp", textureid_P1[51]);
+
+    bindBMPtoTexture("./Images/outUVClaymore.bmp", textureid_P1[52]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -289,6 +300,94 @@ void RenderingEngine::drawModel(ObjModel* model,int x,int y, int z, int scale)
     glEnd();
 }
 
+void RenderingEngine::drawModel(ObjModel* model,int x,int y, int z, NxVec3 scale)
+{
+    //Sanity Check
+    if (model == NULL)
+    {MessageBox(NULL, "Accessing invalid model....Did we loaded the models? Did we downloaded models....", NULL, NULL);}
+
+    std::vector<std::vector<ObjModel::vertElements>>* faces = model->getFaces();
+    std::vector<ObjModel::vertex3d>* verticies = model->getVerticies();
+    std::vector<ObjModel::vertex3d>* norms = model->getVertexNormals();
+    std::vector<ObjModel::vertex2d>* texs = model->getVertexTextureCoords();
+
+    ObjModel::vertElements face;
+    ObjModel::vertex3d  vert;
+    ObjModel::vertex3d  norm;
+    ObjModel::vertex2d  tex;
+
+    glColor3f(1,1,1);
+    glBegin(GL_TRIANGLES);
+    for (unsigned i = 0; i < faces->size(); ++i)
+    {
+        for (unsigned j = 0; j < faces->at(i).size(); ++j)
+        {            
+            face = faces->at(i).at(j);
+            vert = verticies->at(face.vertIndex);
+
+            if(model->getNormalsEnabled())            
+            {
+                norm = norms->at(face.vertNormalIndex);
+                glNormal3f(norm.x,norm.y,norm.z);
+            }
+            if(model->getTextureCoordsEnabled())
+            {
+                tex = texs->at(face.vertTextureIndex);
+                glTexCoord2d(tex.x,tex.y);
+            }
+
+            glVertex3f(x+(vert.x*scale.x),y+(vert.y*scale.y),z+(vert.z*scale.z));
+        }
+    }
+    glEnd();
+}
+
+void RenderingEngine::drawScaledModelPos(ObjModel* model, NxMat34* aPose, NxVec3 scale)
+{
+    glPushMatrix();
+
+ 	float mat[16];
+	aPose->getColumnMajor44(mat);
+    
+    glMultMatrixf(mat);
+
+    std::vector<std::vector<ObjModel::vertElements>>* faces = model->getFaces();
+    std::vector<ObjModel::vertex3d>* verticies = model->getVerticies();
+    std::vector<ObjModel::vertex3d>* norms = model->getVertexNormals();
+    std::vector<ObjModel::vertex2d>* texs = model->getVertexTextureCoords();
+
+    ObjModel::vertElements face;
+    ObjModel::vertex3d  vert;
+    ObjModel::vertex3d  norm;
+    ObjModel::vertex2d  tex;
+
+    glColor3f(1,1,1);
+    glBegin(GL_TRIANGLES);
+    for (unsigned i = 0; i < faces->size(); ++i)
+    {
+        for (unsigned j = 0; j < faces->at(i).size(); ++j)
+        {            
+            face = faces->at(i).at(j);
+            vert = verticies->at(face.vertIndex);
+
+            if(model->getNormalsEnabled())            
+            {
+                norm = norms->at(face.vertNormalIndex);
+                glNormal3f(norm.x,norm.y,norm.z);
+            }
+            if(model->getTextureCoordsEnabled())
+            {
+                tex = texs->at(face.vertTextureIndex);
+                glTexCoord2d(tex.x,tex.y);
+            }
+
+            glVertex3f((vert.x * scale.x),(vert.y * scale.y),(vert.z * scale.z));
+        }
+    }
+    glEnd();
+
+    glPopMatrix();
+}
 
 void RenderingEngine::drawModelPos(ObjModel* model, NxMat34* aPose)
 {
@@ -706,6 +805,31 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             glTexCoord2f(displaceHundred, 1.0f);glVertex2f(0.75f, -0.75f);
             glTexCoord2f(displaceHundred, 0.0f);glVertex2f(0.75f, -0.90);
         glEnd();
+
+        //Draw the map
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
+        drawSquareUVRev(0.5f,0.45f,0,0.5f,0.5f);
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[20]);
+
+
+        float x = 0;
+        float z = 0;
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[14]);
+        for(unsigned i=0;i<entities->AIcars.size();i++)
+        {
+            x = entities->AIcars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
+            z = entities->AIcars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
+
+            drawSquare(0.5f+x,0.5f-z,0,0.015f,0.015f);
+        }
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[47]);
+        for(unsigned i=0;i<entities->cars.size();i++)
+        {
+            x = entities->cars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
+            z = entities->cars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
+
+            drawSquare(0.5f+x,0.5f-z,0,0.015f,0.015f);
+        }
     }
 
     //Draw the map
@@ -1734,10 +1858,10 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     glEnable(GL_TEXTURE_2D);
 		            glPopMatrix();
 
-
-                flatten->on();
-				drawShadow(entities, scene);
-				flatten->off();
+                //drawShadow2(entities, scene);
+                //flatten->on();
+				//drawShadow(entities, scene);
+				//flatten->off();
 
                     if (aShader != NULL)
                      {
@@ -1745,7 +1869,26 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                      }
 
 
+                    //GLint locShader_Alpha = glGetUniformLocation(aShader->f, "alpha");
+                    locShader_Alpha = aShader->getUniLoc("alpha");
+                    if (locShader_Alpha != -1)
+                    {glUniform1f(locShader_Alpha, 0.00f);}
+
+                    drawShadow2(entities, scene);
+
+
+
+                    if (locShader_Alpha != -1)
+                    {glUniform1f(locShader_Alpha, 0.432f);}
+
                     drawTrack(track);
+                    //if (locShader_Alpha != -1)
+                    //{glUniform1f(locShader_Alpha, 1.000);}
+
+
+                    if (locShader_Alpha != -1)
+                    {glUniform1f(locShader_Alpha, 1.00f);}
+
                     drawDynamicObjects(&entities->DynamicObjs);
                 //float blur = (entities->cars[0]->getActor()->getLinearVelocity().magnitude() / 150.0f); //blur = (blur * 0.7) + (0.3 * newblur)
 
@@ -2718,7 +2861,7 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
 }
 
 
-int RenderingEngine::drawShopScreen(float dt)
+int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -2736,11 +2879,9 @@ int RenderingEngine::drawShopScreen(float dt)
     //glDisable(GL_NORMALIZE);
     //glDisable(GL_TEXTURE);
 	
-    if (aShader != NULL)
-         {
+
             glEnable(GL_TEXTURE_2D);
-            aShader->on();
-         }
+            aHUDShader->on();
 
 
    //Initialize a new coordinate system
@@ -2791,13 +2932,29 @@ int RenderingEngine::drawShopScreen(float dt)
 
    
 
+        //draw di's here!
+         for (unsigned di=0; di<ssi.di.size();di++)
+        {
+            DynamicImage* aDynamicImage = ssi.di[di];
+            NxVec3 imgPos = aDynamicImage->getCurPos();
+            title = "Hi! This is a Mechanic";
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[aDynamicImage->getTextureIndex()]);
+            drawSquareUVRev(imgPos.x, imgPos.y,0, 200.0f, 300.0f);
+            //renderText(imgPos.x, imgPos.y, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
+            ssi.di[di]->update();
+
+        }
+
+
+
 
         //Done Button
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[1]);
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
 
             drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
 
         aHUDShader->off();
+
 
     //reset to previous state
     glPopAttrib();
@@ -2812,7 +2969,7 @@ int RenderingEngine::drawShopScreen(float dt)
 
     if (aShader != NULL)
     {
-        aShader->off();
+        //aShader->on();
     }
 
 
@@ -2840,6 +2997,7 @@ int RenderingEngine::drawShopScreen(float dt)
     if (aShader != NULL)
     {
         glDisable(GL_TEXTURE_2D);
+        //aShader->off();
     }
 
 
@@ -2915,7 +3073,7 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
         //Title
-        string title = "Hi! This is Stage Select Mode!";
+        string title = "Hi! This is Stage Select Mode! curTrack=" + FloatToString(gameVariables->selectedTrack);
         renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
         //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
 
@@ -3068,7 +3226,14 @@ int RenderingEngine::drawResultScreen(float dt)
         //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
 
 
-   
+        float offset = dec_height*4.0f;
+
+        for (unsigned i= 0; i < gameVariables->rankings.size();i++)
+        {
+                string title = gameVariables->rankings[i];                 //THIS SHOULD READ OUT THE RANKINGS!
+                renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+offset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
+                offset = offset + dec_height*2.0f;
+        }
 
 
         //Done Button
@@ -3149,6 +3314,68 @@ void RenderingEngine::drawWheels(Entity* entity, int model, int texture)
         }
     }
 }
+
+void RenderingEngine::drawShadow2(Entities* entities, NxScene* scene)
+{
+	NxRay ray;
+    NxRaycastHit hit;
+	NxVec3 down(0.0f, -1.0f, 0.0f);
+
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]);     //black shadow
+
+	ray.dir = down;
+
+    if (entities->cars.size() > 0)
+    {
+        for (unsigned i = 0; i < entities->cars.size(); ++i)
+        {
+            if (entities->cars[i]->rc.size() > 0)
+            {
+                for (unsigned r = 0; r < entities->cars[i]->rc.size(); ++r)
+                {
+					ray.orig = entities->cars[i]->getActor()->getGlobalPosition();
+
+					//scene->raycastClosestShape(ray,NX_ALL_SHAPES,hit);
+                    scene->raycastClosestShape(ray,NX_STATIC_SHAPES,hit);
+					NxVec3 result = hit.worldImpact - ray.orig;
+
+                    //glBindTexture(GL_TEXTURE_2D, textureid_P1[entities->cars[i]->rc[r]->textureID]);
+                    NxMat34* aPose = &(entities->cars[i]->getActor()->getGlobalPose());
+                    NxMat33 aRot = (entities->cars[i]->getActor()->getGlobalOrientation());
+					NxVec3* aim = &(entities->cars[i]->getActor()->getGlobalPosition());
+
+                    
+					glPushMatrix();
+
+ 					float mat[16];
+					aPose->getColumnMajor44(mat);
+                    //aRot.getColumnMajor(mat);
+					//float distToGround = -0.35f;
+
+					
+                    NxVec3 towardsCarVec = hit.worldImpact - entities->cars[i]->getActor()->getGlobalPosition();
+                    towardsCarVec.normalize();
+
+                    NxVec3 theVec2 = NxVec3(aim->x,hit.worldImpact.y - (aPose->t.y),aim->z) - towardsCarVec;
+                    NxVec3 theVec = NxVec3(aim->x,hit.worldImpact.y - (aPose->t.y) + 1.0f,aim->z);
+
+                    glTranslatef(0, theVec.y, 0);
+                    glMultMatrixf(mat);
+                    
+
+					for (unsigned x = 0; x < entities->cars[i]->rc.size();x++)
+                    {
+                        drawModel(modelManager.getModel(entities->cars[i]->rc.at(x)->modelID), 0.0f, 0, 0, NxVec3(1.0f, 0.0f, 1.0f));       //draw model with a flatten scale
+                    }
+                    glPopMatrix();
+
+                }
+            }
+        }
+    }
+}
+
+
 
 void RenderingEngine::drawShadow(Entities* entities, NxScene* scene)
 {
@@ -3403,12 +3630,17 @@ void RenderingEngine::drawTrack(Track* track)
     std::vector<Waypoint*>* wps = track->getWaypoints();
     ObjModel* model = modelManager.getModel("box.obj");
     if (model != NULL)
-    {                
+    {   
+        if (locShader_Alpha != -1)
+                    {glUniform1f(locShader_Alpha, 0.33f);}
+
         for(unsigned int i=0; i<wps->size(); i++)       
         {
             if(wps->at(i)->type == Waypoint::PICKUP_SPAWN)
             {
+
                 model = modelManager.getModel("Shield.obj");
+
 
                 if(model != NULL)
                     drawModel(model,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
@@ -3417,6 +3649,9 @@ void RenderingEngine::drawTrack(Track* track)
                 model = modelManager.getModel("box.obj");*/
 
         }
+
+        if (locShader_Alpha != -1)
+                    {glUniform1f(locShader_Alpha, 1.000f);}
     }
     
         

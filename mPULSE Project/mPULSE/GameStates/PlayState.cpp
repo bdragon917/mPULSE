@@ -18,6 +18,8 @@ void PlayState::resetAll()
     showConsole = true;
     rbPressed = false;
 
+    CHEAT_InfPowUp = false;
+
     gameVariables->resetRace();     //Clears victory flags
     gameVariables->finishTime = NULL;
     entities.clearAll();
@@ -32,6 +34,7 @@ void PlayState::resetAll()
     for(int i=0;i<numPlayers;i++)
     {
         Entity* playerCar = new Entity();
+        playerCar->rankingName = gameVariables->getPlayerProfile(i)->data.driverName;
         playerCar->aAI = new AI();
         rankings->push_back(playerCar);
         entities.cars.push_back(playerCar);
@@ -51,31 +54,38 @@ void PlayState::resetAll()
         newAIrCar->aAI = new AI();
         rankings->push_back(newAIrCar);
 
+        AI_Names* aiNames = AI_Names::getInstance();
+
         switch (AIType)
         {
         case 0:
             newRc = new RenderableComponent(1, 0);
             newAIrCar->aAI->myPersonality.setPersonality(AIType);
+            newAIrCar->rankingName = aiNames->getRandomName();
             break;
 
         case 1:
             newRc = new RenderableComponent(1, 4);
             newAIrCar->aAI->myPersonality.setPersonality(AIType);
+            newAIrCar->rankingName = aiNames->getRandomName();
             break;
 
         case 2:
             newRc = new RenderableComponent(11, 5);
             newAIrCar->aAI->myPersonality.setPersonality(AIType);
+            newAIrCar->rankingName = aiNames->getAngryName();
             break;
 
         case 3:
             newRc = new RenderableComponent(1, 6);
             newAIrCar->aAI->myPersonality.setPersonality(AIType);
+            newAIrCar->rankingName = aiNames->getRandomName();
             break;
         
         default:
             newRc = new RenderableComponent(1, 5);
             newAIrCar->aAI->myPersonality.setPersonality(AIType);
+            newAIrCar->rankingName = aiNames->getRandomName();
             break;
 
         }
@@ -98,10 +108,85 @@ void PlayState::resetAll()
     //set numPlayers
     renderingEngine->createLight();
 
+
+
+
+
+    
+        /*//UNDER CONSTUCTION CODE//
+        Entity* aTrack = new Entity();
+
+    Track* tempTrackReader = new Track(".\\InGameObjects\\Race1.txt",aTrack);
+    std::string trackFilename = gameVariables->loadedTracks->getTrackFilename(gameVariables->selectedTrack);
+    tempTrackReader->loadTrackAdditions(trackFilename);
+    int physXModelNum = tempTrackReader->infoz.physics;
+
+    //gameVariables->loadedTracks->getTrackFilename(gameVariables->selectedTrack)
+    ObjModel* aModel = renderingEngine->getModelManger().getModel(physXModelNum);
+    RenderableComponent* rc = new RenderableComponent(physXModelNum,7);
+
+    if(aModel != NULL)
+    {
+        aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
+        entities.Track.push_back(aTrack);
+        aTrack->rc.push_back(rc);        
+        //aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));    
+        aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1)); 
+    }   
+    track = new Track(trackFilename,aTrack);
+	physicsEngine->createWaypoints(track->getWaypoints());
+    *//////////////////////////////////
+
+
+    ///THIS IS A HACK FOR MILESTONE 4
+    
+    Entity* aTrack;
+    ObjModel* aModel;
+    RenderableComponent* rc;
+    
+    
+    switch (gameVariables->selectedTrack)
+    {
+    case 1:
+            aTrack = new Entity();
+            aModel = renderingEngine->getModelManger().getModel(13);
+            rc = new RenderableComponent(13,7);
+
+            if(aModel != NULL)
+            {
+                aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
+                entities.Track.push_back(aTrack);
+                aTrack->rc.push_back(rc);        
+                aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1_Spiral.obj",0,0,0,1));     
+            }   
+            track = new Track(".\\InGameObjects\\Race_Spiral.txt",aTrack);
+	        physicsEngine->createWaypoints(track->getWaypoints());
+        break;
+
+    default:
+            aTrack = new Entity();
+            aModel = renderingEngine->getModelManger().getModel("Race1.obj");
+            rc = new RenderableComponent(2,7);
+
+            if(aModel != NULL)
+            {
+                aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
+                entities.Track.push_back(aTrack);
+                aTrack->rc.push_back(rc);        
+                aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));     
+            }   
+            track = new Track(".\\InGameObjects\\Race1.txt",aTrack);
+	        physicsEngine->createWaypoints(track->getWaypoints());
+        break;
+
+    }
+
+    //This is our old code to load in tracks
+    /*
     //Create Track        
     Entity* aTrack = new Entity();
     ObjModel* aModel = renderingEngine->getModelManger().getModel("Race1.obj");
-    RenderableComponent* rc = new RenderableComponent(2,7);    
+    RenderableComponent* rc = new RenderableComponent(2,7);
 
     if(aModel != NULL)
     {
@@ -112,6 +197,7 @@ void PlayState::resetAll()
     }   
     track = new Track(".\\InGameObjects\\Race1.txt",aTrack);
 	physicsEngine->createWaypoints(track->getWaypoints());
+    */
 
     //Attach AI to the player cars
     for (unsigned pcai = 0; pcai < entities.cars.size();++pcai)
@@ -161,13 +247,14 @@ void PlayState::resetAll()
     entities.StaticObjs.push_back(aEntity);
     entities.StaticObjs.push_back(aEntity2);
     */
+    renderingEngine->setEntities(&entities);
     InitializeConsoleCommands();    //Initalize Commands
 }
 
 void PlayState::update(float dt)
 {    
     //renderingEngine->drawText(100, -100, renderingEngine->FloatToString(
-    printf("x: %f y: %f z: %f",entities.cars.at(0)->getActor()->getGlobalPosition().x)+" "+renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPosition().y)+" "+renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPosition().z);
+    //printf("x: %f y: %f z: %f",entities.cars.at(0)->getActor()->getGlobalPosition().x)+" "+renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPosition().y)+" "+renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPosition().z);
     //Handle Events
     handleEvents();
 
@@ -200,15 +287,25 @@ void PlayState::update(float dt)
     }
 
     
-    if (gameVariables->isFinishedRace())
+    if (gameVariables->isFinishedRace())                    ///Finish Race here
     {
         if (gameVariables->finishTime == NULL)
-        {gameVariables->finishTime = time.getCurrentTime();soundEngine->FadeOutMusic(4000);renderingEngine->startFadeOut();}
+        {gameVariables->finishTime = time.getCurrentTime();soundEngine->FadeOutMusic(4000);soundEngine->fadeOutAllSound(4000);renderingEngine->startFadeOut();}
 
         const unsigned int FINISH_DELAY = 5000;
 
         if (time.getDeltaTime(gameVariables->finishTime) > FINISH_DELAY)
-        {changeState(RESULT);}
+        {
+            soundEngine->fadeOutAllSound(10); //make sure they really are off
+
+            gameVariables->rankings.clear();
+            for (unsigned e=0;e<rankings->size();e++)
+            {
+                gameVariables->rankings.push_back(rankings->at(e)->rankingName);
+            }
+
+            changeState(RESULT);
+        }
     }
     //
 
@@ -264,9 +361,32 @@ void PlayState::update(float dt)
 
 
     //soundengine p1
-    float vol = entities.cars.at(0)->getDriveWheels()->at(0)->getAxleSpeed() * 0.75f;
+    float AxleSpeed = entities.cars.at(0)->getDriveWheels()->at(0)->getAxleSpeed();
+    float vol = AxleSpeed * 0.75f;
     if (vol > 128){vol=128.0f;}
     soundEngine->engineVol(1, vol);
+    if (AxleSpeed < 10)
+        soundEngine->playSound(0,13);
+    else if (AxleSpeed < 40)
+        soundEngine->playSound(0,14);
+    else if (AxleSpeed < 80)
+        soundEngine->playSound(0,15);
+    else if (AxleSpeed < 120)
+        soundEngine->playSound(0,16);
+    else if (AxleSpeed < 160)
+        soundEngine->playSound(0,17);
+    else if (AxleSpeed < 200)
+        soundEngine->playSound(0,18);
+    else if (AxleSpeed < 240)
+        soundEngine->playSound(0,19);
+    else if (AxleSpeed < 280)
+        soundEngine->playSound(0,20);
+    else if (AxleSpeed < 320)
+        soundEngine->playSound(0,21);
+    else if (AxleSpeed < 360)
+        soundEngine->playSound(0,22);
+    else
+        soundEngine->playSound(0,23);
 
     entities.cars[0]->aCam->updateCamera(1.0f);
     if (entities.cars.size() > 1)
@@ -471,6 +591,12 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 if (renderingEngine->aConsole.consoleString == "on g")
                 {
                     physicsEngine->getScene()->setGravity(NxVec3(0,-9.81f,0));
+                }
+
+                if (renderingEngine->aConsole.consoleString == "cheat char")
+                {
+                    CHEAT_InfPowUp = true;
+                    renderingEngine->aConsole.propragateMsg("Char Cheat ENABLED!");
                 }
 
                 //Num Commands
@@ -813,6 +939,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 entities.DynamicObjs.push_back(e);
 				e->parent = car;
                 entities.DynamicObjs.push_back(e);
+
+                if (CHEAT_InfPowUp)
+                {car->givePickup(Entity::MISSILE);}
             }
             else if(type == Entity::SHIELD)
             {
@@ -830,6 +959,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
                 e->rc.push_back(new RenderableComponent(10,31));     //BarrierScreen
                 entities.DynamicObjs.push_back(e);
+
+                if (CHEAT_InfPowUp)
+                {car->givePickup(Entity::BARRIER);}
             }
         }
         
@@ -890,6 +1022,10 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             car->aCam->resetCamera();
 			*/
 	    }
+        if (state->start)
+        {
+            logWayPoint(0);
+        }
     }
 }
 

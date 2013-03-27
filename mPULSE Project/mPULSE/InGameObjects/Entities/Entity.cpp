@@ -35,6 +35,8 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     shuntPower = 50;
     shuntReloadTime = 600;
 
+    rankingName = "not set";
+
     timeToLive = tmpTimeToLive;
     timeCreated = clock.getCurrentTime();
 
