@@ -495,7 +495,7 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
 
 
   	triMeshShapeDesc.meshData = physicsSDK->createTriangleMesh(readBuffer);
-    //triMeshShapeDesc.meshFlags = NxMeshFlags::NX_MF_FLIPNORMALS;        //seems to help??
+    //triMeshShapeDesc.meshFlags = NX_MF_FLIPNORMALS;        //seems to help??
 	//
 	// Please note about the created Triangle Mesh, user needs to release it when no one uses it to save memory. It can be detected
 	// by API "meshData->getReferenceCount() == 0". And, the release API is "gPhysicsSDK->releaseTriangleMesh(*meshData);"
@@ -526,7 +526,7 @@ NxActor* PhysicsEngine::createTriMesh(float x, float y, float z, ObjModel aModel
 NxActor* PhysicsEngine::createCarChassis() 
 {
 	//Set the box starting height
-	NxVec3 position(0.0, 3.5, 0.0);
+	NxVec3 position(0.0, 53.5, 0.0);
 
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
