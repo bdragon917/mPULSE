@@ -61,7 +61,7 @@ ProfileState::ProfileState()
     curSelected = 1;
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
-    WAIT_TIME = 50;
+    WAIT_TIME = 100;
     
 
     //MAX_SELECTED = Gamevariables.profileNum + 2;
@@ -411,6 +411,7 @@ ProfileState* ProfileState::getInstance()
     static ProfileState ProfileState;
     ProfileState.changeState(PROFILE);
 
+    ProfileState.prevTime = ProfileState.clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
     return &ProfileState;
 }

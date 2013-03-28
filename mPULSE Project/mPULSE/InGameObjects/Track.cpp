@@ -6,6 +6,16 @@ Track::Track(std::string infoFilename, Entity* trackEntity)
     entity = trackEntity;
 }
 
+Track::Track(std::string trackInfo)   //remember to set Entity afterwards?? this uses the new file format
+{
+    loadTrackInfo2(trackInfo);
+}
+
+void Track::setEntity(Entity* trackEntity)
+{
+    entity = trackEntity;
+}
+
 std::string Track::removeFilePath(std::string line)
 {
     unsigned int i = 0;
@@ -183,6 +193,209 @@ void Track::loadTrackInfo(std::string filename)
     finalizeWaypoints();        
 }
 
+void Track::parseHead(std::vector<std::string>* newData)
+{
+        if(newData->size() > 1)
+    {
+        if(newData->at(0).compare("MusicIndex:") == 0)
+            infoz.music = atoi(newData->at(1).c_str());
+        else if(newData->at(0).compare("SkyBox:") == 0)
+        {
+            if (newData->size() > 6)
+            {
+                infoz.sky.push_back(atoi(newData->at(1).c_str()));
+                infoz.sky.push_back(atoi(newData->at(2).c_str()));
+                infoz.sky.push_back(atoi(newData->at(3).c_str()));
+                infoz.sky.push_back(atoi(newData->at(4).c_str()));
+                infoz.sky.push_back(atoi(newData->at(5).c_str()));
+                infoz.sky.push_back(atoi(newData->at(6).c_str()));
+            }
+            else
+            {
+                printf("Track:parseHead: Invalid number of skybox index\n");
+            }
+        }
+        else if(newData->at(0).compare("PhysXModel:") == 0)
+            infoz.physics = atoi(newData->at(1).c_str());
+        else if(newData->at(0).compare("RC:") == 0)
+            infoz.pairs.push_back( new RenderableComponent(atoi(newData->at(1).c_str()), atoi(newData->at(2).c_str())) );
+
+    }
+}
+
+void Track::loadTrackInfo2(std::string filename)
+{
+	/*
+	format:
+	<music index>
+	<empty line>
+	<skybox texture indices>
+	<forward slash>
+	<physics model number>
+	<@>
+	<model texture pairs> <each pair separated by star>
+	<percent sign>
+	<waypoint and powerup spawn point data>
+	*/
+	       
+    char charArray[1024];
+    std::string tmpLine = "";
+    std::ifstream file;
+    trackName = removeFilePath(filename);
+	file.open(filename);	
+
+	int state = 0;
+	bool togPair = false;
+	//RenderableComponent* pair;
+    int seenModel = 0;
+	int pairs = 0;
+
+    if(file.is_open())
+    {
+
+		bool headerSeen = false;
+
+	    while(!file.eof())
+	    {
+			if (!headerSeen)
+			{
+                //read a line
+                file.getline(charArray,1024);
+				tmpLine = charArray;
+
+                if (tmpLine.size() <= 0)    //ingore if empty
+                    continue;
+                else if (tmpLine.at(0) == '%')
+                {
+                    headerSeen = true;
+                }
+                else
+                {
+                    std::vector<std::string>* substrings;
+                    GameVariables* gameVariables = GameVariables::getInstance();
+
+                    substrings = gameVariables->split(tmpLine,'|');
+                    parseHead(substrings);
+                }
+			}
+			else
+			{
+				//Read a line
+				file.getline(charArray,1024);
+				tmpLine = charArray;	    		
+
+				//*************PARSE OUT THE HEADING************//
+				std::string heading = "";
+				unsigned int i = 0;
+				unsigned int j = 0;
+				int startFlag = 0;
+				char ch = '\0';
+				bool parsing = true;
+				bool headingSeen = false;
+
+				//Check if the line is empty or a comment
+				if(tmpLine.size() <= 0 || tmpLine.at(0) == '#')
+					continue;
+
+				//Parse out the heading from the current line.
+				while((!headingSeen && parsing) && i < tmpLine.size())
+				{
+					ch = tmpLine.at(i);
+					if(ch == ' ' || ch == '\t')
+					{
+						headingSeen = true;                
+						heading = tmpLine.substr(0,i);
+						startFlag = i;
+					}
+
+					if(ch == '\n' || ch == '\0')
+						parsing = false;
+
+					i++;
+				}
+				Waypoint::TYPE type = stringToType(heading);
+                
+				//********PARSE OUT THE DATA********//  
+				if (type != Waypoint::INVALID_TYPE)
+				{
+    
+					Waypoint* wp = new Waypoint();
+					wp->type = type;
+
+					NxVec3 col0 = NxVec3(0,0,0);
+					NxVec3 col1 = NxVec3(0,0,0);
+					NxVec3 col2 = NxVec3(0,0,0);
+
+					bool startSeen = true;
+					startFlag = i;
+					
+					while((parsing && i < tmpLine.size()) && j < 14)
+					{
+						ch = tmpLine.at(i);
+						if((ch == ' ' || ch == '\t') && startSeen)
+						{
+							if (j == 0)
+								wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 1)
+								wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 2)
+								wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 3)
+								col0.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 4)
+								col0.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 5)
+								col0.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 6)
+								col1.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 7)
+								col1.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 8)
+								col1.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 9)
+								col2.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 10)
+								col2.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 11)
+								col2.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 12)
+								wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+							else if(j == 13)
+								wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+
+							j++;
+							startSeen = false;
+						}
+						else if ((ch != ' ' && ch != '\t') && !startSeen)
+						{
+							startSeen = true;
+							startFlag = i;
+						}
+
+						i++;
+					}
+					if(startSeen)
+					{
+						if(j == 13)
+							wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+					}
+
+					wp->ori.setColumn(0, col0);
+					wp->ori.setColumn(1, col1);
+					wp->ori.setColumn(2, col2);
+
+					addWaypoint(wp);
+				}
+			}
+        }
+	    file.close();              
+    }
+    else
+    {printf("Track checkpoints didn't open, can't find maybe??\n"); }
+    finalizeWaypoints();  
+ 
+}
+
 
 void Track::loadTrackAdditions(std::string filename)
 {
@@ -207,7 +420,8 @@ void Track::loadTrackAdditions(std::string filename)
 
 	int state = 0;
 	bool togPair = false;
-	rc pair;
+	//RenderableComponent* pair;
+    int seenModel = 0;
 	int pairs = 0;
 
     if(file.is_open())
@@ -271,13 +485,15 @@ void Track::loadTrackAdditions(std::string filename)
 					{
 						if (togPair == true)
 						{
-							pair.m = atoi(tmpLine.c_str());
+							seenModel = atoi(tmpLine.c_str());
 							togPair = false;
 						}
 						else
 						{
-							pair.t = atoi(tmpLine.c_str());
+                            int textureID = atoi(tmpLine.c_str());
+							//pair->textureID = atoi(tmpLine.c_str());
 							pairs++;
+                            RenderableComponent* pair = new RenderableComponent(seenModel, textureID);
 							infoz.pairs.push_back(pair);
 						}
 					}

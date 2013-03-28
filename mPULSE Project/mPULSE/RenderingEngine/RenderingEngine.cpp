@@ -51,6 +51,7 @@ GLuint RenderingEngine::generateDisplayList(std::string modelName,int x,int y,in
     return index;
 }
 
+
 GLuint RenderingEngine::generateDisplayList(ObjModel* model,int x,int y,int z,int scale)
 {
     GLuint index = -1;
@@ -3051,20 +3052,23 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
     const float half_width = SCREEN_WIDTH / 2.0f;
 
     const float button_width = SCREEN_WIDTH / 6.0f;     //button width is /3, but also /2 as drawSquare uses half
-    float const textWidth = button_width * 1.6f;
+    float const textWidth = button_width * 1.4f;
 
     const float dec_height = SCREEN_HEIGHT / 40.0f;
-    const float butWidthOffset = half_width + (SCREEN_WIDTH / 96.0f);  //128 64
+    //const float butWidthOffset = half_width + (SCREEN_WIDTH / 96.0f);  //128 64
+    const float butWidthOffset = half_width + (half_width / 2.0f);  //128 64
     const float butHeightOffset = (SCREEN_HEIGHT / 4.0f);
 
-    const float titleHeightOffset = (SCREEN_HEIGHT / 8.0f);
+    const float titleHeightOffset = (SCREEN_HEIGHT / 32.0f);
     //const float doneHeightOffset = (3.0f * SCREEN_HEIGHT / 4.0f);// + (SCREEN_HEIGHT / 32.0f) ;
     const float doneHeightOffset = (13.0f * SCREEN_HEIGHT / 16.0f);// + (SCREEN_HEIGHT / 32.0f) ;
 
+    /*
     //draw transparent blackground
         glColor4f(0.0f,0.0f,0.0f, 0.5f);
         drawSquare(half_width, half_height, 0.0f, half_width, half_height);
-        glClear(GL_DEPTH_BUFFER_BIT);
+    */    
+    glClear(GL_DEPTH_BUFFER_BIT);
 
     //draw profile info
 
@@ -3072,30 +3076,70 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
         glColor4f(0.0f,0.0f,0.0f, 1.0f);
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
+
+
+                    //Draw the rotating Track
+        glPushMatrix();
+        glClear(GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
+        setUpPerpView();
+       gluLookAt(-20, 10, 0,  // Eye/camera position
+	        0 ,5, 0,		// Look-at position 
+	        0.0,1.0,0.0); 		// "Up" vector
+
+       glRotatef(gameVariables->trackSelectRotVar,0,1,0);
+       glScalef(0.01f,0.01f,0.01f);
+       gameVariables->trackSelectRotVar += 0.2f;
+
+       glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
+       drawModel(modelManager.getModel(gameVariables->selectedTrack),0,0,0,1.0f);
+       glClear(GL_DEPTH_BUFFER_BIT); 
+       glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix();
+
+        //setUpOrthoView();
+        //glLoadIdentity();
+
+
+        aShader->off();
+
+        aHUDShader->on();
+        
         //Title
-        string title = "Hi! This is Stage Select Mode! curTrack=" + FloatToString(gameVariables->selectedTrack);
-        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
+        string title = "Stage Select";
+        float const titleWidth = SCREEN_HEIGHT/30.0f * title.size();
+
+        renderText((SCREEN_WIDTH / 2) - (titleWidth / 2), titleHeightOffset, SCREEN_HEIGHT/15.0f, SCREEN_HEIGHT/30.0f, 35, title, true);
+        //renderText((half_width + (SCREEN_WIDTH / 96.0f))-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (titleWidth)/title.size(), 36, title, true);
         //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
 
         int numberoftracks = gameVariables->loadedTracks->getNumberofTracks();
 
         float x_TrackColumn = (butWidthOffset);
 
-        float but_offset = titleHeightOffset + ((butHeightOffset)* 0.25f);        //starting offset
-
+        float but_offset = titleHeightOffset * 6;        //starting offset
         for (int items=0;items<numberoftracks; items++)
         {
             string drawText = gameVariables->loadedTracks->getTrackFilename(items);
+
+            unsigned found = drawText.find_last_of("/\\");
+            drawText = drawText.substr(found+1);
+
             if ((curSelected - 1) == items) //this is selected
-            {renderText(x_TrackColumn, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
+            //{renderText(x_TrackColumn, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
+            {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
             else
-            {renderText(x_TrackColumn, but_offset, dec_height*2.0f, (textWidth)/title.size(), 36, drawText, true);}
+            //{renderText(x_TrackColumn, but_offset, dec_height*2.0f, (textWidth)/title.size(), 36, drawText, true);}
+            {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 36, drawText, true);}
 
             but_offset += (butHeightOffset)/4.0f;
         }
    
 
-
+/*
         //Done Button
         if (curSelected == 0)
             glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
@@ -3104,7 +3148,22 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
 
             drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
 
-        aShader->off();
+  */      
+            
+            
+    
+            
+            
+            
+        aHUDShader->off();
+            
+       
+
+
+
+
+
+
 
     //reset to previous state
     glPopAttrib();
@@ -3114,6 +3173,8 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
     glPopMatrix();
 
      glEnable(GL_LIGHTING);
+
+
 
 
 
@@ -3141,6 +3202,10 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
             {
                 FadeCtrl=0.0f;fadeMode=0;return 1;
             }
+
+
+
+
 
 
             

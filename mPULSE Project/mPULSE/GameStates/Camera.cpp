@@ -112,6 +112,9 @@ void Camera::resetCamera()
 
 void Camera::updateCamera(float dt)
 {
+
+    ///printf("%f\n", dt);
+
     //int mode = 4;       //Testing different camera styles here, change to different values for different test code
     //mode is now a CLASS VARIABLE!!!! WOOOT!!!!!!!!! XDDDDDDDDD
 
@@ -388,20 +391,23 @@ void Camera::updateCamera(float dt)
         case 4:         //This fixes the slope issues
             {
 
+                float newTarDistance = targetDistance;
+
+                //newTarDistance *= (16.666667f/(dt*2.0f));//(dt/16.666667f);
 
 
                 //Set target camera location in local space
                 float disAbove = 5.0f;
-                NxVec3 tarCamLoc = NxVec3(-targetDistance,disAbove,0.0f);
+                NxVec3 tarCamLoc = NxVec3(-newTarDistance,disAbove,0.0f);
 
                 //NxVec3 tarCamSpd30 = NxVec3(-targetDistance,disAbove,0.0f);
                 //NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.75f,disAbove,0.0f);
                 //NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.60f,disAbove * 0.75f,0.0f);
-                NxVec3 tarCamSpd30 = NxVec3(-targetDistance * 0.30f,disAbove,0.0f);
-                NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.01f,disAbove * 0.90f,0.0f);
-                NxVec3 tarCamSpd70 = NxVec3(-targetDistance * 0.001f,disAbove * 0.80f,0.0f);
+                NxVec3 tarCamSpd30 = NxVec3(-newTarDistance * 0.30f,disAbove,0.0f);
+                NxVec3 tarCamSpd50 = NxVec3(-newTarDistance * 0.01f,disAbove * 0.90f,0.0f);
+                NxVec3 tarCamSpd70 = NxVec3(-newTarDistance * 0.001f,disAbove * 0.80f,0.0f);
 
-                NxVec3 tarCamSpdH = NxVec3(-targetDistance * 0.0001f,disAbove * 0.70f,0.0f);       //add random jitter
+                NxVec3 tarCamSpdH = NxVec3(-newTarDistance * 0.0001f,disAbove * 0.70f,0.0f);       //add random jitter
 
                 NxVec3 tarCamSpdInsane = NxVec3(-30.0f,disAbove * 0.80f,0.0f);
                 //NxVec3 tarCamSpdH = NxVec3(-targetDistance * 0.10f,disAbove * 0.5f,0.0f);       //add random jitter
@@ -426,6 +432,7 @@ void Camera::updateCamera(float dt)
                     tarCamLoc = tarCamSpdH;
                 }
                 
+                tarCamLoc.x = tarCamLoc.x * (16.666667f/(dt * 1000000000));
 
                 float rate = 0.1f;  //rate of camera view change
                 float slowrate = 0.1f;  //rate of camera view change
@@ -472,10 +479,12 @@ void Camera::updateCamera(float dt)
                 tarCamLoc = targetActor->getGlobalPose() * tarCamLoc;
                 tarCamLookAt = targetActor->getGlobalPose() * tarCamLookAt;
 
+
+                //tarCamLoc = tarCamLoc * (dt/16.666667f);
                 //NxVec3 debugCarLoc = targetActor->getGlobalPose().t;
 
                 //calculate a vector to tarCamLoc
-                NxVec3 vecCamLoc = tarCamLoc - curCamLoc;
+                NxVec3 vecCamLoc = (tarCamLoc - curCamLoc);
 
 
                 //Spring for main camera
@@ -491,6 +500,8 @@ void Camera::updateCamera(float dt)
                 //float damping = 30.0f;
                 NxVec3 stretch = (curCamLoc - tarCamLoc);//position - desiredPosition;
                 NxVec3 force = (-stiffness * stretch) - (damping * vecCamLoc);
+
+                //force = force * (dt / 16.666667f);     // NO
 
                 //f=ma
                 //apply force to vecCamLoc

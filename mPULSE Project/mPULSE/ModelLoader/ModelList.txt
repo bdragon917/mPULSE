@@ -12,3 +12,6 @@ ModelLoader\\Models\\BarrierScreen.obj
 ModelLoader\\Models\\Claymore.obj
 ModelLoader\\Models\\Nogard.obj
 ModelLoader\\Models\\Race1_Spiral.obj
+ModelLoader\\Models\\Boxer.obj
+ModelLoader\\Models\\mothershipHullMini.obj
+ModelLoader\\Models\\Race1_Spiral.obj

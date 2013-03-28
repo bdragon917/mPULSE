@@ -2,9 +2,12 @@
 #include <Util/Profile.h>
 #include <vector>
 #include <InGameObjects\Tracks.h>
+#include <InGameObjects\Track.h>
 #include <InGameObjects\Entities\RenderableComponent.h>
 #include <iostream>
 #include <fstream>
+
+class Track;
 
 class GameVariables
 {
@@ -63,9 +66,14 @@ public:
 
 
     Tracks* loadedTracks;
-    int selectedTrack;      //int points to loadedTracks
+    int selectedTrack;      //int points to PhysX Model
+    Track* theSelectedTrack;
+    float trackSelectRotVar;
+    std::vector<RenderableComponent*> rcTrack;
+    int minimapTextureIndex;
     int physXTrackModel;
-    RenderableComponent* trackRC;
+    int musicIndex;
+    std::vector<RenderableComponent*> trackRC;
 
 
     std::vector<std::string> rankings;      //used to display the ranking at results

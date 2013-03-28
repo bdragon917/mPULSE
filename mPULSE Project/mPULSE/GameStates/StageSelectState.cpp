@@ -9,16 +9,18 @@ StageSelectState::StageSelectState()
     soundEngine = SoundEngine::getInstance();
  
     int curSelectedX = 0;
-    int curSelectedY = 0;
+    int curSelectedY = 1;
 
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
     WAIT_TIME = 50;
     MAX_X_SELECTED = 4; 
-    MAX_Y_SELECTED = gameVariables->loadedTracks->getNumberofTracks() + 1; 
+    MAX_Y_SELECTED = gameVariables->loadedTracks->getNumberofTracks(); 
     buttonPressed = false;
     lockControls = false;
     endState = false;
+
+    loadTrack();
 
 }
 
@@ -116,13 +118,76 @@ void StageSelectState::handleXboxEvents(int player,XboxController* state)
     }
 }
 
+void StageSelectState::loadTrack()
+{
+    std::string trackFileName;
+
+    gameVariables->trackSelectRotVar = 0.0f;
+    if ((curSelectedY-1) < (gameVariables->loadedTracks->getNumberofTracks()) && ((curSelectedY-1) > -1))
+    {
+        trackFileName = gameVariables->loadedTracks->getTrackFilename(curSelectedY-1);
+
+        Track* tempTrack = new Track(trackFileName);
+
+        //tempTrack.infoz.music;
+    
+
+        gameVariables->selectedTrack = tempTrack->infoz.physics;     //Set index to physX model
+        //skyboxIndex[0] = tempTrack.infoz.sky[0];                  //ToDO change skybox with this code
+        gameVariables->musicIndex = tempTrack->infoz.music;                 //TODO
+        //gameVariables->minimapTextureIndex;
+
+        //tempTrack.infoz.pairs
+
+        //Clear/initialize the gameVariables
+        for each (RenderableComponent* tobeDeletedRC in gameVariables->trackRC)
+        {
+            delete tobeDeletedRC;
+        }
+
+        gameVariables->trackRC.clear();
+
+        //Populate
+        for each (RenderableComponent* rc in tempTrack->infoz.pairs)
+        {
+            RenderableComponent* copyRC = new RenderableComponent(rc->modelID, rc->textureID);
+            gameVariables->trackRC.push_back(copyRC);
+        }
+
+        delete gameVariables->theSelectedTrack;
+        gameVariables->theSelectedTrack = tempTrack;
+
+    }
+    else
+    {
+        printf("StageSelectState: Out of Bounds\n");
+        
+        gameVariables->selectedTrack = 2;   //default track
+        gameVariables->musicIndex = 2;               //TODO
+        for each (RenderableComponent* tobeDeletedRC in gameVariables->trackRC)
+        {delete tobeDeletedRC;}
+        gameVariables->trackRC.clear();
+
+        gameVariables->trackRC.push_back(new RenderableComponent(2, 7));
+        
+        delete gameVariables->theSelectedTrack;
+        gameVariables->theSelectedTrack = new Track(".\\InGameObjects\\Race1.txt");
+        //Use default track
+    }
+
+    
+
+
+}
+
 
 void StageSelectState::keySelectLeft()
 {
      soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
      curSelectedY = curSelectedY - 1;
-     if (curSelectedY < 0)
+     if (curSelectedY < 1)          //not zero to not allow the done button
      {curSelectedY = gameVariables->loadedTracks->getNumberofTracks();}
+     loadTrack();
 }
 
 void StageSelectState::keySelectRight()
@@ -130,16 +195,18 @@ void StageSelectState::keySelectRight()
      soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
      curSelectedY = curSelectedY + 1;
      if (curSelectedY > gameVariables->loadedTracks->getNumberofTracks())
-     {curSelectedY = 0;}
+     {curSelectedY = 1;}            //not zero to not allow the done button
+     loadTrack();
 }
 
 void StageSelectState::keySelectTarget()
 {
     if (curSelectedY == 0)
     {
+        curSelectedY = 1;       //hack, THIS value should not be 0 anymore
         soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
-        renderingEngine->startFadeOut();
-        lockControls = true;
+        //renderingEngine->startFadeOut();
+        //lockControls = true;
     }
     else
     {

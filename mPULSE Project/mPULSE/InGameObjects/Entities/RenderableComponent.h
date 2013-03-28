@@ -9,6 +9,8 @@ public:
     //RenderableComponent();        usen't use this
     RenderableComponent(int m, int t);
 
+    ~RenderableComponent();
+
 private:
 
 };

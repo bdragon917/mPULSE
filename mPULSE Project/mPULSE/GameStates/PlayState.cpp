@@ -142,9 +142,38 @@ void PlayState::resetAll()
     
     Entity* aTrack;
     ObjModel* aModel;
-    RenderableComponent* rc;
     
     
+    int st = gameVariables->theSelectedTrack->infoz.physics;
+    if (st == NULL)
+    {printf("PlayState:!!!!!/n");}
+
+    aTrack = new Entity();
+    aModel = renderingEngine->getModelManger().getModel(gameVariables->theSelectedTrack->infoz.physics);
+
+            if(aModel != NULL)
+            {
+                //aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
+                aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
+                entities.Track.push_back(aTrack);
+
+                for each (RenderableComponent* rc in gameVariables->theSelectedTrack->infoz.pairs)
+                {
+                    RenderableComponent* newRC = new RenderableComponent(rc->modelID, rc->textureID);
+                    aTrack->rc.push_back(newRC);
+                }
+                //aTrack->rc = gameVariables->rcTrack;
+                
+                printf("PlayState: Num of RC:%i\n", aTrack->rc.size());
+
+
+                aTrack->setDisplayListIndex(renderingEngine->generateDisplayList(aModel,0,0,0,1));     
+            }   
+            track = gameVariables->theSelectedTrack;
+            track->setEntity(aTrack);
+	        physicsEngine->createWaypoints(track->getWaypoints());
+
+    /*
     switch (gameVariables->selectedTrack)
     {
     case 1:
@@ -154,7 +183,7 @@ void PlayState::resetAll()
 
             if(aModel != NULL)
             {
-                aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
+                aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
                 entities.Track.push_back(aTrack);
                 aTrack->rc.push_back(rc);        
                 aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1_Spiral.obj",0,0,0,1));     
@@ -170,7 +199,7 @@ void PlayState::resetAll()
 
             if(aModel != NULL)
             {
-                aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
+                aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
                 entities.Track.push_back(aTrack);
                 aTrack->rc.push_back(rc);        
                 aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));     
@@ -180,6 +209,7 @@ void PlayState::resetAll()
         break;
 
     }
+    */
 
     //This is our old code to load in tracks
     /*
@@ -249,10 +279,13 @@ void PlayState::resetAll()
     */
     renderingEngine->setEntities(&entities);
     InitializeConsoleCommands();    //Initalize Commands
+
+    track;
 }
 
 void PlayState::update(float dt)
-{    
+{   
+    track;
     //renderingEngine->drawText(100, -100, renderingEngine->FloatToString(
     //printf("x: %f y: %f z: %f",entities.cars.at(0)->getActor()->getGlobalPosition().x)+" "+renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPosition().y)+" "+renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPosition().z);
     //Handle Events
@@ -388,9 +421,9 @@ void PlayState::update(float dt)
     else
         soundEngine->playSound(0,23);
 
-    entities.cars[0]->aCam->updateCamera(1.0f);
+    entities.cars[0]->aCam->updateCamera(dt);
     if (entities.cars.size() > 1)
-        entities.cars[1]->aCam->updateCamera(1.0f);
+        entities.cars[1]->aCam->updateCamera(dt);
 
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {

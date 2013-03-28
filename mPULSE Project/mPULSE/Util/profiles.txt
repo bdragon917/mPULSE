@@ -18,8 +18,8 @@ steeringBehavior|0
 #
 #
 driveName|Ben
-carModel|1
-carTexture|3
+carModel|14
+carTexture|0
 Obs|0
 isAI|0
 shuntingLevel|0
@@ -36,8 +36,8 @@ steeringBehavior|0
 #
 #
 driveName|Nigel
-carModel|1
-carTexture|3
+carModel|15
+carTexture|27
 Obs|0
 isAI|0
 shuntingLevel|0

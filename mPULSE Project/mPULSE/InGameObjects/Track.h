@@ -7,29 +7,36 @@
 #include <NxActor.h>
 
 #include <InGameObjects/Entities/Entity.h>
+#include <InGameObjects/Entities/RenderableComponent.h>
+#include <GameStates\GameVariables.h>
 #include <AI/Waypoint.h>
 
 class Track
 {
-	struct rc
-	{
-		int m;
-		int t;
-	};
+	//struct rc
+	//{
+	//	int m;
+	//	int t;
+	//};
 
 	struct additional
 	{
 		int music;
 		std::vector<int> sky;
 		int physics;
-		std::vector<rc> pairs;
+		std::vector<RenderableComponent*> pairs;
 	};
 
 public:   
     Track(std::string trackInfo, Entity* trackEntity);
+    Track(std::string trackInfo);   //remember to set Entity afterwards?? this uses the new file format
+
+    void setEntity(Entity* trackEntity);
 
     void loadTrackInfo(std::string fileName);
+    void Track::loadTrackInfo2(std::string filename);
 	void loadTrackAdditions(std::string filename);
+    void Track::parseHead(std::vector<std::string>* newData);
     //void addWaypoint(float xPos, float yPos, float zPos,float xOri, float yOri,float zOri,int tmpId,int next,Waypoint::TYPE type);
     void addWaypoint(Waypoint* wp);  
     std::vector<Waypoint*>* getWaypoints();  

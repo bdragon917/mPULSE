@@ -45,6 +45,7 @@ private:
     void keySelectDown();
     void keySelectTarget();
 
+    void loadTrack();
 
     void backPressed();
 
