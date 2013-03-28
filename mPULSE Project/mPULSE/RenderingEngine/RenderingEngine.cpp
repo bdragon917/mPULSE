@@ -807,13 +807,16 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         glEnd();
 
         //Draw the map
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
-        drawSquareUVRev(0.5f,0.45f,0,0.5f,0.5f);
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[20]);
-
 
         float x = 0;
         float z = 0;
+		float xOffset = 0.9;
+		float yOffset = 0.60;
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
+        drawSquareUVRev(xOffset,yOffset,0,0.5f,0.5f);
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[20]);
+
         glBindTexture(GL_TEXTURE_2D, textureid_P1[14]);
         for(unsigned i=0;i<entities->AIcars.size();i++)
         {
@@ -828,7 +831,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             x = entities->cars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
             z = entities->cars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
 
-            drawSquare(0.5f+x,0.5f-z,0,0.015f,0.015f);
+            drawSquare(xOffset+x,yOffset+0.05-z,0,0.015f,0.015f);
         }
     }
 

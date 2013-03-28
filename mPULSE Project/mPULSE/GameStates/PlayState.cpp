@@ -28,7 +28,7 @@ void PlayState::resetAll()
 
     changeState(PLAY); 
     numPlayers = gameVariables->getPlayerNum();
-    int num_AI = 6;
+    int num_AI = 0;
 
     rankings = new std::vector<Entity*>;
     for(int i=0;i<numPlayers;i++)
@@ -394,6 +394,7 @@ void PlayState::update(float dt)
 
     for (unsigned c = 0; c < entities.cars.size(); ++c)
     {
+		//Checking if any of the player cars have any sweep collisions.
         Entity* car = entities.cars[c];
         entities.cars[c]->aAI->update(entities.cars, entities.AIcars);
 		NxSweepQueryHit* sweepResult = car->linearSweep(dt);
@@ -515,10 +516,11 @@ void PlayState::update(float dt)
 
 			if((dotResult * car->getDotResult()) < 0)
 			{
+				//Dealing with player cars going through walls
 				NxVec3 oldVelUnit = -car->getOldVelocity();
 				oldVelUnit.normalize();
 				normal.normalize();
-				double angle = oldVelUnit.dot(normal)*90.0f;
+				double angle = acos(oldVelUnit.dot(normal));
 
 				double scale = car->getOldVelocity().magnitude() * cos(angle);
 				NxVec3 scaledNormal = scale * normal;
@@ -527,11 +529,25 @@ void PlayState::update(float dt)
 				//This definitely need some tweaking.  When I set it to bounce back at the appropriate angle it didn't work
 				//too well either.  We'll have to play around with it a bit.  Sometimes falls through the ground when you
 				//run into a wall really fast.
-				car->getActor()->setLinearVelocity(NxVec3(0,0,0)); 
+				
+				car->getActor()->setLinearVelocity(newVelVec*0.3); 
 				newVelVec.normalize();
 				NxVec3 newPos = car->getImpactPoint() + (newVelVec * 5.0f);
 				car->getActor()->setGlobalPosition(newPos);
 				
+				/*
+				CustomData* cd = (CustomData*)car->getActor()->userData;
+
+				NxVec3 respawnPt = cd->wp->pos;
+				car->getActor()->setGlobalPosition(respawnPt);
+
+				NxMat33 orient(cd->wp->ori);
+
+				car->getActor()->setGlobalOrientation(orient);
+				car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+				car->aCam->resetCamera();
+				*/
+
 				//Pseudo-code of how to do this:
 				// find angle by dot product normal with car->getOldVelocity()
 				// scale = car->getOldVelocity().magnitude() * cos(the angle between )
@@ -979,7 +995,6 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             car->shuntRight();
         if(state->ls)
         {
-            car->shuntLeft();
 			CustomData* cd = (CustomData*)car->getActor()->userData;
 
             NxVec3 respawnPt = cd->wp->pos;
