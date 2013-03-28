@@ -106,7 +106,7 @@ public:
 	void setDotResult(NxReal result);
     int rank;
 	Entity* parent;
-
+    	unsigned obs;
     std::string rankingName;
 
 private:
@@ -128,7 +128,6 @@ private:
     int shieldActivatedTime;     
     int health;
 
-	unsigned obs;
 	unsigned highSpeedObsTime;
 	
     

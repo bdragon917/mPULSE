@@ -756,9 +756,10 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         int tens = (curSpd-(hundreds*100)) /10;
         int ones = (curSpd-((hundreds*100)+(tens*10)));
         int tenth = ((carActor->getLinearVelocity().magnitude()*10)-((hundreds*1000)+(tens*100)+(ones*10)));
-        drawText(50,-75, "Place: " + FloatToString(carEntity->rank));
-        drawText(50, -100, "Obs: " + FloatToString(carEntity->raceWinnings()));
-        drawText(850,-600, "Spd: " + FloatToString(hundreds) + " " + FloatToString(tens) + " " + FloatToString(ones));
+        CustomData* cd = (CustomData*) carActor->userData;
+        //drawText(50,-75, "Place: " + FloatToString(carEntity->rank));
+        //drawText(50, -100, "Obs: " + FloatToString(carEntity->raceWinnings()));
+        //drawText(850,-600, "Spd: " + FloatToString(hundreds) + " " + FloatToString(tens) + " " + FloatToString(ones));
 
         //one
         //0.1f assumes there is ten characters
@@ -806,24 +807,23 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             glTexCoord2f(displaceHundred, 0.0f);glVertex2f(0.75f, -0.90);
         glEnd();
 
-        //Draw the map
-
-        float x = 0;
-        float z = 0;
-		float xOffset = 0.9;
-		float yOffset = 0.60;
-
+        //Draw the minimap
+        float xOffset = 0.9;
+        float yOffset = 0.65;
         glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
         drawSquareUVRev(xOffset,yOffset,0,0.5f,0.5f);
         glBindTexture(GL_TEXTURE_2D, textureid_P1[20]);
 
+
+        float x = 0;
+        float z = 0;
         glBindTexture(GL_TEXTURE_2D, textureid_P1[14]);
         for(unsigned i=0;i<entities->AIcars.size();i++)
         {
             x = entities->AIcars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
             z = entities->AIcars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
 
-            drawSquare(0.5f+x,0.5f-z,0,0.015f,0.015f);
+            drawSquare(xOffset+x,yOffset-z,0,0.015f,0.015f);
         }
         glBindTexture(GL_TEXTURE_2D, textureid_P1[47]);
         for(unsigned i=0;i<entities->cars.size();i++)
@@ -831,23 +831,21 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             x = entities->cars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
             z = entities->cars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
 
-            drawSquare(xOffset+x,yOffset+0.05-z,0,0.015f,0.015f);
+            drawSquare(xOffset+x,yOffset+0.05f-z,0,0.015f,0.015f);
         }
+
+        //Draw pickup
+        xOffset = -0.85;
+        yOffset = 0.85;
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[42]);
+        drawSquareUVRev(xOffset,yOffset,0,0.10f,0.10f);
+
+        //Draw text on screen        
+        renderText(-0.1,0.80,0.03,0.03,35,"Obs "+FloatToString(cd->entity->obs),false);
+        renderText(0.65,0.1,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/7",false);       
+        renderText(0.65,0.2,0.03,0.03,35,"Lap   "+FloatToString(cd->laps)+"/2",false);
     }
 
-    //Draw the map
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
-    int offset = 50;
-    glBegin(GL_QUADS);
-        glColor3f(1.0f, 1.0f, 0.0);
-        glTexCoord2f(0.0f, 0.0f);   glVertex2f(50.0f, -100.0f);
-        glTexCoord2f(1.0f, 0.0f);   glVertex2f(50.0f+offset, -100.0f);
-        glTexCoord2f(1.0f, 1.0f);   glVertex2f(50.0f+offset, -100.0f+offset);
-        glTexCoord2f(0.0f, 1.0f);   glVertex2f(50.0f, -100.0f+offset);
-    glEnd();
-
-
-//////
     glPopAttrib();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -2031,8 +2029,8 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
         //HUD info
         //drawText(850,-700, FloatToString(entities->cars[carIndex]->getActor()->getLinearVelocity().magnitude()));
-        drawText(SCREEN_WIDTH-150,-50, FloatToString(cd->laps) + " / 2 Laps");
-        drawText(50,-700, "Waypoint: " + FloatToString(cd->wp->id));
+        //drawText(SCREEN_WIDTH-150,-50, FloatToString(cd->laps) + " / 2 Laps");
+        //drawText(50,-700, "Waypoint: " + FloatToString(cd->wp->id));
         
 
         //Ya...this should bwe put in a drawHUD element function later....
@@ -2081,7 +2079,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
   //      glVertex3f(0.0f,0.5f,0.0f);
   //      glVertex3f(0.5f,0.0f,0.0f);
    // glEnd();
-
+        /*
         switch(cd->pickupType)
         {
         case 0: //missile
@@ -2103,7 +2101,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
             drawText(50,-655, "BATTERY CHARGED");
         else
             drawText(50,-655, "BATTERY EMPTY");
-
+        */
 		//add obs for high speed.
 		targetEntities[carIndex]->highSpeedCash();
 

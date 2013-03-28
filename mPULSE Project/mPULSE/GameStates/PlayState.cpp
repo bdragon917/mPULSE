@@ -494,7 +494,7 @@ void PlayState::update(float dt)
     NxVec3 result = hit.worldImpact - ray.orig;
     //*/
     //Display FPS
-    renderingEngine->drawText(50,-50,"FPS: "+renderingEngine->FloatToString(1000.0f/dt));
+    renderingEngine->drawText(30,-90,"FPS: "+renderingEngine->FloatToString(1000.0f/dt));
     //physicsEngine->step(dt/1000.0f);
     //physicsEngine->step(0.33f);
     //physicsEngine->step(1.0f/60.0f);
