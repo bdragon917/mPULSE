@@ -102,7 +102,10 @@ int GameVariables::addPlayerTwo()
 
 int GameVariables::setPlayers(Profile* aPlayer, int index)
 {
-    players.at(index) = aPlayer;    //possibly save the old profile???
+    //if (players.size() > index + 1)
+        players.at(index) = aPlayer;    //possibly save the old profile???
+   // else
+    //{MessageBox(NULL, "GameVariables: ERROR: Players <array> isn't big enough, cannot set.", NULL, NULL);}
     return 0;
 }
 

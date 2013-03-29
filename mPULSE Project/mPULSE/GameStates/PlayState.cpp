@@ -980,151 +980,153 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
     //logReplay(player, state, 0);      Used to log replay!
 
     //if (state->back)
-
-
-    int carCount = cars.size();
-    if (player < carCount)
+    if(raceStarted)
     {
-        if((player == 0) && (isHuman))
+
+        int carCount = cars.size();
+        if (player < carCount)
         {
-            if (state->rs && !rbPressed)
+            if((player == 0) && (isHuman))
             {
+                if (state->rs && !rbPressed)
+                {
 
-                logWayPoint(0);
-                rbPressed = true;
-                printf("Point logged pressed\n");
+                    logWayPoint(0);
+                    rbPressed = true;
+                    printf("Point logged pressed\n");
+                }
+
+                else if (!state->rs)
+                    rbPressed = false;  
+
+                if (state->back)
+                {changeState(MAIN_MENU); }
             }
-
-            else if (!state->rs)
-                rbPressed = false;  
-
-            if (state->back)
-            {changeState(MAIN_MENU); }
-        }
         
 
-        //UserCamControl  
-        Entity* car = cars[player];
+            //UserCamControl  
+            Entity* car = cars[player];
         
-        car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
+            car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
 
-        NxVec3 a = car->getActor()->getLinearVelocity();
-        //printf("x: %f y: %f z: %f \n",a.x,a.y,a.z);
-        int rTriggMag = state->rTrigger;
-        int lTriggMag = state->lTrigger;    
-        static int count = 0;
+            NxVec3 a = car->getActor()->getLinearVelocity();
+            //printf("x: %f y: %f z: %f \n",a.x,a.y,a.z);
+            int rTriggMag = state->rTrigger;
+            int lTriggMag = state->lTrigger;    
+            static int count = 0;
 
-        car->addTorque(rTriggMag - lTriggMag);        
-        car->setSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
+            car->addTorque(rTriggMag - lTriggMag);        
+            car->setSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
 
-		if(state->x)
-			car->chargeBattery();
-		if(state->y)
-			car->dischargeBattery();
-        if(state->b)
-            car->brake(5000);
-        else
-            car->brake(0);   
+		    if(state->x)
+			    car->chargeBattery();
+		    if(state->y)
+			    car->dischargeBattery();
+            if(state->b)
+                car->brake(5000);
+            else
+                car->brake(0);   
 
-        if(state->a)
-        {
-            Entity::PickupType type = car->usePickup();
-            if(type == Entity::MISSILE)
+            if(state->a)
             {
-                soundEngine->playSound(4, 8);       //play missile, on channel 4
-                Entity* e = new Entity(10000,
-                    physicsEngine->createMissile(car->getActor()),
-                    renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 10000 ms.
+                Entity::PickupType type = car->usePickup();
+                if(type == Entity::MISSILE)
+                {
+                    soundEngine->playSound(4, 8);       //play missile, on channel 4
+                    Entity* e = new Entity(10000,
+                        physicsEngine->createMissile(car->getActor()),
+                        renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 10000 ms.
 
-                e->rc.push_back(new RenderableComponent(4,32));      //Missile
-                entities.DynamicObjs.push_back(e);
-				e->parent = car;
-                entities.DynamicObjs.push_back(e);
+                    e->rc.push_back(new RenderableComponent(4,32));      //Missile
+                    entities.DynamicObjs.push_back(e);
+				    e->parent = car;
+                    entities.DynamicObjs.push_back(e);
 
-                if (CHEAT_InfPowUp)
-                {car->givePickup(Entity::MISSILE);}
-            }
-            else if(type == Entity::SHIELD)
-            {
-                soundEngine->playSound(4, 9);       //play missile, on channel 4
-                car->setShield(true);
-            }
-            else if(type == Entity::BARRIER)
-            {
-                soundEngine->playSound(4, 10);       //play missile, on channel 4
-                Entity* e = new Entity(10000,
-                    physicsEngine->createBarrier(car->getActor()),
-                    renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live for 10000 ms.         
+                    if (CHEAT_InfPowUp)
+                    {car->givePickup(Entity::MISSILE);}
+                }
+                else if(type == Entity::SHIELD)
+                {
+                    soundEngine->playSound(4, 9);       //play missile, on channel 4
+                    car->setShield(true);
+                }
+                else if(type == Entity::BARRIER)
+                {
+                    soundEngine->playSound(4, 10);       //play missile, on channel 4
+                    Entity* e = new Entity(10000,
+                        physicsEngine->createBarrier(car->getActor()),
+                        renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live for 10000 ms.         
 
                 
-                e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
-                e->rc.push_back(new RenderableComponent(10,31));     //BarrierScreen
-                entities.DynamicObjs.push_back(e);
+                    e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
+                    e->rc.push_back(new RenderableComponent(10,31));     //BarrierScreen
+                    entities.DynamicObjs.push_back(e);
 
-                if (CHEAT_InfPowUp)
-                {car->givePickup(Entity::BARRIER);}
+                    if (CHEAT_InfPowUp)
+                    {car->givePickup(Entity::BARRIER);}
+                }
             }
-        }
         
-        if(state->dpadUp)
-            car->givePickup(Entity::BARRIER);
-        if(state->dpadRight)
-            car->givePickup(Entity::SHIELD);
-        if(state->dpadLeft)
-            car->givePickup(Entity::MISSILE);
-        if(state->dpadDown)
-            car->getActor()->setLinearVelocity((car->getActor()->getLinearVelocity() * 1.2f));
-        if(state->lb) 
-            car->shuntLeft();
-        if(state->rb)
-            car->shuntRight();
-        if(state->ls)
-        {
-			CustomData* cd = (CustomData*)car->getActor()->userData;
+            if(state->dpadUp)
+                car->givePickup(Entity::BARRIER);
+            if(state->dpadRight)
+                car->givePickup(Entity::SHIELD);
+            if(state->dpadLeft)
+                car->givePickup(Entity::MISSILE);
+            if(state->dpadDown)
+                car->getActor()->setLinearVelocity((car->getActor()->getLinearVelocity() * 1.2f));
+            if(state->lb) 
+                car->shuntLeft();
+            if(state->rb)
+                car->shuntRight();
+            if(state->ls)
+            {
+			    CustomData* cd = (CustomData*)car->getActor()->userData;
 
-            NxVec3 respawnPt = cd->wp->pos;
-            //NxVec3 ori = cd->wp->ori;
-            //float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
+                NxVec3 respawnPt = cd->wp->pos;
+                //NxVec3 ori = cd->wp->ori;
+                //float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
 
-            car->getActor()->setGlobalPosition(respawnPt);
-            //NxVec3 v(0,1,0);
+                car->getActor()->setGlobalPosition(respawnPt);
+                //NxVec3 v(0,1,0);
 
-            //NxQuat q;
-            //q.fromAngleAxis(angle*(180.0f/3.14f), v);
-			NxMat33 orient(cd->wp->ori);
-			/*
-			NxVec3 temp1 = orient.getColumn(0);
-			NxVec3 temp2 = orient.getColumn(1);
-			NxVec3 temp3 = orient.getColumn(2);
-			printf("%f %f %f\n%f %f %f\n%f %f %f\n\n", temp1[0],temp1[1],temp1[2],temp2[0],temp2[1],temp2[2],temp3[0],temp3[1],temp3[2]);
-			*/
+                //NxQuat q;
+                //q.fromAngleAxis(angle*(180.0f/3.14f), v);
+			    NxMat33 orient(cd->wp->ori);
+			    /*
+			    NxVec3 temp1 = orient.getColumn(0);
+			    NxVec3 temp2 = orient.getColumn(1);
+			    NxVec3 temp3 = orient.getColumn(2);
+			    printf("%f %f %f\n%f %f %f\n%f %f %f\n\n", temp1[0],temp1[1],temp1[2],temp2[0],temp2[1],temp2[2],temp3[0],temp3[1],temp3[2]);
+			    */
 
-            //orient.fromQuat(q);
+                //orient.fromQuat(q);
 
-            car->getActor()->setGlobalOrientation(orient);
-            car->getActor()->setLinearVelocity(NxVec3(0,0,0));
-            car->aCam->resetCamera();
-			/*
-		    physicsEngine->resetBox();
+                car->getActor()->setGlobalOrientation(orient);
+                car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+                car->aCam->resetCamera();
+			    /*
+		        physicsEngine->resetBox();
             
-            car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
+                car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
 
-            NxVec3 v(0,1,0);
-            NxReal ang = 90;
+                NxVec3 v(0,1,0);
+                NxReal ang = 90;
 
-            NxQuat q;
-            q.fromAngleAxis(ang, v);
-            NxMat33 orient;
-            orient.fromQuat(q);
+                NxQuat q;
+                q.fromAngleAxis(ang, v);
+                NxMat33 orient;
+                orient.fromQuat(q);
 
-            car->getActor()->setGlobalOrientation(orient);
-            car->getActor()->setLinearVelocity(NxVec3(0,0,0));
-            car->aCam->resetCamera();
-			*/
-	    }
-        if (state->start)
-        {
-            logWayPoint(0);
+                car->getActor()->setGlobalOrientation(orient);
+                car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+                car->aCam->resetCamera();
+			    */
+	        }
+            if (state->start)
+            {
+                logWayPoint(0);
+            }
         }
     }
 }
