@@ -110,6 +110,8 @@ bool ShopState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             }
             else if ((keyPressed == SDLK_RETURN) || (keyPressed == SDLK_SPACE))
                 keySelectTarget();
+            else if ((keyPressed == SDLK_ESCAPE))
+                backPressed();
         }
     }
     return true;

@@ -424,7 +424,11 @@ void PlayState::update(float dt)
             if (keySPressed)
             {
                 Entity* car = entities.cars[0];
-                car->addTorque(-255);        
+                car->addTorque(-255);
+                car->addTorque(-255);
+                car->addTorque(-255);
+                car->addTorque(-255);
+                car->addTorque(-255);
             }
             else if (keyWPressed)
             {
@@ -919,6 +923,10 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             else if (keyPressed == SDLK_s)
             {
                 keySPressed = true;      
+            }
+            else if (keyPressed == SDLK_INSERT)         //insert logs a waypoint
+            {
+                logWayPoint(0);
             }
         }
 
