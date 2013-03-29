@@ -28,7 +28,7 @@ public:
     void removePlayer(unsigned controllerIndex);    
 
     int addPlayerTwo();     //Add default profile
-    int setPlayers(Profile* aPlayer, int index);
+    int setPlayers(Profile* aPlayer, unsigned index);
 
     int getPlayerNum();
 

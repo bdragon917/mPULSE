@@ -100,12 +100,12 @@ int GameVariables::addPlayerTwo()
     {printf("Hey! Too many human players! (GameVariables::addPlayers)\n");return -1;}                        //return -1 if too many players
 }
 
-int GameVariables::setPlayers(Profile* aPlayer, int index)
+int GameVariables::setPlayers(Profile* aPlayer, unsigned index)
 {
-    //if (players.size() > index + 1)
+    if (players.size() > index + 1)
         players.at(index) = aPlayer;    //possibly save the old profile???
-   // else
-    //{MessageBox(NULL, "GameVariables: ERROR: Players <array> isn't big enough, cannot set.", NULL, NULL);}
+    else
+    {MessageBox(NULL, "GameVariables: ERROR: Players <array> isn't big enough, cannot set.", NULL, NULL);}
     return 0;
 }
 

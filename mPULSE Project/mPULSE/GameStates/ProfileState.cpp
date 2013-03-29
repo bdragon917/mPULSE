@@ -376,7 +376,10 @@ void ProfileState::keySelectTarget()
             Profile* aProfile = gameVariables->profiles.at(profilesOffset + curSelected - 2);
             //Profile::profileData dataaaaa = aProfile->data;
             //std::string aNameeeee = dataaaaa.driverName;
-            gameVariables->setPlayers(aProfile, targetPlayer);
+            if (gameVariables->getPlayerNum() > (targetPlayer + 1)) //This is a HACK wrapper. Since the players are done in a vector, have to make sure that they exist, before using that index
+                gameVariables->setPlayers(aProfile, targetPlayer);          //This is the orginal code
+            else
+                gameVariables->addPlayers(aProfile);
 
             soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
             renderingEngine->startFadeOut();
