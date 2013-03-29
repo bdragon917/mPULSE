@@ -144,34 +144,54 @@ void PlayState::resetAll()
     ObjModel* aModel;
     
     
-    int st = gameVariables->theSelectedTrack->infoz.physics;
-    if (st == NULL)
-    {printf("PlayState:!!!!!/n");}
+    //int st = gameVariables->theSelectedTrack->infoz.physics;
+    if (gameVariables->isLoaded == false)
+    {
+        //If Track is not loaded from stageSelect, use default variables. Hopefully they still work!
+        printf("PlayState: Track doesn't seem to have been loaded, attempting to compensate by using pre-determined variables/n");
+        //Create Track        
+        Entity* aTrack = new Entity();
+        ObjModel* aModel = renderingEngine->getModelManger().getModel("Race1.obj");
+        RenderableComponent* rc = new RenderableComponent(2,7);
 
-    aTrack = new Entity();
-    aModel = renderingEngine->getModelManger().getModel(gameVariables->theSelectedTrack->infoz.physics);
+        if(aModel != NULL)
+        {
+            aTrack->setActor(physicsEngine->createTriMesh(0,-0.5f,0,*aModel));
+            entities.Track.push_back(aTrack);
+            aTrack->rc.push_back(rc);        
+            aTrack->setDisplayListIndex(renderingEngine->generateDisplayList("Race1.obj",0,0,0,1));     
+        }   
+        track = new Track(".\\InGameObjects\\Race1.txt",aTrack);
+	    physicsEngine->createWaypoints(track->getWaypoints());
+    }
+    else
+    {
+        //Create Track from variables in gameVariables
+        aTrack = new Entity();
+        aModel = renderingEngine->getModelManger().getModel(gameVariables->theSelectedTrack->infoz.physics);
 
-            if(aModel != NULL)
-            {
-                //aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
-                aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
-                entities.Track.push_back(aTrack);
-                /*
-                for each (RenderableComponent* rc in gameVariables->theSelectedTrack->infoz.pairs)
+                if(aModel != NULL)
                 {
-                    RenderableComponent* newRC = new RenderableComponent(rc->modelID, rc->textureID);
-                    aTrack->rc.push_back(newRC);
-                }*/
-                //aTrack->rc = gameVariables->rcTrack;
+                    //aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
+                    aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
+                    entities.Track.push_back(aTrack);
+                    /*
+                    for each (RenderableComponent* rc in gameVariables->theSelectedTrack->infoz.pairs)
+                    {
+                        RenderableComponent* newRC = new RenderableComponent(rc->modelID, rc->textureID);
+                        aTrack->rc.push_back(newRC);
+                    }*/
+                    //aTrack->rc = gameVariables->rcTrack;
                 
-                printf("PlayState: Num of RC:%i\n", aTrack->rc.size());
+                    printf("PlayState: Num of RC:%i\n", aTrack->rc.size());
 
 
-                aTrack->setDisplayListIndex(renderingEngine->generateDisplayList(aModel,0,0,0,1));     
-            }   
-            track = gameVariables->theSelectedTrack;
-            track->setEntity(aTrack);
-	        physicsEngine->createWaypoints(track->getWaypoints());
+                    aTrack->setDisplayListIndex(renderingEngine->generateDisplayList(aModel,0,0,0,1));     
+                }   
+                track = gameVariables->theSelectedTrack;
+                track->setEntity(aTrack);
+	            physicsEngine->createWaypoints(track->getWaypoints());
+    }
 
     /*
     switch (gameVariables->selectedTrack)

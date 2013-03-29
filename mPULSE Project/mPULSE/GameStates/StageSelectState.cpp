@@ -8,7 +8,7 @@ StageSelectState::StageSelectState()
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
  
-    int curSelectedX = 0;
+    int curSelectedX = 1;
     int curSelectedY = 1;
 
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
@@ -156,6 +156,7 @@ void StageSelectState::loadTrack()
 
         delete gameVariables->theSelectedTrack;
         gameVariables->theSelectedTrack = tempTrack;
+        gameVariables->isLoaded = true;     //should now have a loaded track! 
 
     }
     else
@@ -172,6 +173,7 @@ void StageSelectState::loadTrack()
         
         delete gameVariables->theSelectedTrack;
         gameVariables->theSelectedTrack = new Track(".\\InGameObjects\\Race1.txt");
+        gameVariables->isLoaded = false;
         //Use default track
     }
 

@@ -67,6 +67,7 @@ public:
 
     Tracks* loadedTracks;
     int selectedTrack;      //int points to PhysX Model
+    bool isLoaded;
     Track* theSelectedTrack;
     float trackSelectRotVar;
     std::vector<RenderableComponent*> rcTrack;

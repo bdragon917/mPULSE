@@ -398,7 +398,7 @@ void Camera::updateCamera(float dt)
 
                 //Set target camera location in local space
                 float disAbove = 5.0f;
-                NxVec3 tarCamLoc = NxVec3(-newTarDistance,disAbove,0.0f);
+                NxVec3 tarCamLoc = NxVec3(-(newTarDistance + 15.0f),disAbove,0.0f);
 
                 //NxVec3 tarCamSpd30 = NxVec3(-targetDistance,disAbove,0.0f);
                 //NxVec3 tarCamSpd50 = NxVec3(-targetDistance * 0.75f,disAbove,0.0f);
@@ -432,7 +432,11 @@ void Camera::updateCamera(float dt)
                     tarCamLoc = tarCamSpdH;
                 }
                 
-                tarCamLoc.x = tarCamLoc.x * (16.666667f/(dt * 1000000000));
+
+
+                //if (curActorSpd > 30.0f)                    //Seems to set x as zero, when going at slow speeds. HACK: don't do this at low speeds
+                //    tarCamLoc.x = tarCamLoc.x * (16.666667f/(dt * 1000000000));        
+
 
                 float rate = 0.1f;  //rate of camera view change
                 float slowrate = 0.1f;  //rate of camera view change
@@ -505,7 +509,7 @@ void Camera::updateCamera(float dt)
 
                 //f=ma
                 //apply force to vecCamLoc
-                vecCamLoc = vecCamLoc * (force.magnitude()/10000.0f);
+                vecCamLoc = vecCamLoc * ((force.magnitude()/10000.0f)); //*((dt)/16.666667f));
 
 
 
