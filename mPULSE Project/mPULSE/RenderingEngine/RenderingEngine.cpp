@@ -617,66 +617,16 @@ void RenderingEngine::renderText(float startX, float startY, float fontHeight, f
 /**
 *	This draws a string on screen
 **/
-void RenderingEngine::drawText(float inX, float inY, string s)
+void RenderingEngine::drawText(string s, float inX, float inY, float size)
 {
     drawableText t;
     t.text = s;
+    t.size = size;
     t.x = inX;
     t.y = inY;
 
     textQueue.push_back(t);
 
-}
-
-void RenderingEngine::drawAllText()
-{
-    
-    glRasterPos3f(0.0f ,0.0f , 0.0f);
-    glDisable(GL_LIGHTING);
-
-    /*glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(70, 1, 1, 100);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    */
-
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1.0f, 1.0f);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-
-    glPushAttrib(GL_DEPTH_TEST);
-    glDisable(GL_DEPTH_TEST);
-
-    for(unsigned i=0;i<textQueue.size();i++)
-    {
-        drawableText words = textQueue[i];
-        float x = 10 + words.x;
-        float y = SCREEN_HEIGHT - 20 + words.y;
-
-        glScalef(0.1, 0.1, 0.1);
-        glTranslatef(x*10.0f, y*10.0f, 0.0f);
-
-        for (unsigned int ch=0; ch < words.text.size(); ch++)
-        {
-            glutStrokeCharacter(GLUT_STROKE_ROMAN, words.text[ch]);
-        }
-        glLoadIdentity();
-    }
-
-    textQueue.clear();
-
-    glPopAttrib();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-
-     glEnable(GL_LIGHTING);
 }
 
 void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
@@ -845,6 +795,14 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         renderText(-0.1,0.80,0.03,0.03,35,"Obs "+FloatToString(cd->entity->obs),false);
         renderText(0.65,0.1,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/7",false);       
         renderText(0.65,0.2,0.03,0.03,35,"Lap   "+FloatToString(cd->laps)+"/2",false);
+
+        for(unsigned i=0;i<textQueue.size();i++)
+        {
+            drawableText words = textQueue[i];
+            renderText(words.x,words.y,words.size,words.size,35,words.text,false);
+        }
+
+        textQueue.clear();
     }
 
     glPopAttrib();
@@ -1002,12 +960,12 @@ void RenderingEngine::displayConsole()
 
      glColor3f(1.0f,1.0f,1.0f);
      
-     drawText(0,  0,    aConsole.consoleOut[4]);
-     drawText(0,  -20,    aConsole.consoleOut[3]);
-     drawText(0,  -40,    aConsole.consoleOut[2]);
-     drawText(0,  -60,    aConsole.consoleOut[1]);
-     drawText(0,  -80,   aConsole.consoleOut[0]);
-     drawText(0,  -120,   aConsole.consoleString);
+     drawText(aConsole.consoleOut[4],-0.95,  0.5);
+     drawText(aConsole.consoleOut[3],-0.95,  0.4);
+     drawText(aConsole.consoleOut[2],-0.95,  0.3);
+     drawText(aConsole.consoleOut[1],-0.95,  0.2);
+     drawText(aConsole.consoleOut[0],-0.95,  0.1);
+     drawText(aConsole.consoleString,-0.95,  0.0);
      //drawText(0,  -200,   debugOut);
 
 }
@@ -2107,7 +2065,6 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 		targetEntities[carIndex]->highSpeedCash();
 
 
-        drawAllText();
 
 
 
@@ -2681,15 +2638,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     if (aShader != NULL)
     {
         glDisable(GL_TEXTURE_2D);
-    }
-
-
-    drawText(800,-680, "MAIN MENU!");
-
-
-
-
-
+    } 
 
     //glEnable(GL_NORMALIZE);
 	//glEnable(GL_LIGHTING);

@@ -156,12 +156,12 @@ void PlayState::resetAll()
                 //aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
                 aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
                 entities.Track.push_back(aTrack);
-
+                /*
                 for each (RenderableComponent* rc in gameVariables->theSelectedTrack->infoz.pairs)
                 {
                     RenderableComponent* newRC = new RenderableComponent(rc->modelID, rc->textureID);
                     aTrack->rc.push_back(newRC);
-                }
+                }*/
                 //aTrack->rc = gameVariables->rcTrack;
                 
                 printf("PlayState: Num of RC:%i\n", aTrack->rc.size());
@@ -281,10 +281,41 @@ void PlayState::resetAll()
     InitializeConsoleCommands();    //Initalize Commands
 
     track;
+    raceStarted = false;
+    lastSecond = 0;
+    initialTime = time.getCurrentTime()/1000;
+    timeBeforeRaceStarts = 5;
+    countdownTime = 2;
 }
 
 void PlayState::update(float dt)
 {   
+    unsigned curTime = time.getCurrentTime() / 1000;
+    if(!raceStarted)
+    {        
+        if(curTime > timeBeforeRaceStarts + initialTime)
+        {
+            raceStarted = true;
+        }
+        else if((curTime - initialTime > countdownTime))
+        {            
+            if(curTime != lastSecond)
+                soundEngine->playSound(4, 8);
+
+            renderingEngine->drawText(renderingEngine->FloatToString((timeBeforeRaceStarts - (curTime - initialTime) + 1)),-0.1,0,0.2);
+
+            lastSecond = curTime;
+        }
+    }
+    else if(raceStarted && (curTime < timeBeforeRaceStarts + initialTime + 2)) 
+    {
+        if(curTime != lastSecond)
+            soundEngine->playSound(4, 10);
+
+        renderingEngine->drawText("GO!",-0.2,0,0.2);
+
+        lastSecond = curTime;
+    }
     track;
     //renderingEngine->drawText(100, -100, renderingEngine->FloatToString(
     //printf("x: %f y: %f z: %f",entities.cars.at(0)->getActor()->getGlobalPosition().x)+" "+renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPosition().y)+" "+renderingEngine->FloatToString(entities.cars.at(0)->getActor()->getGlobalPosition().z);
@@ -527,7 +558,7 @@ void PlayState::update(float dt)
     NxVec3 result = hit.worldImpact - ray.orig;
     //*/
     //Display FPS
-    renderingEngine->drawText(30,-90,"FPS: "+renderingEngine->FloatToString(1000.0f/dt));
+    renderingEngine->drawText("FPS: "+renderingEngine->FloatToString(1000.0f/dt),-0.95,0.65,0.03);
     //physicsEngine->step(dt/1000.0f);
     //physicsEngine->step(0.33f);
     //physicsEngine->step(1.0f/60.0f);

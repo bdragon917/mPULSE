@@ -309,7 +309,7 @@ ObjModel* ModelManager::getModel(std::string fileName)
 ObjModel* ModelManager::getModel(int index)
 {
     errorMsg = "No error message.";
-    if(index < numOfModels)
+    if(index >= 0 && index < numOfModels)
         return models[index];         
 
     errorMsg = "Invalid Model Index";

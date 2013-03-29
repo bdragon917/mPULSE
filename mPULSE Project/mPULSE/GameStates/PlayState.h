@@ -67,6 +67,12 @@ private:
 
     bool showConsole;
     bool rbPressed;
+    bool raceStarted;
+    unsigned lastSecond;
+    unsigned initialTime;
+    unsigned timeBeforeRaceStarts;
+    unsigned countdownTime;
+
     PlayState();
     float id;
     Track* track;

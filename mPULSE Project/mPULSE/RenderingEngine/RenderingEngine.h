@@ -54,7 +54,7 @@ public:
     int SCREEN_WIDTH;
     int SCREEN_HEIGHT;
     ///Custom Draw Functions
-    void drawText(float inX, float inY, string s);
+    void drawText(string s,float inX, float inY, float size=0.03);
 
     //void drawCube(float x, float y, float z, float size);
     void initializeGL();
@@ -141,6 +141,7 @@ private:
     struct drawableText {
         float x;
         float y;
+        float size;
         std::string text;
     };
 
@@ -169,7 +170,6 @@ private:
     void drawTrack(Track* track);
 
     void drawHUD(Entity* carEntity, bool hasWon);
-    void drawAllText();
 
     void RenderDebugPhysic(const NxDebugRenderable* ndr);
     
