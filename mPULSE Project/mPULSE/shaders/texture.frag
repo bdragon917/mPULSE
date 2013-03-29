@@ -17,6 +17,7 @@ void main()
     ct = texel.rgb;
     //at = texel.a;
 	at = alpha;
-    gl_FragColor = vec4(ct * cf, at * af);
+	
+		gl_FragColor = vec4(ct * cf, at * af);
  
 }

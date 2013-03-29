@@ -1039,6 +1039,7 @@ void RenderingEngine::initializeGL()
 		{
             printf("glewInit is successful!\n");
             aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");
+            aShinyShader = new Shader("shaders/Shiny2.frag", "shaders/Shiny2.vert");
             aSkyBoxShader = new Shader("shaders/skybox.frag", "shaders/texture.vert");
             aShadowShader = new Shader("shaders/shadow.frag", "shaders/shadow.vert");
             aHUDShader = new Shader("shaders/BlueColorKey.frag", "shaders/BlueColorKey.vert");
@@ -1831,11 +1832,6 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
                     //GLint locShader_Alpha = glGetUniformLocation(aShader->f, "alpha");
                     locShader_Alpha = aShader->getUniLoc("alpha");
-                    if (locShader_Alpha != -1)
-                    {glUniform1f(locShader_Alpha, 0.00f);}
-
-                    drawShadow2(entities, scene);
-
 
 
                     if (locShader_Alpha != -1)
@@ -1845,6 +1841,20 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     //if (locShader_Alpha != -1)
                     //{glUniform1f(locShader_Alpha, 1.000);}
 
+                    if (locShader_Alpha != -1)
+                    {glUniform1f(locShader_Alpha, 0.20f);}
+                    glPushAttrib(GL_DEPTH_TEST);
+                    glDisable(GL_DEPTH_TEST);
+                    drawShadow2(entities, scene);
+                    glEnable(GL_DEPTH_TEST);
+                    glPopAttrib();
+
+                    if (locShader_Alpha != -1)
+                    {glUniform1f(locShader_Alpha, 1.00f);}
+                    
+                    
+                    drawCars(entities);
+                    
 
                     if (locShader_Alpha != -1)
                     {glUniform1f(locShader_Alpha, 1.00f);}
@@ -1856,7 +1866,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                 //glAccum(GL_ACCUM, 1 -blur );
                 //glAccum(GL_RETURN, 1.0);
 
-                drawCars(entities);
+                
 
 
 
@@ -2290,10 +2300,10 @@ int RenderingEngine::drawStoryScreen(float dt)
     //glDisable(GL_NORMALIZE);
     //glDisable(GL_TEXTURE);
 	
-    if (aShader != NULL)
+    if (aSkyBoxShader != NULL)
          {
             glEnable(GL_TEXTURE_2D);
-            aShader->on();
+            aSkyBoxShader->on();
          }
 
 
@@ -2352,7 +2362,7 @@ int RenderingEngine::drawStoryScreen(float dt)
 
             drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
         */
-        aShader->off();
+        aSkyBoxShader->off();
 
     //reset to previous state
     glPopAttrib();
@@ -2365,9 +2375,9 @@ int RenderingEngine::drawStoryScreen(float dt)
 
 
 
-    if (aShader != NULL)
+    if (aSkyBoxShader != NULL)
     {
-        aShader->off();
+        aSkyBoxShader->off();
     }
 
 
@@ -2976,10 +2986,10 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
     //glDisable(GL_NORMALIZE);
     //glDisable(GL_TEXTURE);
 	
-    if (aShader != NULL)
+    if (aSkyBoxShader != NULL)
          {
             glEnable(GL_TEXTURE_2D);
-            aShader->on();
+            aSkyBoxShader->on();
          }
 
 
@@ -3027,6 +3037,9 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
 
+
+        aSkyBoxShader->off();
+        aShader->on();
 
                     //Draw the rotating Track
         glPushMatrix();
@@ -3188,10 +3201,10 @@ int RenderingEngine::drawResultScreen(float dt)
     //glDisable(GL_NORMALIZE);
     //glDisable(GL_TEXTURE);
 	
-    if (aShader != NULL)
+    if (aSkyBoxShader != NULL)
          {
             glEnable(GL_TEXTURE_2D);
-            aShader->on();
+            aSkyBoxShader->on();
          }
 
 
@@ -3256,7 +3269,7 @@ int RenderingEngine::drawResultScreen(float dt)
 
             drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
 
-        aShader->off();
+        aSkyBoxShader->off();
 
     //reset to previous state
     glPopAttrib();
@@ -3269,9 +3282,9 @@ int RenderingEngine::drawResultScreen(float dt)
 
 
 
-    if (aShader != NULL)
+    if (aSkyBoxShader != NULL)
     {
-        aShader->off();
+        aSkyBoxShader->off();
     }
 
 
@@ -3296,7 +3309,7 @@ int RenderingEngine::drawResultScreen(float dt)
 
 
             
-    if (aShader != NULL)
+    if (aSkyBoxShader != NULL)
     {
         glDisable(GL_TEXTURE_2D);
     }
@@ -3469,7 +3482,12 @@ void RenderingEngine::drawCars(Entities* entities)
                     drawModelPosRotationEnhanced(modelManager.getModel(entities->cars[i]->rc[r]->modelID), entities->cars[i]);
 
                     if(entities->cars[i]->getShield())
+                    {
+                        if (locShader_Alpha != -1)
+                        {glUniform1f(locShader_Alpha, 0.50f);}
+                         glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
                         drawModelPos(modelManager.getModel("Shield.obj"), aPose );
+                    }
                     //Particles
                     //Particle* newParticle = new Particle(entities->cars[i]->getActor()->getGlobalPose().t.x, entities->cars[i]->getActor()->getGlobalPose().t.y,entities->cars[i]->getActor()->getGlobalPose().t.z);
                     //particles.push_back(newParticle);

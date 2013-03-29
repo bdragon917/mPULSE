@@ -107,6 +107,7 @@ public:
 
     Console aConsole;    
     Shader* aShader;
+    Shader* aShinyShader;
     Shader* aSkyBoxShader;
     Shader* aShadowShader;
     Shader* aHUDShader;
@@ -191,7 +192,6 @@ private:
 
     //used to control the main texture alpha
     GLint locShader_Alpha;
-
 
     //Used for Fade In and Out
     float FadeCtrl;
