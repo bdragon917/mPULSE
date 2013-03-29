@@ -313,6 +313,9 @@ ObjModel* ModelManager::getModel(int index)
         return models[index];         
 
     errorMsg = "Invalid Model Index";
+    printf("Invalid Model Index: %i ", index);
+    printf(models[index]->getName().c_str());
+    printf("\n");
     return NULL;
 }
 

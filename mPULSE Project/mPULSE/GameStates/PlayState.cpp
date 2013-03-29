@@ -175,12 +175,12 @@ void PlayState::resetAll()
                     //aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
                     aTrack->setActor(physicsEngine->createTriMesh(0,0.0f,0,*aModel));
                     entities.Track.push_back(aTrack);
-                    /*
+
                     for each (RenderableComponent* rc in gameVariables->theSelectedTrack->infoz.pairs)
                     {
                         RenderableComponent* newRC = new RenderableComponent(rc->modelID, rc->textureID);
                         aTrack->rc.push_back(newRC);
-                    }*/
+                    }
                     //aTrack->rc = gameVariables->rcTrack;
                 
                     printf("PlayState: Num of RC:%i\n", aTrack->rc.size());
@@ -872,6 +872,7 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     physicsEngine->resetBox();
                     entities.cars[0]->getActor()->setGlobalPosition(NxVec3(0,35.0f,0));
                     entities.cars[0]->getActor()->setGlobalOrientation(NxMat33(NxVec3(1,0,0),NxVec3(0,1,0),NxVec3(0,0,1)));
+                    entities.cars[0]->aCam->resetCamera();
                      renderingEngine->aConsole.propragateMsg("Car Reset");
                 }
                 
