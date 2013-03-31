@@ -18,6 +18,6 @@ private:
     float milliSecPerFrame;
 
     float lastUsedFPS;
-    float lastUsedFPSAtTime;
-    float FPSTimeSwitchLimit;
+    unsigned lastUsedFPSAtTime;
+    unsigned FPSTimeSwitchLimit;
 };
