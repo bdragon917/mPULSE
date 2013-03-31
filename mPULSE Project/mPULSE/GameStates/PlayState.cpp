@@ -28,7 +28,7 @@ void PlayState::resetAll()
 
     changeState(PLAY); 
     numPlayers = gameVariables->getPlayerNum();
-    int num_AI = 0;
+    int num_AI = 2;
 
     rankings = new std::vector<Entity*>;
     for(int i=0;i<numPlayers;i++)

@@ -16,4 +16,8 @@ private:
     unsigned int time;
     float maxFrameRate;
     float milliSecPerFrame;
+
+    float lastUsedFPS;
+    float lastUsedFPSAtTime;
+    float FPSTimeSwitchLimit;
 };
