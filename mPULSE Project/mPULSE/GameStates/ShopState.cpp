@@ -13,7 +13,7 @@ ShopState::ShopState()
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
     WAIT_TIME = 50;
-    MAX_X_SELECTED = 4;           //Change this depending on number of profiles avaliable
+    MAX_X_SELECTED = 4;           
     MAX_Y_SELECTED = 4;
 
     buttonPressed = false;

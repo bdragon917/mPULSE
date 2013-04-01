@@ -38,6 +38,8 @@ void AIPersonality::setPersonality(int index)
 
         case 2:     //Aggressive
         {
+            lookAhead = -37.0f;     //wierd, is this opposite
+            lookRadius = 40.0f;
             Boidness = 0.0f;     //used
             PlayerHate = 1.0f;   //Used
             break;
