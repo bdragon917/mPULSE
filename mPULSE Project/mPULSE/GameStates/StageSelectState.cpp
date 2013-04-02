@@ -3,6 +3,7 @@
 StageSelectState::StageSelectState()
 {
     changeState(STAGE); 
+    quit = false;
     gameVariables = GameVariables::getInstance();
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();

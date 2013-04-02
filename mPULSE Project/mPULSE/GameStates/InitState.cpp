@@ -3,6 +3,7 @@
 InitState::InitState()
 {
     stateType = INIT;
+    quit = false;
     renderingEngine = RenderingEngine::getInstance();
 	soundEngine = SoundEngine::getInstance();
     //renderingEngine->initializeGL();          //should be initalized when RenderingEngine was created

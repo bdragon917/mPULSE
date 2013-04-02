@@ -19,7 +19,7 @@ void Game::render()
 
 bool Game::handleKeyboardMouseEvents(SDL_Event& KeyboardMouseEvents)
 {
-    if(KeyboardMouseEvents.type == SDL_QUIT)
+    if(KeyboardMouseEvents.type == SDL_QUIT || state->quit)
         return false;
 
 	return state->handleKeyboardMouseEvents(KeyboardMouseEvents);

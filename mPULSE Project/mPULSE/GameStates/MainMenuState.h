@@ -28,6 +28,7 @@ private:
     bool buttonPressed;
     bool endState;
     bool lockControls;
+   
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
     GameVariables* gameVariables;

@@ -3,6 +3,7 @@
 ProfileState::ProfileState()
 {
     changeState(MAIN_MENU); 
+    quit = false;
     gameVariables = GameVariables::getInstance();
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();

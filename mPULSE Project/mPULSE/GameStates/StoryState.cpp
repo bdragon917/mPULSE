@@ -3,6 +3,7 @@
 StoryState::StoryState()
 {
     changeState(STORY); 
+    quit = false;
     gameVariables = GameVariables::getInstance();
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();

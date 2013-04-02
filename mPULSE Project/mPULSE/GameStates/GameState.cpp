@@ -2,5 +2,5 @@
 
 GameState::GameState()
 {
-
+    quit = false;
 }

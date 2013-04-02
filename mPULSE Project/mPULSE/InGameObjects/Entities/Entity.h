@@ -23,6 +23,7 @@ public:
         MISSILE,
         SHIELD,
         BARRIER,
+        BOOST,
         NONE
     } PickupType;
 
@@ -40,6 +41,7 @@ public:
 	void chargeBattery();
 	void dischargeBattery();
     void givePickup(PickupType type);
+    void boost();
     PickupType usePickup();
 
     //void setModel(ObjModel* m);

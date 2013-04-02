@@ -3,6 +3,7 @@
 MainMenuState::MainMenuState()
 {
     changeState(MAIN_MENU); 
+    quit = false;
     gameVariables = GameVariables::getInstance();
 
     //entities.cars.push_back(new Entity);
@@ -92,6 +93,7 @@ void MainMenuState::render()
             changeState(SETTING); 
             break;
         case 4:
+            quit = true;
             //changeState(MAIN_MENU); 
             break;
         }

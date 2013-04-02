@@ -2,7 +2,8 @@
 
 SettingState::SettingState()
 {
-    changeState(SETTING); 
+    changeState(SETTING);
+    quit = false;
     gameVariables = GameVariables::getInstance();
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();

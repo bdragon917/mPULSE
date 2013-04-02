@@ -3,6 +3,7 @@
 PlayState::PlayState()
 {
     resetAll();
+    quit = false;
 }
 
 void PlayState::resetAll()
@@ -1064,7 +1065,6 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                     Entity* e = new Entity(10000,
                         physicsEngine->createBarrier(car->getActor()),
                         renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live for 10000 ms.         
-
                 
                     e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
                     e->rc.push_back(new RenderableComponent(10,31));     //BarrierScreen
@@ -1073,6 +1073,10 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                     if (CHEAT_InfPowUp)
                     {car->givePickup(Entity::BARRIER);}
                 }
+                else if(type == Entity::BOOST)
+                {
+                    car->boost();
+                }
             }
         
             if(state->dpadUp)
@@ -1080,7 +1084,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             if(state->dpadRight)
                 car->givePickup(Entity::SHIELD);
             if(state->dpadLeft)
-                car->givePickup(Entity::MISSILE);
+                car->givePickup(Entity::BOOST);
             if(state->dpadDown)
                 car->getActor()->setLinearVelocity((car->getActor()->getLinearVelocity() * 1.2f));
             if(state->lb) 

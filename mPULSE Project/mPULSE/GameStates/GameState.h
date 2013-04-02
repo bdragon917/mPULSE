@@ -37,5 +37,8 @@ public:
         stateType = type;
     }
     StateType stateType;
+
+
+    bool quit;
 };
 

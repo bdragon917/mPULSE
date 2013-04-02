@@ -8,8 +8,8 @@ RenderingEngine::RenderingEngine()
 
     showConsole = true;
     zRot = 0.0f;
-    SCREEN_WIDTH = 1024;
-    SCREEN_HEIGHT = 768;
+    SCREEN_WIDTH = 1600;
+    SCREEN_HEIGHT = 900;
 	setUpPerpView();
 	createLight();
 	initializeGL();

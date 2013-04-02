@@ -3,6 +3,7 @@
 ShopState::ShopState()
 {
     changeState(SHOP); 
+    quit = false;
     gameVariables = GameVariables::getInstance();
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();

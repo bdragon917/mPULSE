@@ -3,6 +3,7 @@
 ResultState::ResultState()
 {
     changeState(RESULT); 
+    quit = false;
     gameVariables = GameVariables::getInstance();
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();

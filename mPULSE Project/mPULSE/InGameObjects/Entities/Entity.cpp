@@ -94,7 +94,6 @@ bool Entity::isAlive()
 void Entity::givePickup(Entity::PickupType p)
 {
     pickup = p;
-
     CustomData* cd = (CustomData*) actor->userData;
     cd->pickupType = p;
 }
@@ -125,6 +124,8 @@ Entity::PickupType Entity::usePickup()
         return SHIELD;
     else if(type == 2)
         return BARRIER; 
+    else if(type == 3)
+        return BOOST;
     else
         return NONE;
 }
@@ -338,6 +339,14 @@ void Entity::highSpeedCash()
 			}
 		}
 	}
+}
+
+void Entity::boost()
+{    
+    NxVec3 dir = actor->getGlobalOrientation() * NxVec3(1,0,0);
+    NxReal boostVal = 50;
+	NxVec3 lin_vel = actor->getLinearVelocity();
+	actor->setLinearVelocity(lin_vel + dir*boostVal);
 }
 
 void Entity::missleCash()
