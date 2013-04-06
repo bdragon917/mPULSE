@@ -126,7 +126,7 @@ void RenderingEngine::initializeTexture()
 	BMPImg aBMPImg;
 
     textureid_P1 = new GLuint[59];
-    glGenTextures(58, textureid_P1);
+    glGenTextures(59, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
