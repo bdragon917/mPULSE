@@ -749,14 +749,17 @@ std::vector<std::string>* Track::split(std::string line, char delimiter)
     {
         if(line.at(i) == delimiter)
         {
-            substrings->push_back(line.substr(lastDelimiterSeen,lastDelimiterSeen+i));
-            lastDelimiterSeen = i;
+
+            std::string sub = line.substr(lastDelimiterSeen,lastDelimiterSeen + i);
+            std::string sub2 = line.substr(lastDelimiterSeen,i-lastDelimiterSeen);
+            substrings->push_back(line.substr(lastDelimiterSeen,i-lastDelimiterSeen));
+            lastDelimiterSeen = i + 1;
         }
     }
     if(lastDelimiterSeen == 0)
         substrings->push_back(line.substr(lastDelimiterSeen));
     else 
-        substrings->push_back(line.substr(lastDelimiterSeen+1));
+        substrings->push_back(line.substr(lastDelimiterSeen));
 
     return substrings;
 }
