@@ -125,8 +125,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[53];
-    glGenTextures(53, textureid_P1);
+    textureid_P1 = new GLuint[58];
+    glGenTextures(58, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -158,7 +158,7 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/sb/ss_top3.bmp", textureid_P1[24]);
     bindBMPtoTexture("./Images/sb/ss_bottom4.bmp", textureid_P1[25]);
 
-    bindBMPtoTexture("./Images/Menu/RaceOverlays/EndMsgWin.bmp", textureid_P1[26]);
+    bindBMPtoTexture("./Images/Menu/RaceOverlays/EndMsgFinish.bmp", textureid_P1[26]);
 
     bindBMPtoTexture("./Images/motherShipHullUV.bmp", textureid_P1[27]);
     bindBMPtoTexture("./Images/motherShipEngineUV.bmp", textureid_P1[28]);
@@ -200,6 +200,12 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/black.bmp", textureid_P1[51]);
 
     bindBMPtoTexture("./Images/outUVClaymore.bmp", textureid_P1[52]);
+
+    bindBMPtoTexture("./Images/Pickups/Boost.bmp", textureid_P1[53]);
+    bindBMPtoTexture("./Images/Pickups/Missile.bmp", textureid_P1[54]);
+    bindBMPtoTexture("./Images/Pickups/Shield.bmp", textureid_P1[55]);
+    bindBMPtoTexture("./Images/Pickups/Barrier.bmp", textureid_P1[56]);
+    bindBMPtoTexture("./Images/Pickups/Empty.bmp", textureid_P1[57]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -788,8 +794,19 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         //Draw pickup
         xOffset = -0.85;
         yOffset = 0.85;
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[42]);
-        drawSquareUVRev(xOffset,yOffset,0,0.10f,0.10f);
+
+        if(cd->pickupType == Entity::BOOST)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[53]);
+        else if(cd->pickupType == Entity::MISSILE)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[54]);
+        else if(cd->pickupType == Entity::SHIELD)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[55]);
+        else if(cd->pickupType == Entity::BARRIER)
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[56]);
+        else
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[57]);
+
+        drawSquare(xOffset,yOffset,0,0.10f,0.10f);
 
         //Draw text on screen        
         renderText(-0.1,0.80,0.03,0.03,35,"Obs "+FloatToString(cd->entity->obs),false);
