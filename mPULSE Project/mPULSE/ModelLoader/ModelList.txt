@@ -15,3 +15,6 @@ ModelLoader\\Models\\Race1_Spiral.obj
 ModelLoader\\Models\\Boxer.obj
 ModelLoader\\Models\\mothershipHullMini.obj
 ModelLoader\\Models\\Race1_Spiral.obj
+ModelLoader\\Models\\testFGHTrack.obj
+ModelLoader\\Models\\Track_M2.obj
+ModelLoader\\Models\\Track_M2_rc1.obj

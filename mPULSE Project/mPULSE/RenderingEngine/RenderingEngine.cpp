@@ -125,8 +125,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[53];
-    glGenTextures(53, textureid_P1);
+    textureid_P1 = new GLuint[54];
+    glGenTextures(54, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -200,6 +200,8 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/black.bmp", textureid_P1[51]);
 
     bindBMPtoTexture("./Images/outUVClaymore.bmp", textureid_P1[52]);
+
+    bindBMPtoTexture("./Images/planet.bmp", textureid_P1[53]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -3640,7 +3642,8 @@ void RenderingEngine::drawTrack(Track* track)
             glBindTexture(GL_TEXTURE_2D, textureid_P1[track->getEntity()->rc[r]->textureID]);
             NxMat34* aPose = &(track->getEntity()->getActor()->getGlobalPose());
 
-            if(track->getEntity()->getUsingDisplayList())
+            //if(track->getEntity()->getUsingDisplayList())     //HACK getUsingDisplayList assumes a particular modelID
+            if(r == 0)
                 drawDisplayList(track->getEntity()->getDisplayListIndex());
             else
                 drawModelPos(modelManager.getModel(track->getEntity()->rc[r]->modelID), aPose );

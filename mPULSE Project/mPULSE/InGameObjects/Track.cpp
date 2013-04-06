@@ -218,7 +218,13 @@ void Track::parseHead(std::vector<std::string>* newData)
         else if(newData->at(0).compare("PhysXModel:") == 0)
             infoz.physics = atoi(newData->at(1).c_str());
         else if(newData->at(0).compare("RC:") == 0)
+        {
+            int a = atoi(newData->at(0).c_str());
+            int b = atoi(newData->at(1).c_str());
+            int c = atoi(newData->at(2).c_str());
+
             infoz.pairs.push_back( new RenderableComponent(atoi(newData->at(1).c_str()), atoi(newData->at(2).c_str())) );
+        }
 
     }
 }
