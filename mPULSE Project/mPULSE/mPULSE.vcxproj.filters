@@ -232,7 +232,7 @@
       <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="mPULSE.cpp">
-      <Filter>Source Files\Util</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

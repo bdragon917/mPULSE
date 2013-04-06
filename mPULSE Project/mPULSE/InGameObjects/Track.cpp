@@ -34,9 +34,7 @@ std::string Track::removeFilePath(std::string line)
 }
 
 void Track::loadTrackInfo(std::string filename)
-{
-        
-    char charArray[1024];
+{            
     std::string tmpLine = "";
     std::ifstream file;
     trackName = removeFilePath(filename);
@@ -46,6 +44,7 @@ void Track::loadTrackInfo(std::string filename)
 	    while(!file.eof())
 	    {
             //Read a line
+            char* charArray = new char[1024];
             file.getline(charArray,1024);
             tmpLine = charArray;	    		
 
@@ -83,113 +82,127 @@ void Track::loadTrackInfo(std::string filename)
             //********PARSE OUT THE DATA********//  
             if (type != Waypoint::INVALID_TYPE)
             {
-    
-                Waypoint* wp = new Waypoint();
-                wp->type = type;
-
-				NxVec3 col0 = NxVec3(0,0,0);
-				NxVec3 col1 = NxVec3(0,0,0);
-				NxVec3 col2 = NxVec3(0,0,0);
-
-                bool startSeen = true;
-                startFlag = i;
-				/*
-                while((parsing && i < tmpLine.size()) && j < 8)
-	            {
-                    ch = tmpLine.at(i);
-                    if((ch == ' ' || ch == '\t') && startSeen)
-                    {
-                        if (j == 0)
-                            wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 1)
-                            wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 2)
-                            wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 3)
-                            wp->ori.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 4)
-                            wp->ori.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 5)
-                            wp->ori.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 6)
-                            wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 7)
-                            wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
-
-                        j++;
-                        startSeen = false;
-                    }
-                    else if ((ch != ' ' && ch != '\t') && !startSeen)
-                    {
-                        startSeen = true;
-                        startFlag = i;
-                    }
-
-                    i++;
-	            }
-				*/
-				while((parsing && i < tmpLine.size()) && j < 14)
-	            {
-                    ch = tmpLine.at(i);
-                    if((ch == ' ' || ch == '\t') && startSeen)
-                    {
-                        if (j == 0)
-                            wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 1)
-                            wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 2)
-                            wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 3)
-                            col0.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 4)
-                            col0.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 5)
-                            col0.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-						else if(j == 6)
-                            col1.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 7)
-                            col1.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 8)
-                            col1.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-						else if(j == 9)
-                            col2.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 10)
-                            col2.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 11)
-                            col2.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 12)
-                            wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
-                        else if(j == 13)
-                            wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
-
-                        j++;
-                        startSeen = false;
-                    }
-                    else if ((ch != ' ' && ch != '\t') && !startSeen)
-                    {
-                        startSeen = true;
-                        startFlag = i;
-                    }
-
-                    i++;
-	            }
-                if(startSeen)
+                if(type == Waypoint::WAYPOINT)
                 {
-                    if(j == 13)
-                        wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                    Waypoint* wp = new Waypoint();
+                    wp->type = type;
+
+				    NxVec3 col0 = NxVec3(0,0,0);
+				    NxVec3 col1 = NxVec3(0,0,0);
+				    NxVec3 col2 = NxVec3(0,0,0);
+
+                    bool startSeen = true;
+                    startFlag = i;
+				    /*
+                    while((parsing && i < tmpLine.size()) && j < 8)
+	                {
+                        ch = tmpLine.at(i);
+                        if((ch == ' ' || ch == '\t') && startSeen)
+                        {
+                            if (j == 0)
+                                wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 1)
+                                wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 2)
+                                wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 3)
+                                wp->ori.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 4)
+                                wp->ori.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 5)
+                                wp->ori.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 6)
+                                wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 7)
+                                wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+
+                            j++;
+                            startSeen = false;
+                        }
+                        else if ((ch != ' ' && ch != '\t') && !startSeen)
+                        {
+                            startSeen = true;
+                            startFlag = i;
+                        }
+
+                        i++;
+	                }
+				    */
+				    while((parsing && i < tmpLine.size()) && j < 14)
+	                {
+                        ch = tmpLine.at(i);
+                        if((ch == ' ' || ch == '\t') && startSeen)
+                        {
+                            if (j == 0)
+                                wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 1)
+                                wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 2)
+                                wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 3)
+                                col0.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 4)
+                                col0.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 5)
+                                col0.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+						    else if(j == 6)
+                                col1.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 7)
+                                col1.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 8)
+                                col1.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+						    else if(j == 9)
+                                col2.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 10)
+                                col2.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 11)
+                                col2.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 12)
+                                wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                            else if(j == 13)
+                                wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+
+                            j++;
+                            startSeen = false;
+                        }
+                        else if ((ch != ' ' && ch != '\t') && !startSeen)
+                        {
+                            startSeen = true;
+                            startFlag = i;
+                        }
+
+                        i++;
+	                }
+                    if(startSeen)
+                    {
+                        if(j == 13)
+                            wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+                    }
+
+				    wp->ori.setColumn(0, col0);
+				    wp->ori.setColumn(1, col1);
+				    wp->ori.setColumn(2, col2);
+
+                    addWaypoint(wp);
                 }
-
-				wp->ori.setColumn(0, col0);
-				wp->ori.setColumn(1, col1);
-				wp->ori.setColumn(2, col2);
-
-                addWaypoint(wp);
-            }
+                else if(type == Waypoint::PICKUP_SPAWN)
+                {
+                    std::vector<std::string>* elements = split(charArray,' ');  
+                    if(elements->size() >= 8)
+                    {
+                        Waypoint* wp = new Waypoint(elements);
+					    wp->type = type;
+                        addWaypoint(wp);
+                    }
+                }
+            }	                
+            delete charArray;
         }
-	    file.close();                
+        file.close();    
     }
     else
-    {printf("Track checkpoints didn't open, can't find maybe??\n"); }
+        printf("Track checkpoints didn't open, can't find maybe??\n");
+
     finalizeWaypoints();        
 }
 
@@ -324,73 +337,81 @@ void Track::loadTrackInfo2(std::string filename)
 				//********PARSE OUT THE DATA********//  
 				if (type != Waypoint::INVALID_TYPE)
 				{
-    
-					Waypoint* wp = new Waypoint();
-					wp->type = type;
+                    if(type == Waypoint::WAYPOINT)
+                    {
+                        Waypoint* wp = new Waypoint();
+					    wp->type = type;
+					    NxVec3 col0 = NxVec3(0,0,0);
+					    NxVec3 col1 = NxVec3(0,0,0);
+					    NxVec3 col2 = NxVec3(0,0,0);
 
-					NxVec3 col0 = NxVec3(0,0,0);
-					NxVec3 col1 = NxVec3(0,0,0);
-					NxVec3 col2 = NxVec3(0,0,0);
-
-					bool startSeen = true;
-					startFlag = i;
+					    bool startSeen = true;
+					    startFlag = i;
 					
-					while((parsing && i < tmpLine.size()) && j < 14)
-					{
-						ch = tmpLine.at(i);
-						if((ch == ' ' || ch == '\t') && startSeen)
-						{
-							if (j == 0)
-								wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 1)
-								wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 2)
-								wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 3)
-								col0.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 4)
-								col0.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 5)
-								col0.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 6)
-								col1.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 7)
-								col1.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 8)
-								col1.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 9)
-								col2.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 10)
-								col2.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 11)
-								col2.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 12)
-								wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
-							else if(j == 13)
-								wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+					    while((parsing && i < tmpLine.size()) && j < 14)
+					    {
+						    ch = tmpLine.at(i);
+						    if((ch == ' ' || ch == '\t') && startSeen)
+						    {
+							    if (j == 0)
+								    wp->pos.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 1)
+								    wp->pos.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 2)
+								    wp->pos.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 3)
+								    col0.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 4)
+								    col0.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 5)
+								    col0.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 6)
+								    col1.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 7)
+								    col1.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 8)
+								    col1.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 9)
+								    col2.x = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 10)
+								    col2.y = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 11)
+								    col2.z = static_cast<float>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 12)
+								    wp->id = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+							    else if(j == 13)
+								    wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
 
-							j++;
-							startSeen = false;
-						}
-						else if ((ch != ' ' && ch != '\t') && !startSeen)
-						{
-							startSeen = true;
-							startFlag = i;
-						}
+							    j++;
+							    startSeen = false;
+						    }
+						    else if ((ch != ' ' && ch != '\t') && !startSeen)
+						    {
+							    startSeen = true;
+							    startFlag = i;
+						    }
 
-						i++;
-					}
-					if(startSeen)
-					{
-						if(j == 13)
-							wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
-					}
+						    i++;
+					    }
+					    if(startSeen)
+					    {
+						    if(j == 13)
+							    wp->nextId = static_cast<int>(atof(tmpLine.substr(startFlag,i).data()));
+					    }
 
-					wp->ori.setColumn(0, col0);
-					wp->ori.setColumn(1, col1);
-					wp->ori.setColumn(2, col2);
-
-					addWaypoint(wp);
+					    wp->ori.setColumn(0, col0);
+					    wp->ori.setColumn(1, col1);
+					    wp->ori.setColumn(2, col2);
+                        addWaypoint(wp);
+                    }
+                    else if(type == Waypoint::PICKUP_SPAWN)
+                    {
+                        file.getline(charArray,1024);
+                        std::vector<std::string>* elements = split(charArray,' ');  
+                        Waypoint* wp = new Waypoint(elements);
+					    wp->type = type;
+                        addWaypoint(wp);
+                    }					
 				}
 			}
         }
@@ -715,4 +736,27 @@ Waypoint* Track::getFirst()
 Waypoint* Track::getWaypoint(int index)
 {
     return waypoints[index];
+}
+
+std::vector<std::string>* Track::split(std::string line, char delimiter)
+{
+    std::vector<std::string>* substrings = new std::vector<std::string>;
+
+    unsigned lineLength = line.size();
+    unsigned lastDelimiterSeen = 0;
+
+    for(unsigned i=0;i<lineLength;i++)
+    {
+        if(line.at(i) == delimiter)
+        {
+            substrings->push_back(line.substr(lastDelimiterSeen,lastDelimiterSeen+i));
+            lastDelimiterSeen = i;
+        }
+    }
+    if(lastDelimiterSeen == 0)
+        substrings->push_back(line.substr(lastDelimiterSeen));
+    else 
+        substrings->push_back(line.substr(lastDelimiterSeen+1));
+
+    return substrings;
 }
