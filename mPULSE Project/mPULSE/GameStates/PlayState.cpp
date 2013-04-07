@@ -401,7 +401,7 @@ void PlayState::update(float dt)
     while(currObj<numOfObjs)
     {    
         NxActor* a = entities.DynamicObjs.at(currObj)->getActor();
-        if(!(entities.DynamicObjs.at(currObj)->isAlive()))
+        if(!entities.DynamicObjs.at(currObj)->isAlive())
         {            
             numOfObjs--;
             physicsEngine->destroy(entities.DynamicObjs.at(currObj)->getActor());
@@ -583,7 +583,7 @@ void PlayState::update(float dt)
     NxVec3 result = hit.worldImpact - ray.orig;
     //*/
     //Display FPS
-    renderingEngine->drawText("FPS: "+renderingEngine->FloatToString(1000.0f/dt),-0.95,0.65,0.03);
+    renderingEngine->drawText("FPS: "+renderingEngine->FloatToString(1000.0f/dt),-0.95,0.85,0.03);
     //physicsEngine->step(dt/1000.0f);
     //physicsEngine->step(0.33f);
     //physicsEngine->step(1.0f/60.0f);
@@ -1062,7 +1062,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 else if(type == Entity::BARRIER)
                 {
                     soundEngine->playSound(4, 10);       //play missile, on channel 4
-                    Entity* e = new Entity(10000,
+                    Entity* e = new Entity(-1,
                         physicsEngine->createBarrier(car->getActor()),
                         renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live for 10000 ms.         
                 

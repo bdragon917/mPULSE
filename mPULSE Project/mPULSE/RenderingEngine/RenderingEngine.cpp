@@ -714,6 +714,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         int ones = (curSpd-((hundreds*100)+(tens*10)));
         int tenth = ((carActor->getLinearVelocity().magnitude()*10)-((hundreds*1000)+(tens*100)+(ones*10)));
         CustomData* cd = (CustomData*) carActor->userData;
+        
         //drawText(50,-75, "Place: " + FloatToString(carEntity->rank));
         //drawText(50, -100, "Obs: " + FloatToString(carEntity->raceWinnings()));
         //drawText(850,-600, "Spd: " + FloatToString(hundreds) + " " + FloatToString(tens) + " " + FloatToString(ones));
@@ -790,10 +791,10 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
 
             drawSquare(xOffset+x,yOffset+0.05f-z,0,0.015f,0.015f);
         }
-
+        
         //Draw pickup
         xOffset = -0.85;
-        yOffset = 0.85;
+        yOffset = 0.70;
 
         if(cd->pickupType == Entity::BOOST)
             glBindTexture(GL_TEXTURE_2D, textureid_P1[53]);
@@ -809,9 +810,15 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         drawSquare(xOffset,yOffset,0,0.10f,0.10f);
 
         //Draw text on screen        
+        if(carEntity->getBatteryCharged())
+            renderText(-0.1,0.7,0.03,0.03,35,"Battery Full",false);        
+        else 
+            renderText(-0.1,0.7,0.03,0.03,35,"Battery Empty",false);
+
         renderText(-0.1,0.80,0.03,0.03,35,"Obs "+FloatToString(cd->entity->obs),false);
         renderText(0.65,0.1,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/7",false);       
         renderText(0.65,0.2,0.03,0.03,35,"Lap   "+FloatToString(cd->laps)+"/2",false);
+
 
         for(unsigned i=0;i<textQueue.size();i++)
         {

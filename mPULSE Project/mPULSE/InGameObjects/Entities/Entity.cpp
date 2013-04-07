@@ -80,9 +80,8 @@ bool Entity::isAlive()
     if(alive)
     {
         if(timeToLive==-1)
-            alive = true;
-    
-        if((int)clock.getCurrentTime() - timeCreated >= timeToLive)
+            alive = true;    
+        else if((int)clock.getCurrentTime() - timeCreated >= timeToLive)
             alive = false;
         else
             alive = true;
@@ -317,7 +316,10 @@ void Entity::chargeBattery()
 		actor->setLinearVelocity(lin_vel);
 	}
 }
-
+bool Entity::getBatteryCharged()
+{
+    return batteryCharged;
+}
 float Entity::raceWinnings()
 {
 	return (float)obs;
