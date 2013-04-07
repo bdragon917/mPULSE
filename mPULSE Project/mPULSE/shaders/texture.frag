@@ -38,6 +38,6 @@ void main (void)
   }
   
   renderColor = vec4(ct, alpha);
-  final_color = final_color * renderColor;
+  final_color = (final_color * (renderColor)) + (renderColor * 0.5);
   gl_FragColor = final_color;			
 }
