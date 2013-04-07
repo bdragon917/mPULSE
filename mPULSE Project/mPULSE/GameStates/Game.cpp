@@ -4,17 +4,18 @@ Game::Game()
 {
     state = InitState::getInstance();
     gameClock = new Clock(60.0f);
+    quit = false;
 }
 void Game::update()
 {       
     checkStateChange(); //This method checks if Game should change state and preforms a state change if needed
-    state->update(gameClock->getDeltaTime());
-    //printf(("fps:%i\n"),gameClock->getDeltaTime());
+    state->update(gameClock->getDeltaTime());      
 }
 
 void Game::render()
 {
     state->render();
+    quit = state->quit; //Check if game should quit
 }
 
 bool Game::handleKeyboardMouseEvents(SDL_Event& KeyboardMouseEvents)
