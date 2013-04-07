@@ -40,6 +40,9 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     timeToLive = tmpTimeToLive;
     timeCreated = clock.getCurrentTime();
 
+    tracker = NULL;
+    tracking = NULL;
+
     if(actor != NULL)
     {
         CustomData* cd = (CustomData*) actor->userData;
@@ -52,6 +55,30 @@ void Entity::update()
 {
     if (clock.getCurrentTime() - shieldActivatedTime > shieldTimeout)
         shield = false;
+
+    if(tracking != NULL)
+    {
+        //Update the velocity
+        NxVec3 trackingPos = tracking->getActor()->getGlobalPosition();
+        NxVec3 dirToTarget = trackingPos - actor->getGlobalPosition();   
+        dirToTarget.normalize();
+
+        NxReal velMag = actor->getLinearVelocity().magnitude();
+        actor->setLinearVelocity(velMag * dirToTarget);
+
+        //Update the orientation
+        NxQuat quat;
+        NxVec3 dir = actor->getGlobalOrientation()*initDir;
+        dir.normalize();
+        NxVec3 axis = tracking->getActor()->getGlobalPosition().cross(dir);
+        axis.normalize();                
+        trackingPos.normalize();
+
+        quat.fromAngleAxis(acos(dir.dot(trackingPos))*(3.1415f/180.0f),axis);
+        quat.rotate(dir);
+
+        actor->setGlobalOrientationQuat(quat);
+    }
 }
 
 void Entity::setTimeToLive(int tmpTime)
@@ -71,6 +98,12 @@ void Entity::reset()
 
 void Entity::kill()
 {
+    if(tracking != NULL)
+        tracking->tracker = NULL;
+
+    if(tracker != NULL)
+        tracker->tracking = NULL;
+
     alive = false;
     timeToLive = 0;
 }

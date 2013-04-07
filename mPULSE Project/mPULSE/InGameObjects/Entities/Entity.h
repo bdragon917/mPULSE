@@ -110,8 +110,11 @@ public:
 	void setDotResult(NxReal result);
     int rank;
 	Entity* parent;
-    	unsigned obs;
+    Entity* tracking;
+    Entity* tracker;
+    unsigned obs;
     std::string rankingName;
+    NxVec3 initDir;
 
 private:
 
@@ -148,7 +151,7 @@ private:
 
 	NxVec3 impactPoint;
 	NxVec3 impactNormal;
-	NxVec3 oldVelocity;
+	NxVec3 oldVelocity;    
 	NxReal dotResult;
 
     Clock clock;
