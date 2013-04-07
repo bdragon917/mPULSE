@@ -84,6 +84,8 @@ public:
 
     bool getShield();
     void setShield(bool active);
+    bool getBatteryCharged();
+
     void update();
 
     void reset();

@@ -188,7 +188,7 @@ void Track::loadTrackInfo(std::string filename)
                 else if(type == Waypoint::PICKUP_SPAWN)
                 {
                     std::vector<std::string>* elements = split(charArray,' ');  
-                    if(elements->size() >= 8)
+                    if(elements->size() >= 5)
                     {
                         Waypoint* wp = new Waypoint(elements);
 					    wp->type = type;
@@ -406,11 +406,13 @@ void Track::loadTrackInfo2(std::string filename)
                     }
                     else if(type == Waypoint::PICKUP_SPAWN)
                     {
-                        file.getline(charArray,1024);
                         std::vector<std::string>* elements = split(charArray,' ');  
-                        Waypoint* wp = new Waypoint(elements);
-					    wp->type = type;
-                        addWaypoint(wp);
+                        if(elements->size() >= 8)
+                        {
+                            Waypoint* wp = new Waypoint(elements);
+					        wp->type = type;
+                            addWaypoint(wp);
+                        }
                     }					
 				}
 			}
@@ -749,7 +751,6 @@ std::vector<std::string>* Track::split(std::string line, char delimiter)
     {
         if(line.at(i) == delimiter)
         {
-
             std::string sub = line.substr(lastDelimiterSeen,lastDelimiterSeen + i);
             std::string sub2 = line.substr(lastDelimiterSeen,i-lastDelimiterSeen);
             substrings->push_back(line.substr(lastDelimiterSeen,i-lastDelimiterSeen));
