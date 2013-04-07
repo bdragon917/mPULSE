@@ -125,8 +125,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[59];
-    glGenTextures(59, textureid_P1);
+    textureid_P1 = new GLuint[60];
+    glGenTextures(60, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -206,6 +206,7 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/Pickups/Barrier.bmp", textureid_P1[56]);
     bindBMPtoTexture("./Images/Pickups/Empty.bmp", textureid_P1[57]);
 	bindBMPtoTexture("./Images/planet.bmp", textureid_P1[58]);
+    bindBMPtoTexture("./Images/shield.bmp", textureid_P1[59]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -3503,8 +3504,14 @@ void RenderingEngine::drawCars(Entities* entities)
                     {
                         if (locShader_Alpha != -1)
                         {glUniform1f(locShader_Alpha, 0.50f);}
-                         glBindTexture(GL_TEXTURE_2D, textureid_P1[3]);
+
+                        GLint locShader_DiscardBlue = aShader->getUniLoc("discard_blue");
+                        glUniform1f(locShader_DiscardBlue, 1.0f);
+
+                         glBindTexture(GL_TEXTURE_2D, textureid_P1[59]);
                         drawModelPos(modelManager.getModel("Shield.obj"), aPose );
+
+                        glUniform1f(locShader_DiscardBlue, 0.0f);
                     }
                     //Particles
                     //Particle* newParticle = new Particle(entities->cars[i]->getActor()->getGlobalPose().t.x, entities->cars[i]->getActor()->getGlobalPose().t.y,entities->cars[i]->getActor()->getGlobalPose().t.z);

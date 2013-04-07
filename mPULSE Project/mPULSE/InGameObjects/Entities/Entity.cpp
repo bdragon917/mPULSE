@@ -83,7 +83,6 @@ void Entity::update()
         float angleToTarget = target.dot(NxVec3(0,1,0));
 
         NxVec3 dir = actor->getGlobalOrientation()*initDir;
-
         NxVec3 axis = tracking->getActor()->getGlobalPosition().cross(dir);
         axis.normalize();
 
