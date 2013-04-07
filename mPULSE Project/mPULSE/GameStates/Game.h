@@ -27,6 +27,7 @@ public:
     bool handleKeyboardMouseEvents(SDL_Event& KeyboardMouseState);
     void handleXboxEvents(int player,XboxController* controller);
     void checkStateChange();
+    bool quit;
 
 private:
     Clock* gameClock;

@@ -12,7 +12,7 @@
 SDL_Surface* init();
 
 // Constants
-const unsigned MAX_PLAYER_COUNT = 4;
+const unsigned MAX_PLAYER_COUNT = 2;
  
 int main(int argc, char *argv[])
 {   
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
         
 		game.update();  //physics simulations
 		game.render();  //openGL calls          
-
+        gameRunning = !game.quit; //Check if game should quit
         //Display to screen
         SDL_GL_SwapBuffers();
 	}

@@ -28,7 +28,6 @@ void MainMenuState::update(float dt)
 void MainMenuState::render()
 {   
     renderingEngine->createLight_MainMenu();
-
     //Construct ProfileScreenInfo (Using this to tell renderingHowTo draw profile
     //Not reallly used excepted for .isActive, but good to initial the variables
     ProfileScreenInfo psi = ProfileScreenInfo();
@@ -43,11 +42,8 @@ void MainMenuState::render()
     psi.selectedTextTexture = 1;
     psi.selectedButtonTexture = 1;
 
-
-
     //assumes myDt is updated
     int retMenuVal = renderingEngine->drawMainMenuScreen(curSelected, 0, myDt, psi);     //retMenuVal returns 1 if it is finished (This means change screen!)
-
 
     //If all animation is finished, run the command
 	if ((retMenuVal == 1) || endState)
@@ -65,23 +61,12 @@ void MainMenuState::render()
             changeState(PROFILE);
             break;
         case 1:
-            //This should bring up a profile screen
-            //if (gameVariables->getPlayerNum() < 2)
-            //{
-            //    printf("Only one player detected.\n");//TODO Tell the player on screen they need more controllers.
-            //    gameVariables->addPlayerTwo();
-            //    gameVariables->player2isAI = true;
-            //    changeState(PROFILE); 
-            //}
-            //else
-            //{
             for (int i = 0;i < gameVariables->getPlayerNum(); i++)
-                {gameVariables->removePlayer(i);}               //Clears all players. HACK to make things work [Pushes responsibility of players management to profiles]
+                gameVariables->removePlayer(i);               //Clears all players. HACK to make things work [Pushes responsibility of players management to profiles]
 
-                gameVariables->addPlayers(new Profile());
-                gameVariables->addPlayerTwo();
-                changeState(PROFILE); 
-           // }
+            gameVariables->addPlayers(new Profile());
+            gameVariables->addPlayerTwo();
+            changeState(PROFILE); 
             break;
         case 2:
             changeState(STORY);
@@ -91,11 +76,9 @@ void MainMenuState::render()
             break;
         case 4:
             quit = true;
-            //changeState(MAIN_MENU); 
             break;
         }
     }
-
 }
 
 bool MainMenuState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)

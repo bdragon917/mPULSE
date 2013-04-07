@@ -138,9 +138,6 @@
     <ClCompile Include="AI\Waypoints.cpp">
       <Filter>Source Files\AI</Filter>
     </ClCompile>
-    <ClCompile Include="GameStates\GameVariables.cpp">
-      <Filter>Source Files\GameStates</Filter>
-    </ClCompile>
     <ClCompile Include="Util\Profile.cpp">
       <Filter>Source Files\Util</Filter>
     </ClCompile>
@@ -233,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="mPULSE.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\GameVariables.cpp">
+      <Filter>Source Files\InGameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
