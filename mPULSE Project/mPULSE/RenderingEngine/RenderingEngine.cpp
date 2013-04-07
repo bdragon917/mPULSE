@@ -125,8 +125,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[60];
-    glGenTextures(60, textureid_P1);
+    textureid_P1 = new GLuint[61];
+    glGenTextures(61, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -207,6 +207,7 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/Pickups/Empty.bmp", textureid_P1[57]);
 	bindBMPtoTexture("./Images/planet.bmp", textureid_P1[58]);
     bindBMPtoTexture("./Images/shield.bmp", textureid_P1[59]);
+    bindBMPtoTexture("./Images/ColorWhite.bmp", textureid_P1[60]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -3691,14 +3692,14 @@ void RenderingEngine::drawTrack(Track* track)
     if (model != NULL)
     {   
         if (locShader_Alpha != -1)
-                    {glUniform1f(locShader_Alpha, 0.33f);}
+                    {glUniform1f(locShader_Alpha, 0.40f);}
 
         for(unsigned int i=0; i<wps->size(); i++)       
         {
             if(wps->at(i)->type == Waypoint::PICKUP_SPAWN)
             {
-
-                model = modelManager.getModel("Shield.obj");
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[60]);
+                model = modelManager.getModel(20);
 
 
                 if(model != NULL)

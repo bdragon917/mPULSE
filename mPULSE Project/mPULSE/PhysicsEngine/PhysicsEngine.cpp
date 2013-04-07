@@ -357,7 +357,7 @@ void PhysicsEngine::createBoxes(float x, float y, float z, int num, float radius
         float rndz = ((rand() % 100) / 100) * radius;
         Entity* aEntity = new Entity(-1,createBox(x + rndx, y, z + rndz));
         //aEntity->rc.push_back(&(RenderableComponent(0,6)));
-        RenderableComponent* rc = new RenderableComponent(0,6);
+        RenderableComponent* rc = new RenderableComponent(21,6);
         aEntity->rc.push_back(rc);
         
         Boxes->push_back(aEntity);
@@ -371,7 +371,9 @@ NxActor* PhysicsEngine::createBox(float x, float y, float z)
 
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
-	bodyDesc.angularDamping	= 0.5f;
+	bodyDesc.angularDamping	= 0.1f;
+    bodyDesc.linearDamping = 0.5f;
+    bodyDesc.flags = NX_BF_DISABLE_GRAVITY;
 
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;

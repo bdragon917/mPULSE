@@ -147,7 +147,8 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
         //xController->leftStick.x = myTarget.x;
         //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
         xController->leftStick.x = 0;
-        xController->rTrigger = 255;
+        //xController->rTrigger = 255;
+        xController->rTrigger = 100;        //Weaken AI
 
         if (xController->leftStick.y < 0)   //If y is negative, probably due to ai logic /slow down
         {
