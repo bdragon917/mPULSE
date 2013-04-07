@@ -3272,12 +3272,6 @@ int RenderingEngine::drawResultScreen(float dt)
         glColor4f(0.0f,0.0f,0.0f, 1.0f);
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
-        //Title
-        string title = "Hi! This is Result Mode!";
-        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
-        //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
-
-
         float offset = dec_height*4.0f;
 
         for (unsigned i= 0; i < gameVariables->rankings.size();i++)

@@ -29,7 +29,7 @@ void PlayState::resetAll()
 
     changeState(PLAY); 
     numPlayers = gameVariables->getPlayerNum();
-    int num_AI = 2;
+    int num_AI = 1;
 
     rankings = new std::vector<Entity*>;
     for(int i=0;i<numPlayers;i++)
@@ -400,6 +400,7 @@ void PlayState::update(float dt)
 
     while(currObj<numOfObjs)
     {    
+        entities.DynamicObjs.at(currObj)->update();
         NxActor* a = entities.DynamicObjs.at(currObj)->getActor();
         if(!entities.DynamicObjs.at(currObj)->isAlive())
         {            
@@ -1041,14 +1042,22 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 Entity::PickupType type = car->usePickup();
                 if(type == Entity::MISSILE)
                 {
+                    int numCars = 2;
+                    int victimIndex = car->rank - 2;   //offset from current rank to get the person infront of you                 
                     soundEngine->playSound(4, 8);       //play missile, on channel 4
-                    Entity* e = new Entity(10000,
+                    Entity* e = new Entity(20000,
                         physicsEngine->createMissile(car->getActor()),
-                        renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 10000 ms.
-
-                    e->rc.push_back(new RenderableComponent(4,32));      //Missile
-                    entities.DynamicObjs.push_back(e);
+                        renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 20000 ms.
+                    e->rc.push_back(new RenderableComponent(4,32));      //Missile                    
 				    e->parent = car;
+                    e->initDir = car->getActor()->getGlobalOrientation()*NxVec3(1,0,0);
+
+                    if(victimIndex >= 0) //Fly straight if player is in first place
+                    {
+                        e->tracking = rankings->at(victimIndex);
+                        rankings->at(victimIndex)->tracker = e;
+                    }
+
                     entities.DynamicObjs.push_back(e);
 
                     if (CHEAT_InfPowUp)
@@ -1064,8 +1073,8 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                     soundEngine->playSound(4, 10);       //play missile, on channel 4
                     Entity* e = new Entity(-1,
                         physicsEngine->createBarrier(car->getActor()),
-                        renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live for 10000 ms.         
-                
+                        renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live forever       
+				    e->parent = car;                
                     e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
                     e->rc.push_back(new RenderableComponent(10,31));     //BarrierScreen
                     entities.DynamicObjs.push_back(e);
@@ -1086,7 +1095,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             if(state->dpadLeft)
                 car->givePickup(Entity::BOOST);
             if(state->dpadDown)
-                car->getActor()->setLinearVelocity((car->getActor()->getLinearVelocity() * 1.2f));
+                car->givePickup(Entity::MISSILE);
             if(state->lb) 
                 car->shuntLeft();
             if(state->rb)
