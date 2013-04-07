@@ -272,7 +272,7 @@ NxActor* PhysicsEngine::createMissile(NxActor* car)
 	//Add single shape actor to the scene
 	NxBodyDesc bodyDesc;
 	bodyDesc.angularDamping	= 0.5f;
-    bodyDesc.flags = NX_BF_DISABLE_GRAVITY;
+    bodyDesc.flags = NX_BF_DISABLE_GRAVITY | NX_BF_FROZEN_ROT;
     
 	//The actor has one shape, a box, 1m on a side
 	NxBoxShapeDesc boxDesc;
