@@ -4,7 +4,6 @@ varying vec3 normal, eyeVec;
 varying vec3 lightDir[MAX_LIGHTS];
 uniform sampler2D tex;
 uniform float alpha = 1.0f;
-uniform float discard_blue = 0.0f;
 void main (void)
 {
   vec4 texel, renderColor;
@@ -39,14 +38,6 @@ void main (void)
   }
   
   renderColor = vec4(ct, alpha);
-  final_color = (final_color * (renderColor)) + (renderColor * 0.5);
-  final_color.w = alpha;
-  
-  if (discard_blue > 0.5f)
-	{
-		if (ct == vec3(0.0,0.0,1.0))
-			discard;
-	}
-  
+  final_color = final_color * renderColor;
   gl_FragColor = final_color;			
 }

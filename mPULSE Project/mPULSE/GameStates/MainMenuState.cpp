@@ -6,17 +6,14 @@ MainMenuState::MainMenuState()
     quit = false;
     gameVariables = GameVariables::getInstance();
 
-    //entities.cars.push_back(new Entity);
     physicsEngine = PhysicsEngine::getInstance();
-    //physicsEngine->setupPlayScene(&entities.cars);
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
-	//renderingEngine->initializeGL();
     renderingEngine->createLight_MainMenu();
 
     curSelected = 0;
     prevTime = 0;
-    WAIT_TIME = 50;
+    WAIT_TIME = 250;
     MAX_SELECTED = 4;
     buttonPressed = false;
     endState = false;          //might not be used....
@@ -48,7 +45,7 @@ void MainMenuState::render()
 
 
 
-    //asumes myDt is updated
+    //assumes myDt is updated
     int retMenuVal = renderingEngine->drawMainMenuScreen(curSelected, 0, myDt, psi);     //retMenuVal returns 1 if it is finished (This means change screen!)
 
 
@@ -152,8 +149,8 @@ void MainMenuState::handleXboxEvents(int player,XboxController* state)
                 if(!buttonPressed)
                     buttonPressed = true;
                 keySelectLeft();
-            }
-            prevTime = clock.getCurrentTime();
+                prevTime = clock.getCurrentTime();
+            }            
         }
         else if(state->dpadRight || state->leftStick.x > 0)
         {
@@ -162,8 +159,8 @@ void MainMenuState::handleXboxEvents(int player,XboxController* state)
                 if(!buttonPressed)
                     buttonPressed = true;
                 keySelectRight();
+                prevTime = clock.getCurrentTime();
             }
-            prevTime = clock.getCurrentTime();
         }
         else if (state->a)
             keySelectTarget();
