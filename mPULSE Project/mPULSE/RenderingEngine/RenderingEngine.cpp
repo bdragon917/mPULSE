@@ -125,8 +125,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[61];
-    glGenTextures(61, textureid_P1);
+    textureid_P1 = new GLuint[65];
+    glGenTextures(65, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -208,6 +208,12 @@ void RenderingEngine::initializeTexture()
 	bindBMPtoTexture("./Images/planet.bmp", textureid_P1[58]);
     bindBMPtoTexture("./Images/shield.bmp", textureid_P1[59]);
     bindBMPtoTexture("./Images/ColorWhite.bmp", textureid_P1[60]);
+
+    //Asteroids
+    bindBMPtoTexture("./Images/Asteroids/meteorite0.bmp", textureid_P1[61]);
+    bindBMPtoTexture("./Images/Asteroids/meteorite1.bmp", textureid_P1[62]);
+    bindBMPtoTexture("./Images/Asteroids/meteorite2.bmp", textureid_P1[63]);
+    bindBMPtoTexture("./Images/Asteroids/meteorite3.bmp", textureid_P1[64]);
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");

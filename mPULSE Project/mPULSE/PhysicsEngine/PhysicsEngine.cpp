@@ -357,7 +357,7 @@ void PhysicsEngine::createBoxes(float x, float y, float z, int num, float radius
         float rndz = ((rand() % 100) / 100) * radius;
         Entity* aEntity = new Entity(-1,createBox(x + rndx, y, z + rndz));
         //aEntity->rc.push_back(&(RenderableComponent(0,6)));
-        RenderableComponent* rc = new RenderableComponent(21,6);
+        RenderableComponent* rc = new RenderableComponent(21,61 + rand() % 5);        //asteroids , texture = 61 - 64
         aEntity->rc.push_back(rc);
         
         Boxes->push_back(aEntity);
