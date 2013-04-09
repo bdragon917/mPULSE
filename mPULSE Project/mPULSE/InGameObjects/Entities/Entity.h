@@ -146,7 +146,8 @@ private:
     unsigned shuntStartTime;
     unsigned maxShuntTime;
     unsigned shuntReloadTime;
-    unsigned shieldTimeout;   
+    unsigned shieldTimeout;  
+    unsigned delayBeforeTracking;
     NxReal shuntPower;
 
 	NxVec3 impactPoint;

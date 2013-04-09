@@ -34,7 +34,7 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     maxShuntTime = 200;
     shuntPower = 50;
     shuntReloadTime = 600;
-
+    delayBeforeTracking = 1000;
     rankingName = "not set";
 
     timeToLive = tmpTimeToLive;
@@ -56,70 +56,21 @@ void Entity::update()
     if (clock.getCurrentTime() - shieldActivatedTime > shieldTimeout)
         shield = false;
 
-    if(tracking != NULL)
+    if(tracking != NULL && clock.getCurrentTime() > timeCreated+delayBeforeTracking)
     {
         //Update the velocity
+        NxVec3 myPos = actor->getGlobalPosition();
         NxVec3 trackingPos = tracking->getActor()->getGlobalPosition();
-        NxVec3 dirToTarget = trackingPos - actor->getGlobalPosition();   
+        NxVec3 dirToTarget = trackingPos - myPos;   
         dirToTarget.normalize();
 
         NxReal velMag = actor->getLinearVelocity().magnitude();
-        actor->setLinearVelocity(velMag * dirToTarget);
+        actor->setLinearVelocity(velMag*dirToTarget);
 
-
-
-        //Calc stuff to determine the angle to target in x, z plane
-        NxQuat quat;
-        NxVec3 myDir = actor->getGlobalPose() * initDir;
-        myDir = myDir - actor->getGlobalPose().t;
-
-        myDir.normalize();
-
-        NxVec3 target = trackingPos;
-        target = target - actor->getGlobalPose().t;
-        target.normalize();
-
-        //float angleToTarget = target.dot(myDir);
-        float angleToTarget = target.dot(NxVec3(0,1,0));
-
-        NxVec3 dir = actor->getGlobalOrientation()*initDir;
-        NxVec3 axis = tracking->getActor()->getGlobalPosition().cross(dir);
-        axis.normalize();
-
-        //find y angle
-        float deltaY = tracking->getActor()->getGlobalPosition().y - actor->getGlobalPosition().y;
-        float dist = tracking->getActor()->getGlobalPosition().distance(actor->getGlobalPosition());
-
-        float angleUp = asin(deltaY/dist);
-
-
-
-        //Apply rotations
-        //Rotate the missile upwards
-        quat.fromAngleAxis(angleUp, NxVec3(0,0,1));
-
-        //rotate the missile on the xz plane towards the opponent
-        quat.fromAngleAxis((angleToTarget*(180.0f/3.1415f))  + 90.0f,NxVec3(0,1,0));
-
-        /*
-        //Update the orientation
-        NxQuat quat;
-        NxVec3 dir = actor->getGlobalOrientation()*initDir;
-        NxVec3 noNorDir = dir;
-        dir.normalize();
-        NxVec3 axis = tracking->getActor()->getGlobalPosition().cross(dir);
-        axis.normalize();                
-        trackingPos.normalize();
-        
-
-        //quat.fromAngleAxis(acos(dir.dot(trackingPos))*(3.1415f/180.0f),axis);
-        quat.fromAngleAxis(noNorDir.dot(trackingPos),axis);
-        */
-
-        //quat.fromAngleAxis(90.0f,axis);
-        //quat.rotate(dir);
-
-        actor->setGlobalOrientationQuat(quat);
+        //Update the orientation        
+        NxMat33 orientation = actor->getGlobalOrientation();
+        orientation.setColumn(0,dirToTarget);
+        actor->setGlobalOrientation(orientation);
     }
 }
 
