@@ -22,3 +22,6 @@ SoundEngine\\Sounds\\scifiEngine2_7.wav
 SoundEngine\\Sounds\\scifiEngine2_8.wav
 SoundEngine\\Sounds\\scifiEngine2_9.wav
 SoundEngine\\Sounds\\scifiEngine2_10.wav
+SoundEngine\\Sounds\\MissileAbsorbed.wav
+SoundEngine\\Sounds\\MissileHit.wav
+SoundEngine\\Sounds\\MissileAlarm.wav

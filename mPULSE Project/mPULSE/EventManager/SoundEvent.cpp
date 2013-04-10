@@ -1,8 +1,10 @@
 #include "SoundEvent.h"
 
 
-SoundEvent::SoundEvent(void)
+SoundEvent::SoundEvent(int channel,int soundIndex)
 {
+    ch = channel;
+    sIndex = soundIndex;
 }
 
 

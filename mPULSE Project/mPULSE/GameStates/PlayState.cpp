@@ -486,6 +486,11 @@ void PlayState::update(float dt)
     {
 		//Checking if any of the player cars have any sweep collisions.
         Entity* car = entities.cars[c];
+
+        //Player car is being tracked. Play Alarm Sound.
+        if(car->tracker != NULL)
+            soundEngine->playSound(4,26);
+
         entities.cars[c]->aAI->update(entities.cars, entities.AIcars);
 		NxSweepQueryHit* sweepResult = car->linearSweep(dt);
 		car->setSweepCollision(false);
@@ -1044,7 +1049,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 {
                     int numCars = 2;
                     int victimIndex = car->rank - 2;   //offset from current rank to get the person infront of you                 
-                    soundEngine->playSound(4, 8);       //play missile, on channel 4
+                    soundEngine->playSound(-1, 8);       //play missile, on channel 4
                     Entity* e = new Entity(20000,
                         physicsEngine->createMissile(car->getActor()),
                         renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 20000 ms.
@@ -1203,8 +1208,7 @@ void PlayState::handleSoundEvents()
     for(unsigned i=0;i<sounds->size();i++)
     {
         sound = sounds->at(i);
-        //********Handle sound events here***********
-        //soundEngine->playSound(sound->getSound);        
+        soundEngine->playSound(sound->ch,sound->sIndex);       
     }    
     sounds->clear();
 }

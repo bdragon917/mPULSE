@@ -2,7 +2,9 @@
 class SoundEvent
 {
 public:
-    SoundEvent(void);
+    SoundEvent(int channel,int soundIndex);
     ~SoundEvent(void);
+    int ch;
+    int sIndex;
 };
 

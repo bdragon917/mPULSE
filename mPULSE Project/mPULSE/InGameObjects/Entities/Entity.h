@@ -115,6 +115,7 @@ public:
     unsigned obs;
     std::string rankingName;
     NxVec3 initDir;
+    bool shield;
 
 private:
 
@@ -123,7 +124,6 @@ private:
     bool alive;
     bool shunting;
     bool steering;
-    bool shield;
 	bool sweepCollision;
 
     int displayListIndex;
