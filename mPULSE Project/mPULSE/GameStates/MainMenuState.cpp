@@ -112,41 +112,46 @@ bool MainMenuState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void MainMenuState::handleXboxEvents(int player,XboxController* state)
 {   
-    if(!lockControls)
+    if(player==0)
     {
+        if(!lockControls)
+        {
         
-        bool* controllers = gameVariables->getControllers();
+            bool* controllers = gameVariables->getControllers();
 
-        //if(state->start && !controllers[player])
-        //{
-        //    //TODO: ask for player profile
-        //    gameVariables->addPlayer(player);
-       // }
-        //if(state->back && controllers[player])
-       //     gameVariables->removePlayer(player);
+            //if(state->start && !controllers[player])
+            //{
+            //    //TODO: ask for player profile
+            //    gameVariables->addPlayer(player);
+           // }
+            //if(state->back && controllers[player])
+           //     gameVariables->removePlayer(player);
 
-        if(state->dpadLeft || state->leftStick.x < 0)
-        {
-            if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
+            if(state->dpadLeft || state->leftStick.x < 0)
             {
-                if(!buttonPressed)
-                    buttonPressed = true;
-                keySelectLeft();
-                prevTime = clock.getCurrentTime();
-            }            
-        }
-        else if(state->dpadRight || state->leftStick.x > 0)
-        {
-            if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
-            {
-                if(!buttonPressed)
-                    buttonPressed = true;
-                keySelectRight();
-                prevTime = clock.getCurrentTime();
+                if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
+                {
+                    if(!buttonPressed)
+                        buttonPressed = true;
+                    keySelectLeft();
+                    prevTime = clock.getCurrentTime();
+                }            
             }
+            else if(state->dpadRight || state->leftStick.x > 0)
+            {
+                if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
+                {
+                    if(!buttonPressed)
+                        buttonPressed = true;
+                    keySelectRight();
+                    prevTime = clock.getCurrentTime();
+                }
+            }
+            else if (state->a)
+                keySelectTarget();
+            else 
+                buttonPressed = false;
         }
-        else if (state->a)
-            keySelectTarget();
     }
 }
 
