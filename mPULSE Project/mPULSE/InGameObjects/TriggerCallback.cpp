@@ -3,6 +3,7 @@
 TriggerCallback::TriggerCallback(void)
 {
     soundEngine = SoundEngine::getInstance();
+    gameVariables = GameVariables::getInstance();
 }
 
 
@@ -32,8 +33,8 @@ void TriggerCallback::onTrigger(NxShape& triggerShape, NxShape& actingShape, NxT
 						if(actingCd->wp->id > triggerCd->wp->id)  //check if the car passed the finish line 
                         {
                             actingCd->laps++;
-                            if(actingCd->laps > 1)                                
-                                printf("You Win!");
+                            if(actingCd->laps > gameVariables->numLaps)                                
+                                printf("Race Finished");
                         }
                         actingCd->wp = actingCd->wp->nextWaypoint;
 					}

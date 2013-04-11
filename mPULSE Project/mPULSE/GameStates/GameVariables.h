@@ -74,6 +74,7 @@ public:
     int minimapTextureIndex;
     int physXTrackModel;
     int musicIndex;
+    int numLaps;
     std::vector<RenderableComponent*> trackRC;
 
 

@@ -27,6 +27,7 @@ void GameVariables::initialize()
         
         finishTime = NULL;
     }
+    numLaps = 3;
     numberOfAIs = 6;
     selectedTrack = 0;
     loadedTracks = new Tracks("tracks.txt");

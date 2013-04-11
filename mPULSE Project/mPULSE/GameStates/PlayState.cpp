@@ -29,7 +29,7 @@ void PlayState::resetAll()
 
     changeState(PLAY); 
     numPlayers = gameVariables->getPlayerNum();
-    int num_AI = 1;
+    int num_AI = gameVariables->numberOfAIs;
 
     rankings = new std::vector<Entity*>;
     for(int i=0;i<numPlayers;i++)
@@ -351,7 +351,7 @@ void PlayState::update(float dt)
 
         CustomData* cd = (CustomData*)entities.cars[playa]->getActor()->userData;
 
-        if (cd->laps > 1)
+        if (cd->laps >= gameVariables->numLaps)
         {
             gameVariables->becomeFinished(playa);
             entities.cars[playa]->aCam->setMode(6);
@@ -1047,7 +1047,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 Entity::PickupType type = car->usePickup();
                 if(type == Entity::MISSILE)
                 {
-                    int numCars = 2;
+                    int numCars = gameVariables->numberOfAIs + gameVariables->getPlayerNum();
                     int victimIndex = car->rank - 2;   //offset from current rank to get the person infront of you                 
                     soundEngine->playSound(-1, 8);       //play missile, on channel 4
                     Entity* e = new Entity(20000,

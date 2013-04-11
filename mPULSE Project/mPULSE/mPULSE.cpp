@@ -50,8 +50,9 @@ int main(int argc, char *argv[])
         }
         
 		game.update();  //physics simulations
-		game.render();  //openGL calls          
-        gameRunning = !game.quit; //Check if game should quit
+		game.render();  //openGL calls  
+        if(gameRunning)
+            gameRunning = !game.quit; //Check if game should quit
         //Display to screen
         SDL_GL_SwapBuffers();
 	}

@@ -123,11 +123,15 @@ void SettingState::handleXboxEvents(int player,XboxController* state)
             prevTime = clock.getCurrentTime();
         }
         else if (state->a)
+        {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME)
                 keySelectTarget();
+        }
         else if (state->b)
+        {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME)
                 backPressed();
+        }
     }
 }
 

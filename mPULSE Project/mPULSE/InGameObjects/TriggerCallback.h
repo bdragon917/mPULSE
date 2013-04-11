@@ -10,6 +10,7 @@
 #include "EventManager/CollisionEvent.h"
 #include "EventManager/WaypointEvent.h"
 #include "EventManager/EventManager.h"
+#include "GameStates\GameVariables.h"
 
 class TriggerCallback : public NxUserTriggerReport 
 {
@@ -19,6 +20,7 @@ public:
 	void onTrigger(NxShape& triggerShape, NxShape& otherShape, NxTriggerFlag status);
 
 private:
+    GameVariables* gameVariables;
     SoundEngine* soundEngine;
 };
 
