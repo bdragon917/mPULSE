@@ -2748,49 +2748,49 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
 
         //Profiles
         title = psi.profilesOnScreen[0];
-        if (psi.selectedItem == 1)
+        if (psi.selectedItem == 0)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*3), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*3), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[1];
-        if (psi.selectedItem == 2)
+        if (psi.selectedItem == 1)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*5), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*5), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[2];
-        if (psi.selectedItem == 3)
+        if (psi.selectedItem == 2)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*7), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*7), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[3];
-        if (psi.selectedItem == 4)
+        if (psi.selectedItem == 3)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*9), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*9), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
         
         title = psi.profilesOnScreen[4];
-        if (psi.selectedItem == 5)
+        if (psi.selectedItem == 4)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*11), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*11), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[5];
-        if (psi.selectedItem == 6)
+        if (psi.selectedItem == 5)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*13), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*13), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[6];
-        if (psi.selectedItem == 7)
+        if (psi.selectedItem == 6)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*15), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*15), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[7];
-        if (psi.selectedItem == 8)
+        if (psi.selectedItem == 7)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*17), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*17), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
@@ -2834,12 +2834,13 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
         */
 
         //Done Button
+		/*
        if (psi.selectedItem == 0)
             glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
         else
             glBindTexture(GL_TEXTURE_2D, textureid_P1[37]);
         drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
-
+		*/
         aHUDShader->off();
 
     //reset to previous state
