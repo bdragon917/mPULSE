@@ -2,7 +2,7 @@
 
 MainMenuState::MainMenuState()
 {
-    changeState(MAIN_MENU); 
+    //changeState(MAIN_MENU); 
     quit = false;
     gameVariables = GameVariables::getInstance();
 
@@ -10,8 +10,10 @@ MainMenuState::MainMenuState()
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
     renderingEngine->createLight_MainMenu();
+}
 
-    curSelected = 0;
+void MainMenuState::initialize()
+{
     prevTime = 0;
     WAIT_TIME = 250;
     MAX_SELECTED = 4;
@@ -28,10 +30,12 @@ void MainMenuState::update(float dt)
 void MainMenuState::render()
 {   
     renderingEngine->createLight_MainMenu();
+	
     //Construct ProfileScreenInfo (Using this to tell renderingHowTo draw profile
     //Not reallly used excepted for .isActive, but good to initial the variables
     ProfileScreenInfo psi = ProfileScreenInfo();
     psi.isActive = false;
+	/*
     psi.title = "Player 1 Profile";
     psi.profilesOnScreen[0] = "";
     psi.profilesOnScreen[1] = "";
@@ -41,7 +45,7 @@ void MainMenuState::render()
     psi.selectedItem = 0;
     psi.selectedTextTexture = 1;
     psi.selectedButtonTexture = 1;
-
+	*/
     //assumes myDt is updated
     int retMenuVal = renderingEngine->drawMainMenuScreen(curSelected, 0, myDt, psi);     //retMenuVal returns 1 if it is finished (This means change screen!)
 
@@ -61,6 +65,7 @@ void MainMenuState::render()
                 {gameVariables->removePlayer(i);}               //Clears all players. HACK to make things work [Pushes responsibility of players management to profiles]
             gameVariables->addPlayers(new Profile());
 			*/
+			printf("case 0 triggered!!!!!!!!!!!!!!!!!!!!!!!!!\n");
             changeState(PROFILE);
             break;
         case 1:
@@ -73,6 +78,7 @@ void MainMenuState::render()
             gameVariables->addPlayers(new Profile());
             gameVariables->addPlayerTwo();
 			*/
+			printf("case 1 triggered!!!!!!!!!!!!!!!!!!!!!!!!!\n");
             changeState(PROFILE); 
             break;
         case 2:
@@ -190,7 +196,7 @@ void MainMenuState::keySelectTarget()
     }
     else
     {
-        renderingEngine->startFadeOut();
+		renderingEngine->startTransition(RenderingEngine::FADE_OUT);
         lockControls = true;
     }
     //lock controls
@@ -199,8 +205,9 @@ void MainMenuState::keySelectTarget()
 
 MainMenuState* MainMenuState::getInstance()
 {    
-     printf("main menu state\n");
+    printf("main menu state\n");
     static MainMenuState MainMenuState;
     MainMenuState.changeState(MAIN_MENU);
+	MainMenuState.initialize();
     return &MainMenuState;
 }

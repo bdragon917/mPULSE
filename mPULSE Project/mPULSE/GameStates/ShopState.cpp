@@ -218,7 +218,7 @@ void ShopState::keySelectDown()
 void ShopState::keySelectTarget()
 {
     soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
-    renderingEngine->startFadeOut();
+    renderingEngine->startTransition(RenderingEngine::FADE_OUT);
     lockControls = true;
 }
 
@@ -226,7 +226,7 @@ void ShopState::backPressed()
 {
     lockControls = true;
     curSelectedY = -1;
-    renderingEngine->startFadeOut();
+    renderingEngine->startTransition(RenderingEngine::FADE_OUT);
 }
 ShopState* ShopState::getInstance()
 {    

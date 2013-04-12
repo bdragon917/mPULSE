@@ -7,6 +7,7 @@
 
 #include <GameStates/GameState.h>
 #include <RenderingEngine/RenderingEngine.h>
+#include <RenderingEngine\DynamicImage.h>
 #include <PhysicsEngine/PhysicsEngine.h>
 #include <SoundEngine/SoundEngine.h>
 #include <InGameObjects/Entities/Entity.h>

@@ -17,6 +17,7 @@ class MainMenuState : public GameState
 {
 public:
     static MainMenuState* getInstance();
+	void initialize();
     void update(float dt);
     void render();
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);

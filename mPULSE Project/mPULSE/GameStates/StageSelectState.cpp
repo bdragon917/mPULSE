@@ -8,9 +8,12 @@ StageSelectState::StageSelectState()
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
- 
-    int curSelectedX = 1;
-    int curSelectedY = 1;
+}
+
+void StageSelectState::initialize()
+{    
+	int currentSelectedX = 0;
+    int currentSelectedY = 0;
 
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
@@ -22,7 +25,6 @@ StageSelectState::StageSelectState()
     endState = false;
 
     loadTrack();
-
 }
 
 void StageSelectState::update(float dt)
@@ -33,25 +35,15 @@ void StageSelectState::update(float dt)
 void StageSelectState::render()
 {   
     renderingEngine->createLight_MainMenu();
-    int retMenuVal = renderingEngine->drawStageSelectScreen(myDt, curSelectedY);     //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
+    int retMenuVal = renderingEngine->drawStageSelectScreen(myDt, currentSelectedY);     //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
 
     if (retMenuVal == 1)
     {
-        switch (curSelectedY)
-        {
-        case -1:
-            curSelectedY = 1;
-            lockControls = false;
-            changeState(SHOP);
-            break;
-        default:
-            PlayState* pStage = PlayState::getInstance();
-            pStage->resetAll();
-            renderingEngine->resetFade();   //In case
-            lockControls = false;
-            changeState(PLAY);
-            break;
-        }
+		PlayState* pStage = PlayState::getInstance();
+        pStage->resetAll();
+        renderingEngine->resetFade();   //In case
+        lockControls = false;
+        changeState(PLAY);
     }
 
 
@@ -126,9 +118,9 @@ void StageSelectState::loadTrack()
     std::string trackFileName;
 
     gameVariables->trackSelectRotVar = 0.0f;
-    if ((curSelectedY-1) < (gameVariables->loadedTracks->getNumberofTracks()) && ((curSelectedY-1) > -1))
+    if ((currentSelectedY) < (gameVariables->loadedTracks->getNumberofTracks()) && ((currentSelectedY) > -1))
     {
-        trackFileName = gameVariables->loadedTracks->getTrackFilename(curSelectedY-1);
+        trackFileName = gameVariables->loadedTracks->getTrackFilename(currentSelectedY);
 
         Track* tempTrack = new Track(trackFileName);
 
@@ -189,52 +181,45 @@ void StageSelectState::loadTrack()
 void StageSelectState::keySelectLeft()
 {
      soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
-     curSelectedY = curSelectedY - 1;
-     if (curSelectedY < 1)          //not zero to not allow the done button
-     {curSelectedY = gameVariables->loadedTracks->getNumberofTracks();}
+     currentSelectedY--; // = currentSelectedY - 1;
+
+     if (currentSelectedY < 0)
+     {
+		 currentSelectedY = gameVariables->loadedTracks->getNumberofTracks()-1;
+	 }
+
      loadTrack();
 }
 
 void StageSelectState::keySelectRight()
 {
      soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
-     curSelectedY = curSelectedY + 1;
-     if (curSelectedY > gameVariables->loadedTracks->getNumberofTracks())
-     {curSelectedY = 1;}            //not zero to not allow the done button
+     currentSelectedY = (currentSelectedY + 1) % gameVariables->loadedTracks->getNumberofTracks();
      loadTrack();
 }
 
 void StageSelectState::keySelectTarget()
 {
-    if (curSelectedY == 0)
-    {
-        curSelectedY = 1;       //hack, THIS value should not be 0 anymore
-        soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
-        //renderingEngine->startFadeOut();
-        //lockControls = true;
-    }
-    else
-    {
-        gameVariables->selectedTrack = curSelectedY - 1;
+	gameVariables->selectedTrack = currentSelectedY;
 
-
-        soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
-        renderingEngine->startFadeOut();
-        lockControls = true;
-        //load the selected track!!!
-    }
+    soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
+    renderingEngine->startTransition(RenderingEngine::FADE_OUT);
+    lockControls = true;
 }
 
 void StageSelectState::backPressed()
 {
-    curSelectedY = -1;
-    renderingEngine->startFadeOut();
+    currentSelectedY = -1;
+    renderingEngine->startTransition(RenderingEngine::FADE_OUT);
     lockControls = true;
 }
+
+
 StageSelectState* StageSelectState::getInstance()
 {    
-     printf("StageSelectState state\n");
+    printf("StageSelectState state\n");
     static StageSelectState StageSelectState;
     StageSelectState.changeState(STAGE);
+	StageSelectState.initialize();
     return &StageSelectState;
 }

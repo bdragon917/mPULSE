@@ -70,7 +70,7 @@ void ProfileState::render()
 
 
     //If all animation is finished, run the command
-	if ((retMenuVal == 1) || goBack)
+	if (retMenuVal == 1)
     {
 		if(goBack)
 		{
@@ -230,16 +230,18 @@ void ProfileState::selectPressed()
 
     soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
 	//Instead of fadeOut we will make a generic leaving the state call.
-    renderingEngine->startFadeOut();
+	renderingEngine->startTransition(RenderingEngine::FADE_OUT);
     lockControls = true;
 }
 
 
 void ProfileState::backPressed()
 {
-	//Set type of transition once this is implemented
+	renderingEngine->startTransition(RenderingEngine::INSTANT);
+    lockControls = true;
 	goBack = true;
 }
+
 
 ProfileState* ProfileState::getInstance()
 {    

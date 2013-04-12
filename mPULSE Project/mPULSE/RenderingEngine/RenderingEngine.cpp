@@ -2429,7 +2429,9 @@ int RenderingEngine::drawStoryScreen(float dt)
 
         if (FadeCtrl >= 1.0f)
             {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
             }
 
 
@@ -2455,7 +2457,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 	glLoadIdentity ();
 	
     glDisable(GL_LIGHTING);
-        glDisable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
     gluLookAt(0, 0, -2,  // Eye/camera position
 	0 ,0, 0,		// Look-at position 
 	0.0,1.0,0.0); 		// "Up" vector
@@ -2468,10 +2470,10 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     //glDisable(GL_TEXTURE);
 	
     if (aSkyBoxShader != NULL)
-         {
-            glEnable(GL_TEXTURE_2D);
-            aSkyBoxShader->on();
-         }
+    {
+		glEnable(GL_TEXTURE_2D);
+		aSkyBoxShader->on();
+    }
 
 
 
@@ -2664,17 +2666,25 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     //Fader
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
-    	glBegin(GL_QUADS);
-            glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
-		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
-		    glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
-		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
-		glEnd();
+    glBegin(GL_QUADS);
+        glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
+		glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
+		glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
+		glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
+	glEnd();
 
-        if (FadeCtrl >= 1.0f)
-            {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
-            }
+	if (instantTrans)
+	{
+		instantTrans = false;
+		return 1;
+	}
+    if (FadeCtrl >= 1.0f)
+    {
+		startFadeIn();
+        //FadeCtrl=0.0f;
+		//fadeMode=0;
+		return 1;
+    }
 
 
     if (aShader != NULL)
@@ -2874,8 +2884,8 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
     //glDisable(GL_TEXTURE);
 	
 
-            glEnable(GL_TEXTURE_2D);
-            aHUDShader->on();
+    glEnable(GL_TEXTURE_2D);
+    aHUDShader->on();
 
 
    //Initialize a new coordinate system
@@ -2983,7 +2993,9 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 
         if (FadeCtrl >= 1.0f)
             {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
             }
 
 
@@ -3001,14 +3013,13 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 }
 
 
-int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
+int RenderingEngine::drawStageSelectScreen(float dt, int currentSelected)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glPushMatrix ();
 	glLoadIdentity ();
 	
-
     gluLookAt(0, 0, -2,  // Eye/camera position
 	0 ,0, 0,		// Look-at position 
 	0.0,1.0,0.0); 		// "Up" vector
@@ -3020,13 +3031,12 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
     //glDisable(GL_TEXTURE);
 	
     if (aSkyBoxShader != NULL)
-         {
-            glEnable(GL_TEXTURE_2D);
-            aSkyBoxShader->on();
-         }
+    {
+		glEnable(GL_TEXTURE_2D);
+		aSkyBoxShader->on();
+    }
 
-
-   //Initialize a new coordinate system
+	//Initialize a new coordinate system
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -3079,18 +3089,18 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
         glClear(GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         setUpPerpView();
-       gluLookAt(-20, 10, 0,  // Eye/camera position
+		gluLookAt(-20, 10, 0,  // Eye/camera position
 	        0 ,5, 0,		// Look-at position 
 	        0.0,1.0,0.0); 		// "Up" vector
 
-       glRotatef(gameVariables->trackSelectRotVar,0,1,0);
-       glScalef(0.01f,0.01f,0.01f);
-       gameVariables->trackSelectRotVar += 0.2f;
+		glRotatef(gameVariables->trackSelectRotVar,0,1,0);
+		glScalef(0.01f,0.01f,0.01f);
+		gameVariables->trackSelectRotVar += 0.2f;
 
-       glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
-       drawModel(modelManager.getModel(gameVariables->selectedTrack),0,0,0,1.0f);
-       glClear(GL_DEPTH_BUFFER_BIT); 
-       glMatrixMode(GL_PROJECTION);
+		glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
+		drawModel(modelManager.getModel(gameVariables->selectedTrack),0,0,0,1.0f);
+		glClear(GL_DEPTH_BUFFER_BIT); 
+		glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
         glMatrixMode(GL_MODELVIEW);
@@ -3124,7 +3134,7 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
             unsigned found = drawText.find_last_of("/\\");
             drawText = drawText.substr(found+1);
 
-            if ((curSelected - 1) == items) //this is selected
+            if ((currentSelected) == items) //this is selected
             //{renderText(x_TrackColumn, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
             {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
             else
@@ -3196,7 +3206,9 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
 
         if (FadeCtrl >= 1.0f)
             {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
             }
 
 
@@ -3331,7 +3343,9 @@ int RenderingEngine::drawResultScreen(float dt)
 
         if (FadeCtrl >= 1.0f)
             {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
             }
 
 
@@ -4150,6 +4164,29 @@ int RenderingEngine::drawIntro()
 //
 //}
 
+void RenderingEngine::startTransition(int type)
+{
+	switch(type)
+	{
+	case FADE_IN:
+		startFadeIn();
+		break;
+	case FADE_OUT:
+		startFadeOut();
+		break;
+	case INSTANT:
+		instantTrans = true;
+		break;
+	case SLIDE:
+		//Need to do this
+		break;
+	case SLIDE_FADE:
+		//Also need to do this
+		break;
+	}
+}
+
+
 void RenderingEngine::resetFade()
 {
     FadeCtrl=0.0f;fadeMode=0;
@@ -4182,14 +4219,14 @@ float RenderingEngine::updateFade(float dt)
 
     case 1: //Fade In
         if (FadeCtrl > 0)
-        {FadeCtrl = FadeCtrl - 0.01f;}
+        {FadeCtrl = FadeCtrl - 0.02f;}
         else
         {FadeCtrl = 0.0f;fadeMode = 0;}
         break;
 
     case 2: //Fade Out
         if (FadeCtrl < 1.0f)
-        {FadeCtrl = FadeCtrl + 0.01f;}
+        {FadeCtrl = FadeCtrl + 0.02f;}
         else
         {FadeCtrl = 1.0f;fadeMode = 0;}
         break;

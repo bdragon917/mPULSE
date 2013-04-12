@@ -4,6 +4,7 @@
 #include <InGameObjects\Tracks.h>
 #include <InGameObjects\Track.h>
 #include <InGameObjects\Entities\RenderableComponent.h>
+#include <RenderingEngine\DynamicImage.h>
 #include <iostream>
 #include <fstream>
 
@@ -71,6 +72,9 @@ public:
 
     std::vector<std::string> rankings;      //used to display the ranking at results
 
+	//Transistion Variables
+	std::vector<DynamicImage*> di;
+
 private:
 
     //Race Variables
@@ -82,4 +86,5 @@ private:
 
 	//This is for profiles =)
     int profileCurrentPlayer;
+
 };

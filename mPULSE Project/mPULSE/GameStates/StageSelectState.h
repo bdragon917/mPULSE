@@ -19,6 +19,7 @@ class StageSelectState : public GameState
 {
 public:
     static StageSelectState* getInstance();
+	void initialize();
     void update(float dt);
     void render();
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);
@@ -51,8 +52,8 @@ private:
 
     float myDt; //hack for update
 
-    int curSelectedX;
-    int curSelectedY;
+    int currentSelectedX;
+    int currentSelectedY;
     int MAX_X_SELECTED;
     int MAX_Y_SELECTED;
 

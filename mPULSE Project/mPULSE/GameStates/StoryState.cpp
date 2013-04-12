@@ -117,12 +117,12 @@ void StoryState::keySelectTarget()
 {
     //changeState(PLAY);
     soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
-    renderingEngine->startFadeOut();
+    renderingEngine->startTransition(RenderingEngine::FADE_OUT);
 }
 
 void StoryState::backPressed()
 {
-    renderingEngine->startFadeOut();
+    renderingEngine->startTransition(RenderingEngine::FADE_OUT);
 }
 StoryState* StoryState::getInstance()
 {    

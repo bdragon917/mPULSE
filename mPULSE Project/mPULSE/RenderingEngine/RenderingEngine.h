@@ -125,10 +125,20 @@ public:
     //Texture Stuff
     GLuint* textureid_P1;
 
-    //Fade stuff
+    //Transition stuff
+	void startTransition(int type);
+
     void resetFade();
     void startFadeIn();
     void startFadeOut();
+
+	typedef enum {
+        FADE_IN,
+        FADE_OUT,
+        INSTANT,
+        SLIDE,
+		SLIDE_FADE
+    } Resolution;
 
 
     ModelManager getModelManger();
@@ -193,12 +203,13 @@ private:
     //used to control the main texture alpha
     GLint locShader_Alpha;
 
+	//Transition Stuff
     //Used for Fade In and Out
     float FadeCtrl;
     int fadeMode;
     float updateFade(float dt);
 
-    
+    bool instantTrans;
         
         //    int loadShaders();
         //Used to generate a list of shaders
