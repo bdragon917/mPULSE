@@ -99,7 +99,7 @@ void StoryState::handleXboxEvents(int player,XboxController* state)
         else if (state->b)
         {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME)
-                changeState(MAIN_MENU);
+                backPressed();
         }
     }
 }
@@ -122,7 +122,7 @@ void StoryState::keySelectTarget()
 
 void StoryState::backPressed()
 {
-    changeState(MAIN_MENU);
+    renderingEngine->startFadeOut();
 }
 StoryState* StoryState::getInstance()
 {    

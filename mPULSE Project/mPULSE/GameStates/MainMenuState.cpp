@@ -54,18 +54,25 @@ void MainMenuState::render()
         switch (curSelected)
         {
         case 0:
+			gameVariables->setNumPlayers(1);
+			gameVariables->setProfileCurrentPlayer(1);
+			/*
             for (int i = 0;i < gameVariables->getPlayerNum(); i++)
                 {gameVariables->removePlayer(i);}               //Clears all players. HACK to make things work [Pushes responsibility of players management to profiles]
             gameVariables->addPlayers(new Profile());
-
+			*/
             changeState(PROFILE);
             break;
         case 1:
+			gameVariables->setNumPlayers(2);
+			gameVariables->setProfileCurrentPlayer(1);
+			/*
             for (int i = 0;i < gameVariables->getPlayerNum(); i++)
                 gameVariables->removePlayer(i);               //Clears all players. HACK to make things work [Pushes responsibility of players management to profiles]
 
             gameVariables->addPlayers(new Profile());
             gameVariables->addPlayerTwo();
+			*/
             changeState(PROFILE); 
             break;
         case 2:

@@ -232,7 +232,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameStates\GameVariables.cpp">
-      <Filter>Source Files\InGameObjects</Filter>
+      <Filter>Source Files\GameStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

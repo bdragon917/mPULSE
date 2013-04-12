@@ -824,7 +824,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             renderText(-0.1,0.7,0.03,0.03,35,"Battery Empty",false);
 
         renderText(-0.1,0.80,0.03,0.03,35,"Obs "+FloatToString(cd->entity->obs),false);
-        renderText(0.65,0.1,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/"+FloatToString(gameVariables->numberOfAIs + gameVariables->getPlayerNum()),false);       
+        renderText(0.65,0.1,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/"+FloatToString(gameVariables->numberOfAIs + gameVariables->getNumPlayers()),false);       
         renderText(0.65,0.2,0.03,0.03,35,"Lap   "+FloatToString(cd->laps)+"/"+FloatToString(gameVariables->numLaps),false);
 
 
@@ -1424,10 +1424,10 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (gameVariables->getPlayerNum() == 2)
+    if (gameVariables->getNumPlayers() == 2)
     {
 
-        if (gameVariables->player2isAI)
+		if (gameVariables->getPlayerProfile(1)->data.isAI)
         {
             //AI Mode
             drawScene_ForPlayer(scene, track, entities, 0, true, true, entities->cars);

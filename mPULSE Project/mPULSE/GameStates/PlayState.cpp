@@ -28,7 +28,7 @@ void PlayState::resetAll()
     time.reset();
 
     changeState(PLAY); 
-    numPlayers = gameVariables->getPlayerNum();
+    numPlayers = gameVariables->getNumPlayers();
     int num_AI = gameVariables->numberOfAIs;
 
     rankings = new std::vector<Entity*>;
@@ -104,7 +104,6 @@ void PlayState::resetAll()
     physicsEngine->setupCars(&entities.AIcars);  //Assign actors to the entities without the initalization of the engine
 
     renderingEngine = RenderingEngine::getInstance();
-//    renderingEngine->setPlayerNum(gameVariables->getPlayerNum());     //RenderingEngine now reads from gameVariables directly
 
     //set numPlayers
     renderingEngine->createLight();
@@ -346,7 +345,7 @@ void PlayState::update(float dt)
     //deal with end of race
     calculateRankings();
 
-    for (int playa=0;playa<gameVariables->getPlayerNum();playa++)
+    for (int playa=0;playa<gameVariables->getNumPlayers();playa++)
     {
 
         CustomData* cd = (CustomData*)entities.cars[playa]->getActor()->userData;
@@ -360,7 +359,7 @@ void PlayState::update(float dt)
         //gameVariables->becomeFinished(playa);
     }
 
-    if (gameVariables->player2isAI)
+    if (gameVariables->getPlayerProfile(1)->data.isAI)
     {
         CustomData* cd = (CustomData*)entities.AIcars[0]->getActor()->userData;
 
@@ -509,7 +508,7 @@ void PlayState::update(float dt)
 			car->setDotResult(dotResult);
 			car->setOldVelocity(car->getActor()->getLinearVelocity());
 			
-			printf("Sweep collision!\n");
+			//printf("Sweep collision!\n");
 		}
 		
         car->update();
@@ -549,6 +548,26 @@ void PlayState::update(float dt)
         
 
         car->aAI->update(entities.cars, entities.AIcars);
+
+		NxSweepQueryHit* sweepResult = car->linearSweep(dt);
+		car->setSweepCollision(false);
+		if(sweepResult != NULL)
+		{
+			NxVec3 impactPoint = sweepResult->point;
+			NxVec3 normal = sweepResult->normal;
+			NxVec3 currPos = car->getActor()->getGlobalPose().t;
+
+			NxVec3 testVec = impactPoint - currPos;
+			NxReal dotResult = testVec.dot(normal);
+
+			car->setSweepCollision(true);
+			car->setImpactPoint(impactPoint);
+			car->setImpactNormal(normal);
+			car->setDotResult(dotResult);
+			car->setOldVelocity(car->getActor()->getLinearVelocity());
+			
+			//printf("AI Sweep collision!\n");
+		}
 
         //Do AI Controller stuff
         handleXboxController(c, entities.AIcars ,entities.AIcars.at(c)->aAI->getControl(), false);
@@ -620,39 +639,48 @@ void PlayState::update(float dt)
 				double scale = car->getOldVelocity().magnitude() * cos(angle);
 				NxVec3 scaledNormal = scale * normal;
 				NxVec3 newVelVec = car->getOldVelocity() + (2.0f * scaledNormal);
-
-				//This definitely need some tweaking.  When I set it to bounce back at the appropriate angle it didn't work
-				//too well either.  We'll have to play around with it a bit.  Sometimes falls through the ground when you
-				//run into a wall really fast.
 				
 				car->getActor()->setLinearVelocity(newVelVec*0.3); 
 				newVelVec.normalize();
 				NxVec3 newPos = car->getImpactPoint() + (newVelVec * 5.0f);
 				car->getActor()->setGlobalPosition(newPos);
-				
-				/*
-				CustomData* cd = (CustomData*)car->getActor()->userData;
-
-				NxVec3 respawnPt = cd->wp->pos;
-				car->getActor()->setGlobalPosition(respawnPt);
-
-				NxMat33 orient(cd->wp->ori);
-
-				car->getActor()->setGlobalOrientation(orient);
-				car->getActor()->setLinearVelocity(NxVec3(0,0,0));
-				car->aCam->resetCamera();
-				*/
-
-				//Pseudo-code of how to do this:
-				// find angle by dot product normal with car->getOldVelocity()
-				// scale = car->getOldVelocity().magnitude() * cos(the angle between )
-				// newNormal = scale * normal
-				// newVelVector = car->getOldVelocity() + (2*newNormal)
-				// set position to impact point + newVelVector
-				// set linearVelocity to newVelVector
-				// adjust orientation somehow
 
 				printf("You definitely went through a wall.\n");
+			}
+		}
+	}
+	
+	for (unsigned c = 0; c < entities.AIcars.size(); ++c)
+    {
+		Entity* car = entities.AIcars[c];
+
+		if(car->getSweepCollision())
+		{
+			NxVec3 impactPoint = car->getImpactPoint();
+			NxVec3 normal = car->getImpactNormal();
+			NxVec3 newPos = car->getActor()->getGlobalPose().t;
+
+			NxVec3 testVec = impactPoint - newPos;
+			NxReal dotResult = testVec.dot(normal);
+
+			if((dotResult * car->getDotResult()) < 0)
+			{
+				//Dealing with player cars going through walls
+				NxVec3 oldVelUnit = -car->getOldVelocity();
+				oldVelUnit.normalize();
+				normal.normalize();
+				double angle = acos(oldVelUnit.dot(normal));
+
+				double scale = car->getOldVelocity().magnitude() * cos(angle);
+				NxVec3 scaledNormal = scale * normal;
+				NxVec3 newVelVec = car->getOldVelocity() + (2.0f * scaledNormal);
+				
+				car->getActor()->setLinearVelocity(newVelVec*0.3); 
+				newVelVec.normalize();
+				NxVec3 newPos = car->getImpactPoint() + (newVelVec * 5.0f);
+				car->getActor()->setGlobalPosition(newPos);
+
+				printf("AI definitely went through a wall.\n");
 			}
 		}
 	}
@@ -1047,7 +1075,7 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 Entity::PickupType type = car->usePickup();
                 if(type == Entity::MISSILE)
                 {
-                    int numCars = gameVariables->numberOfAIs + gameVariables->getPlayerNum();
+                    int numCars = gameVariables->numberOfAIs + gameVariables->getNumPlayers();
                     int victimIndex = car->rank - 2;   //offset from current rank to get the person infront of you                 
                     soundEngine->playSound(-1, 8);       //play missile, on channel 4
                     Entity* e = new Entity(20000,
