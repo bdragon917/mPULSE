@@ -113,7 +113,7 @@ void ResultState::keySelectRight()
 void ResultState::keySelectTarget()
 {
     soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
-    renderingEngine->startFadeOut();
+	renderingEngine->startTransition(RenderingEngine::FADE_OUT);
     lockControls = true;
 }
 

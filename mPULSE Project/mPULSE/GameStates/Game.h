@@ -10,6 +10,7 @@
 #include <GameStates/MainMenuState.h>
 #include <GameStates/StoryState.h>
 #include <GameStates/SettingState.h>
+#include <GameStates/LoungeState.h>
 #include <GameStates/ProfileState.h>
 #include <GameStates/ShopState.h>
 #include <GameStates/ResultState.h>

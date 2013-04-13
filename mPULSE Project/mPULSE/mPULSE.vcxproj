@@ -103,6 +103,7 @@
     <ClCompile Include="GameStates\GameState.cpp" />
     <ClCompile Include="GameStates\GameVariables.cpp" />
     <ClCompile Include="GameStates\InitState.cpp" />
+    <ClCompile Include="GameStates\LoungeState.cpp" />
     <ClCompile Include="GameStates\MainMenuState.cpp" />
     <ClCompile Include="GameStates\PlayState.cpp" />
     <ClCompile Include="GameStates\ProfileState.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="GameStates\GameState.h" />
     <ClInclude Include="GameStates\GameVariables.h" />
     <ClInclude Include="GameStates\InitState.h" />
+    <ClInclude Include="GameStates\LoungeState.h" />
     <ClInclude Include="GameStates\MainMenuState.h" />
     <ClInclude Include="GameStates\PlayState.h" />
     <ClInclude Include="GameStates\ProfileState.h" />

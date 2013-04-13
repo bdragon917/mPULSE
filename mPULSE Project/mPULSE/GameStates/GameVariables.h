@@ -4,6 +4,7 @@
 #include <InGameObjects\Tracks.h>
 #include <InGameObjects\Track.h>
 #include <InGameObjects\Entities\RenderableComponent.h>
+#include <RenderingEngine\DynamicImage.h>
 #include <iostream>
 #include <fstream>
 
@@ -17,26 +18,21 @@ public:
     void initialize();
 
     void loadAllProfiles(std::string filename);
-    int addPlayers(Profile* aPlayer);
     void setConnectedControllers(bool* controllerIndexes);
     bool* getConnectedControllers(bool* controllerIndexes);
 
     void setControllers(bool* controllerArray);
-    bool* getControllers();
+    bool* getControllers();  
 
-    int addPlayer(int controllerIndex);
-    void removePlayer(unsigned controllerIndex);    
-
-    int addPlayerTwo();     //Add default profile
-    int setPlayers(Profile* aPlayer, unsigned index);
-
-    int getPlayerNum();
-
-    //This is for profiles =)
-    int profileTargetPlayer;
+	void setPlayerProfile(Profile* aPlayer, unsigned index);
+	Profile* getPlayerProfile(int player);
 
 
-    bool player2isAI;       //debug??
+	void setNumPlayers(int num);
+	int getNumPlayers();
+	void setProfileCurrentPlayer(int num);
+	int getProfileCurrentPlayer();
+
 
     typedef enum {
         STANDARD,
@@ -54,9 +50,6 @@ public:
     bool isFinished(int player);
     void becomeFinished(int player);
     unsigned int finishTime;
-    //
-
-    Profile* getPlayerProfile(int player);
 
     int numberOfAIs;
     void finalizeProfiles();
@@ -64,7 +57,7 @@ public:
     std::vector<Profile*> profiles; 
 
 
-
+	//Track Stuff
     Tracks* loadedTracks;
     int selectedTrack;      //int points to PhysX Model
     bool isLoaded;
@@ -77,16 +70,21 @@ public:
     int numLaps;
     std::vector<RenderableComponent*> trackRC;
 
-
     std::vector<std::string> rankings;      //used to display the ranking at results
 
-private:
+	//Transistion Variables
+	std::vector<DynamicImage*> di;
 
+private:
 
     //Race Variables
     bool finishedPlayers[4];        //Should be the number of players
     std::vector<Profile*> players; 
-    
+
     int numPlayers;
     bool* controllers;
+
+	//This is for profiles =)
+    int profileCurrentPlayer;
+
 };

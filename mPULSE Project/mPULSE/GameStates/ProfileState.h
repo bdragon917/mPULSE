@@ -7,6 +7,7 @@
 
 #include <GameStates/GameState.h>
 #include <RenderingEngine/RenderingEngine.h>
+#include <RenderingEngine\DynamicImage.h>
 #include <PhysicsEngine/PhysicsEngine.h>
 #include <SoundEngine/SoundEngine.h>
 #include <InGameObjects/Entities/Entity.h>
@@ -17,6 +18,7 @@ class ProfileState : public GameState
 {
 public:
     static ProfileState* getInstance();
+	void initialize();
     void update(float dt);
     void render();
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);
@@ -27,8 +29,11 @@ private:
 
     ProfileScreenInfo psi;
 
+	unsigned PROFILE_FRAME_SIZE;
+	int WAIT_TIME;
+
     bool lockControls;
-    bool endState;
+    bool goBack;
 
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
@@ -37,21 +42,19 @@ private:
 
     Clock clock;
 
-    void keySelectLeft();
-    void keySelectRight();
-    void keySelectTarget();
-    void ProfileState::backPressed();
+    void upPressed();
+    void downPressed();
+    void selectPressed();
+    void backPressed();
 
     float myDt; //hack for update
 
-    int targetPlayer;
-
-    int curSelected;
-    int MAX_SELECTED;
-    unsigned profilesOffset; //Used to remember which range of profiles to display
+    int currentSelected;
+    int maxSelected;
+    int currentFrame; //Used to remember which range of profiles to display
 
     //xbox controller variables
-    int WAIT_TIME;
+    
     bool buttonPressed;
     unsigned prevTime;
 

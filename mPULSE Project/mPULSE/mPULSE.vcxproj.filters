@@ -232,7 +232,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameStates\GameVariables.cpp">
-      <Filter>Source Files\InGameObjects</Filter>
+      <Filter>Source Files\GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates\LoungeState.cpp">
+      <Filter>Source Files\GameStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -388,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="Util\AI_Names.h">
       <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStates\LoungeState.h">
+      <Filter>Header Files\GameStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

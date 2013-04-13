@@ -75,6 +75,7 @@ public:
     void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, bool topScreen, std::vector<Entity*> targetEntities);
     int drawMainMenuScreen(int curMenuButton, bool clicked, float dt, ProfileScreenInfo psi);
     int drawStoryScreen(float dt);
+	int drawLoungeScreen(float dt);
     int drawSettingScreen(float dt, int selectX, int selectY);
     int drawShopScreen(float dt, ShopScreenInfo ssi);
     int drawResultScreen(float dt);
@@ -125,10 +126,20 @@ public:
     //Texture Stuff
     GLuint* textureid_P1;
 
-    //Fade stuff
+    //Transition stuff
+	void startTransition(int type);
+
     void resetFade();
     void startFadeIn();
     void startFadeOut();
+
+	typedef enum {
+        FADE_IN,
+        FADE_OUT,
+        INSTANT,
+        SLIDE,
+		SLIDE_FADE
+    } Resolution;
 
 
     ModelManager getModelManger();
@@ -195,12 +206,13 @@ private:
     //used to control the main texture alpha
     GLint locShader_Alpha;
 
+	//Transition Stuff
     //Used for Fade In and Out
     float FadeCtrl;
     int fadeMode;
     float updateFade(float dt);
 
-    
+    bool instantTrans;
         
         //    int loadShaders();
         //Used to generate a list of shaders

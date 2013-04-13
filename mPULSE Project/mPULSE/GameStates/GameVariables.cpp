@@ -10,48 +10,15 @@ GameVariables* GameVariables::getInstance()
 void GameVariables::initialize()
 {
     loadAllProfiles(".\\Util\\profiles.txt");
-    if (players.size() == 0)             //Initalize if there is no players already loaded  //Might wanna do auto
-    {
-        controllers = new bool[4];
-        controllers[0] = true;
-        controllers[1] = false;
-        controllers[2] = false;
-        controllers[3] = false;
-        
-        numPlayers = 1;
-        Profile* defaultProfile = new Profile();
-        players.push_back(defaultProfile);
+	players.push_back(new Profile());
+	players.push_back(new Profile());
 
-        player2isAI = false;
-        profileTargetPlayer = 1;
-        
-        finishTime = NULL;
-    }
+	finishTime = NULL;
     numLaps = 3;
     numberOfAIs = 6;
     selectedTrack = 0;
     loadedTracks = new Tracks("tracks.txt");
     isLoaded = false;
-}
-
-int GameVariables::addPlayer(int controllerIndex)
-{
-    if (players.size() < 2)             //Limit on player number
-    {
-        Profile* defaultProfile = new Profile();
-        defaultProfile->data.driverName = "Player2";
-        players.push_back(defaultProfile);
-        numPlayers++;
-        controllers[controllerIndex] = true;
-        return (players.size() - 1);    //return player index
-    }
-    else
-    {printf("Hey! Too many human players! (GameVariables::addPlayers)\n");return -1;}                        //return -1 if too many players
-}
-
-Profile* GameVariables::getPlayerProfile(int player)
-{
-       return players.at(player);
 }
 
 void GameVariables::setControllers(bool* controllerArray)
@@ -64,55 +31,37 @@ bool* GameVariables::getControllers()
     return controllers;
 }
 
-void GameVariables::removePlayer(unsigned controllerIndex)
+void GameVariables::setPlayerProfile(Profile* aPlayer, unsigned index)
 {
-    if(controllerIndex < 4)
-    {
-        players[controllerIndex] = false;
-        if (players.size() > controllerIndex)
-            players.erase( players.begin() + controllerIndex);
-        numPlayers--;
-    }
-}
-
-int GameVariables::addPlayers(Profile* aPlayer)
-{
-    if (players.size() < 2)             //Limit on player number
-    {
-        players.push_back(aPlayer);
-        return (players.size() - 1);    //return player index
-    }
-    else
-    {printf("Hey! Too many human players! (GameVariables::addPlayers)\n");return -1;}                        //return -1 if too many players
-}
-
-int GameVariables::addPlayerTwo()
-{
-    if (players.size() < 2)             //Limit on player number
-    {
-        Profile* defaultProfile = new Profile();
-        defaultProfile->data.driverName = "Player2";
-        players.push_back(defaultProfile);
-        numPlayers++;
-        controllers[1] = true;
-        return (players.size() - 1);    //return player index
-    }
-    else
-    {printf("Hey! Too many human players! (GameVariables::addPlayers)\n");return -1;}                        //return -1 if too many players
-}
-
-int GameVariables::setPlayers(Profile* aPlayer, unsigned index)
-{
-    if (players.size() > index + 1)
-        players.at(index) = aPlayer;    //possibly save the old profile???
+    if (players.size() >= index)
+        players.at(index-1) = aPlayer;    //possibly save the old profile???
     else
     {MessageBox(NULL, "GameVariables: ERROR: Players <array> isn't big enough, cannot set.", NULL, NULL);}
-    return 0;
 }
 
-int GameVariables::getPlayerNum()
+Profile* GameVariables::getPlayerProfile(int player)
 {
-    return players.size();
+	return players.at(player);
+}
+
+void GameVariables::setNumPlayers(int num)
+{
+	numPlayers = num;
+}
+
+int GameVariables::getNumPlayers()
+{
+	return numPlayers;
+}
+
+void GameVariables::setProfileCurrentPlayer(int num)
+{
+	profileCurrentPlayer = num;
+}
+
+int GameVariables::getProfileCurrentPlayer()
+{
+	return profileCurrentPlayer;
 }
 
 void GameVariables::resetRace()

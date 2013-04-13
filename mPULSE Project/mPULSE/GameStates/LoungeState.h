@@ -12,13 +12,11 @@
 #include <InGameObjects/Entities/Entity.h>
 #include <InGameObjects/Entities/RenderableComponent.h>
 #include <GameStates/GameVariables.h>
-#include <RenderingEngine\ShopScreenInfo.h>
-#include <GameStates\PlayState.h>
 
-class StageSelectState : public GameState
+class LoungeState : public GameState
 {
 public:
-    static StageSelectState* getInstance();
+    static LoungeState* getInstance();
 	void initialize();
     void update(float dt);
     void render();
@@ -26,9 +24,9 @@ public:
     void handleXboxEvents(int player,XboxController* state);
 
 private:
-    StageSelectState();
+    LoungeState();
 
-    ShopScreenInfo ssi;
+	int WAIT_TIME;
 
     bool lockControls;
     bool goBack;
@@ -40,25 +38,19 @@ private:
 
     Clock clock;
 
-    void keySelectLeft();
-    void keySelectRight();
-    void keySelectUp();
-    void keySelectDown();
-    void keySelectTarget();
-
-    void loadTrack();
-
+    void upPressed();
+    void downPressed();
+    void selectPressed();
     void backPressed();
 
     float myDt; //hack for update
 
-    int currentSelectedX;
-    int currentSelectedY;
-    int MAX_X_SELECTED;
-    int MAX_Y_SELECTED;
+    int currentSelected;
+    int maxSelected;
 
     //xbox controller variables
-    int WAIT_TIME;
     bool buttonPressed;
     unsigned prevTime;
+
+
 };

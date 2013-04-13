@@ -897,7 +897,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             renderText(-0.1,0.7,0.03,0.03,35,"Battery Empty",false);
 
         renderText(-0.1,0.80,0.03,0.03,35,"Obs "+FloatToString(cd->entity->obs),false);
-        renderText(0.65,0.1,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/"+FloatToString(gameVariables->numberOfAIs + gameVariables->getPlayerNum()),false);       
+        renderText(0.65,0.1,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/"+FloatToString(gameVariables->numberOfAIs + gameVariables->getNumPlayers()),false);       
         renderText(0.65,0.2,0.03,0.03,35,"Lap   "+FloatToString(cd->laps)+"/"+FloatToString(gameVariables->numLaps),false);
 
 
@@ -1497,10 +1497,10 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (gameVariables->getPlayerNum() == 2)
+    if (gameVariables->getNumPlayers() == 2)
     {
 
-        if (gameVariables->player2isAI)
+		if (gameVariables->getPlayerProfile(1)->data.isAI)
         {
             //AI Mode
             drawScene_ForPlayer(scene, track, entities, 0, true, true, entities->cars);
@@ -2502,7 +2502,9 @@ int RenderingEngine::drawStoryScreen(float dt)
 
         if (FadeCtrl >= 1.0f)
             {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
             }
 
 
@@ -2519,6 +2521,111 @@ int RenderingEngine::drawStoryScreen(float dt)
 }
 
 
+int RenderingEngine::drawLoungeScreen(float dt)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix ();
+	glLoadIdentity ();
+	
+    gluLookAt(0, 0, -2,  // Eye/camera position
+	0 ,0, 0,		// Look-at position 
+	0.0,1.0,0.0); 		// "Up" vector
+	
+	//set view
+	setUpPerpView();
+    //glEnable(GL_LIGHTING);
+    //glDisable(GL_NORMALIZE);
+    //glDisable(GL_TEXTURE);
+	
+    if (aSkyBoxShader != NULL)
+    {
+		glEnable(GL_TEXTURE_2D);
+		aSkyBoxShader->on();
+    }
+
+   //Initialize a new coordinate system
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    //glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1.0f, 1.0f);
+    glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    //clear depth buffer
+    glPushAttrib(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    //declare some common variables
+    const float half_height = SCREEN_HEIGHT / 2.0f;
+    const float half_width = SCREEN_WIDTH / 2.0f;
+
+    const float button_width = SCREEN_WIDTH / 6.0f;     //button width is /3, but also /2 as drawSquare uses half
+    float const textWidth = button_width * 1.6f;
+
+    const float dec_height = SCREEN_HEIGHT / 40.0f;
+    const float butWidthOffset = half_width + (SCREEN_WIDTH / 96.0f);  //128 64
+    const float butHeightOffset = (SCREEN_HEIGHT / 4.0f);
+
+    const float titleHeightOffset = (SCREEN_HEIGHT / 8.0f);
+    //const float doneHeightOffset = (3.0f * SCREEN_HEIGHT / 4.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+    const float doneHeightOffset = (13.0f * SCREEN_HEIGHT / 16.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+
+	//draw transparent blackground
+    glColor4f(0.0f,0.0f,0.0f, 0.5f);
+    drawSquare(half_width, half_height, 0.0f, half_width, half_height);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[39]);
+    glColor4f(0.0f,0.0f,0.0f, 1.0f);
+    drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
+
+    aSkyBoxShader->off();
+
+    //reset to previous state
+    glPopAttrib();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+     glEnable(GL_LIGHTING);
+
+    if (aSkyBoxShader != NULL)
+    {
+        aSkyBoxShader->off();
+    }
+
+    //Fader
+    //float FadeCtrl = 0.0f;
+    glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
+    	glBegin(GL_QUADS);
+            glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
+		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
+		glEnd();
+
+        if (FadeCtrl >= 1.0f)
+            {
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
+            }
+            
+    if (aShader != NULL)
+    {
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
+	glPopMatrix();
+
+    return 0;
+}
+
 
 int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float dt, ProfileScreenInfo psi)
 {
@@ -2528,7 +2635,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 	glLoadIdentity ();
 	
     glDisable(GL_LIGHTING);
-        glDisable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
     gluLookAt(0, 0, -2,  // Eye/camera position
 	0 ,0, 0,		// Look-at position 
 	0.0,1.0,0.0); 		// "Up" vector
@@ -2541,10 +2648,10 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     //glDisable(GL_TEXTURE);
 	
     if (aSkyBoxShader != NULL)
-         {
-            glEnable(GL_TEXTURE_2D);
-            aSkyBoxShader->on();
-         }
+    {
+		glEnable(GL_TEXTURE_2D);
+		aSkyBoxShader->on();
+    }
 
 
 
@@ -2737,17 +2844,25 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     //Fader
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
-    	glBegin(GL_QUADS);
-            glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
-		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
-		    glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
-		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
-		glEnd();
+    glBegin(GL_QUADS);
+        glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
+		glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
+		glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
+		glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
+	glEnd();
 
-        if (FadeCtrl >= 1.0f)
-            {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
-            }
+	if (instantTrans)
+	{
+		instantTrans = false;
+		return 1;
+	}
+    if (FadeCtrl >= 1.0f)
+    {
+		startFadeIn();
+        //FadeCtrl=0.0f;
+		//fadeMode=0;
+		return 1;
+    }
 
 
     if (aShader != NULL)
@@ -2821,49 +2936,49 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
 
         //Profiles
         title = psi.profilesOnScreen[0];
-        if (psi.selectedItem == 1)
+        if (psi.selectedItem == 0)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*3), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*3), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[1];
-        if (psi.selectedItem == 2)
+        if (psi.selectedItem == 1)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*5), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*5), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[2];
-        if (psi.selectedItem == 3)
+        if (psi.selectedItem == 2)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*7), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*7), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[3];
-        if (psi.selectedItem == 4)
+        if (psi.selectedItem == 3)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*9), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*9), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
         
         title = psi.profilesOnScreen[4];
-        if (psi.selectedItem == 5)
+        if (psi.selectedItem == 4)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*11), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*11), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[5];
-        if (psi.selectedItem == 6)
+        if (psi.selectedItem == 5)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*13), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*13), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[6];
-        if (psi.selectedItem == 7)
+        if (psi.selectedItem == 6)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*15), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*15), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
 
         title = psi.profilesOnScreen[7];
-        if (psi.selectedItem == 8)
+        if (psi.selectedItem == 7)
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*17), dec_height*1.8f, (textWidth)/title.size(), 35, title, true);
         else
             renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+(dec_height*17), dec_height*1.8f, (textWidth)/title.size(), 34, title, true);
@@ -2907,12 +3022,13 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
         */
 
         //Done Button
+		/*
        if (psi.selectedItem == 0)
             glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
         else
             glBindTexture(GL_TEXTURE_2D, textureid_P1[37]);
         drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
-
+		*/
         aHUDShader->off();
 
     //reset to previous state
@@ -2946,8 +3062,8 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
     //glDisable(GL_TEXTURE);
 	
 
-            glEnable(GL_TEXTURE_2D);
-            aHUDShader->on();
+    glEnable(GL_TEXTURE_2D);
+    aHUDShader->on();
 
 
    //Initialize a new coordinate system
@@ -3055,7 +3171,9 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 
         if (FadeCtrl >= 1.0f)
             {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
             }
 
 
@@ -3073,14 +3191,13 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 }
 
 
-int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
+int RenderingEngine::drawStageSelectScreen(float dt, int currentSelected)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glPushMatrix ();
 	glLoadIdentity ();
 	
-
     gluLookAt(0, 0, -2,  // Eye/camera position
 	0 ,0, 0,		// Look-at position 
 	0.0,1.0,0.0); 		// "Up" vector
@@ -3092,13 +3209,12 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
     //glDisable(GL_TEXTURE);
 	
     if (aSkyBoxShader != NULL)
-         {
-            glEnable(GL_TEXTURE_2D);
-            aSkyBoxShader->on();
-         }
+    {
+		glEnable(GL_TEXTURE_2D);
+		aSkyBoxShader->on();
+    }
 
-
-   //Initialize a new coordinate system
+	//Initialize a new coordinate system
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -3151,18 +3267,18 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
         glClear(GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         setUpPerpView();
-       gluLookAt(-20, 10, 0,  // Eye/camera position
+		gluLookAt(-20, 10, 0,  // Eye/camera position
 	        0 ,5, 0,		// Look-at position 
 	        0.0,1.0,0.0); 		// "Up" vector
 
-       glRotatef(gameVariables->trackSelectRotVar,0,1,0);
-       glScalef(0.01f,0.01f,0.01f);
-       gameVariables->trackSelectRotVar += 0.2f;
+		glRotatef(gameVariables->trackSelectRotVar,0,1,0);
+		glScalef(0.01f,0.01f,0.01f);
+		gameVariables->trackSelectRotVar += 0.2f;
 
-       glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
-       drawModel(modelManager.getModel(gameVariables->selectedTrack),0,0,0,1.0f);
-       glClear(GL_DEPTH_BUFFER_BIT); 
-       glMatrixMode(GL_PROJECTION);
+		glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
+		drawModel(modelManager.getModel(gameVariables->selectedTrack),0,0,0,1.0f);
+		glClear(GL_DEPTH_BUFFER_BIT); 
+		glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
         glMatrixMode(GL_MODELVIEW);
@@ -3196,7 +3312,7 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
             unsigned found = drawText.find_last_of("/\\");
             drawText = drawText.substr(found+1);
 
-            if ((curSelected - 1) == items) //this is selected
+            if ((currentSelected) == items) //this is selected
             //{renderText(x_TrackColumn, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
             {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
             else
@@ -3268,7 +3384,9 @@ int RenderingEngine::drawStageSelectScreen(float dt, int curSelected)
 
         if (FadeCtrl >= 1.0f)
             {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
             }
 
 
@@ -3403,7 +3521,9 @@ int RenderingEngine::drawResultScreen(float dt)
 
         if (FadeCtrl >= 1.0f)
             {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
             }
 
 
@@ -4222,6 +4342,29 @@ int RenderingEngine::drawIntro()
 //
 //}
 
+void RenderingEngine::startTransition(int type)
+{
+	switch(type)
+	{
+	case FADE_IN:
+		startFadeIn();
+		break;
+	case FADE_OUT:
+		startFadeOut();
+		break;
+	case INSTANT:
+		instantTrans = true;
+		break;
+	case SLIDE:
+		//Need to do this
+		break;
+	case SLIDE_FADE:
+		//Also need to do this
+		break;
+	}
+}
+
+
 void RenderingEngine::resetFade()
 {
     FadeCtrl=0.0f;fadeMode=0;
@@ -4254,14 +4397,14 @@ float RenderingEngine::updateFade(float dt)
 
     case 1: //Fade In
         if (FadeCtrl > 0)
-        {FadeCtrl = FadeCtrl - 0.01f;}
+        {FadeCtrl = FadeCtrl - 0.02f;}
         else
         {FadeCtrl = 0.0f;fadeMode = 0;}
         break;
 
     case 2: //Fade Out
         if (FadeCtrl < 1.0f)
-        {FadeCtrl = FadeCtrl + 0.01f;}
+        {FadeCtrl = FadeCtrl + 0.02f;}
         else
         {FadeCtrl = 1.0f;fadeMode = 0;}
         break;
