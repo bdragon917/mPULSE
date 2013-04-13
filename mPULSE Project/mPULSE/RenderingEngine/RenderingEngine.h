@@ -75,6 +75,7 @@ public:
     void drawScene_ForPlayer(NxScene* scene, Track* track, Entities* entities, int carIndex, bool splitScreen, bool topScreen, std::vector<Entity*> targetEntities);
     int drawMainMenuScreen(int curMenuButton, bool clicked, float dt, ProfileScreenInfo psi);
     int drawStoryScreen(float dt);
+	int drawLoungeScreen(float dt);
     int drawSettingScreen(float dt, int selectX, int selectY);
     int drawShopScreen(float dt, ShopScreenInfo ssi);
     int drawResultScreen(float dt);

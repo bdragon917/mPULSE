@@ -95,7 +95,7 @@ void ProfileState::render()
 			}
 			else
 			{
-				changeState(SHOP);
+				changeState(LOUNGE);
 			}
 		}
     }

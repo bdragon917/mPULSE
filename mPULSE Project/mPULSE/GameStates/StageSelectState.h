@@ -31,7 +31,7 @@ private:
     ShopScreenInfo ssi;
 
     bool lockControls;
-    bool endState;
+    bool goBack;
 
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;

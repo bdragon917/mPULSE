@@ -8,37 +8,35 @@ ShopState::ShopState()
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
- 
-    curSelectedY = 1;
-    curSelectedX = 0;
+}
+
+
+void ShopState::initialize()
+{
+	currentSelectedCategory = 0;
+    currentSelectedItem = 0;
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
+	inSubmenu = false;
+
     WAIT_TIME = 50;
-    MAX_X_SELECTED = 4;           
-    MAX_Y_SELECTED = 4;
+    MAX_CATEGORY_SELECTED = 4;           
+    MAX_ITEM_SELECTED = 4;
 
     buttonPressed = false;
     lockControls = false;
-    endState = false;
+    goBack = false;
 
     //ssi = new ssi???
     ssi.di.clear();
 
     //texture 42 is mechanic =)
-    mechanicGirl = new DynamicImage(-125,400,0,20,20, 42,0 );   //will probably be overwritten in reset(), so change the values there
-    painterGirl = new DynamicImage(-50,50,0,20,20, 43,0 );
+    mechanicGirl = new DynamicImage(-125,400,0,20,20,42,1);   //will probably be overwritten in reset(), so change the values there
+    painterGirl = new DynamicImage(-50,50,0,20,20,43,0);
 
-    mechanicGirl->setTargetLocation(250,400,0);
-    mechanicGirl->setMode(1);
-
-    ssi.di.push_back(mechanicGirl);
+	enterMechanic();
 }
 
-void ShopState::reset()
-{
-    ssi.di.clear();
-    enterMechanic();
-}
 
 void ShopState::enterMechanic()
 {
@@ -67,21 +65,8 @@ void ShopState::render()
 
     if (retMenuVal == 1)
     {
-        switch (curSelectedY)
-        {
-        case -1:    //back
-            lockControls = false;
-            curSelectedY = 1;
-            changeState(MAIN_MENU);
-            break;
-        default:
-            lockControls = false;
-            curSelectedY = 1;
-            changeState(STAGE);
-        }
+        changeState(LOUNGE);
     }
-
-
 }
 
 bool ShopState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
@@ -95,22 +80,22 @@ bool ShopState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
             if ((keyPressed == SDLK_LEFT) || (keyPressed == SDLK_a))
             {
-                keySelectLeft();  
+                leftPressed();  
             }
             else if ((keyPressed == SDLK_RIGHT) || (keyPressed == SDLK_d))
             {
-                keySelectRight();
+                rightPressed();
             }
             else if ((keyPressed == SDLK_UP) || (keyPressed == SDLK_w))
             {
-                keySelectUp();  
+                upPressed();  
             }
             else if ((keyPressed == SDLK_DOWN) || (keyPressed == SDLK_s))
             {
-                keySelectDown();
+                downPressed();
             }
             else if ((keyPressed == SDLK_RETURN) || (keyPressed == SDLK_SPACE))
-                keySelectTarget();
+                selectPressed();
             else if ((keyPressed == SDLK_ESCAPE))
                 backPressed();
         }
@@ -122,117 +107,195 @@ void ShopState::handleXboxEvents(int player,XboxController* state)
 {   
     if(!lockControls)
     {
-        
         bool* controllers = gameVariables->getControllers();
 
-        if(state->dpadUp || state->leftStick.y > 0.5f)
+        if(state->dpadUp || state->leftStick.y > 0)
         {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
             {
                 if(!buttonPressed)
                     buttonPressed = true;
-                keySelectUp();
+				upPressed();
             }
             prevTime = clock.getCurrentTime();
         }
-        else if(state->dpadDown || state->leftStick.y < -0.5f)
+        else if(state->dpadDown || state->leftStick.y < 0)
         {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
             {
                 if(!buttonPressed)
                     buttonPressed = true;
-                keySelectDown();
+                downPressed();
             }
             prevTime = clock.getCurrentTime();
         }
-        else if(state->dpadLeft || state->leftStick.x < -0.5f)
+		else if(state->dpadRight || state->leftStick.x > 0)
         {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
             {
                 if(!buttonPressed)
                     buttonPressed = true;
-                keySelectLeft();
+                rightPressed();
             }
             prevTime = clock.getCurrentTime();
         }
-        else if(state->dpadRight || state->leftStick.x > 0.5f)
+		else if(state->dpadLeft || state->leftStick.x < 0)
         {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
             {
                 if(!buttonPressed)
                     buttonPressed = true;
-                keySelectRight();
+                leftPressed();
             }
             prevTime = clock.getCurrentTime();
         }
         else if (state->a)
         {
-            if(clock.getDeltaTime(prevTime) > WAIT_TIME)
-                keySelectTarget();
+            if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
+            {
+                if(!buttonPressed)
+                    buttonPressed = true;
+                selectPressed();
+            }
+            prevTime = clock.getCurrentTime();
         }
-        else if ((state->b)||(state->back))
-        {
-            if(clock.getDeltaTime(prevTime) > WAIT_TIME)
+        else if (state->b)
+		{
+            if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
+            {
+                if(!buttonPressed)
+                    buttonPressed = true;
                 backPressed();
-        }
+            }
+            prevTime = clock.getCurrentTime();
+		}
     }
 }
 
 
-void ShopState::keySelectLeft()
+void ShopState::upPressed()
 {
-     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
-    curSelectedX -= 1;
-
-    if (curSelectedX < 0)
-        curSelectedX = MAX_X_SELECTED;
+	if(!inSubmenu)
+	{
+		if(currentSelectedCategory == 0)
+		{
+			//Play not possible sound
+		}
+		else
+		{
+			currentSelectedCategory--;
+			soundEngine->playSound(4,7); 
+		}
+	}
 }
 
-void ShopState::keySelectRight()
+void ShopState::downPressed()
 {
-     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
-    curSelectedX += 1;
-
-    if (curSelectedX > MAX_X_SELECTED)
-        curSelectedX = 0;
+	if(!inSubmenu)
+	{
+		if(currentSelectedCategory == MAX_CATEGORY_SELECTED -1)
+		{
+			//Play not possible sound
+		}
+		else
+		{
+			currentSelectedCategory++;
+			soundEngine->playSound(4,7); 
+		}
+	}
 }
 
-void ShopState::keySelectUp()
+void ShopState::rightPressed()
 {
-     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
-    curSelectedY -= 1;
-
-    if (curSelectedY < 0)
-        curSelectedY = MAX_Y_SELECTED;
+	if(inSubmenu)
+	{
+		if(currentSelectedItem == MAX_ITEM_SELECTED)
+		{
+			//Play not possible sound
+		}
+		else
+		{
+			currentSelectedItem++;
+			soundEngine->playSound(4,7); 
+		}
+	}
 }
 
-void ShopState::keySelectDown()
+void ShopState::leftPressed()
 {
-     soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
-    curSelectedY += 1;
-
-    if (curSelectedY > MAX_Y_SELECTED)
-        curSelectedY = 0;
+    if(inSubmenu)
+	{
+		if(currentSelectedItem == 0)
+		{
+			//Play not possible sound
+		}
+		else
+		{
+			currentSelectedItem--;
+			soundEngine->playSound(4,7); 
+		}
+	}
 }
 
-void ShopState::keySelectTarget()
+void ShopState::selectPressed()
 {
     soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
-    renderingEngine->startTransition(RenderingEngine::FADE_OUT);
-    lockControls = true;
+
+	if(!inSubmenu)
+	{
+		switch(currentSelectedCategory)
+		{
+		case 0:
+			printf("Ships\n");
+			inSubmenu = true;
+			//Ships
+			//MAX_ITEMS_SELECTED = # of ships -1
+			break;
+		case 1:
+			printf("Upgrades\n");
+			inSubmenu = true;
+			//Upgrades
+			//MAX_ITEMS_SELECTED = # of upgrades -1
+			break;
+		case 2:
+			printf("Paint\n");
+			inSubmenu = true;
+			//Paint
+			//MAX_ITEMS_SELECTED = # of paint styles -1
+			break;
+		case 3:
+			//Done
+			printf("Done\n");
+			renderingEngine->startTransition(RenderingEngine::FADE_OUT);
+			lockControls = true;
+			break;
+		}
+	}
+	else  // In a sub menu
+	{
+		// The meat and potatoes of this screen
+	}
+   
 }
 
 void ShopState::backPressed()
 {
-    lockControls = true;
-    curSelectedY = -1;
-    renderingEngine->startTransition(RenderingEngine::FADE_OUT);
+	if(!inSubmenu)
+	{
+		lockControls = true;
+		renderingEngine->startTransition(RenderingEngine::FADE_OUT);
+	}
+	else
+	{
+		// Play some sort of cancel noise
+		inSubmenu = false;
+	}
 }
 ShopState* ShopState::getInstance()
 {    
      printf("Shop state\n");
     static ShopState ShopState;
     ShopState.changeState(SHOP);
-    ShopState.reset();
+    ShopState.initialize();
     return &ShopState;
 }

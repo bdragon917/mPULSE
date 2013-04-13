@@ -22,7 +22,7 @@ void StageSelectState::initialize()
     MAX_Y_SELECTED = gameVariables->loadedTracks->getNumberofTracks(); 
     buttonPressed = false;
     lockControls = false;
-    endState = false;
+    goBack = false;
 
     loadTrack();
 }
@@ -39,11 +39,18 @@ void StageSelectState::render()
 
     if (retMenuVal == 1)
     {
-		PlayState* pStage = PlayState::getInstance();
-        pStage->resetAll();
-        renderingEngine->resetFade();   //In case
-        lockControls = false;
-        changeState(PLAY);
+		if(goBack)
+		{
+			changeState(LOUNGE);
+		}
+		else
+		{
+			PlayState* pStage = PlayState::getInstance();
+			pStage->resetAll();
+			renderingEngine->resetFade();   //In case
+			lockControls = false;
+			changeState(PLAY);
+		}
     }
 
 
@@ -209,7 +216,7 @@ void StageSelectState::keySelectTarget()
 
 void StageSelectState::backPressed()
 {
-    currentSelectedY = -1;
+    goBack = true;
     renderingEngine->startTransition(RenderingEngine::FADE_OUT);
     lockControls = true;
 }

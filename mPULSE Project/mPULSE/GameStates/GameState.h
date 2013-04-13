@@ -14,6 +14,7 @@ public:
         SHOP,
         STAGE,
         SETTING,
+		LOUNGE,
         PROFILE,
         PLAY,
         RESULT,

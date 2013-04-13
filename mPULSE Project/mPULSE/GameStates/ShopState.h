@@ -18,11 +18,11 @@ class ShopState : public GameState
 {
 public:
     static ShopState* getInstance();
+	void initialize();
     void update(float dt);
     void render();
     bool handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents);
     void handleXboxEvents(int player,XboxController* state);
-    void reset();
 
 
 private:
@@ -33,7 +33,7 @@ private:
     DynamicImage* painterGirl;
 
     bool lockControls;
-    bool endState;
+    bool goBack;
 
     PhysicsEngine* physicsEngine;
     RenderingEngine* renderingEngine;
@@ -42,11 +42,11 @@ private:
 
     Clock clock;
 
-    void keySelectLeft();
-    void keySelectRight();
-    void keySelectUp();
-    void keySelectDown();
-    void keySelectTarget();
+    void rightPressed();
+    void leftPressed();
+    void upPressed();
+    void downPressed();
+    void selectPressed();
 
 
     void backPressed();
@@ -56,10 +56,12 @@ private:
 
     float myDt; //hack for update
 
-    int curSelectedX;
-    int curSelectedY;
-    int MAX_X_SELECTED;
-    int MAX_Y_SELECTED;
+    int currentSelectedCategory;
+    int currentSelectedItem;
+    int MAX_CATEGORY_SELECTED;
+    int MAX_ITEM_SELECTED;
+
+	bool inSubmenu;
 
     //xbox controller variables
     int WAIT_TIME;
