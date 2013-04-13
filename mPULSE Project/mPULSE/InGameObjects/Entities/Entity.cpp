@@ -8,7 +8,9 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     usingDisplayList = false;
     steering = true;
     shunting = false;
-
+    boosting = false;
+    batteryCharging = false;
+    batteryDischarging = false;
 	obs = 0; //money earned from current race.
 	highSpeedObsTime = 0;
 
@@ -28,6 +30,7 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     shield = 0;
     pickup = NONE;
 
+    boostAmount = 0;
     shuntStartTime = 0;
     shieldActivatedTime = 0;
     shieldTimeout = 10000;
@@ -35,6 +38,8 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     shuntPower = 50;
     shuntReloadTime = 600;
     delayBeforeTracking = 1000;
+    boostPeriod = 500;
+    chargePeriod = 450;
     rankingName = "not set";
 
     timeToLive = tmpTimeToLive;
@@ -51,8 +56,77 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     }
 }
 
+void Entity::applyDischargeBattery()
+{
+    unsigned dt = clock.getDeltaTime(dischargeStartTime);
+
+    if(dt > chargePeriod)
+        dt = chargePeriod;
+
+    NxVec3 dir = actor->getGlobalOrientation().getColumn(0);
+    NxReal chargePercent = sin(((float)dt/(float)chargePeriod) * 1.570796327f);
+    NxReal chargeVal = chargeAmount * chargePercent;
+
+	NxVec3 lin_vel = actor->getLinearVelocity();
+	actor->setLinearVelocity(lin_vel + dir*chargeVal);
+
+    chargeAmount -= chargeVal;
+
+    if(dt >= chargePeriod)
+    {
+        batteryDischarging  = false;
+        batteryCharged = false;
+    }
+}
+
+void Entity::applyChargeBattery()
+{
+    unsigned dt = clock.getDeltaTime(chargeStartTime);
+    if(dt > chargePeriod)
+        dt = chargePeriod;
+
+    NxVec3 dir = actor->getGlobalOrientation().getColumn(0);
+    NxReal chargePercent = sin(((float)dt/(float)chargePeriod) * 1.570796327f);
+    NxReal chargeVal = chargeAmount * chargePercent;
+
+	NxVec3 lin_vel = actor->getLinearVelocity();
+	actor->setLinearVelocity(lin_vel - dir*chargeVal);
+
+    chargeAmount -= chargeVal;
+
+    if(dt >= chargePeriod)
+    {
+        batteryCharging  = false;
+        batteryCharged = true;
+    }
+}
+
+void Entity::applyBoost()
+{
+    unsigned dt = clock.getDeltaTime(boostStartTime);
+    if(dt > boostPeriod)
+        dt = boostPeriod;
+
+    NxVec3 dir = actor->getGlobalOrientation().getColumn(0);
+    NxReal boostPercent = sin(((float)dt/(float)boostPeriod) * 1.570796327f);
+    NxReal boostVal = boostAmount * boostPercent;
+	NxVec3 lin_vel = actor->getLinearVelocity();
+	actor->setLinearVelocity(lin_vel + dir*boostVal);
+    boostAmount -= boostVal;
+
+    if(dt >= boostPeriod)
+        boosting = false;
+}
+
 void Entity::update()
 {
+    if(boosting)        
+        applyBoost();
+    if(batteryCharging)
+        applyChargeBattery();
+    else if(batteryDischarging)
+        applyDischargeBattery();
+
     if (clock.getCurrentTime() - shieldActivatedTime > shieldTimeout)
         shield = false;
 
@@ -140,8 +214,10 @@ NxSweepQueryHit* Entity::linearSweep(float dt)
 Entity::PickupType Entity::usePickup()
 {
     CustomData* cd = (CustomData*) actor->userData;
-    int type = cd->pickupType;    
-    cd->pickupType = -1;
+    int type = cd->pickupType;   
+
+    if(type != 3 || !shunting)
+        cd->pickupType = -1;
 
     if(type == 0)
         return MISSILE;
@@ -149,7 +225,7 @@ Entity::PickupType Entity::usePickup()
         return SHIELD;
     else if(type == 2)
         return BARRIER; 
-    else if(type == 3)
+    else if(type == 3 && !shunting)
         return BOOST;
     else
         return NONE;
@@ -329,23 +405,6 @@ void Entity::setSteeringAngle(float percent)
     }
 }
 
-void Entity::chargeBattery()
-{
-	if(!batteryCharged && !shunting)
-	{
-		batteryCharged = true;
-		NxVec3 lin_vel = actor->getLinearVelocity();
-		NxReal speed = lin_vel.magnitude();
-		lin_vel.setMagnitude(speed/2.0f);
-		charge = lin_vel.magnitude();
-	
-		actor->setLinearVelocity(lin_vel);
-	}
-}
-bool Entity::getBatteryCharged()
-{
-    return batteryCharged;
-}
 float Entity::raceWinnings()
 {
 	return (float)obs;
@@ -370,11 +429,10 @@ void Entity::highSpeedCash()
 }
 
 void Entity::boost()
-{    
-    NxVec3 dir = actor->getGlobalOrientation() * NxVec3(1,0,0);
-    NxReal boostVal = 50;
-	NxVec3 lin_vel = actor->getLinearVelocity();
-	actor->setLinearVelocity(lin_vel + dir*boostVal);
+{        
+    boosting = true;
+    boostAmount = 50;
+    boostStartTime = clock.getCurrentTime();
 }
 
 void Entity::missleCash()
@@ -427,18 +485,33 @@ void Entity::collide(Entity* e)
     }
 }
 
+bool Entity::getBatteryCharged()
+{
+    return batteryCharged;
+}
+
+void Entity::chargeBattery()
+{
+	if(!batteryCharged && !shunting && !batteryCharging)
+	{
+        chargeStartTime = clock.getCurrentTime();
+        batteryCharging = true;
+
+		NxVec3 lin_vel = actor->getLinearVelocity();
+		NxReal speed = lin_vel.magnitude();
+        chargeAmount = speed/2.0f;
+        charge = chargeAmount;
+	}
+}
+
 void Entity::dischargeBattery()
 {
-	if(batteryCharged && !shunting)
-	{
-		batteryCharged = false;
-        NxVec3 dir = actor->getGlobalOrientation() * NxVec3(1,0,0);
-		NxVec3 lin_vel = actor->getLinearVelocity();
-
-		//NxReal speed = lin_vel.magnitude();
-		//lin_vel.setMagnitude(speed + charge);
-
-		actor->setLinearVelocity(lin_vel + dir*charge);
+	if(batteryCharged && !shunting && !batteryCharging && !batteryDischarging)
+	{                
+        dischargeStartTime = clock.getCurrentTime();
+        batteryDischarging = true; 
+        chargeAmount = charge;
+        charge = 0;
 	}
 }
 
