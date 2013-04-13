@@ -32,7 +32,7 @@ void LoungeState::update(float dt)
 void LoungeState::render()
 {   
     //asumes myDt is updated
-    int retMenuVal = renderingEngine->drawStoryScreen(myDt);     //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
+    int retMenuVal = renderingEngine->drawLoungeScreen(myDt, currentSelected);     //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
 
     //If all animation is finished, run the command
 	if (retMenuVal == 1)

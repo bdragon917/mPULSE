@@ -1,5 +1,7 @@
 varying vec3 lightDir,normal;
 uniform sampler2D tex;
+uniform float alphaOffset = 0.0f;
+uniform float mode = 0;
  
 void main()
 {
@@ -29,6 +31,13 @@ void main()
 	else if ((ct.x < 0.4) && (ct.y < 0.4) && (ct.z > 0.4))
 		at = 0.7;
 		
+	at = at + alphaOffset;
+	
+	if (at < 0)
+		at = 0;
+		
+	if (mode == 1)
+		at = ct.z;
 		
     gl_FragColor = vec4(ct, at);
  

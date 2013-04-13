@@ -80,6 +80,7 @@ public:
     int drawShopScreen(float dt, ShopScreenInfo ssi);
     int drawResultScreen(float dt);
     int drawStageSelectScreen(float dt, int curSelected);
+    int drawLoungeScreen(float dt, int curSelected);
 
     void drawProfileOverlay(ProfileScreenInfo psi);
 
