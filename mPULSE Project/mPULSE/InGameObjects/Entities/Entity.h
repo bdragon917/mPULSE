@@ -59,12 +59,7 @@ public:
     std::vector<NxWheelShape*>* getDriveWheels();
     std::vector<NxWheelShape*>* getPassiveWheels();    
     std::vector<NxWheelShape*>* getSteerWheels();
-    //Drawing stuff
-    //list of renderableElements [model index, texture index]
-    std::vector<RenderableComponent*> rc;
-    //NxVec3 location for rendering
-    //int rotation mode
-    //rotation data    
+    std::vector<RenderableComponent*> rc;  
 
 	NxSweepQueryHit* linearSweep(float dt);
 
@@ -81,7 +76,7 @@ public:
     float tiltAngle;
 
     int getTimeToLive();
-
+    void applyBoost();
     bool getShield();
     void setShield(bool active);
     bool getBatteryCharged();
@@ -98,6 +93,8 @@ public:
 	float raceWinnings();
 	void missleCash();
 
+    void applyDischargeBattery();
+    void applyChargeBattery();
 	bool getSweepCollision();
 	void setSweepCollision(bool b);
 	NxVec3 getImpactPoint();
@@ -118,13 +115,15 @@ public:
     bool shield;
 
 private:
-
 	bool batteryCharged;
     bool usingDisplayList;
     bool alive;
     bool shunting;
     bool steering;
 	bool sweepCollision;
+    bool boosting;
+    bool batteryCharging;
+    bool batteryDischarging;
 
     int displayListIndex;
     int torque;
@@ -134,31 +133,40 @@ private:
     int timeCreated;
     int shieldActivatedTime;     
     int health;
-
-	unsigned highSpeedObsTime;
-	
     
     float maxSteeringAngle;
     float minSteering;
     float maxSteering;
 	float charge;
 
+    unsigned chargeAmount;
+    unsigned boostAmount;
+	unsigned highSpeedObsTime;
     unsigned shuntStartTime;
     unsigned maxShuntTime;
     unsigned shuntReloadTime;
     unsigned shieldTimeout;  
     unsigned delayBeforeTracking;
-    NxReal shuntPower;
+
+    unsigned boostPeriod;
+    unsigned boostStartTime;
+    unsigned chargePeriod;
+    unsigned chargeStartTime;
+    unsigned dischargeStartTime;
+
 
 	NxVec3 impactPoint;
 	NxVec3 impactNormal;
 	NxVec3 oldVelocity;    
+
 	NxReal dotResult;
+    NxReal shuntPower;
 
     Clock clock;
     PickupType pickup;
     NxActor* actor;
     ObjModel* model;
+
     std::vector<NxWheelShape*> driveWheels;
     std::vector<NxWheelShape*> steerWheels;
     std::vector<NxWheelShape*> passiveWheels;

@@ -46,10 +46,10 @@ void LoungeState::render()
 			switch (currentSelected)
 			{
 			case 0:
-				changeState(SHOP);
+				changeState(STAGE);
 				break;
 			case 1:
-				changeState(STAGE); 
+				changeState(SHOP); 
 				break;
 			}
 		}
