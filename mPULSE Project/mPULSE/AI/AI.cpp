@@ -131,13 +131,17 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
         //This will change the amount of accelerate depending on angle steer
         //-1.0 > angleToTarget > -0.03
         if (angleToTarget > -0.25f)
-            xController->rTrigger = 175;
+            //xController->rTrigger = 175;
+            xController->rTrigger = 6;
         else if (angleToTarget > -0.5f)
-            xController->rTrigger = 135;
+            //xController->rTrigger = 135;
+            xController->rTrigger = 5;
         else if (angleToTarget > -0.75f)
-            xController->rTrigger = 75;
+            //xController->rTrigger = 75;
+            xController->rTrigger = 4;
         else
-            xController->rTrigger = 35;
+            //xController->rTrigger = 35;
+            xController->rTrigger = 3;
 
     }
     else
@@ -148,7 +152,7 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
         //xController->leftStick.x = xController->leftStick.x + (angleToTarget / 5);
         xController->leftStick.x = 0;
         //xController->rTrigger = 255;
-        xController->rTrigger = 100;        //Weaken AI
+        xController->rTrigger = 8;        //Weaken AI
 
         if (xController->leftStick.y < 0)   //If y is negative, probably due to ai logic /slow down
         {

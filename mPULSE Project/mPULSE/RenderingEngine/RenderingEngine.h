@@ -137,6 +137,8 @@ public:
 
     bool debugCam;
 
+    float debugFloat;
+
 private:
     
     struct drawableText {

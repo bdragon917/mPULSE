@@ -20,6 +20,8 @@ RenderingEngine::RenderingEngine()
     debugPhysX = false;
     showScene = true;
     debugCamera = false;
+
+    debugFloat = 0.0f;
 }
 
 void RenderingEngine::setEntities(Entities* ents)
@@ -125,8 +127,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg aBMPImg;
 
-    textureid_P1 = new GLuint[65];
-    glGenTextures(65, textureid_P1);
+    textureid_P1 = new GLuint[71];
+    glGenTextures(71, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -214,6 +216,17 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/Asteroids/meteorite1.bmp", textureid_P1[62]);
     bindBMPtoTexture("./Images/Asteroids/meteorite2.bmp", textureid_P1[63]);
     bindBMPtoTexture("./Images/Asteroids/meteorite3.bmp", textureid_P1[64]);
+
+    //MiniMap pieces
+    bindBMPtoTexture("./Images/MiniMap/P1.bmp", textureid_P1[65]);
+    bindBMPtoTexture("./Images/MiniMap/P2.bmp", textureid_P1[66]);
+    bindBMPtoTexture("./Images/MiniMap/COM.bmp", textureid_P1[67]);
+    bindBMPtoTexture("./Images/MiniMap/GUY.bmp", textureid_P1[68]);
+    bindBMPtoTexture("./Images/MiniMap/ShipIconPLY.bmp", textureid_P1[69]);
+    bindBMPtoTexture("./Images/MiniMap/ShipIconCOM.bmp", textureid_P1[70]);
+
+
+
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -783,21 +796,81 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
 
         float x = 0;
         float z = 0;
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[14]);
+
         for(unsigned i=0;i<entities->AIcars.size();i++)
         {
             x = entities->AIcars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
             z = entities->AIcars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
 
-            drawSquare(xOffset+x,yOffset-z,0,0.015f,0.015f);
+            //Draw a direction Indicator
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[70]);
+
+            glPushMatrix();
+
+            NxVec3 vA = entities->AIcars.at(i)->getActor()->getGlobalOrientation() * NxVec3(0,0,1);//entities->cars.at(i)->getActor()->getLinearVelocity();
+            vA.y = 0;
+            vA.normalize();
+            NxVec3 vB = NxVec3(0,0,1);
+
+            float cosAngle = vA.dot(vB);
+
+            float angle = acos(cosAngle) * (180.0f / 3.14159265f);
+            if (vA.x > 0) {angle = 180 + (180-angle);}
+
+            glTranslatef((xOffset+x),(yOffset+0.05f-z),0);
+            glRotatef(-angle,0,0,1);
+            glRotatef(-90,0,0,1);
+            glTranslatef(-(xOffset+x),-(yOffset+0.05f-z),0);
+
+            drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.02f,-0.03f);
+            debugFloat = debugFloat + 1;
+            glPopMatrix();
+
+            //Draw the Label
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[67]);     //display a COM symbol for COM drivers
+            drawSquareUVRev(xOffset+x,yOffset-z,0,0.03f,-0.03f);
         }
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[47]);
+        
         for(unsigned i=0;i<entities->cars.size();i++)
         {
+            
             x = entities->cars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
             z = entities->cars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
+            
+            //Draw a direction Indicator
+            //Use this texture: 69
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[69]);
 
-            drawSquare(xOffset+x,yOffset+0.05f-z,0,0.015f,0.015f);
+            glPushMatrix();
+
+            NxVec3 vA = entities->cars.at(i)->getActor()->getGlobalOrientation() * NxVec3(0,0,1);//entities->cars.at(i)->getActor()->getLinearVelocity();
+            vA.y = 0;
+            vA.normalize();
+            NxVec3 vB = NxVec3(0,0,1);
+
+            float cosAngle = vA.dot(vB);
+
+            float angle = acos(cosAngle) * (180.0f / 3.14159265f);
+            if (vA.x > 0) {angle = 180 + (180-angle);}
+
+            glTranslatef((xOffset+x),(yOffset+0.05f-z),0);
+            glRotatef(-angle,0,0,1);
+            glRotatef(-90,0,0,1);
+            glTranslatef(-(xOffset+x),-(yOffset+0.05f-z),0);
+
+            drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.02f,-0.03f);
+            debugFloat = debugFloat + 1;
+            glPopMatrix();
+
+
+            //Draws the labels
+            if (i == 0){glBindTexture(GL_TEXTURE_2D, textureid_P1[65]);}        //Display P1 for player 1
+            else if (i == 1){glBindTexture(GL_TEXTURE_2D, textureid_P1[66]);}   //Display P2 for Player 2
+            else {glBindTexture(GL_TEXTURE_2D, textureid_P1[68]);}              //Display GUY if something is wrong
+
+            
+
+            drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.03f,-0.03f);
         }
         
         //Draw pickup
@@ -815,7 +888,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         else
             glBindTexture(GL_TEXTURE_2D, textureid_P1[57]);
 
-        drawSquare(xOffset,yOffset,0,0.10f,0.10f);
+        drawSquareUVRev(xOffset,yOffset,0,0.10f,-0.10f);
 
         //Draw text on screen        
         if(carEntity->getBatteryCharged())
@@ -1214,7 +1287,7 @@ void RenderingEngine::createLight()
 {
     GLfloat mat_ambient[] = { 0.4, 0.4, 0.4, 1.0};
 	GLfloat mat_specular[] = { 0.6, 0.6, 0.6, 1.0};
-	GLfloat mat_shininess[] = {50.0};
+	GLfloat mat_shininess[] = {35.0};
 	GLfloat light_position[] = {1.0,1.0,1.0,0.0};
 	//GLfloat light_ambient[] = {0.0,0.0,0.0,0.1};
 	//GLfloat light_diffuse[] = {0.0,0.0,0.0,1.0};

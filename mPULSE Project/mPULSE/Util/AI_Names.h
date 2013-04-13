@@ -19,4 +19,6 @@ private:
     std::vector<std::string> randomName;
     unsigned curAngryName;
     unsigned curRandomName;
+    int angryPPLSeed;
+    int randPPLSeed;
 };
