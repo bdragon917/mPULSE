@@ -910,18 +910,19 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         if (locHUDShader_Alpha != -1)
                     {glUniform1f(locHUDShader_Alpha, 0.0f);}
 
-        if(cd->pickupType == Entity::BOOST)
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[53]);
-        else if(cd->pickupType == Entity::MISSILE)
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[54]);
-        else if(cd->pickupType == Entity::SHIELD)
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[55]);
-        else if(cd->pickupType == Entity::BARRIER)
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[56]);
-        else
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[57]);
+        if(cd->pickupType >= 0 && cd->pickupType <= 3)
+        {
+            if(cd->pickupType == Entity::BOOST)
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[53]);
+            else if(cd->pickupType == Entity::MISSILE)
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[54]);
+            else if(cd->pickupType == Entity::SHIELD)
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[55]);
+            else if(cd->pickupType == Entity::BARRIER)
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[56]);
 
-        drawSquareUVRev(xOffset,yOffset,0,0.10f,-0.10f);
+            drawSquareUVRev(xOffset,yOffset,0,0.10f,-0.10f);
+        }
 
         //Draw text on screen        
         if(carEntity->getBatteryCharged())
