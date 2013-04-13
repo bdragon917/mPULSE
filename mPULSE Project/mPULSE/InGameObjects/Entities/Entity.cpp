@@ -39,7 +39,7 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
     shuntReloadTime = 600;
     delayBeforeTracking = 1000;
     boostPeriod = 500;
-    chargePeriod = 250;
+    chargePeriod = 450;
     rankingName = "not set";
 
     timeToLive = tmpTimeToLive;
@@ -214,8 +214,10 @@ NxSweepQueryHit* Entity::linearSweep(float dt)
 Entity::PickupType Entity::usePickup()
 {
     CustomData* cd = (CustomData*) actor->userData;
-    int type = cd->pickupType;    
-    cd->pickupType = -1;
+    int type = cd->pickupType;   
+
+    if(type != 3 || !shunting)
+        cd->pickupType = -1;
 
     if(type == 0)
         return MISSILE;
@@ -223,7 +225,7 @@ Entity::PickupType Entity::usePickup()
         return SHIELD;
     else if(type == 2)
         return BARRIER; 
-    else if(type == 3)
+    else if(type == 3 && !shunting)
         return BOOST;
     else
         return NONE;
