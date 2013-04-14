@@ -135,8 +135,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[77];
-    glGenTextures(77, textureid_P1);
+    textureid_P1 = new GLuint[83];
+    glGenTextures(83, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -240,6 +240,13 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/Menu/Lounge/Lounge.bmp", textureid_P1[74]);
     bindBMPtoTexture("./Images/Particles/ParticleBlue.bmp", textureid_P1[75]);
     bindBMPtoTexture("./Images/Particles/ParticleTwin.bmp", textureid_P1[76]);
+
+    bindBMPtoTexture("./Images/Tracks/TrackTexture2.bmp", textureid_P1[77]);
+    bindBMPtoTexture("./Images/Tracks/TrackTexture3.bmp", textureid_P1[78]);
+    bindBMPtoTexture("./Images/Tracks/TrackTexture4.bmp", textureid_P1[79]);
+    bindBMPtoTexture("./Images/Tracks/TrackTexture5.bmp", textureid_P1[80]);
+    bindBMPtoTexture("./Images/Tracks/TrackTexture6.bmp", textureid_P1[81]);
+    bindBMPtoTexture("./Images/Tracks/TrackTexture7.bmp", textureid_P1[82]);
 
 
 

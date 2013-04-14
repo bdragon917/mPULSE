@@ -14,7 +14,7 @@ void GameVariables::initialize()
 	players.push_back(new Profile());
 
 	finishTime = NULL;
-    numLaps = 0;
+    numLaps = 3;
     numberOfAIs = 6;
     selectedTrack = 0;
     loadedTracks = new Tracks("tracks.txt");
