@@ -133,8 +133,8 @@ public:
 	void startTransition(int type);
 
     void resetFade();
-    void startFadeIn();
-    void startFadeOut();
+    void startFadeIn(unsigned fadeTimeLimit=1000);
+    void startFadeOut(unsigned fadeTimeLimit=1000);
 
 	typedef enum {
         FADE_IN,
@@ -162,6 +162,9 @@ private:
         std::string text;
     };
 
+    unsigned fadeTime;
+    unsigned fadeStartTime;
+    Clock clock;
     std::vector<drawableText> textQueue;
 
     std::vector<DynamicImage> dImages;

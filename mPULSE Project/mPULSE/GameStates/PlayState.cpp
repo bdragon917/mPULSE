@@ -8,8 +8,9 @@ PlayState::PlayState()
 
 void PlayState::resetAll()
 {
+    raceStartTime = time.getCurrentTime();
     pauseTime = 0; 
-    maxPauseTime = 100;
+    maxPauseTime = 300;
     eventManager = EventManager::getInstance();
     gameVariables = GameVariables::getInstance();
     keyAPressed = false;
@@ -376,12 +377,16 @@ void PlayState::update(float dt)
     
     if (gameVariables->isFinishedRace())                    ///Finish Race here
     {
+        const unsigned int FINISH_DELAY = 10000;
         if (gameVariables->finishTime == NULL)
-        {gameVariables->finishTime = time.getCurrentTime();soundEngine->FadeOutMusic(4000);soundEngine->fadeOutAllSound(4000);renderingEngine->startFadeOut();}
+        {
+            gameVariables->finishTime = time.getCurrentTime();
+            soundEngine->FadeOutMusic(4000);
+            soundEngine->fadeOutAllSound(4000);
+            renderingEngine->startFadeOut(FINISH_DELAY);
+        }
 
-        const unsigned int FINISH_DELAY = 5000;
-
-        if (time.getDeltaTime(gameVariables->finishTime) > FINISH_DELAY)
+        if (time.getDeltaTime(gameVariables->finishTime) >= FINISH_DELAY)
         {
             soundEngine->fadeOutAllSound(10); //make sure they really are off
 

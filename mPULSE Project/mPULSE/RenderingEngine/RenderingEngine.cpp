@@ -4810,8 +4810,10 @@ void RenderingEngine::resetFade()
     FadeCtrl=0.0f;fadeMode=0;
 }
 
-void RenderingEngine::startFadeIn()
+void RenderingEngine::startFadeIn(unsigned fadeTimeLimit)
 {
+    fadeTime = fadeTimeLimit;
+    fadeStartTime = clock.getCurrentTime();
 //    if (fadeMode == 0)
     {
         FadeCtrl = 1.0f;
@@ -4819,8 +4821,10 @@ void RenderingEngine::startFadeIn()
     }
 }
 
-void RenderingEngine::startFadeOut()
+void RenderingEngine::startFadeOut(unsigned fadeTimeLimit)
 {
+    fadeTime = fadeTimeLimit;
+    fadeStartTime = clock.getCurrentTime();
 //    if (fadeMode == 0)
     {
         FadeCtrl = 0.0f;
@@ -4830,21 +4834,23 @@ void RenderingEngine::startFadeOut()
 
 float RenderingEngine::updateFade(float dt)
 {
+    float fadePercent = (float)clock.getDeltaTime(fadeStartTime) / (float)fadeTime;
+
     switch (fadeMode)
     {
     case 0: //Stopped
         break;
 
     case 1: //Fade In
-        if (FadeCtrl > 0)
-        {FadeCtrl = FadeCtrl - 0.02f;}
+        if (FadeCtrl > 0.0f)
+        {FadeCtrl = 1.0f-fadePercent;}
         else
         {FadeCtrl = 0.0f;fadeMode = 0;}
         break;
 
     case 2: //Fade Out
         if (FadeCtrl < 1.0f)
-        {FadeCtrl = FadeCtrl + 0.02f;}
+        {FadeCtrl = fadePercent;}
         else
         {FadeCtrl = 1.0f;fadeMode = 0;}
         break;

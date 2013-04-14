@@ -74,6 +74,7 @@ private:
     unsigned initialTime;
     unsigned timeBeforeRaceStarts;
     unsigned countdownTime;
+    unsigned raceStartTime;
     int pauseTime;
     int maxPauseTime;
     PlayState();
