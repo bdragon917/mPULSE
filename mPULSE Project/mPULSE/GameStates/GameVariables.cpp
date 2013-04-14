@@ -77,7 +77,7 @@ bool GameVariables::isFinishedRace()
 {
     bool retValue = true;
 
-    for (unsigned int p=0;p<players.size();p++)
+    for (int p=0;p<numPlayers;p++)
     {
         if (!finishedPlayers[p])
             retValue = false;

@@ -1966,6 +1966,17 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 				//drawShadow(entities, scene);
 				//flatten->off();
 
+
+                    aSkyBoxShader->on();
+                    //glDisable (GL_COLOR_MATERIAL);
+	                //glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+                    //glEnable(GL_TEXTURE_2D);
+                    //glDisable (GL_NORMALIZE);
+                    //glDepthFunc(GL_ALWAYS);
+                    drawSkyBox(0,0, 0, 10000.0f, 10000.0f, 10000.0f, 0);
+                    aSkyBoxShader->off();
+
+
                     if (aShader != NULL)
                      {
                         aShader->on();
@@ -2052,14 +2063,14 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                      //}
                     //glPushMatrix();
                     //glDisable (GL_LIGHTING);
-                    aSkyBoxShader->on();
+                    //aSkyBoxShader->on();
                     //glDisable (GL_COLOR_MATERIAL);
 	                //glColorMaterial (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
                     //glEnable(GL_TEXTURE_2D);
                     //glDisable (GL_NORMALIZE);
                     //glDepthFunc(GL_ALWAYS);
-                    drawSkyBox(0,0, 0, 10000.0f, 10000.0f, 10000.0f, 0);
-                    aSkyBoxShader->off();
+                   // drawSkyBox(0,0, 0, 10000.0f, 10000.0f, 10000.0f, 0);
+                    //aSkyBoxShader->off();
                     //glMaterialfv(GL_FRONT_AND_BACK,  GL_AMBIENT,  &norMat);
                     //glDepthFunc(GL_LESS);
                     //glEnable (GL_NORMALIZE);

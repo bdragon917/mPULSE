@@ -36,8 +36,8 @@ void main()
 	if (at < 0)
 		at = 0;
 		
-	if (mode == 1)
-		at = ct.z;
+	//if (mode == 1)
+	//	at = 0;
 		
     gl_FragColor = vec4(ct, at);
  
