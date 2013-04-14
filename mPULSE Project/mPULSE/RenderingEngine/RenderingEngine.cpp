@@ -3534,7 +3534,7 @@ int RenderingEngine::drawLoungeScreen(float dt, int currentSelected)
 
         string drawText;
 
-        drawText = "Shop";
+        drawText = "Race";
        if ((currentSelected) == 0) //this is selected
        {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
        else
@@ -3544,7 +3544,7 @@ int RenderingEngine::drawLoungeScreen(float dt, int currentSelected)
        but_offset += (butHeightOffset)/4.0f;
 
 
-       drawText = "Race!";
+       drawText = "Shop";
        if ((currentSelected) == 1) //this is selected
        {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
        else
