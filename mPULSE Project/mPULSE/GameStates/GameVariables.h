@@ -33,6 +33,13 @@ public:
 	void setProfileCurrentPlayer(int num);
 	int getProfileCurrentPlayer();
 
+    typedef struct Rank{
+        std::string rank;
+        std::string name;
+        std::string time;
+    };
+
+    void addRanking(std::string rank,std::string name,std::string time);
 
     typedef enum {
         STANDARD,
@@ -75,7 +82,7 @@ public:
     int numLaps;
     std::vector<RenderableComponent*> trackRC;
 
-    std::vector<std::string> rankings;      //used to display the ranking at results
+    std::vector<Rank> rankings;      //used to display the ranking at results
 
 	//Transistion Variables
 	std::vector<DynamicImage*> di;

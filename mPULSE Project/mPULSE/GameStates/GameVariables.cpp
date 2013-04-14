@@ -22,6 +22,15 @@ void GameVariables::initialize()
     isLoaded = false;
 }
 
+void GameVariables::addRanking(std::string rank,std::string name,std::string time)
+{
+    Rank ranking;
+    ranking.rank = rank;
+    ranking.name = name;
+    ranking.time = time;
+    rankings.push_back(ranking);
+}
+
 void GameVariables::setControllers(bool* controllerArray)
 {
     controllers = controllerArray;
