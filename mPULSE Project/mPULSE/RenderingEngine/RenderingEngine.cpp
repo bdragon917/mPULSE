@@ -1992,7 +1992,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     if (locShader_Alpha != -1)
                     {glUniform1f(locShader_Alpha, 0.20f);}
                     glPushAttrib(GL_DEPTH_TEST);
-                    glDisable(GL_DEPTH_TEST);
+                    //glDisable(GL_DEPTH_TEST);
                     drawShadow2(entities, scene);
                     glEnable(GL_DEPTH_TEST);
                     glPopAttrib();
