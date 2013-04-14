@@ -34,7 +34,7 @@ void ResultState::render()
     if (retMenuVal == 1)
     {
         lockControls = false;
-        changeState(SHOP);
+        changeState(LOUNGE);
     }
 
 
