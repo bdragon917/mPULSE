@@ -227,7 +227,7 @@ void ShopState::handleXboxEvents(int player,XboxController* state)
     {
         bool* controllers = gameVariables->getControllers();
 
-        if(state->dpadUp || state->leftStick.y > 0)
+        if(state->dpadUp || state->leftStick.y >  0)
         {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
             {
@@ -247,7 +247,7 @@ void ShopState::handleXboxEvents(int player,XboxController* state)
             }
             prevTime = clock.getCurrentTime();
         }
-		else if(state->dpadRight || state->leftStick.x > 0)
+		if(state->dpadRight || state->leftStick.x > 0)
         {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
             {

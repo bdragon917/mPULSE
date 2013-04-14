@@ -3230,6 +3230,9 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
         //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
 
 
+        renderText(butWidthOffset-((textWidth)/2), SCREEN_HEIGHT * 0.80f, dec_height*2.0f, 30, 36, FloatToString(gameVariables->playerInShop->data.Obs) + " Obs", true);
+
+        renderText(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.80f, dec_height*2.0f, 30, 36, gameVariables->playerInShop->data.driverName, true);
    
 
 
