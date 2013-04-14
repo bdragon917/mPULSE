@@ -39,7 +39,7 @@ std::string AI_Names::getAngryName()
         int getIndex = ((curAngryName + 1) * angryPPLSeed * angryPPLSeed) % angryName.size();
         curAngryName++;
 
-        if (curAngryName <= angryName.size())
+        if (curAngryName >= angryName.size())
         {
             curAngryName = 0;
             angryPPLSeed = (rand() % 20) + 1;
@@ -57,7 +57,7 @@ std::string AI_Names::getRandomName()
 
 
 
-    if (curRandomName <= randomName.size())
+    if (curRandomName >= randomName.size())
     {
         curRandomName = 0;
         randPPLSeed = (rand() % 20) + 1;
