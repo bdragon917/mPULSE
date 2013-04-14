@@ -16,6 +16,14 @@
 
 class ShopState : public GameState
 {
+
+    struct shopItem
+	{
+		int itemIndex;
+		int price;
+	};
+
+
 public:
     static ShopState* getInstance();
 	void initialize();
@@ -27,6 +35,13 @@ public:
 
 private:
     ShopState();
+
+    void initializeInventory();
+    void initializePaintJob(int shipModel);
+
+    std::vector<shopItem*> availableShips;
+    std::vector<shopItem*> availablePaints;
+    std::vector<shopItem*> availableUpgrades;
 
     ShopScreenInfo ssi;
     DynamicImage* mechanicGirl;

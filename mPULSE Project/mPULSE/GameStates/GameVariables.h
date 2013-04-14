@@ -57,6 +57,10 @@ public:
     std::vector<Profile*> profiles; 
 
 
+    //Used by Shop State (set by Lounge state)
+    Profile* playerInShop;
+
+
 	//Track Stuff
     Tracks* loadedTracks;
     int selectedTrack;      //int points to PhysX Model

@@ -20,6 +20,8 @@ void LoungeState::initialize()
     lockControls = false;
     goBack = false;
 
+    actingPlayer = 0;
+
 	prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 }
 
@@ -49,6 +51,13 @@ void LoungeState::render()
 				changeState(STAGE);
 				break;
 			case 1:
+                if (actingPlayer <= gameVariables->getNumPlayers())
+                {
+                    gameVariables->playerInShop = gameVariables->getPlayerProfile(actingPlayer);
+                    printf("Lounge: actingPlayer is %i\n", actingPlayer);
+                }
+                else
+                    printf("Lounge: actingPlayer is more than gameVariables.getNumPlayers!\n");
 				changeState(SHOP); 
 				break;
 			}
@@ -81,6 +90,8 @@ bool LoungeState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void LoungeState::handleXboxEvents(int player,XboxController* state)
 {   
+
+    
     if(!lockControls)
     {
         bool* controllers = gameVariables->getControllers();
@@ -109,6 +120,9 @@ void LoungeState::handleXboxEvents(int player,XboxController* state)
         {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
             {
+                //Hopefully, we can use this to let shop know which player is entering
+                actingPlayer = state->getIndex();
+
                 if(!buttonPressed)
                     buttonPressed = true;
                 selectPressed();

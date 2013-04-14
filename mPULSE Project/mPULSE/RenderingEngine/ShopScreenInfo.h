@@ -5,7 +5,6 @@
 
 class ShopScreenInfo {
 public:
-	bool isActive;
 
     std::vector <DynamicImage*> di;
 
@@ -22,9 +21,12 @@ public:
     std::string playerName;
     int playerObs;
 
+    bool inSubmenu;
 
     int selectedMenuIndex;
-    int selectedSelectorIndex;
+    int selectedItemIndex;
+
+    int newShipTexture;     //Need to tell which texture to use for new models;
 
 
 };

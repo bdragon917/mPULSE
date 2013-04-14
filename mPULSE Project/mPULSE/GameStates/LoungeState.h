@@ -45,6 +45,8 @@ private:
 
     float myDt; //hack for update
 
+    int actingPlayer;       //Used to remember which controller hit the button for shop;
+
     int currentSelected;
     int maxSelected;
 

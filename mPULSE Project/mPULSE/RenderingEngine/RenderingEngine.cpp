@@ -3160,7 +3160,71 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
         glColor4f(0.0f,0.0f,0.0f, 1.0f);
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
-        //Title
+        aHUDShader->off();
+
+
+    //Get info from ssi
+    int displayModelIndex = gameVariables->playerInShop->data.carModel;
+    int displayTextureIndex = gameVariables->playerInShop->data.carTexture;
+
+        if (ssi.inSubmenu)
+        {
+            //draw the submenu
+            switch (ssi.selectedMenuIndex)
+            {
+            case 0:         //Buy Ship
+                displayModelIndex = ssi.selectedItemIndex;
+                displayTextureIndex = ssi.newShipTexture;
+                break;
+
+            case 1:         //Buy Upgrades
+                //displayModelIndex = ssi.selectedItemIndex;        //How to show this??/ TODO:
+                break;
+
+            case 2:         //Buy Paint
+                displayTextureIndex = ssi.selectedItemIndex;
+                break;
+            }
+        }
+
+
+
+
+    //Draw The Model.  RootMenu:PLAYER's Ship  subMenu:SelectedItem
+         aShader->on();
+
+                    //Draw the rotating Ship
+        glPushMatrix();
+        glClear(GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
+        setUpPerpView();
+		gluLookAt(-20, 17, 0,  // Eye/camera position
+	        0 ,9, 0,		// Look-at position 
+	        0.0,1.0,0.0); 		// "Up" vector
+
+		glRotatef(gameVariables->trackSelectRotVar,0,1,0);
+		//glScalef(0.01f,0.01f,0.01f);
+		gameVariables->trackSelectRotVar += 0.2f;
+
+		glBindTexture(GL_TEXTURE_2D, textureid_P1[displayTextureIndex]);
+		drawModel(modelManager.getModel(displayModelIndex),0,0,0,2.0f);
+		glClear(GL_DEPTH_BUFFER_BIT); 
+		glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix();
+
+        //setUpOrthoView();
+        //glLoadIdentity();
+
+
+        aShader->off();
+        aHUDShader->on();
+
+
+
+     //Title
         string title = "Hi! This is shop Mode!";
         renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
         //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
@@ -3168,7 +3232,80 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 
    
 
-        //draw di's here!
+
+    //Menu Buttons
+        //Atempt to use a different Cooridinate system
+         glPushMatrix();
+        
+        //glOrtho(-1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f);
+       // glLoadIdentity();
+       // glMatrixMode(GL_MODELVIEW);
+       // glPushMatrix();
+       // glLoadIdentity();
+
+         NxVec3 drawPos = NxVec3(
+                                    (0.25f * half_width) + half_width,
+                                    SCREEN_HEIGHT * 0.3f,
+                                    (0)
+                                );
+         int textTexture = 36;
+         float blockHeight = dec_height;
+         float charWidth = 30;
+
+
+
+         //Draw "SHIP"
+         if (ssi.selectedMenuIndex == 0)
+             textTexture = 35;              //glBindTexture(GL_TEXTURE_2D, textureid_P1[38]); //if using graphical buttons
+         else
+             textTexture = 36;
+         
+         renderText(drawPos.x, drawPos.y, blockHeight, charWidth, textTexture, "BUY SHIP", true);
+
+         drawPos.y += blockHeight;
+         //drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
+
+
+         //Draw "BUY POWERUP"
+         if (ssi.selectedMenuIndex == 1)
+             textTexture = 35;              //glBindTexture(GL_TEXTURE_2D, textureid_P1[38]); //if using graphical buttons
+         else
+             textTexture = 36;
+         
+         renderText(drawPos.x, drawPos.y, blockHeight, charWidth, textTexture, "BUY POWER-UPS", true);
+         //drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
+
+         drawPos.y += blockHeight;
+
+         //Draw "RE-PAINT"
+         if (ssi.selectedMenuIndex == 2)
+             textTexture = 35;              //glBindTexture(GL_TEXTURE_2D, textureid_P1[38]); //if using graphical buttons
+         else
+             textTexture = 36;
+         
+         renderText(drawPos.x, drawPos.y, blockHeight, charWidth, textTexture, "RE-PAINT", true);
+         //drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
+
+         drawPos.y += blockHeight;
+
+         //Draw "DONE"
+         if (ssi.selectedMenuIndex == 3)
+             textTexture = 35;              //glBindTexture(GL_TEXTURE_2D, textureid_P1[38]); //if using graphical buttons
+         else
+             textTexture = 36;
+         
+         renderText(drawPos.x, drawPos.y, blockHeight, charWidth, textTexture, "DONE", true);
+         //drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
+
+         //glPopMatrix();
+         glPopMatrix();
+
+
+
+
+
+
+    //draw di's here!
          for (unsigned di=0; di<ssi.di.size();di++)
         {
             DynamicImage* aDynamicImage = ssi.di[di];
@@ -3178,19 +3315,37 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
             drawSquareUVRev(imgPos.x, imgPos.y,0, 200.0f, 300.0f);
             //renderText(imgPos.x, imgPos.y, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
             ssi.di[di]->update();
+        }
 
+
+
+    //Draw subMenu if needed
+
+        if (ssi.inSubmenu)
+        {
+            //draw the submenu
+            switch (ssi.selectedMenuIndex)
+            {
+            case 0:     //Ship
+                renderText(butWidthOffset-((textWidth)/2), titleHeightOffset-(dec_height*2.0f), dec_height*2.0f, (textWidth)/title.size(), 36, "Submenu: Ship", true);
+                break;
+
+            case 1:     //Upgrades
+                renderText(butWidthOffset-((textWidth)/2), titleHeightOffset-(dec_height*2.0f), dec_height*2.0f, (textWidth)/title.size(), 36, "Submenu: Upgrades", true);
+                break;
+
+            case 2:     //Paint
+                renderText(butWidthOffset-((textWidth)/2), titleHeightOffset-(dec_height*2.0f), dec_height*2.0f, (textWidth)/title.size(), 36, "Submenu: Paint", true);
+                break;
+
+            }
         }
 
 
 
 
-        //Done Button
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
 
-            drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
-
-        aHUDShader->off();
-
+         aHUDShader->off();
 
     //reset to previous state
     glPopAttrib();

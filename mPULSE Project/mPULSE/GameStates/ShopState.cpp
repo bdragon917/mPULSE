@@ -27,14 +27,131 @@ void ShopState::initialize()
     lockControls = false;
     goBack = false;
 
+    initializeInventory();
+
     //ssi = new ssi???
     ssi.di.clear();
+    //ssi.playerName;       //Rendering will use Profile:playerInShop to display this info
+    //ssi.playerObs;
+
+    ssi.inSubmenu = false;
+
+    ssi.selectedMenuIndex = currentSelectedCategory;
+    ssi.selectedItemIndex = currentSelectedItem;
+    //end ssi initialization
 
     //texture 42 is mechanic =)
     mechanicGirl = new DynamicImage(-125,400,0,20,20,42,1);   //will probably be overwritten in reset(), so change the values there
     painterGirl = new DynamicImage(-50,50,0,20,20,43,0);
 
 	enterMechanic();
+}
+
+
+void ShopState::initializeInventory()
+{
+    availableShips.clear();
+    availablePaints.clear();
+    availableUpgrades.clear();
+
+    shopItem* newItem;
+
+    //Buyable Ship Models
+    newItem = new shopItem;
+        newItem->itemIndex = 1;      //saruk
+        newItem->price = 0;
+        availableShips.push_back(newItem);
+
+    newItem = new shopItem;
+        newItem->itemIndex = 11;      //Claymore
+        newItem->price = 100000;
+        availableShips.push_back(newItem);
+
+    newItem = new shopItem;
+        newItem->itemIndex = 14;      //Boxer
+        newItem->price = 100000;
+        availableShips.push_back(newItem);
+
+    newItem = new shopItem;
+        newItem->itemIndex = 12;      //Nogard
+        newItem->price = 500000;
+        availableShips.push_back(newItem);
+
+    newItem = new shopItem;
+        newItem->itemIndex = 15;      //MiniMothership
+        newItem->price = 1000000;
+        availableShips.push_back(newItem);
+
+
+
+    //TODO: Buyable Upgrades (Index is not bound to anything)
+    newItem = new shopItem;
+        newItem->itemIndex = 0;      //TODO: SHUNTING
+        newItem->price = 1000000;
+        availableUpgrades.push_back(newItem);
+
+
+}
+
+
+void ShopState::initializePaintJob(int shipModel)
+{
+    availablePaints.clear();
+
+    shopItem* newItem;
+
+    switch (shipModel)
+    {
+        case 1:     //Saruk
+            newItem = new shopItem;
+                newItem->itemIndex = 3;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+            break;
+
+        case 11:     //Claymore
+            newItem = new shopItem;
+                newItem->itemIndex = 52;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+            break;
+
+        case 14:     //Boxer
+            //newItem = new shopItem;
+            //    newItem->itemIndex = 3;      //Standard
+            //    newItem->price = 0;
+             //   availablePaints.push_back(newItem);
+            break;
+
+        case 12:     //Nogard
+            newItem = new shopItem;
+                newItem->itemIndex = 50;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+            break;
+
+        case 15:     //MiniMothership
+            newItem = new shopItem;
+                newItem->itemIndex = 27;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+            break;
+
+        default:     //in case
+
+            break;
+    }
+
+    //Add some generic Paints
+    newItem = new shopItem;
+                newItem->itemIndex = 0;      //Test Texture
+                newItem->price = 1000;
+                availablePaints.push_back(newItem);
+
+    newItem = new shopItem;
+                newItem->itemIndex = 51;      //Black
+                newItem->price = 5000;
+                availablePaints.push_back(newItem);
 }
 
 
@@ -60,6 +177,7 @@ void ShopState::update(float dt)
 void ShopState::render()
 {   
     renderingEngine->createLight_MainMenu();
+
 
     int retMenuVal = renderingEngine->drawShopScreen(myDt, ssi);    //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
 
@@ -184,7 +302,8 @@ void ShopState::upPressed()
 		else
 		{
 			currentSelectedCategory--;
-			soundEngine->playSound(4,7); 
+			soundEngine->playSound(4,7);
+            ssi.selectedMenuIndex = currentSelectedCategory;
 		}
 	}
 }
@@ -200,7 +319,8 @@ void ShopState::downPressed()
 		else
 		{
 			currentSelectedCategory++;
-			soundEngine->playSound(4,7); 
+			soundEngine->playSound(4,7);
+            ssi.selectedMenuIndex = currentSelectedCategory;
 		}
 	}
 }
@@ -209,14 +329,27 @@ void ShopState::rightPressed()
 {
 	if(inSubmenu)
 	{
-		if(currentSelectedItem == MAX_ITEM_SELECTED)
+		if(currentSelectedItem == MAX_ITEM_SELECTED - 1)
 		{
 			//Play not possible sound
 		}
 		else
 		{
 			currentSelectedItem++;
-			soundEngine->playSound(4,7); 
+			soundEngine->playSound(4,7);
+            if (currentSelectedItem < MAX_ITEM_SELECTED)
+            {
+                switch (currentSelectedCategory)
+                {
+                case 0:     //Ship
+                    ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex;  initializePaintJob(ssi.selectedItemIndex);ssi.newShipTexture=availablePaints[0]->itemIndex;break;
+                case 1:     //upgrades
+                    ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;break;
+                case 2:     //Paint
+                    ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;break;
+                }
+            }
+
 		}
 	}
 }
@@ -232,7 +365,21 @@ void ShopState::leftPressed()
 		else
 		{
 			currentSelectedItem--;
-			soundEngine->playSound(4,7); 
+			soundEngine->playSound(4,7);
+
+            if (currentSelectedItem < MAX_ITEM_SELECTED)
+            {
+                switch (currentSelectedCategory)
+                {
+                case 0:     //Ship
+                    ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex;  initializePaintJob(ssi.selectedItemIndex);ssi.newShipTexture=availablePaints[0]->itemIndex;break;
+                case 1:     //upgrades
+                    ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;break;
+                case 2:     //Paint
+                    ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;break;
+                }
+            }
+
 		}
 	}
 }
@@ -248,18 +395,31 @@ void ShopState::selectPressed()
 		case 0:
 			printf("Ships\n");
 			inSubmenu = true;
+            ssi.selectedItemIndex = 0;
+            ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex;
+            MAX_ITEM_SELECTED = availableShips.size();
+
 			//Ships
 			//MAX_ITEMS_SELECTED = # of ships -1
 			break;
 		case 1:
 			printf("Upgrades\n");
 			inSubmenu = true;
+            ssi.selectedItemIndex = 0;
+            if ((unsigned) currentSelectedItem > availableUpgrades.size() - 1){printf("ShopState: HEY! No items in Upgrade!!!\n");}
+            else
+                ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
+            MAX_ITEM_SELECTED = availableUpgrades.size();
 			//Upgrades
 			//MAX_ITEMS_SELECTED = # of upgrades -1
 			break;
 		case 2:
 			printf("Paint\n");
 			inSubmenu = true;
+            ssi.selectedItemIndex = 0;
+            initializePaintJob(gameVariables->playerInShop->data.carModel);
+            ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;
+            MAX_ITEM_SELECTED = availablePaints.size();
 			//Paint
 			//MAX_ITEMS_SELECTED = # of paint styles -1
 			break;
@@ -274,8 +434,23 @@ void ShopState::selectPressed()
 	else  // In a sub menu
 	{
 		// The meat and potatoes of this screen
+        switch(currentSelectedCategory)
+		{
+		case 0:
+			printf("Buy selected Ship\n");
+            //if hasenough money, buy item, and go back to root
+			break;
+		case 1:
+			printf("Buy selected Upgrades\n");
+			break;
+		case 2:
+			printf("Buy selected Paint\n");
+			break;
+		}
 	}
-   
+
+
+    ssi.inSubmenu = inSubmenu;
 }
 
 void ShopState::backPressed()
@@ -290,6 +465,7 @@ void ShopState::backPressed()
 		// Play some sort of cancel noise
 		inSubmenu = false;
 	}
+    ssi.inSubmenu = inSubmenu;
 }
 ShopState* ShopState::getInstance()
 {    
