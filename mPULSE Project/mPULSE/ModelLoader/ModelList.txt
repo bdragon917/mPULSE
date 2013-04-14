@@ -20,3 +20,4 @@ ModelLoader\\Models\\Track_M2.obj
 ModelLoader\\Models\\Track_M2_rc1.obj
 ModelLoader\\Models\\powerup.obj
 ModelLoader\\Models\\asteroid1.obj
+ModelLoader\\Models\\particle.obj

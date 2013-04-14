@@ -2852,6 +2852,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     //glLoadIdentity();
     //glOrtho(-1, 1, -1, 1, -10.0f, 1000.0f);
     //setUpPerpView();
+	/*
     Particle* newParticle = new Particle(shipAngle * 0.1f,0.0f,shipAngle * 0.03f + 1.0f);
     newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,1.5));
     newParticle->timeTilDeath = 20;
@@ -2860,6 +2861,20 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,1.7f));
     newParticle2->timeTilDeath = 20;
     particles.push_back(newParticle2);
+	*/
+
+	for (int e = 0; e < 100; e++)
+	{
+		Particle* newParticle = new Particle(((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX), 0.0f, shipAngle*((float)rand()/(float)RAND_MAX));
+		newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,1.5));
+		newParticle->timeTilDeath = (rand()%20);
+		particles.push_back(newParticle);
+
+		Particle* newParticle2 = new Particle( -((float)rand()/(float)RAND_MAX),0.0f,shipAngle * ((float)rand()/(float)RAND_MAX));
+		newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,1.7f));
+		newParticle2->timeTilDeath = (rand()%20);
+		particles.push_back(newParticle2);
+	}
 
     glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
     for (unsigned int x=0;x<particles.size();x++)
@@ -2874,7 +2889,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
         //glTranslatef(-particles[x]->getLocation().x,-particles[x]->getLocation().y,-particles[x]->getLocation().z);
         modelManager;
 
-            drawModel(modelManager.getModel(0),0,0,0,1.0f);
+            drawModel(modelManager.getModel(22),0,0,0,1.0f);
         glPopMatrix();
     }
 
