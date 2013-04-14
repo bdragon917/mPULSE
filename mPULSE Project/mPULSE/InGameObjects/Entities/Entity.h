@@ -110,6 +110,7 @@ public:
     Entity* tracking;
     Entity* tracker;
     unsigned obs;
+    unsigned finishTime;
     std::string rankingName;
     NxVec3 initDir;
     bool shield;
@@ -140,7 +141,7 @@ private:
 	float charge;
     float chargeAmount;
     float boostAmount;
-
+    
 	unsigned highSpeedObsTime;
     unsigned shuntStartTime;
     unsigned maxShuntTime;

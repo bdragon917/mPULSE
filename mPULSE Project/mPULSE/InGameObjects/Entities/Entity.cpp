@@ -2,6 +2,7 @@
 
 Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
 {
+    finishTime = 0;
     rank = 0;
     alive = true;
 	batteryCharged = false;

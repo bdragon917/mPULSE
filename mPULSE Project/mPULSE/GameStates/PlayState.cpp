@@ -8,7 +8,7 @@ PlayState::PlayState()
 
 void PlayState::resetAll()
 {
-    raceStartTime = time.getCurrentTime();
+    raceStartTime = 0;
     pauseTime = 0; 
     maxPauseTime = 300;
     eventManager = EventManager::getInstance();
@@ -320,6 +320,7 @@ void PlayState::update(float dt)
         if(curTime > timeBeforeRaceStarts + initialTime)
         {
             raceStarted = true;
+            raceStartTime = time.getCurrentTime();
         }
         else if((curTime - initialTime > countdownTime))
         {            
@@ -356,6 +357,7 @@ void PlayState::update(float dt)
 
         if (cd->laps >= gameVariables->numLaps)
         {
+            entities.cars[playa]->finishTime = time.getDeltaTime(raceStartTime);
             gameVariables->becomeFinished(playa);
             entities.cars[playa]->aCam->setMode(6);
         }
@@ -388,12 +390,13 @@ void PlayState::update(float dt)
 
         if (time.getDeltaTime(gameVariables->finishTime) >= FINISH_DELAY)
         {
+            renderingEngine->resetFade();
             soundEngine->fadeOutAllSound(10); //make sure they really are off
 
             gameVariables->rankings.clear();
             for (unsigned e=0;e<rankings->size();e++)
             {
-                gameVariables->rankings.push_back(rankings->at(e)->rankingName);
+                gameVariables->addRanking(renderingEngine->FloatToString(rankings->at(e)->rank),rankings->at(e)->rankingName,renderingEngine->FloatToString(rankings->at(e)->finishTime));
             }
 
             changeState(RESULT);
@@ -549,6 +552,11 @@ void PlayState::update(float dt)
     {
         Entity* car = entities.AIcars[c];
         car->update();
+
+        CustomData* cd = (CustomData*) car->getActor()->userData;
+        if (cd->laps >= gameVariables->numLaps)
+            car->finishTime = time.getDeltaTime(raceStartTime);
+
         //Do AI thinking here!!!!!
         //car->aAI->
         //car->aAI->setWaypoint(&Waypoint(7.83703,0.413632,-101.592));

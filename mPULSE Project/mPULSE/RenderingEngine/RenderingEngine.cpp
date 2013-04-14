@@ -3926,10 +3926,11 @@ int RenderingEngine::drawResultScreen(float dt)
         float offset = dec_height*4.0f;
 
         for (unsigned i= 0; i < gameVariables->rankings.size();i++)
-        {
-                string title = gameVariables->rankings[i];                 //THIS SHOULD READ OUT THE RANKINGS!
-                renderText(butWidthOffset-((textWidth)/2), titleHeightOffset+offset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
-                offset = offset + dec_height*2.0f;
+        {            
+            renderText(butWidthOffset-((textWidth)/2)-490, 50+titleHeightOffset+offset, dec_height*2.0f, (textWidth)/gameVariables->rankings[i].name.size(), 36, gameVariables->rankings[i].rank, true);
+            renderText(butWidthOffset-((textWidth)/2)-160, 50+titleHeightOffset+offset, dec_height*2.0f, (textWidth)/gameVariables->rankings[i].name.size(), 36, gameVariables->rankings[i].name, true);
+            renderText(butWidthOffset-((textWidth)/2)+470, 50+titleHeightOffset+offset, dec_height*2.0f, (textWidth)/gameVariables->rankings[i].name.size(), 36, gameVariables->rankings[i].time, true);
+            offset = offset + dec_height*2.0f;
         }
 
 
