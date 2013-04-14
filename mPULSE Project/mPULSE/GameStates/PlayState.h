@@ -45,6 +45,7 @@ public:
     void InitializeConsoleCommands();
     void setNumberOfPlayers(int numOfPlayers);
 
+    void pause();
     void handleEvents();
     void handleCollisionEvents();
     void handleSoundEvents();
@@ -62,6 +63,7 @@ private:
     bool keyDPressed;
     bool keyWPressed;
     bool keySPressed;
+    bool paused;
 
     bool CHEAT_InfPowUp;
 
@@ -72,7 +74,8 @@ private:
     unsigned initialTime;
     unsigned timeBeforeRaceStarts;
     unsigned countdownTime;
-
+    int pauseTime;
+    int maxPauseTime;
     PlayState();
     float id;
     Track* track;

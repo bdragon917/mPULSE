@@ -58,7 +58,7 @@ Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
 
 void Entity::applyDischargeBattery()
 {
-    unsigned dt = clock.getDeltaTime(dischargeStartTime);
+    int dt = clock.getDeltaTime(dischargeStartTime);
 
     if(dt > chargePeriod)
         dt = chargePeriod;
@@ -81,7 +81,7 @@ void Entity::applyDischargeBattery()
 
 void Entity::applyChargeBattery()
 {
-    unsigned dt = clock.getDeltaTime(chargeStartTime);
+    int dt = clock.getDeltaTime(chargeStartTime);
     if(dt > chargePeriod)
         dt = chargePeriod;
 
@@ -103,7 +103,7 @@ void Entity::applyChargeBattery()
 
 void Entity::applyBoost()
 {
-    unsigned dt = clock.getDeltaTime(boostStartTime);
+    int dt = clock.getDeltaTime(boostStartTime);
     if(dt > boostPeriod)
         dt = boostPeriod;
 

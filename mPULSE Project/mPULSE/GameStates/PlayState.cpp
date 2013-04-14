@@ -8,12 +8,15 @@ PlayState::PlayState()
 
 void PlayState::resetAll()
 {
+    pauseTime = 0; 
+    maxPauseTime = 100;
     eventManager = EventManager::getInstance();
     gameVariables = GameVariables::getInstance();
     keyAPressed = false;
     keyDPressed = false;
     keyWPressed = false;
     keySPressed = false;
+    paused = false;
 
     id = 0;
     showConsole = true;
@@ -511,6 +514,7 @@ void PlayState::update(float dt)
 			//printf("Sweep collision!\n");
 		}
 		
+        
         car->update();
 		
         if (car->getActor()->getGlobalPose().t.y < -20.0f)
@@ -612,7 +616,10 @@ void PlayState::update(float dt)
     //physicsEngine->step(dt/1000.0f);
     //physicsEngine->step(0.33f);
     //physicsEngine->step(1.0f/60.0f);
-	physicsEngine->step(dt/1000.0f);
+    if(!paused)
+	    physicsEngine->step(dt/1000.0f);
+    else
+        renderingEngine->drawText("PAUSED",-0.1,0);
 
 	
 	for (unsigned c = 0; c < entities.cars.size(); ++c)
@@ -1025,7 +1032,6 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
     //if (state->back)
     if(raceStarted)
     {
-
         int carCount = cars.size();
         if (player < carCount)
         {
@@ -1033,17 +1039,12 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             {
                 if (state->rs && !rbPressed)
                 {
-
                     logWayPoint(0);
                     rbPressed = true;
                     printf("Point logged pressed\n");
                 }
-
                 else if (!state->rs)
                     rbPressed = false;  
-
-                if (state->back)
-                {changeState(MAIN_MENU); }
             }
         
 
@@ -1052,134 +1053,139 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
         
             car->aCam->setUserCamControl(NxVec3 (state->rightStick.y, 0, state->rightStick.x));
 
-            NxVec3 a = car->getActor()->getLinearVelocity();
-            //printf("x: %f y: %f z: %f \n",a.x,a.y,a.z);
-            int rTriggMag = state->rTrigger;
-            int lTriggMag = state->lTrigger;    
-            static int count = 0;
-
-            car->addTorque(rTriggMag - lTriggMag);        
-            car->setSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
-
-		    if(state->x)
-			    car->chargeBattery();
-		    if(state->y)
-			    car->dischargeBattery();
-            if(state->b)
-                car->brake(5000);
-            else
-                car->brake(0);   
-
-            if(state->a)
+            if(!state->start && !paused)
             {
-                Entity::PickupType type = car->usePickup();
-                if(type == Entity::MISSILE)
-                {
-                    int numCars = gameVariables->numberOfAIs + gameVariables->getNumPlayers();
-                    int victimIndex = car->rank - 2;   //offset from current rank to get the person infront of you                 
-                    soundEngine->playSound(-1, 8);       //play missile, on channel 4
-                    Entity* e = new Entity(20000,
-                        physicsEngine->createMissile(car->getActor()),
-                        renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 20000 ms.
-                    e->rc.push_back(new RenderableComponent(4,32));      //Missile                    
-				    e->parent = car;
-                    e->initDir = car->getActor()->getGlobalOrientation()*NxVec3(1,0,0);
 
-                    if(victimIndex >= 0) //Fly straight if player is in first place
+                NxVec3 a = car->getActor()->getLinearVelocity();
+                //printf("x: %f y: %f z: %f \n",a.x,a.y,a.z);
+                int rTriggMag = state->rTrigger;
+                int lTriggMag = state->lTrigger;    
+                static int count = 0;
+
+                car->addTorque(rTriggMag - lTriggMag);        
+                car->setSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
+
+		        if(state->x)
+			        car->chargeBattery();
+		        if(state->y)
+			        car->dischargeBattery();
+                if(state->b)
+                    car->brake(5000);
+                else
+                    car->brake(0);   
+
+                if(state->a)
+                {
+                    Entity::PickupType type = car->usePickup();
+                    if(type == Entity::MISSILE)
                     {
-                        e->tracking = rankings->at(victimIndex);
-                        rankings->at(victimIndex)->tracker = e;
+                        int numCars = gameVariables->numberOfAIs + gameVariables->getNumPlayers();
+                        int victimIndex = car->rank - 2;   //offset from current rank to get the person infront of you                 
+                        soundEngine->playSound(-1, 8);       //play missile, on channel 4
+                        Entity* e = new Entity(20000,
+                            physicsEngine->createMissile(car->getActor()),
+                            renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 20000 ms.
+                        e->rc.push_back(new RenderableComponent(4,32));      //Missile                    
+				        e->parent = car;
+                        e->initDir = car->getActor()->getGlobalOrientation()*NxVec3(1,0,0);
+
+                        if(victimIndex >= 0) //Fly straight if player is in first place
+                        {
+                            e->tracking = rankings->at(victimIndex);
+                            rankings->at(victimIndex)->tracker = e;
+                        }
+
+                        entities.DynamicObjs.push_back(e);
+
+                        if (CHEAT_InfPowUp)
+                        {car->givePickup(Entity::MISSILE);}
                     }
+                    else if(type == Entity::SHIELD)
+                    {
+                        soundEngine->playSound(4, 9);       //play missile, on channel 4
+                        car->setShield(true);
+                    }
+                    else if(type == Entity::BARRIER)
+                    {
+                        soundEngine->playSound(4, 10);       //play missile, on channel 4
+                        Entity* e = new Entity(-1,
+                            physicsEngine->createBarrier(car->getActor()),
+                            renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live forever       
+				        e->parent = car;                
+                        e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
+                        e->rc.push_back(new RenderableComponent(10,31));     //BarrierScreen
+                        entities.DynamicObjs.push_back(e);
 
-                    entities.DynamicObjs.push_back(e);
-
-                    if (CHEAT_InfPowUp)
-                    {car->givePickup(Entity::MISSILE);}
+                        if (CHEAT_InfPowUp)
+                        {car->givePickup(Entity::BARRIER);}
+                    }
+                    else if(type == Entity::BOOST)
+                    {
+                        car->boost();
+                    }
                 }
-                else if(type == Entity::SHIELD)
-                {
-                    soundEngine->playSound(4, 9);       //play missile, on channel 4
-                    car->setShield(true);
-                }
-                else if(type == Entity::BARRIER)
-                {
-                    soundEngine->playSound(4, 10);       //play missile, on channel 4
-                    Entity* e = new Entity(-1,
-                        physicsEngine->createBarrier(car->getActor()),
-                        renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live forever       
-				    e->parent = car;                
-                    e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
-                    e->rc.push_back(new RenderableComponent(10,31));     //BarrierScreen
-                    entities.DynamicObjs.push_back(e);
-
-                    if (CHEAT_InfPowUp)
-                    {car->givePickup(Entity::BARRIER);}
-                }
-                else if(type == Entity::BOOST)
-                {
-                    car->boost();
-                }
-            }
         
-            if(state->dpadUp)
-                car->givePickup(Entity::BARRIER);
-            if(state->dpadRight)
-                car->givePickup(Entity::SHIELD);
-            if(state->dpadLeft)
-                car->givePickup(Entity::BOOST);
-            if(state->dpadDown)
-                car->givePickup(Entity::MISSILE);
-            if(state->lb) 
-                car->shuntLeft();
-            if(state->rb)
-                car->shuntRight();
-            if(state->ls)
-            {
-			    CustomData* cd = (CustomData*)car->getActor()->userData;
+                if(state->dpadUp)
+                    car->givePickup(Entity::BARRIER);
+                if(state->dpadRight)
+                    car->givePickup(Entity::SHIELD);
+                if(state->dpadLeft)
+                    car->givePickup(Entity::BOOST);
+                if(state->dpadDown)
+                    car->givePickup(Entity::MISSILE);
+                if(state->lb) 
+                    car->shuntLeft();
+                if(state->rb)
+                    car->shuntRight();
+                if(state->back)
+                {
+			        CustomData* cd = (CustomData*)car->getActor()->userData;
 
-                NxVec3 respawnPt = cd->wp->pos;
-                //NxVec3 ori = cd->wp->ori;
-                //float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
+                    NxVec3 respawnPt = cd->wp->pos;
+                    //NxVec3 ori = cd->wp->ori;
+                    //float angle = acos(cd->wp->ori.dot(NxVec3(1,0,0)));
 
-                car->getActor()->setGlobalPosition(respawnPt);
-                //NxVec3 v(0,1,0);
+                    car->getActor()->setGlobalPosition(respawnPt);
+                    //NxVec3 v(0,1,0);
 
-                //NxQuat q;
-                //q.fromAngleAxis(angle*(180.0f/3.14f), v);
-			    NxMat33 orient(cd->wp->ori);
-			    /*
-			    NxVec3 temp1 = orient.getColumn(0);
-			    NxVec3 temp2 = orient.getColumn(1);
-			    NxVec3 temp3 = orient.getColumn(2);
-			    printf("%f %f %f\n%f %f %f\n%f %f %f\n\n", temp1[0],temp1[1],temp1[2],temp2[0],temp2[1],temp2[2],temp3[0],temp3[1],temp3[2]);
-			    */
+                    //NxQuat q;
+                    //q.fromAngleAxis(angle*(180.0f/3.14f), v);
+			        NxMat33 orient(cd->wp->ori);
+			        /*
+			        NxVec3 temp1 = orient.getColumn(0);
+			        NxVec3 temp2 = orient.getColumn(1);
+			        NxVec3 temp3 = orient.getColumn(2);
+			        printf("%f %f %f\n%f %f %f\n%f %f %f\n\n", temp1[0],temp1[1],temp1[2],temp2[0],temp2[1],temp2[2],temp3[0],temp3[1],temp3[2]);
+			        */
 
-                //orient.fromQuat(q);
+                    //orient.fromQuat(q);
 
-                car->getActor()->setGlobalOrientation(orient);
-                car->getActor()->setLinearVelocity(NxVec3(0,0,0));
-                car->aCam->resetCamera();
-			    /*
-		        physicsEngine->resetBox();
+                    car->getActor()->setGlobalOrientation(orient);
+                    car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+                    car->aCam->resetCamera();
+			        /*
+		            physicsEngine->resetBox();
             
-                car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
+                    car->getActor()->setGlobalPosition(NxVec3(0,3.5f,0));
 
-                NxVec3 v(0,1,0);
-                NxReal ang = 90;
+                    NxVec3 v(0,1,0);
+                    NxReal ang = 90;
 
-                NxQuat q;
-                q.fromAngleAxis(ang, v);
-                NxMat33 orient;
-                orient.fromQuat(q);
+                    NxQuat q;
+                    q.fromAngleAxis(ang, v);
+                    NxMat33 orient;
+                    orient.fromQuat(q);
 
-                car->getActor()->setGlobalOrientation(orient);
-                car->getActor()->setLinearVelocity(NxVec3(0,0,0));
-                car->aCam->resetCamera();
-			    */
-	        }
-            if (state->start)
+                    car->getActor()->setGlobalOrientation(orient);
+                    car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+                    car->aCam->resetCamera();
+			        */
+	            }
+            }
+            else if (state->start && time.getDeltaTime(pauseTime) > maxPauseTime)
             {
-                logWayPoint(0);
+                pauseTime = time.getCurrentTime();
+                pause();
             }
         }
     }
@@ -1273,8 +1279,6 @@ void PlayState::logReplay(int player, XboxController* state, float dt)
         float LeftStickX = state->leftStick.x;
         float LeftStickY = state->leftStick.y;
 
-
-
         std::ofstream out;
         out.open( "replay.txt", std::ios_base::app );
         if( !out )
@@ -1301,11 +1305,7 @@ void PlayState::logReplay(int player, XboxController* state, float dt)
 
 void PlayState::logWayPoint(int player)
 {
-
-
-    Entity* car = entities.cars[player];
-    
-	
+    Entity* car = entities.cars[player];    	
     NxVec3 loc = car->getActor()->getGlobalPose().t;
     //NxVec3 ori = car->getActor()->getGlobalOrientation()*NxVec3(1,0,0);
 	NxVec3 col0 = car->getActor()->getGlobalOrientation().getColumn(0);
@@ -1343,6 +1343,11 @@ void PlayState::logWayPoint(int player)
            //out << "brk1: " + renderingEngine->FloatToString(brk1) + char(10) + char(13);
         }
         out.close();
+}
+
+void PlayState::pause()
+{
+    paused = !paused; //toggle pause.
 }
 
 PlayState* PlayState::getInstance() 

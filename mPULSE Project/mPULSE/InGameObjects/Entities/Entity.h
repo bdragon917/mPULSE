@@ -138,9 +138,9 @@ private:
     float minSteering;
     float maxSteering;
 	float charge;
+    float chargeAmount;
+    float boostAmount;
 
-    unsigned chargeAmount;
-    unsigned boostAmount;
 	unsigned highSpeedObsTime;
     unsigned shuntStartTime;
     unsigned maxShuntTime;
@@ -148,11 +148,11 @@ private:
     unsigned shieldTimeout;  
     unsigned delayBeforeTracking;
 
-    unsigned boostPeriod;
-    unsigned boostStartTime;
-    unsigned chargePeriod;
-    unsigned chargeStartTime;
-    unsigned dischargeStartTime;
+    int boostPeriod;
+    int boostStartTime;
+    int chargePeriod;
+    int chargeStartTime;
+    int dischargeStartTime;
 
 
 	NxVec3 impactPoint;
