@@ -24,6 +24,8 @@ RenderingEngine::RenderingEngine()
     debugCamera = false;
 
     debugFloat = 0.0f;
+
+	generateAsteroids(TOTAL_ASTEROIDS);
 }
 
 void RenderingEngine::ChangeResolution(int newWidthResolution, int newHeightResolution)
@@ -41,6 +43,64 @@ RenderingEngine* RenderingEngine::getInstance()
 {
     static RenderingEngine renderer;
     return &renderer;
+}
+
+void RenderingEngine::generateAsteroids(int total)
+{
+	asteroids a;
+	
+	for (int i = 0; i < total; i++)
+	{
+		if (rand()%2 == 0)
+		{
+			a.x = (rand()% 1000);
+			a.xVec = (rand()% RAND_MAX);
+		}
+		else
+		{
+			a.x = -(rand()%1000);
+			a.xVec = -(rand()% RAND_MAX);
+		}
+
+		if (rand()%2 == 0)
+		{
+			a.y = (rand()% 1000);
+			a.yVec = (rand()% RAND_MAX);
+		}
+		else
+		{
+			a.y = -(rand()% 1000);
+			a.yVec = -(rand()% RAND_MAX);
+		}
+		if (rand()%2 == 0)
+		{
+			a.z = (rand()% 1000);
+			a.zVec = (rand()% RAND_MAX);
+		}
+		else
+		{
+			a.z = -(rand()% 1000);
+			a.xVec = (rand()% RAND_MAX);
+		}
+
+		a.rotateRate = rand()%90 + 30;
+
+		a.angle = 0;
+
+		a.scale = rand()%25 + 1;
+
+		a.texture = rand()%4 + 61;
+
+		asteroidList.push_back(a);
+	}
+}
+
+void RenderingEngine::turnAsteroids(int index)
+{
+	//asteroidList.at(index).angle =+ asteroidList.at(index).rotateRate;
+	asteroidList.at(index).angle += 0.5f;
+	if (asteroidList.at(index).angle >= 360)
+		asteroidList.at(index).angle -= 360;
 }
 
 GLuint RenderingEngine::generateDisplayList(std::string modelName,int x,int y,int z,int scale)
@@ -1995,6 +2055,26 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                      }
 
 
+					//Draw asteroids
+					for (int i = 0; i < TOTAL_ASTEROIDS; i++)
+					{
+						glPushMatrix();
+						turnAsteroids(i);
+						//glRotatef(asteroidList.at(i).angle, asteroidList.at(i).xVec, asteroidList.at(i).yVec, asteroidList.at(i).zVec);
+						glTranslatef(asteroidList.at(i).x,asteroidList.at(i).y,asteroidList.at(i).z);
+						//glRotatef(asteroidList.at(i).angle, 0, 1, 0);
+						glRotatef(asteroidList.at(i).angle, asteroidList.at(i).xVec, asteroidList.at(i).yVec, asteroidList.at(i).zVec);
+						glTranslatef(-asteroidList.at(i).x,-asteroidList.at(i).y,-asteroidList.at(i).z);
+						//drawModel(modelManager.getModel(7), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z ,1.0f);
+						//drawModel(modelManager.getModel(21), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z ,10.0f);
+						glBindTexture(GL_TEXTURE_2D, textureid_P1[asteroidList.at(i).texture]);
+						drawModel(modelManager.getModel(21), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z, asteroidList.at(i).scale);
+						glPopMatrix();
+					}
+
+
+
+
                     //GLint locShader_Alpha = glGetUniformLocation(aShader->f, "alpha");
                     locShader_Alpha = aShader->getUniLoc("alpha");
 
@@ -2050,6 +2130,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
                 //Draw Asteroids and debris stuff
                         //Infinite Plane!
+				/*
                 int groundxoffset = (int(entities->cars.at(carIndex)->getActor()->getGlobalPose().t.x));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x) - (int(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.x));
                 int groundyoffset = (int(entities->cars.at(carIndex)->getActor()->getGlobalPose().t.z));//(entities->cars.at(0)->components.at(0)->getActor()->getGlobalPose().t.z) - );
 
@@ -2064,7 +2145,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                 {gxo = (groundxoffset) - 100.0f;}
                 if ((groundyoffset % 200) == 0)
                 {gyo = (groundyoffset) - 100.0f;}
-
+				*/
 
                 //drawModel(modelManager.getModel(0), 0+gxo,0,0+gyo,1.0f);
 
@@ -2094,6 +2175,8 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                    //glColorMaterial(GL_FRONT_AND_BACK,  GL_AMBIENT_AND_DIFFUSE);
                    //glPopMatrix();
                 //drawTrack(entities);
+
+
 
                         
 
