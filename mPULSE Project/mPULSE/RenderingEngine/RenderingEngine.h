@@ -51,6 +51,8 @@ public:
 
     static RenderingEngine* getInstance();
     float zRot;
+
+    void ChangeResolution(int newWidthResolution, int newHeightResolution);
     int SCREEN_WIDTH;
     int SCREEN_HEIGHT;
     ///Custom Draw Functions

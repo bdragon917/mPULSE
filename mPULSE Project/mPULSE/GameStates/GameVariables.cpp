@@ -18,6 +18,7 @@ void GameVariables::initialize()
     numberOfAIs = 6;
     selectedTrack = 0;
     loadedTracks = new Tracks("tracks.txt");
+    isFullScreen = false;
     isLoaded = false;
 }
 

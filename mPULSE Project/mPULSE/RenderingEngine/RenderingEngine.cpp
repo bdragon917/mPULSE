@@ -10,6 +10,8 @@ RenderingEngine::RenderingEngine()
     zRot = 0.0f;
     SCREEN_WIDTH = 1600;
     SCREEN_HEIGHT = 900;
+    //SCREEN_WIDTH = 1280;
+    //SCREEN_HEIGHT = 960;
 	setUpPerpView();
 	createLight();
 	initializeGL();
@@ -22,6 +24,12 @@ RenderingEngine::RenderingEngine()
     debugCamera = false;
 
     debugFloat = 0.0f;
+}
+
+void RenderingEngine::ChangeResolution(int newWidthResolution, int newHeightResolution)
+{
+    SCREEN_WIDTH = newWidthResolution;
+    SCREEN_HEIGHT = newHeightResolution;
 }
 
 void RenderingEngine::setEntities(Entities* ents)
@@ -2373,21 +2381,65 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
 
         //Title
         string title = "Setting!";
-        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
+        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, 30, 36, title, true);
         //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
 
-        //Title
+        int displayTextTexture = 36;
 
+    //Resolution
+        if (selectY == 0){displayTextTexture = 35;}else{displayTextTexture = 36;}       //Does highlighting
         title = "Resolution:";
-        title = title + FloatToString(gameVariables->curResolution);
-        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*5.0f, (textWidth)/title.size(), 36, title, true);
+        title = title;
+        renderText(butWidthOffset-((textWidth)/2),
+                                        titleHeightOffset + (dec_height*2.0f),
+                                        dec_height*2.0f, 30, displayTextTexture, title, true);
+
+        string curResolutionStr;
+        switch (gameVariables->curResolution)
+        {
+            case gameVariables->STANDARD:
+                curResolutionStr = "640 x 480";break;
+            case gameVariables->LAPTOP:
+                curResolutionStr = "1600 x 900";break;
+            case gameVariables->GAMELAB:
+                curResolutionStr = "1920 x 1200";break;
+        }
+
+        renderText(butWidthOffset-((textWidth)/2) + (title.size() * dec_height*2.0f),
+                                        titleHeightOffset + (dec_height*2.0f),
+                                        dec_height*2.0f, 30, displayTextTexture, curResolutionStr, true);
    
 
+    //FullScreen
+        if (selectY == 1){displayTextTexture = 35;}else{displayTextTexture = 36;}       //Does highlighting
+        title = "Full Screen:";
+        title = title;
+        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*4.0f), dec_height*2.0f, dec_height*2.0f, displayTextTexture, title, true);
 
-        //Done Button
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
+        if (gameVariables->isFullScreen)
+            renderText(butWidthOffset-((textWidth)/2) + (title.size() * dec_height*2.0f),
+                                        titleHeightOffset + (dec_height*4.0f),
+                                        dec_height*2.0f, 30, 36, "TRUE", true);
+        else
+            renderText(butWidthOffset-((textWidth)/2) + (title.size() * dec_height*2.0f),
+                                        titleHeightOffset + (dec_height*4.0f),
+                                        dec_height*2.0f, 30, 36, "FALSE", true);
 
-            drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
+
+
+    //Controls
+        if (selectY == 2){displayTextTexture = 35;}else{displayTextTexture = 36;}       //Does highlighting
+        title = "See Controls";
+        title = title;
+        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*6.0f), dec_height*2.0f, 30, displayTextTexture, title, true);
+
+
+    //Done Button
+        if (selectY == 3){displayTextTexture = 38;}else{displayTextTexture = 37;}       //Does highlighting
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[displayTextTexture]);
+
+            drawSquareUVRev(butWidthOffset, titleHeightOffset + (dec_height*8.0f) + dec_height , 0.0f, button_width, dec_height);
+            //drawSquareUVRev(butWidthOffset, doneHeightOffset + (dec_height*8.0f), 0.0f, button_width, dec_height);
 
         //aHUDShader->off();
 

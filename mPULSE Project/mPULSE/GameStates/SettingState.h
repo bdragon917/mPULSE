@@ -41,6 +41,7 @@ private:
     void keySelectDown();
     void keySelectTarget();
 
+    void reinitializeWindow();
 
     void backPressed();
 

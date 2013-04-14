@@ -38,9 +38,10 @@ public:
         STANDARD,
         LAPTOP,
         GAMELAB,
-        FULLSCREEN,
         LAST
     } Resolution;
+
+    bool isFullScreen;
 
     Resolution curResolution;
 

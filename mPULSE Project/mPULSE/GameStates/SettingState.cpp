@@ -9,13 +9,13 @@ SettingState::SettingState()
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
  
-    curSelectedY = 1;
+    curSelectedY = 0;
     curSelectedX = 0;
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
     WAIT_TIME = 50;
-    MAX_X_SELECTED = 4;           //Change this depending on number of profiles avaliable
-    MAX_Y_SELECTED = 4;
+    MAX_X_SELECTED = 4;
+    MAX_Y_SELECTED = 3;
 
     buttonPressed = false;
     lockControls = false;
@@ -32,7 +32,7 @@ void SettingState::render()
 {   
     renderingEngine->createLight_MainMenu();
 
-    int retMenuVal = renderingEngine->drawSettingScreen(myDt, 0, 0);    //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
+    int retMenuVal = renderingEngine->drawSettingScreen(myDt, curSelectedX, curSelectedY);    //retMenuVal returns 1 if it is finished (This means change screen!) [5 is to not show selected on main menu]
 
     if (retMenuVal == 1)
     {
@@ -139,43 +139,71 @@ void SettingState::handleXboxEvents(int player,XboxController* state)
 void SettingState::keySelectLeft()
 {
      soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
-    if (curSelectedY == 1)
+
+    if (curSelectedY == 0)      //resolution
     {
-        //Does Resolution Stuff
-        if (gameVariables->curResolution = gameVariables->LAST)
-        {gameVariables->curResolution = gameVariables->STANDARD;}
+        //HACK for Looping through resolutions
+        if (gameVariables->curResolution == gameVariables->STANDARD)
+            gameVariables->curResolution = gameVariables->LAPTOP;
+        else if (gameVariables->curResolution == gameVariables->LAPTOP)
+            gameVariables->curResolution = gameVariables->GAMELAB;
+        else
+            gameVariables->curResolution = gameVariables->STANDARD;
+
+        //Does resolution stuff
     }
-    if (curSelectedY == 2)
-    {gameVariables->numberOfAIs -= 1;}
+    else if (curSelectedY == 1)      //Fullscreen
+    {
+        if (gameVariables->isFullScreen){gameVariables->isFullScreen = false;}else{gameVariables->isFullScreen = true;}
+    }
+    else if (curSelectedY == 2)     //Controls
+    {
+        //Show Controls?
+    }
+
+
     /*
     curSelectedX -= 1;
 
     if (curSelectedX < 0)
         curSelectedX = MAX_X_SELECTED;
-        */
+      */  
 
 }
 
 void SettingState::keySelectRight()
 {
   soundEngine->playSound(4,7);    //4 is channel, 7 is index for lazer
-    if (curSelectedY == 1)
+
+
+    if (curSelectedY == 0)      //resolution
     {
-        int index = gameVariables->curResolution + 1;
-        gameVariables->curResolution = (GameVariables::Resolution)(gameVariables->curResolution + 1);
-        //Does Resolution Stuff
-        if (gameVariables->curResolution = gameVariables->LAST)
-        {gameVariables->curResolution = gameVariables->STANDARD;}
+        //HACK for Looping through resolutions
+        if (gameVariables->curResolution == gameVariables->STANDARD)
+            gameVariables->curResolution = gameVariables->GAMELAB;
+        else if (gameVariables->curResolution == gameVariables->LAPTOP)
+            gameVariables->curResolution = gameVariables->STANDARD;
+        else
+            gameVariables->curResolution = gameVariables->LAPTOP;
+
+        //Does resolution stuff
     }
-    if (curSelectedY == 2)
-    {gameVariables->numberOfAIs += 1;}
+    else if (curSelectedY == 1)      //Fullscreen
+    {
+        if (gameVariables->isFullScreen){gameVariables->isFullScreen = false;}else{gameVariables->isFullScreen = true;}
+    }
+    else if (curSelectedY == 2)     //Controls
+    {
+        //Show Controls?
+    }
+    
     
     /*
     curSelectedX += 1;
 
     if (curSelectedX > MAX_X_SELECTED)
         curSelectedX = 0;
-        */
+      */  
 }
 
 void SettingState::keySelectUp()
@@ -200,7 +228,21 @@ void SettingState::keySelectTarget()
 {
     //changeState(PLAY);
     soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
-    renderingEngine->startTransition(RenderingEngine::FADE_OUT);
+
+    if (curSelectedY == 0)
+    {
+        reinitializeWindow();
+    }
+    if (curSelectedY == 1)
+    {
+        reinitializeWindow();
+    }
+    else if (curSelectedY == 3)     //Done
+    {
+        renderingEngine->startTransition(RenderingEngine::FADE_OUT);
+    }
+
+    
 }
 
 void SettingState::backPressed()
@@ -213,4 +255,45 @@ SettingState* SettingState::getInstance()
     static SettingState SettingState;
     SettingState.changeState(SETTING);
     return &SettingState;
+}
+
+
+
+
+void SettingState::reinitializeWindow()
+{
+        SDL_Init( SDL_INIT_EVERYTHING );
+
+	//Initalization for motion blur
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 8);
+
+	//Create Main Window
+
+    int xResolution;
+    int yResolution;
+
+    switch (gameVariables->curResolution)
+    {
+        case gameVariables->STANDARD:
+            xResolution = 640; yResolution = 480;renderingEngine->ChangeResolution(640, 480);break;
+        case gameVariables->LAPTOP:
+            xResolution = 1600; yResolution = 900;renderingEngine->ChangeResolution(1600, 900);break;
+        case gameVariables->GAMELAB:
+            xResolution = 1920; yResolution = 1200;renderingEngine->ChangeResolution(1920, 1200);break;
+    }
+    SDL_Surface* screen;
+
+    if (gameVariables->isFullScreen)
+        screen = SDL_SetVideoMode(xResolution, yResolution, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL | SDL_FULLSCREEN);
+    else
+        screen = SDL_SetVideoMode(xResolution, yResolution, 32, SDL_HWSURFACE | SDL_GL_DOUBLEBUFFER | SDL_OPENGL);
+	
+    
+    if (screen != NULL)
+        SDL_WM_SetCaption("mPULSE","mPULSE");
+
+    renderingEngine->initializeGL();
 }
