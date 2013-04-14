@@ -162,6 +162,24 @@ private:
         std::string text;
     };
 
+	struct asteroids {
+		float scale;
+
+		int texture;
+
+		float angle;
+
+		float rotateRate;
+
+		float xVec;
+		float yVec;
+		float zVec;
+
+		float x;
+		float y;
+		float z;
+	};
+
     unsigned fadeTime;
     unsigned fadeStartTime;
     Clock clock;
@@ -176,6 +194,11 @@ private:
 
     std::vector<GLuint> displayLists;
     ModelManager modelManager;
+
+	std::vector<asteroids> asteroidList;
+	void generateAsteroids(int total);
+	void turnAsteroids(int index);
+	#define TOTAL_ASTEROIDS 200
 
     void drawGroundPlane(float xoffset, float yoffset);
     void drawCheckerBoard(float x, float y);
