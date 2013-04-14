@@ -133,10 +133,10 @@ void RenderingEngine::initializeTexture()
 	//bindBMPtoTexture("./img/textureTest.bmp", textureid_P1);
 	///**
 	unsigned char *data = 0;
-	BMPImg aBMPImg;
+	BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[71];
-    glGenTextures(71, textureid_P1);
+    textureid_P1 = new GLuint[77];
+    glGenTextures(77, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -236,6 +236,10 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/BG/Generic.bmp", textureid_P1[71]);
     bindBMPtoTexture("./Images/BG/PowUp.bmp", textureid_P1[72]);
     bindBMPtoTexture("./Images/BG/Spd.bmp", textureid_P1[73]);
+
+    bindBMPtoTexture("./Images/Menu/Lounge/Lounge.bmp", textureid_P1[74]);
+    bindBMPtoTexture("./Images/Particles/ParticleBlue.bmp", textureid_P1[75]);
+    bindBMPtoTexture("./Images/Particles/ParticleTwin.bmp", textureid_P1[76]);
 
 
 
@@ -2554,7 +2558,7 @@ int RenderingEngine::drawStoryScreen(float dt)
 
     //draw profile info
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[39]);
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[74]);
         glColor4f(0.0f,0.0f,0.0f, 1.0f);
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
@@ -2684,7 +2688,7 @@ int RenderingEngine::drawLoungeScreen(float dt)
     drawSquare(half_width, half_height, 0.0f, half_width, half_height);
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[39]);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[74]);
     glColor4f(0.0f,0.0f,0.0f, 1.0f);
     drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
@@ -2808,7 +2812,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     
 
     aSkyBoxShader->off();
-    aShader->on();
+    aHUDShader->on();
         //if (testRTShader != NULL)
          //{
          //   glEnable(GL_TEXTURE_2D);
@@ -2876,7 +2880,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 		particles.push_back(newParticle2);
 	}
 
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[75]);
     for (unsigned int x=0;x<particles.size();x++)
     {
         glPushMatrix();
@@ -2908,8 +2912,8 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
     
 
-    
-
+    aHUDShader->off();
+    aShader->on();
     /*
     glTranslatef(0,-newY,5.0f);
     glRotatef(75.0f,0.0f,1.0f,0.0f);
@@ -3184,7 +3188,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 	
 
     glEnable(GL_TEXTURE_2D);
-    aHUDShader->on();
+    aSkyBoxShader->on();
 
 
    //Initialize a new coordinate system
@@ -3227,7 +3231,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
         glColor4f(0.0f,0.0f,0.0f, 1.0f);
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
-        aHUDShader->off();
+        aSkyBoxShader->off();
 
 
     //Get info from ssi
@@ -3750,7 +3754,7 @@ int RenderingEngine::drawLoungeScreen(float dt, int currentSelected)
 
     //draw profile info
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[48]);
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[74]);
         glColor4f(0.0f,0.0f,0.0f, 1.0f);
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
@@ -3923,6 +3927,9 @@ int RenderingEngine::drawResultScreen(float dt)
         glColor4f(0.0f,0.0f,0.0f, 1.0f);
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
+        aSkyBoxShader->off();
+        aHUDShader->on();
+
         float offset = dec_height*4.0f;
 
         for (unsigned i= 0; i < gameVariables->rankings.size();i++)
@@ -3933,13 +3940,15 @@ int RenderingEngine::drawResultScreen(float dt)
             offset = offset + dec_height*2.0f;
         }
 
+        aHUDShader->off();
 
+        /*      Don't need this right???
         //Done Button
             glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
 
             drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
-
-        aSkyBoxShader->off();
+        */
+  
 
     //reset to previous state
     glPopAttrib();
@@ -3948,17 +3957,12 @@ int RenderingEngine::drawResultScreen(float dt)
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 
-     glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING);
 
 
 
-    if (aSkyBoxShader != NULL)
-    {
-        aSkyBoxShader->off();
-    }
 
-
-
+    glDisable(GL_TEXTURE_2D);
 
 
     
@@ -3980,11 +3984,8 @@ int RenderingEngine::drawResultScreen(float dt)
             }
 
 
-            
-    if (aSkyBoxShader != NULL)
-    {
-        glDisable(GL_TEXTURE_2D);
-    }
+           
+
 
 
 	glPopMatrix();
