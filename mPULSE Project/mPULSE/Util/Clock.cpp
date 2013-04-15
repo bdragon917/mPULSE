@@ -43,6 +43,41 @@ float Clock::getDeltaTime()
 
 	return dt;
 
+
+//Attempt at capping the frequency of FPS switching.
+
+ //   float dt = (float)(SDL_GetTicks()-time);
+ //   if(milliSecPerFrame > dt && getDeltaTime(lastUsedFPSAtTime) > FPSTimeSwitchLimit)
+ //   {        
+ //       SDL_Delay((unsigned)(milliSecPerFrame-dt)); //Wait for the difference
+ //       dt = milliSecPerFrame;   //Calculate new dt
+
+ //       lastUsedFPSAtTime = milliSecPerFrame;
+ //   }
+	//else if(((2.0f*milliSecPerFrame) > dt) && ((getDeltaTime(lastUsedFPSAtTime) > FPSTimeSwitchLimit) || (lastUsedFPS >= (2.0f*milliSecPerFrame))))
+	//{
+	//	SDL_Delay((unsigned)((2.0f*milliSecPerFrame)-dt)); //Wait for the difference
+ //       dt = 2.0f*milliSecPerFrame;   //Calculate new dt
+
+ //       if(lastUsedFPS != 2.0f*milliSecPerFrame)
+ //           lastUsedFPSAtTime = getCurrentTime();
+
+ //       lastUsedFPS = 2.0f*milliSecPerFrame;
+	//}
+	//else if(((3.0f*milliSecPerFrame) > dt) && ((getDeltaTime(lastUsedFPSAtTime) > FPSTimeSwitchLimit) || (lastUsedFPS >= (3.0f*milliSecPerFrame))))
+	//{
+	//	SDL_Delay((unsigned)((3.0f*milliSecPerFrame)-dt)); //Wait for the difference
+ //       dt = 3.0f*milliSecPerFrame;   //Calculate new dt        
+
+ //       if(lastUsedFPS != 3.0f*milliSecPerFrame)
+ //           lastUsedFPSAtTime = getCurrentTime(); 
+
+ //       lastUsedFPS = 3.0f*milliSecPerFrame;
+	//}
+ //   time = SDL_GetTicks(); //update previous time
+
+	//return dt;
+
 }
 
 int Clock::getDeltaTime(unsigned prevTime)
