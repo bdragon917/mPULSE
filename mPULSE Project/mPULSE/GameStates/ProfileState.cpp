@@ -7,10 +7,14 @@ ProfileState::ProfileState()
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
+
 }
 
 void ProfileState::initialize()
 {
+    initTime = clock.getCurrentTime();
+    timeToWaitBeforeControlEnabled = 300;
+
 	PROFILE_FRAME_SIZE = 8;
 	WAIT_TIME = 100;
 
@@ -126,7 +130,7 @@ bool ProfileState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void ProfileState::handleXboxEvents(int player,XboxController* state)
 {   
-    if(!lockControls)
+    if(!lockControls && clock.getDeltaTime(initTime) > timeToWaitBeforeControlEnabled)
     {
         bool* controllers = gameVariables->getControllers();
 

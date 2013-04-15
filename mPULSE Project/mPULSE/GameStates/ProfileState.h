@@ -57,6 +57,7 @@ private:
     
     bool buttonPressed;
     unsigned prevTime;
-
+    unsigned initTime;
+    unsigned timeToWaitBeforeControlEnabled;
 
 };
