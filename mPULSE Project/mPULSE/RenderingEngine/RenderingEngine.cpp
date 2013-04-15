@@ -3417,7 +3417,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
                                     SCREEN_HEIGHT * 0.3f,
                                     (0)
                                 );
-         int textTexture = 36;
+         int textTexture = 34;
          float blockHeight = dec_height;
          float charWidth = 30;
 
@@ -3427,7 +3427,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
          if (ssi.selectedMenuIndex == 0)
              textTexture = 35;              //glBindTexture(GL_TEXTURE_2D, textureid_P1[38]); //if using graphical buttons
          else
-             textTexture = 36;
+             textTexture = 34;
          
          renderText(drawPos.x, drawPos.y, blockHeight, charWidth, textTexture, "BUY SHIP", true);
 
@@ -3439,7 +3439,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
          if (ssi.selectedMenuIndex == 1)
              textTexture = 35;              //glBindTexture(GL_TEXTURE_2D, textureid_P1[38]); //if using graphical buttons
          else
-             textTexture = 36;
+             textTexture = 34;
          
          renderText(drawPos.x, drawPos.y, blockHeight, charWidth, textTexture, "BUY POWER-UPS", true);
          //drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
@@ -3450,7 +3450,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
          if (ssi.selectedMenuIndex == 2)
              textTexture = 35;              //glBindTexture(GL_TEXTURE_2D, textureid_P1[38]); //if using graphical buttons
          else
-             textTexture = 36;
+             textTexture = 34;
          
          renderText(drawPos.x, drawPos.y, blockHeight, charWidth, textTexture, "RE-PAINT", true);
          //drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
@@ -3461,7 +3461,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
          if (ssi.selectedMenuIndex == 3)
              textTexture = 35;              //glBindTexture(GL_TEXTURE_2D, textureid_P1[38]); //if using graphical buttons
          else
-             textTexture = 36;
+             textTexture = 34;
          
          renderText(drawPos.x, drawPos.y, blockHeight, charWidth, textTexture, "DONE", true);
          //drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
@@ -3674,7 +3674,7 @@ int RenderingEngine::drawStageSelectScreen(float dt, int currentSelected)
         string title = "Stage Select";
         float const titleWidth = SCREEN_HEIGHT/30.0f * title.size();
 
-        renderText((SCREEN_WIDTH / 2) - (titleWidth / 2), titleHeightOffset, SCREEN_HEIGHT/15.0f, SCREEN_HEIGHT/30.0f, 35, title, true);
+        renderText((SCREEN_WIDTH / 2) - (titleWidth / 2), titleHeightOffset, SCREEN_HEIGHT/15.0f, SCREEN_HEIGHT/30.0f, 36, title, true);
         //renderText((half_width + (SCREEN_WIDTH / 96.0f))-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (titleWidth)/title.size(), 36, title, true);
         //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
 
@@ -3695,7 +3695,7 @@ int RenderingEngine::drawStageSelectScreen(float dt, int currentSelected)
             {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
             else
             //{renderText(x_TrackColumn, but_offset, dec_height*2.0f, (textWidth)/title.size(), 36, drawText, true);}
-            {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 36, drawText, true);}
+            {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 34, drawText, true);}
 
             but_offset += (butHeightOffset)/4.0f;
         }
@@ -3862,7 +3862,7 @@ int RenderingEngine::drawLoungeScreen(float dt, int currentSelected)
         string title = "Lounge";
         float const titleWidth = SCREEN_HEIGHT/30.0f * title.size();
 
-        renderText((SCREEN_WIDTH / 2) - (titleWidth / 2), titleHeightOffset, SCREEN_HEIGHT/15.0f, SCREEN_HEIGHT/30.0f, 35, title, true);
+        renderText((SCREEN_WIDTH / 2) - (titleWidth / 2), titleHeightOffset, SCREEN_HEIGHT/15.0f, SCREEN_HEIGHT/30.0f, 36, title, true);
 
 
         float but_offset = titleHeightOffset * 6;        //starting offset
@@ -3873,7 +3873,7 @@ int RenderingEngine::drawLoungeScreen(float dt, int currentSelected)
        if ((currentSelected) == 0) //this is selected
        {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
        else
-       {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 36, drawText, true);}
+       {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 34, drawText, true);}
 
 
        but_offset += (butHeightOffset)/4.0f;
@@ -3883,7 +3883,7 @@ int RenderingEngine::drawLoungeScreen(float dt, int currentSelected)
        if ((currentSelected) == 1) //this is selected
        {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
        else
-       {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 36, drawText, true);}
+       {renderText(SCREEN_WIDTH * 0.625f, but_offset, dec_height*2.0f, (textWidth)/title.size(), 34, drawText, true);}
 
        
        

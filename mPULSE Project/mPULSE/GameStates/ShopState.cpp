@@ -396,9 +396,10 @@ void ShopState::selectPressed()
 			printf("Ships\n");
 			inSubmenu = true;
             ssi.selectedItemIndex = 0;
-            ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex;
+            currentSelectedItem = 0;
+            ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex; initializePaintJob(ssi.selectedItemIndex);ssi.newShipTexture=availablePaints[0]->itemIndex;
             MAX_ITEM_SELECTED = availableShips.size();
-
+            break;
 			//Ships
 			//MAX_ITEMS_SELECTED = # of ships -1
 			break;
@@ -406,6 +407,7 @@ void ShopState::selectPressed()
 			printf("Upgrades\n");
 			inSubmenu = true;
             ssi.selectedItemIndex = 0;
+            currentSelectedItem = 0;
             if ((unsigned) currentSelectedItem > availableUpgrades.size() - 1){printf("ShopState: HEY! No items in Upgrade!!!\n");}
             else
                 ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
@@ -417,6 +419,7 @@ void ShopState::selectPressed()
 			printf("Paint\n");
 			inSubmenu = true;
             ssi.selectedItemIndex = 0;
+            currentSelectedItem = 0;
             initializePaintJob(gameVariables->playerInShop->data.carModel);
             ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;
             MAX_ITEM_SELECTED = availablePaints.size();
