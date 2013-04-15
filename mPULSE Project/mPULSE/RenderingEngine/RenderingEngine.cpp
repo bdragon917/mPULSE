@@ -195,8 +195,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[87];
-    glGenTextures(87, textureid_P1);
+    textureid_P1 = new GLuint[89];
+    glGenTextures(89, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -312,6 +312,10 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/Barriers/BarrierTexture1.bmp", textureid_P1[84]);
     bindBMPtoTexture("./Images/Barriers/BarrierTexture2.bmp", textureid_P1[85]);
     bindBMPtoTexture("./Images/Barriers/BarrierTexture3.bmp", textureid_P1[86]);
+
+    bindBMPtoTexture("./Images/Ship/outUVShipBoxerTrue2.bmp", textureid_P1[87]);
+    bindBMPtoTexture("./Images/Ship/outUVShipBoxerPirate.bmp", textureid_P1[88]);
+
 
 
 	//"/Images/textureTest.bmp"

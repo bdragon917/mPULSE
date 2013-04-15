@@ -117,10 +117,14 @@ void ShopState::initializePaintJob(int shipModel)
             break;
 
         case 14:     //Boxer
-            //newItem = new shopItem;
-            //    newItem->itemIndex = 3;      //Standard
-            //    newItem->price = 0;
-             //   availablePaints.push_back(newItem);
+            newItem = new shopItem;
+                newItem->itemIndex = 87;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+            newItem = new shopItem;
+                newItem->itemIndex = 88;      //Pirate
+                newItem->price = 5000;
+                availablePaints.push_back(newItem);
             break;
 
         case 12:     //Nogard
