@@ -130,7 +130,7 @@ bool ProfileState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
 void ProfileState::handleXboxEvents(int player,XboxController* state)
 {   
-    if(!lockControls && clock.getDeltaTime(initTime) > timeToWaitBeforeControlEnabled)
+    if(!lockControls && ((unsigned) clock.getDeltaTime(initTime)) > timeToWaitBeforeControlEnabled)
     {
         bool* controllers = gameVariables->getControllers();
 

@@ -11,8 +11,9 @@ public:
 
 	//void loadMusic();
 
-	void toggleMusic();
+	void pauseMusic();
 	void stopMusic();
+	void startMusic(int i);
     void FadeOutMusic(int ms);
     void fadeOutAllSound(int ms);
 

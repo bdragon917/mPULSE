@@ -8,7 +8,8 @@ InitState::InitState()
 	soundEngine = SoundEngine::getInstance();
     //renderingEngine->initializeGL();          //should be initalized when RenderingEngine was created
 	soundEngine->initializeSound();
-    soundEngine->playFinalCountDown();
+    //soundEngine->playFinalCountDown();
+	soundEngine->startMusic(0);
     gameVariables = GameVariables::getInstance();
     gameVariables->initialize(); 
     time = clock.getCurrentTime();

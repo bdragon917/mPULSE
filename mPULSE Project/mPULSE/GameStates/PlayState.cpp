@@ -284,7 +284,8 @@ void PlayState::resetAll()
 	soundEngine = SoundEngine::getInstance();
 	soundEngine->initializeSound();
     soundEngine->stopMusic();
-	soundEngine->toggleMusic();
+	//soundEngine->toggleMusic();
+	soundEngine->startMusic(2);
     soundEngine->engineNoise();
     soundEngine->engineVol(1, 0);
     soundEngine->engineVol(2, 0);

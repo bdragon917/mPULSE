@@ -4,6 +4,7 @@
 Sound::Sound(void)
 {
 	SOUND_LIST = "sounds.txt";
+	MUSIC_LIST = "music.txt";
 
 	musicTrack = 0;
 	
@@ -23,14 +24,33 @@ Sound::Sound(void)
 	    }
 	    file.close();
 
-        music0 = Mix_LoadMUS( "SoundEngine\\Sounds\\FinalCountdown.mp3");
-		music1 = Mix_LoadMUS( "SoundEngine\\Sounds\\OuterSpace.mp3" );
-		music2 = Mix_LoadMUS( "SoundEngine\\Sounds\\10YearsAgoAuda.mp3" );
+        //music0 = Mix_LoadMUS( "SoundEngine\\Sounds\\FinalCountdown.mp3");
+		//music1 = Mix_LoadMUS( "SoundEngine\\Sounds\\OuterSpace.mp3" );
+		//music2 = Mix_LoadMUS( "SoundEngine\\Sounds\\10YearsAgoAuda.mp3" );
 	}
 
-	if(!music1) 
+	//if(!music1) 
+	//{
+		//printf("Mix_LoadMUS: %s\n", Mix_GetError());
+	//}
+
+	file.open(MUSIC_LIST);
+	if (file.is_open())
 	{
-		printf("Mix_LoadMUS: %s\n", Mix_GetError());
+		while (!file.eof())
+		{
+			file.getline(charArray,1024);
+			Mix_Music* aMusic = Mix_LoadMUS(charArray);
+
+
+			if (aMusic == NULL)
+			{printf("Sound.cpp: "); printf(charArray); printf(" can't be loaded!\n");}
+
+			music.push_back(aMusic);
+			music;
+		}
+
+		file.close();
 	}
 }
 
@@ -41,30 +61,42 @@ Sound::~Sound(void)
 
 bool Sound::check()
 {
-	if (music1 == NULL)
+	/*
+	if (music.at(0) == NULL)
 	{
 		printf("music1 missing");
 		return false;
 	}
-	if (music2 == NULL)
+	if (music.at(1) == NULL)
 	{
 		printf("music2 missing");
 		return false;
+	}
+	*/
+
+	for (unsigned int i = 0; i < music.size(); i++)
+	{
+		if (music.at(i) == NULL)
+		{
+			printf("music missing: %u\n", i);
+			return false;
+		}
 	}
 	
 	return true;
 }
 
+//only plays if there is a track running as well.
 void Sound::playPause()
 {
 	if( check() )
     {
 		if (Mix_PlayingMusic() == 0)
 		{
-			if (musicTrack == 0)
-				startMusic2();
-			else// if (musicTrack == 1)
-				startMusic1();
+			//if (musicTrack == 0)
+				//startMusic2();
+			//else if (musicTrack == 1)
+				//startMusic1();
 		}
 		else 
 		{
@@ -89,16 +121,36 @@ void Sound::playPause()
 
 void Sound::startMusic0()
 {
-	Mix_FadeInMusic(music0, 1, 10000);
+	Mix_FadeInMusic(music.at(0), 1, 1000);
 }
+void Sound::startMusic0Infinite()
+{
+	Mix_FadeInMusic(music.at(0), -1, 1000);
+}
+
 void Sound::startMusic1()
 {
-	Mix_FadeInMusic(music1, 1, 10000);
+	Mix_FadeInMusic(music.at(1), 1, 1000);
+}
+void Sound::startMusic1Infinite()
+{
+	Mix_FadeInMusic(music.at(1), -1, 1000);
 }
 
 void Sound::startMusic2()
 {
-	Mix_FadeInMusic(music2, 1, 10000);
+	Mix_FadeInMusic(music.at(2), 1, 1000);
+}
+void Sound::startMusic2Infinite()
+{
+	Mix_FadeInMusic(music.at(2), -1, 1000);
+}
+
+void Sound::startMusicInfinite(int i)
+{
+	int retVal = Mix_FadeInMusic(music.at(i), -1, 1000);
+
+	printf("Sound.cpp: retVal:%i\n", retVal);
 }
 
 void Sound::fadeOutMusic(int ms)
