@@ -17,7 +17,7 @@ void SoundEngine::playFinalCountDown()
     song->startMusic0();
 }
 
-void SoundEngine::toggleMusic()
+void SoundEngine::pauseMusic()
 {
 	song->playPause();
 }
@@ -25,6 +25,11 @@ void SoundEngine::toggleMusic()
 void SoundEngine::stopMusic()
 {
 	song->stopMusic();
+}
+
+void SoundEngine::startMusic(int i)
+{
+	song->startMusicInfinite(i);
 }
 
 void SoundEngine::FadeOutMusic(int ms)

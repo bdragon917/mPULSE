@@ -31,16 +31,22 @@ class Sound
         void fadeOutMusic(int ms);
 
         void startMusic0();
+		void startMusic0Infinite();
 		void startMusic1();
+		void startMusic1Infinite();
 		void startMusic2();
+		void startMusic2Infinite();
+		void startMusicInfinite(int i);
 
 	private:
-        Mix_Music *music0;
-		Mix_Music *music1;
-		Mix_Music *music2;
+        //Mix_Music *music0;
+		//Mix_Music *music1;
+		//Mix_Music *music2;
 		std::vector <Mix_Chunk*> chunks;
+		std::vector <Mix_Music*> music;
 
 		std::string SOUND_LIST;
+		std::string MUSIC_LIST;
 
 		int musicTrack;
 
