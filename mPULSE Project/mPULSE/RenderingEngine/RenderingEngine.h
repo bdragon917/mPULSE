@@ -234,6 +234,7 @@ private:
 
     //used to control the main texture alpha
     GLint locShader_Alpha;
+    GLint locShader_DiscardBlue;
 
 	//Transition Stuff
     //Used for Fade In and Out

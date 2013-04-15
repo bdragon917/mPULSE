@@ -42,10 +42,23 @@ void main (void)
   final_color = (final_color * (renderColor)) + (renderColor * 0.5);
   final_color.w = alpha;
   
-  if (discard_blue > 0.5f)
+	if (discard_blue < 0.5)		//Basically if = 0
+	{
+		
+	}
+	else if (discard_blue < 1.5)	//Basically if = 1
 	{
 		if (ct == vec3(0.0,0.0,1.0))
 			discard;
+	}
+	else
+	{
+		if (ct == vec3(0.0,0.0,1.0))
+			discard;
+		else
+			{
+				final_color.w = 0.5 + ((1.0 - ct.z) * 0.5);
+			}
 	}
   
   gl_FragColor = final_color;			

@@ -244,7 +244,7 @@ NxActor* PhysicsEngine::createBarrier(NxActor* car )
     bodyDesc.flags = NX_BF_FROZEN_POS;
 
 	NxBoxShapeDesc boxDesc;
-	boxDesc.dimensions.set(0.25f,1.0f,2.5f);
+	boxDesc.dimensions.set(0.25f,1.5f,3.3f);
 	//boxDesc.localPose.t = position;
 
 	NxActorDesc actorDesc;

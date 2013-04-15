@@ -1126,7 +1126,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                             renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live forever       
 				        e->parent = car;                
                         e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
-                        e->rc.push_back(new RenderableComponent(10,31));     //BarrierScreen
+                        int barrierTexture = 83;
+                        if (rand() % 10 == 0){barrierTexture = 83 + rand() % 4;}
+                        e->rc.push_back(new RenderableComponent(10,barrierTexture));     //BarrierScreen
                         entities.DynamicObjs.push_back(e);
 
                         if (CHEAT_InfPowUp)

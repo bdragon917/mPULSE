@@ -195,8 +195,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[83];
-    glGenTextures(83, textureid_P1);
+    textureid_P1 = new GLuint[87];
+    glGenTextures(87, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -308,6 +308,10 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/Track/TrackTexture6.bmp", textureid_P1[81]);
     bindBMPtoTexture("./Images/Track/TrackTexture7.bmp", textureid_P1[82]);
 
+    bindBMPtoTexture("./Images/Barriers/BarrierTexture0.bmp", textureid_P1[83]);
+    bindBMPtoTexture("./Images/Barriers/BarrierTexture1.bmp", textureid_P1[84]);
+    bindBMPtoTexture("./Images/Barriers/BarrierTexture2.bmp", textureid_P1[85]);
+    bindBMPtoTexture("./Images/Barriers/BarrierTexture3.bmp", textureid_P1[86]);
 
 
 	//"/Images/textureTest.bmp"
@@ -2084,6 +2088,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
                     //GLint locShader_Alpha = glGetUniformLocation(aShader->f, "alpha");
                     locShader_Alpha = aShader->getUniLoc("alpha");
+                    locShader_DiscardBlue = aShader->getUniLoc("discard_blue");
 
 
 
@@ -2970,7 +2975,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 		particles.push_back(newParticle2);
 	}
 
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[75]);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[76]);
     for (unsigned int x=0;x<particles.size();x++)
     {
         glPushMatrix();
@@ -4249,7 +4254,6 @@ void RenderingEngine::drawCars(Entities* entities)
                         if (locShader_Alpha != -1)
                         {glUniform1f(locShader_Alpha, 0.50f);}
 
-                        GLint locShader_DiscardBlue = aShader->getUniLoc("discard_blue");
                         glUniform1f(locShader_DiscardBlue, 1.0f);
 
                          glBindTexture(GL_TEXTURE_2D, textureid_P1[59]);
@@ -4279,8 +4283,11 @@ void RenderingEngine::drawDynamicObjects(std::vector<Entity*>* dObjs)
         {
             for (unsigned r=0; r < dObjs->at(i)->rc.size();r++)
             {
+                if (modelManager.getModel(dObjs->at(i)->rc[r]->modelID == 10))
+                    {glUniform1f(locShader_DiscardBlue, 2.0f);}
                 glBindTexture(GL_TEXTURE_2D, textureid_P1[dObjs->at(i)->rc[r]->textureID]);
                 drawModelPos(modelManager.getModel(dObjs->at(i)->rc[r]->modelID),&(dObjs->at(i)->getActor()->getGlobalPose()));
+                glUniform1f(locShader_DiscardBlue, 0.0f);
             }
         }
             //drawModelPos(dObjs->at(i)->getModel(),&(dObjs->at(i)->getActor()->getGlobalPose()));
