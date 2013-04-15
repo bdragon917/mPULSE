@@ -16,6 +16,7 @@ public:
         SETTING,
 		LOUNGE,
         PROFILE,
+        CONTROLS,
         PLAY,
         RESULT,
         PAUSE,

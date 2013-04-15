@@ -60,7 +60,8 @@ public:
 
     //void drawCube(float x, float y, float z, float size);
     void initializeGL();
-    void RenderingEngine::quickInitialize();
+    void quickInitialize();
+    int drawControlScreen();
     void createLight();
     void createLight_MainMenu();
     void setUpPerpView();

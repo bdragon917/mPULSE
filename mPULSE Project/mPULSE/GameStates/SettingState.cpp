@@ -36,7 +36,10 @@ void SettingState::render()
 
     if (retMenuVal == 1)
     {
-        changeState(MAIN_MENU);
+        if(curSelectedY == 2)
+            changeState(CONTROLS);
+        else
+            changeState(MAIN_MENU);
     }
 
 
@@ -156,10 +159,6 @@ void SettingState::keySelectLeft()
     {
         if (gameVariables->isFullScreen){gameVariables->isFullScreen = false;}else{gameVariables->isFullScreen = true;}
     }
-    else if (curSelectedY == 2)     //Controls
-    {
-        //Show Controls?
-    }
 
 
     /*
@@ -191,10 +190,6 @@ void SettingState::keySelectRight()
     else if (curSelectedY == 1)      //Fullscreen
     {
         if (gameVariables->isFullScreen){gameVariables->isFullScreen = false;}else{gameVariables->isFullScreen = true;}
-    }
-    else if (curSelectedY == 2)     //Controls
-    {
-        //Show Controls?
     }
     
     
@@ -233,9 +228,13 @@ void SettingState::keySelectTarget()
     {
         reinitializeWindow();
     }
-    if (curSelectedY == 1)
+    else if (curSelectedY == 1)
     {
         reinitializeWindow();
+    }
+    else if(curSelectedY == 2)
+    {
+        renderingEngine->startTransition(RenderingEngine::FADE_OUT);
     }
     else if (curSelectedY == 3)     //Done
     {
