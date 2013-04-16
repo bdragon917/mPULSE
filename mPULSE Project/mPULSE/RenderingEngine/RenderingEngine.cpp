@@ -4280,7 +4280,10 @@ int RenderingEngine::drawResultScreen(float dt)
     aShader->off();
 
 
-    
+    if (aShader != NULL)
+    {
+        glEnable(GL_TEXTURE_2D);
+    } 
     //Fader
     glBindTexture(GL_TEXTURE_2D, textureid_P1[51]);
     //float FadeCtrl = 0.0f;
@@ -4300,7 +4303,10 @@ int RenderingEngine::drawResultScreen(float dt)
             }
 
 
-           
+    if (aShader != NULL)
+    {
+        glDisable(GL_TEXTURE_2D);
+    } 
 
 
 
