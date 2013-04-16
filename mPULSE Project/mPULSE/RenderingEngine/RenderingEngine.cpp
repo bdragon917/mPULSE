@@ -2174,11 +2174,11 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     //{glUniform1f(locShader_Alpha, 1.000);}
 					
 					//banner
-					glBindTexture(GL_TEXTURE_2D, textureid_P1[116]);
-					drawModel(modelManager.getModel(26), 0, 0, 0, 1.0f);
+					//glBindTexture(GL_TEXTURE_2D, textureid_P1[116]);
+					//drawModel(modelManager.getModel(29), 0, 0, 0, 1.0f);
 					//banner rockets.
-					glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
-					drawModel(modelManager.getModel(25), 0, 0, 0, 1.0f);
+					//glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
+					//drawModel(modelManager.getModel(28), 0, 0, 0, 1.0f);
 
 
                     if (locShader_Alpha != -1)
