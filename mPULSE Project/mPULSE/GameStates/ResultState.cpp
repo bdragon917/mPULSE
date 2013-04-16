@@ -12,12 +12,6 @@ ResultState::ResultState()
 
 void ResultState::initialize()
 {
-
-}
-
-
-void ResultState::update(float dt)
-{    
 	curSelected = 0;
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
@@ -26,6 +20,12 @@ void ResultState::update(float dt)
     buttonPressed = false;
     lockControls = false;
     endState = false;
+}
+
+
+void ResultState::update(float dt)
+{    
+
 
 	// We want to save the number of Obs earned during the race into the profile
 }
@@ -128,8 +128,8 @@ void ResultState::backPressed()
 ResultState* ResultState::getInstance()
 {    
      printf("ResultState state\n");
-    static ResultState ResultState;
-    ResultState.changeState(RESULT);
-	ResultState.initialize();
-    return &ResultState;
+    static ResultState resultState;
+    resultState.changeState(RESULT);
+	resultState.initialize();
+    return &resultState;
 }

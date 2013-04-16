@@ -382,7 +382,7 @@ void PlayState::update(float dt)
     
     if (gameVariables->isFinishedRace())                    ///Finish Race here
     {
-        const unsigned int FINISH_DELAY = 10000;
+        const unsigned int FINISH_DELAY = 8000;
         if (gameVariables->finishTime == NULL)
         {
             gameVariables->finishTime = time.getCurrentTime();

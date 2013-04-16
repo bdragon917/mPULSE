@@ -4560,7 +4560,7 @@ int RenderingEngine::drawResultScreen(float dt)
         {            
             renderText(butWidthOffset-((textWidth)/2)-490, 50+titleHeightOffset+offset, dec_height*2.0f, (textWidth)/gameVariables->rankings[i].name.size(), 36, gameVariables->rankings[i].rank, true);
             renderText(butWidthOffset-((textWidth)/2)-160, 50+titleHeightOffset+offset, dec_height*2.0f, (textWidth)/gameVariables->rankings[i].name.size(), 36, gameVariables->rankings[i].name, true);
-            renderText(butWidthOffset-((textWidth)/2)+470, 50+titleHeightOffset+offset, dec_height*2.0f, (textWidth)/gameVariables->rankings[i].name.size(), 36, gameVariables->rankings[i].time, true);
+            //renderText(butWidthOffset-((textWidth)/2)+470, 50+titleHeightOffset+offset, dec_height*2.0f, (textWidth)/gameVariables->rankings[i].name.size(), 36, gameVariables->rankings[i].time, true);
             offset = offset + dec_height*2.0f;
         }
 
