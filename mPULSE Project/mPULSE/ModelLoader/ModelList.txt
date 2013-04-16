@@ -28,3 +28,9 @@ ModelLoader\\Models\\Race1_noodles.obj
 ModelLoader\\Models\\JTurns.obj
 ModelLoader\\Models\\Rockets.obj
 ModelLoader\\Models\\banner.obj
+ModelLoader\\Models\\Batt.obj
+ModelLoader\\Models\\sideThruster.obj
+ModelLoader\\Models\\MissilePlus.obj
+ModelLoader\\Models\\BarrierPlus.obj
+ModelLoader\\Models\\BoostPlus.obj
+ModelLoader\\Models\\ShieldPlus.obj

@@ -3889,7 +3889,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
                 break;
 
             case 1:         //Buy Upgrades
-                //displayModelIndex = ssi.selectedItemIndex;        //How to show this??/ TODO:
+                displayModelIndex = ssi.selectedItemIndex;        //How to show this??/ TODO:
                 break;
 
             case 2:         //Buy Paint

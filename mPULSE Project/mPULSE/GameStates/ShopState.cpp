@@ -97,32 +97,32 @@ void ShopState::initializeInventory()
 
     //TODO: Buyable Upgrades (Index is not bound to anything)
     newItem = new shopItem;
-        newItem->itemIndex = 0;     //TODO: IMPULSE BATTERY
+        newItem->itemIndex = 30;     //TODO: IMPULSE BATTERY
 		newItem->price = ((gameVariables->playerInShop->data.batteryLevel != 0) ? 0:10000);
         availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
-		newItem->itemIndex = 1;		//TODO: STRAFE
+		newItem->itemIndex = 31;		//TODO: STRAFE
 		newItem->price = ((gameVariables->playerInShop->data.strafeLevel != 0) ? 0:10000);
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
-		newItem->itemIndex = 2;		//TODO: MISSILE ++
+		newItem->itemIndex = 32;		//TODO: MISSILE ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.missileLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
-		newItem->itemIndex = 3;		//TODO: BARRIER ++
+		newItem->itemIndex = 33;		//TODO: BARRIER ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.barrierLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
-		newItem->itemIndex = 4;		//TODO: BOOST ++
+		newItem->itemIndex = 34;		//TODO: BOOST ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.boostLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
-		newItem->itemIndex = 5;		//TODO: SHIELD ++
+		newItem->itemIndex = 35;		//TODO: SHIELD ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.shieldLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 }
