@@ -2133,6 +2133,19 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     //drawCars(entities);
 
 
+                    //if (locShader_Alpha != -1)
+                    //{glUniform1f(locShader_Alpha, 1.00f);}
+                    //glPushAttrib(GL_DEPTH_TEST);
+                    //glDisable(GL_DEPTH_TEST);
+                    //drawShadow2(entities, scene);
+                    //glEnable(GL_DEPTH_TEST);
+                    //glPopAttrib();
+
+                   // if (locShader_Alpha != -1)              //Alows cars to be on top of shadow
+                    //{glUniform1f(locShader_Alpha, 1.00f);}
+                    //drawCars(entities);
+
+
                     if (locShader_Alpha != -1)
                     {glUniform1f(locShader_Alpha, 0.432f);}
 
@@ -2140,10 +2153,11 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     //if (locShader_Alpha != -1)
                     //{glUniform1f(locShader_Alpha, 1.000);}
 
+
                     if (locShader_Alpha != -1)
                     {glUniform1f(locShader_Alpha, 0.20f);}
                     glPushAttrib(GL_DEPTH_TEST);
-                    //glDisable(GL_DEPTH_TEST);
+                    glDisable(GL_DEPTH_TEST);
                     drawShadow2(entities, scene);
                     glEnable(GL_DEPTH_TEST);
                     glPopAttrib();
@@ -2151,7 +2165,6 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     if (locShader_Alpha != -1)              //Alows cars to be on top of shadow
                     {glUniform1f(locShader_Alpha, 1.00f);}
                     drawCars(entities);
-
                     
                     
 
