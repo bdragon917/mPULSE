@@ -20,6 +20,8 @@ void ResultState::initialize()
     buttonPressed = false;
     lockControls = false;
     endState = false;
+
+	gameVariables->saveProfiles();
 }
 
 

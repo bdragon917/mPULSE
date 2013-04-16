@@ -10,10 +10,13 @@
 #include <InGameObjects/Pickups/Pickup.h>
 #include "Util\Clock.h"
 #include "InGameObjects\CustomData.h"
+#include <Util/Profile.h>
+#include <GameStates/GameVariables.h>
 
 //Forward declarations
 class AI;
 class CustomData;
+class GameVariables;
 
 class Entity
 {
@@ -43,6 +46,8 @@ public:
     void givePickup(PickupType type);
     void boost();
     PickupType usePickup();
+
+	GameVariables* gameVariables;
 
     int test;
     //void setModel(ObjModel* m);
@@ -93,6 +98,7 @@ public:
 	void highSpeedCash();
 	float raceWinnings();
 	void missleCash();
+	void rewardObs();
 
     void applyDischargeBattery();
     void applyChargeBattery();
@@ -113,6 +119,7 @@ public:
     unsigned obs;
     unsigned finishTime;
     std::string rankingName;
+	int playerNum;
     NxVec3 initDir;
     bool shield;
 

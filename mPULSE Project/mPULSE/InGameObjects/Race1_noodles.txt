@@ -1,5 +1,5 @@
 MusicIndex:|2
-Skybox:|20|21|22|23|24|25
+Skybox:|20|21|23|22|24|25
 PhysXModel:|26
 RC:|26|7
 RC:|28|7
