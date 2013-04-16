@@ -4851,7 +4851,7 @@ void RenderingEngine::drawAICars(Entities* entities)
                         drawModelPos(modelManager.getModel("Shield.obj"), aPose );
 
                     //myTargetVector
-                    glBindTexture(GL_TEXTURE_2D, 5);
+                   /* glBindTexture(GL_TEXTURE_2D, 5);
                     glBegin(GL_TRIANGLE_STRIP);
                         glNormal3f(1.0f, 0.0f, 0.0f);
 		                //glTexCoord2d(0.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myTargetVector.x-0.6f,entities->AIcars.at(i)->aAI->myTargetVector.y,entities->AIcars.at(i)->aAI->myTargetVector.z);
@@ -4868,7 +4868,7 @@ void RenderingEngine::drawAICars(Entities* entities)
 		                glTexCoord2d(0.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myOrientation.x + entities->AIcars.at(i)->getActor()->getGlobalPose().t.x,entities->AIcars.at(i)->aAI->myOrientation.y + entities->AIcars.at(i)->getActor()->getGlobalPose().t.y,entities->AIcars.at(i)->aAI->myOrientation.z + entities->AIcars.at(i)->getActor()->getGlobalPose().t.z);
                         glTexCoord2d(1.0,0.0); glVertex3f(entities->AIcars.at(i)->aAI->myOrientation.x + entities->AIcars.at(i)->getActor()->getGlobalPose().t.x,entities->AIcars.at(i)->aAI->myOrientation.y+2.0f+entities->AIcars.at(i)->getActor()->getGlobalPose().t.y,entities->AIcars.at(i)->aAI->myOrientation.z+entities->AIcars.at(i)->getActor()->getGlobalPose().t.z);
                                                 glTexCoord2d(0.0,1.0); glVertex3f(entities->AIcars.at(i)->getActor()->getGlobalPose().t.x,entities->AIcars.at(i)->getActor()->getGlobalPose().t.y,entities->AIcars.at(i)->getActor()->getGlobalPose().t.z);
-                    glEnd();
+                    glEnd();*/
 
 
                     //drawModel(0, entities->AIcars.at(i)->aAI->myTargetVector.x,entities->AIcars.at(i)->aAI->myTargetVector.y,entities->AIcars.at(i)->aAI->myTargetVector.z, 1.0f);
