@@ -195,8 +195,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[89];
-    glGenTextures(89, textureid_P1);
+    textureid_P1 = new GLuint[116];
+    glGenTextures(116, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -315,7 +315,39 @@ void RenderingEngine::initializeTexture()
 
     bindBMPtoTexture("./Images/Ship/outUVShipBoxerTrue2.bmp", textureid_P1[87]);
     bindBMPtoTexture("./Images/Ship/outUVShipBoxerPirate.bmp", textureid_P1[88]);
+    bindBMPtoTexture("./Images/ControlsScreen.bmp", textureid_P1[89]);
 
+    //Texture for ship
+    bindBMPtoTexture("./Images/Ship/saruk_Texture_2.bmp", textureid_P1[90]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texture_3.bmp", textureid_P1[91]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texturev4.bmp", textureid_P1[92]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texturev5.bmp", textureid_P1[93]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texturev6.bmp", textureid_P1[94]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texturev7.bmp", textureid_P1[95]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texturev8.bmp", textureid_P1[96]);
+
+    bindBMPtoTexture("./Images/Ship/outUVClaymore_1.bmp", textureid_P1[97]);
+    bindBMPtoTexture("./Images/Ship/outUVClaymore_2.bmp", textureid_P1[98]);
+    bindBMPtoTexture("./Images/Ship/outUVClaymore_3.bmp", textureid_P1[99]);
+    bindBMPtoTexture("./Images/Ship/outUVClaymore_4.bmp", textureid_P1[100]);
+
+    bindBMPtoTexture("./Images/Ship/UVBoxer1.bmp", textureid_P1[101]);
+    bindBMPtoTexture("./Images/Ship/UVBoxer2.bmp", textureid_P1[102]);
+    bindBMPtoTexture("./Images/Ship/UVBoxer3.bmp", textureid_P1[103]);
+    bindBMPtoTexture("./Images/Ship/UVBoxer4.bmp", textureid_P1[104]);
+    bindBMPtoTexture("./Images/Ship/UVBoxer5.bmp", textureid_P1[105]);
+    bindBMPtoTexture("./Images/Ship/UVBoxer6.bmp", textureid_P1[106]);
+
+    bindBMPtoTexture("./Images/Ship/outUVNogard_1.bmp", textureid_P1[107]);
+    bindBMPtoTexture("./Images/Ship/outUVNogard_2.bmp", textureid_P1[108]);
+    bindBMPtoTexture("./Images/Ship/outUVNogard_3.bmp", textureid_P1[109]);
+    bindBMPtoTexture("./Images/Ship/outUVNogard_4.bmp", textureid_P1[110]);
+    bindBMPtoTexture("./Images/Ship/outUVNogard_5.bmp", textureid_P1[111]);
+    bindBMPtoTexture("./Images/Ship/outUVNogard_6.bmp", textureid_P1[112]);
+
+    bindBMPtoTexture("./Images/Ship/motherShipHullUV_1.bmp", textureid_P1[113]);
+    bindBMPtoTexture("./Images/Ship/motherShipHullUV_2.bmp", textureid_P1[114]);
+    bindBMPtoTexture("./Images/ColorRed.bmp", textureid_P1[115]);
 
 
 	//"/Images/textureTest.bmp"
@@ -691,8 +723,26 @@ void RenderingEngine::drawModelShadow(ObjModel* model, NxMat34* aPose)
 
 
 
-void RenderingEngine::renderText(float startX, float startY, float fontHeight, float FontWidth, int fontTexture, string str, bool invert)
+void RenderingEngine::renderText(float startX, float startY, float fontHeight, float fontWidth, int fontTexture, string str, bool invert)
 {
+
+
+    float xResolution;
+    float yResolution;
+
+    switch (gameVariables->curResolution)
+    {
+        case gameVariables->STANDARD:
+            xResolution = 640.0f; yResolution = 480.0f; break;
+        case gameVariables->LAPTOP:
+            xResolution = 1600.0f; yResolution = 900.0f; break;
+        case gameVariables->GAMELAB:
+            xResolution = 1920.0f; yResolution = 1200.0f; break;
+    }
+    
+    fontWidth = (xResolution*fontWidth) / 1600.0f;
+    fontHeight = (yResolution*fontHeight) / 900.0f;
+
     glBindTexture(GL_TEXTURE_2D, textureid_P1[fontTexture]);
 
     float curXOffset = 0;
@@ -714,19 +764,19 @@ void RenderingEngine::renderText(float startX, float startY, float fontHeight, f
         {
 		    glTexCoord2d(x,y);                              glVertex3f(   (startX)       + curXOffset,          (startY+fontHeight),    (0)   );        //upperleft
 		    glTexCoord2d(x,y+gridSpacing);                  glVertex3f(   (startX)       + curXOffset,          (startY),               (0)   );        //lowerleft
-		    glTexCoord2d(x+gridSpacing,y+gridSpacing);      glVertex3f(   (startX+FontWidth) + curXOffset,      (startY),               (0)   );        //lowerright
-		    glTexCoord2d(x+gridSpacing,y);                  glVertex3f(   (startX+FontWidth) + curXOffset,      (startY+fontHeight),    (0)   );        //upperright
+		    glTexCoord2d(x+gridSpacing,y+gridSpacing);      glVertex3f(   (startX+fontWidth) + curXOffset,      (startY),               (0)   );        //lowerright
+		    glTexCoord2d(x+gridSpacing,y);                  glVertex3f(   (startX+fontWidth) + curXOffset,      (startY+fontHeight),    (0)   );        //upperright
         }
         else
         {
 		    glTexCoord2d(x,y);                              glVertex3f(   (startX)       + curXOffset,          (startY),               (0)   );        //lowerleft
 		    glTexCoord2d(x,y+gridSpacing);                  glVertex3f(   (startX)       + curXOffset,          (startY+fontHeight),    (0)   );        //upperleft
-		    glTexCoord2d(x+gridSpacing,y+gridSpacing);      glVertex3f(   (startX+FontWidth) + curXOffset,      (startY+fontHeight),    (0)   );        //upperright
-		    glTexCoord2d(x+gridSpacing,y);                  glVertex3f(   (startX+FontWidth) + curXOffset,      (startY),               (0)   );        //lowerright
+		    glTexCoord2d(x+gridSpacing,y+gridSpacing);      glVertex3f(   (startX+fontWidth) + curXOffset,      (startY+fontHeight),    (0)   );        //upperright
+		    glTexCoord2d(x+gridSpacing,y);                  glVertex3f(   (startX+fontWidth) + curXOffset,      (startY),               (0)   );        //lowerright
         }
         glEnd();
 
-        curXOffset = curXOffset + FontWidth;
+        curXOffset = curXOffset + fontWidth;
     }
 
 
@@ -1026,9 +1076,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         {
             drawableText words = textQueue[i];
             renderText(words.x,words.y,words.size,words.size,35,words.text,false);
-        }
-
-        textQueue.clear();
+        }        
     }
 
     glPopAttrib();
@@ -1648,6 +1696,8 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
     {
         drawScene_ForPlayer(scene, track, entities, 0, false, true, entities->cars);
     }
+
+    textQueue.clear();
     //drawScene_ForPlayer(scene, entities, 1);        
 }
 
@@ -2101,6 +2151,19 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     //drawCars(entities);
 
 
+                    //if (locShader_Alpha != -1)
+                    //{glUniform1f(locShader_Alpha, 1.00f);}
+                    //glPushAttrib(GL_DEPTH_TEST);
+                    //glDisable(GL_DEPTH_TEST);
+                    //drawShadow2(entities, scene);
+                    //glEnable(GL_DEPTH_TEST);
+                    //glPopAttrib();
+
+                   // if (locShader_Alpha != -1)              //Alows cars to be on top of shadow
+                    //{glUniform1f(locShader_Alpha, 1.00f);}
+                    //drawCars(entities);
+
+
                     if (locShader_Alpha != -1)
                     {glUniform1f(locShader_Alpha, 0.432f);}
 
@@ -2108,10 +2171,11 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     //if (locShader_Alpha != -1)
                     //{glUniform1f(locShader_Alpha, 1.000);}
 
+
                     if (locShader_Alpha != -1)
                     {glUniform1f(locShader_Alpha, 0.20f);}
                     glPushAttrib(GL_DEPTH_TEST);
-                    //glDisable(GL_DEPTH_TEST);
+                    glDisable(GL_DEPTH_TEST);
                     drawShadow2(entities, scene);
                     glEnable(GL_DEPTH_TEST);
                     glPopAttrib();
@@ -2119,7 +2183,6 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     if (locShader_Alpha != -1)              //Alows cars to be on top of shadow
                     {glUniform1f(locShader_Alpha, 1.00f);}
                     drawCars(entities);
-
                     
                     
 
@@ -2490,13 +2553,15 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
         int displayTextTexture = 36;
 
     //Resolution
-        if (selectY == 0){displayTextTexture = 35;}else{displayTextTexture = 36;}       //Does highlighting
+        if (selectY == 0){displayTextTexture = 35;}else{displayTextTexture = 34;}       //Does highlighting
         title = "Resolution:";
         title = title;
         renderText(butWidthOffset-((textWidth)/2),
                                         titleHeightOffset + (dec_height*2.0f),
                                         dec_height*2.0f, 30, displayTextTexture, title, true);
 
+
+        displayTextTexture = 36; 
         string curResolutionStr;
         switch (gameVariables->curResolution)
         {
@@ -2514,7 +2579,7 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
    
 
     //FullScreen
-        if (selectY == 1){displayTextTexture = 35;}else{displayTextTexture = 36;}       //Does highlighting
+        if (selectY == 1){displayTextTexture = 35;}else{displayTextTexture = 34;}       //Does highlighting
         title = "Full Screen:";
         title = title;
         renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*4.0f), dec_height*2.0f, dec_height*2.0f, displayTextTexture, title, true);
@@ -2531,17 +2596,18 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
 
 
     //Controls
-        if (selectY == 2){displayTextTexture = 35;}else{displayTextTexture = 36;}       //Does highlighting
+        if (selectY == 2){displayTextTexture = 35;}else{displayTextTexture = 34;}       //Does highlighting
         title = "See Controls";
         title = title;
         renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*6.0f), dec_height*2.0f, 30, displayTextTexture, title, true);
 
 
     //Done Button
-        if (selectY == 3){displayTextTexture = 38;}else{displayTextTexture = 37;}       //Does highlighting
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[displayTextTexture]);
+        if (selectY == 3){displayTextTexture = 35;}else{displayTextTexture = 34;}       //Does highlighting
+            //glBindTexture(GL_TEXTURE_2D, textureid_P1[displayTextTexture]);
 
-            drawSquareUVRev(butWidthOffset, titleHeightOffset + (dec_height*8.0f) + dec_height , 0.0f, button_width, dec_height);
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*10.0f), dec_height*2.0f, 30, displayTextTexture, title, true);
+            //drawSquareUVRev(butWidthOffset, titleHeightOffset + (dec_height*8.0f) + dec_height , 0.0f, button_width, dec_height);
             //drawSquareUVRev(butWidthOffset, doneHeightOffset + (dec_height*8.0f), 0.0f, button_width, dec_height);
 
         //aHUDShader->off();
@@ -2579,7 +2645,141 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
 
         if (FadeCtrl >= 1.0f)
             {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
+                startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+                return 1;
+            }
+
+            
+    if (aShader != NULL)
+    {
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
+	glPopMatrix();
+
+    return 0;
+}
+
+int RenderingEngine::drawControlScreen()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix ();
+	glLoadIdentity ();
+	
+
+    gluLookAt(0, 0, -2,  // Eye/camera position
+	0 ,0, 0,		// Look-at position 
+	0.0,1.0,0.0); 		// "Up" vector
+	
+	//set view
+	setUpPerpView();
+    //glEnable(GL_LIGHTING);
+    //glDisable(GL_NORMALIZE);
+    //glDisable(GL_TEXTURE);
+	
+    if (aSkyBoxShader != NULL)
+         {
+            glEnable(GL_TEXTURE_2D);
+            aSkyBoxShader->on();
+         }
+
+
+   //Initialize a new coordinate system
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    //glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1.0f, 1.0f);
+    glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    //clear depth buffer
+    glPushAttrib(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    //declare some common variables
+    const float half_height = SCREEN_HEIGHT / 2.0f;
+    const float half_width = SCREEN_WIDTH / 2.0f;
+
+    const float button_width = SCREEN_WIDTH / 6.0f;     //button width is /3, but also /2 as drawSquare uses half
+    float const textWidth = button_width * 1.6f;
+
+    const float dec_height = SCREEN_HEIGHT / 40.0f;
+    const float butWidthOffset = half_width + (SCREEN_WIDTH / 96.0f);  //128 64
+    const float butHeightOffset = (SCREEN_HEIGHT / 4.0f);
+
+    const float titleHeightOffset = (SCREEN_HEIGHT / 8.0f);
+    //const float doneHeightOffset = (3.0f * SCREEN_HEIGHT / 4.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+    const float doneHeightOffset = (13.0f * SCREEN_HEIGHT / 16.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+
+    //draw transparent blackground
+        glColor4f(0.0f,0.0f,0.0f, 0.5f);
+        drawSquare(half_width, half_height, 0.0f, half_width, half_height);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+    //draw profile info
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[89]);
+        glColor4f(0.0f,0.0f,0.0f, 1.0f);
+        drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
+
+        /*
+        //Title
+        string title = "Hi! This is story Mode!";
+        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
+        //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
+        */
+
+   
+
+        /*
+        //Done Button
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[38]);
+
+            drawSquareUVRev(butWidthOffset, doneHeightOffset, 0.0f, button_width, dec_height);
+        */
+        aSkyBoxShader->off();
+
+    //reset to previous state
+    glPopAttrib();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+     glEnable(GL_LIGHTING);
+
+
+
+    if (aSkyBoxShader != NULL)
+    {
+        aSkyBoxShader->off();
+    }
+
+
+
+
+
+    
+    //Fader
+    //float FadeCtrl = 0.0f;
+    glColor4f(0.0f,0.0f,0.0f, updateFade(0.5f));
+    	glBegin(GL_QUADS);
+            glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
+		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
+		glEnd();
+
+        if (FadeCtrl >= 1.0f)
+            {
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
             }
 
 
@@ -2594,7 +2794,6 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
 
     return 0;
 }
-
 
 int RenderingEngine::drawStoryScreen(float dt)
 {
@@ -2657,7 +2856,7 @@ int RenderingEngine::drawStoryScreen(float dt)
 
     //draw profile info
 
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[74]);
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[39]);
         glColor4f(0.0f,0.0f,0.0f, 1.0f);
         drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
 
@@ -4264,6 +4463,7 @@ void RenderingEngine::drawCars(Entities* entities)
                         drawModelPos(modelManager.getModel("Shield.obj"), aPose );
 
                         glUniform1f(locShader_DiscardBlue, 0.0f);
+                        glUniform1f(locShader_Alpha, 1.00f);
                     }
                     //Particles
                     //Particle* newParticle = new Particle(entities->cars[i]->getActor()->getGlobalPose().t.x, entities->cars[i]->getActor()->getGlobalPose().t.y,entities->cars[i]->getActor()->getGlobalPose().t.z);
@@ -4415,7 +4615,6 @@ void RenderingEngine::drawTrack(Track* track)
 {
     if (track->getEntity()->rc.size() > 0)
     {
-
         int startingPt = track->getEntity()->rc.size() - 1;
         //for (unsigned r = 0; r < track->getEntity()->rc.size(); ++r)
         for (int r = startingPt; r > -1; --r)

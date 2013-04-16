@@ -15,6 +15,7 @@
 #include <GameStates/ShopState.h>
 #include <GameStates/ResultState.h>
 #include <GameStates/StageSelectState.h>
+#include <GameStates/ControlScreenState.h>
 #include <Util/Clock.h>
 
 class Game
