@@ -3184,7 +3184,8 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
         //Particle* newParticle = new Particle(shipAngle * 0.1f,0.0f,shipAngle * 0.03f + 1.0f);
         Particle* newParticle = new Particle(
                                             //1.0f,
-                                            ((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
+                                            //((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
+                                            ((rand() % 100) * 0.01f),
                                             0.0f,
                                             shipAngle * 0.03f + 1.0f);
         newParticle->setVelocity(NxVec3(0,0.0f,1.5f));
@@ -3194,7 +3195,8 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
         //Particle* newParticle2 = new Particle(shipAngle * -0.1f,0.0f,shipAngle * 0.04f + 1.0f);
         Particle* newParticle2 = new Particle(
                                                 //-1.0f,
-                                                -((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
+                                                //-((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
+                                                ((rand() % 100) * -0.01f),
                                                 0.0f,
                                                 shipAngle * 0.04f + 1.0f);
         newParticle2->setVelocity(NxVec3(0,0.0f,1.7f));
