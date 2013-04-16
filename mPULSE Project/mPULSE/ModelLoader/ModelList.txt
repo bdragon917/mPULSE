@@ -24,3 +24,7 @@ ModelLoader\\Models\\particle.obj
 ModelLoader\\Models\\Grid\\grid-physical.obj
 ModelLoader\\Models\\Grid\\grid-scenery.obj
 ModelLoader\\Models\\Grid\\grid-track.obj
+ModelLoader\\Models\\Race1_noodles.obj
+ModelLoader\\Models\\JTurns.obj
+ModelLoader\\Models\\Rockets.obj
+ModelLoader\\Models\\banner.obj
