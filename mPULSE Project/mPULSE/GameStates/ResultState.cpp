@@ -8,8 +8,17 @@ ResultState::ResultState()
     physicsEngine = PhysicsEngine::getInstance();
     renderingEngine = RenderingEngine::getInstance();
     soundEngine = SoundEngine::getInstance();
- 
-    curSelected = 0;
+}
+
+void ResultState::initialize()
+{
+
+}
+
+
+void ResultState::update(float dt)
+{    
+	curSelected = 0;
     prevTime = clock.getCurrentTime();  //So users don't accetentially select (as button is pressed from previous state)
 
     WAIT_TIME = 50;
@@ -18,12 +27,7 @@ ResultState::ResultState()
     lockControls = false;
     endState = false;
 
-}
-
-
-void ResultState::update(float dt)
-{    
-
+	// We want to save the number of Obs earned during the race into the profile
 }
 
 void ResultState::render()
@@ -126,5 +130,6 @@ ResultState* ResultState::getInstance()
      printf("ResultState state\n");
     static ResultState ResultState;
     ResultState.changeState(RESULT);
+	ResultState.initialize();
     return &ResultState;
 }

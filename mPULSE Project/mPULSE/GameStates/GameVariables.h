@@ -27,6 +27,8 @@ public:
 	void setPlayerProfile(Profile* aPlayer, unsigned index);
 	Profile* getPlayerProfile(int player);
 
+	//Saving profiles
+	void saveProfiles();
 
 	void setNumPlayers(int num);
 	int getNumPlayers();
@@ -67,7 +69,6 @@ public:
 
     //Used by Shop State (set by Lounge state)
     Profile* playerInShop;
-
 
 	//Track Stuff
     Tracks* loadedTracks;

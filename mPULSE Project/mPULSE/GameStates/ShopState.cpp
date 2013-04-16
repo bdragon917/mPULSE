@@ -22,6 +22,7 @@ void ShopState::initialize()
     WAIT_TIME = 50;
     MAX_CATEGORY_SELECTED = 4;           
     MAX_ITEM_SELECTED = 4;
+	BASE_PICKUP_UPGRADE = 5000;
 
     buttonPressed = false;
     lockControls = false;
@@ -64,38 +65,61 @@ void ShopState::initializeInventory()
     //Buyable Ship Models
     newItem = new shopItem;
         newItem->itemIndex = 1;      //saruk
-        newItem->price = 0;
+        newItem->price = 0; 
         availableShips.push_back(newItem);
 
     newItem = new shopItem;
         newItem->itemIndex = 11;      //Claymore
-        newItem->price = 100000;
+        newItem->price = ((gameVariables->playerInShop->data.shipsOwned[1]) ? 0:100000);
         availableShips.push_back(newItem);
 
     newItem = new shopItem;
         newItem->itemIndex = 14;      //Boxer
-        newItem->price = 100000;
+        newItem->price = ((gameVariables->playerInShop->data.shipsOwned[2]==1) ? 0:100000);
         availableShips.push_back(newItem);
 
     newItem = new shopItem;
         newItem->itemIndex = 12;      //Nogard
-        newItem->price = 500000;
+        newItem->price = ((gameVariables->playerInShop->data.shipsOwned[3]==1) ? 0:500000);
         availableShips.push_back(newItem);
 
     newItem = new shopItem;
         newItem->itemIndex = 15;      //MiniMothership
-        newItem->price = 1000000;
+        newItem->price = ((gameVariables->playerInShop->data.shipsOwned[4]==1) ? 0:1000000);
         availableShips.push_back(newItem);
 
 
 
     //TODO: Buyable Upgrades (Index is not bound to anything)
     newItem = new shopItem;
-        newItem->itemIndex = 0;      //TODO: SHUNTING
-        newItem->price = 1000000;
+        newItem->itemIndex = 0;     //TODO: IMPULSE BATTERY
+		newItem->price = ((gameVariables->playerInShop->data.batteryLevel != 0) ? 0:10000);
         availableUpgrades.push_back(newItem);
 
+	newItem = new shopItem;
+		newItem->itemIndex = 1;		//TODO: STRAFE
+		newItem->price = ((gameVariables->playerInShop->data.strafeLevel != 0) ? 0:10000);
+		availableUpgrades.push_back(newItem);
 
+	newItem = new shopItem;
+		newItem->itemIndex = 2;		//TODO: MISSILE ++
+		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.missileLevel) % (BASE_PICKUP_UPGRADE * 5));
+		availableUpgrades.push_back(newItem);
+
+	newItem = new shopItem;
+		newItem->itemIndex = 3;		//TODO: BARRIER ++
+		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.barrierLevel) % (BASE_PICKUP_UPGRADE * 5));
+		availableUpgrades.push_back(newItem);
+
+	newItem = new shopItem;
+		newItem->itemIndex = 4;		//TODO: BOOST ++
+		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.boostLevel) % (BASE_PICKUP_UPGRADE * 5));
+		availableUpgrades.push_back(newItem);
+
+	newItem = new shopItem;
+		newItem->itemIndex = 5;		//TODO: SHIELD ++
+		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.shieldLevel) % (BASE_PICKUP_UPGRADE * 5));
+		availableUpgrades.push_back(newItem);
 }
 
 
@@ -157,22 +181,22 @@ void ShopState::initializePaintJob(int shipModel)
 
                 newItem = new shopItem;
                 newItem->itemIndex = 97;      //Standard
-                newItem->price = 0;
+                newItem->price = 1000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 98;      //Standard
-                newItem->price = 0;
+                newItem->price = 2000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 99;      //Standard
-                newItem->price = 0;
+                newItem->price = 3000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 100;      //Standard
-                newItem->price = 0;
+                newItem->price = 4000;
                 availablePaints.push_back(newItem);
             break;
 
@@ -183,27 +207,27 @@ void ShopState::initializePaintJob(int shipModel)
                 availablePaints.push_back(newItem);
             newItem = new shopItem;
                 newItem->itemIndex = 88;      //Pirate
-                newItem->price = 5000;
+                newItem->price = 2000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 101;      //Pirate
-                newItem->price = 5000;
+                newItem->price = 2000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 102;      //Pirate
-                newItem->price = 5000;
+                newItem->price = 3000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 103;      //Pirate
-                newItem->price = 5000;
+                newItem->price = 3000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 104;      //Pirate
-                newItem->price = 5000;
+                newItem->price = 4000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
@@ -225,32 +249,32 @@ void ShopState::initializePaintJob(int shipModel)
 
                 newItem = new shopItem;
                 newItem->itemIndex = 107;      //Standard
-                newItem->price = 0;
+                newItem->price = 1000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 108;      //Standard
-                newItem->price = 0;
+                newItem->price = 1000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 109;      //Standard
-                newItem->price = 0;
+                newItem->price = 2000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 110;      //Standard
-                newItem->price = 0;
+                newItem->price = 3000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 111;      //Standard
-                newItem->price = 0;
+                newItem->price = 4000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 112;      //Standard
-                newItem->price = 0;
+                newItem->price = 5000;
                 availablePaints.push_back(newItem);
             break;
 
@@ -262,12 +286,12 @@ void ShopState::initializePaintJob(int shipModel)
 
                 newItem = new shopItem;
                 newItem->itemIndex = 113;      //Standard
-                newItem->price = 0;
+                newItem->price = 2000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 114;      //Standard
-                newItem->price = 0;
+                newItem->price = 4000;
                 availablePaints.push_back(newItem);
             break;
 
@@ -317,6 +341,7 @@ void ShopState::render()
 
     if (retMenuVal == 1)
     {
+		gameVariables->saveProfiles();
         changeState(LOUNGE);
     }
 }
@@ -361,26 +386,29 @@ void ShopState::handleXboxEvents(int player,XboxController* state)
     {
         bool* controllers = gameVariables->getControllers();
 
-        if(state->dpadUp || state->leftStick.y >  0)
-        {
-            if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
-            {
-                if(!buttonPressed)
-                    buttonPressed = true;
-				upPressed();
-            }
-            prevTime = clock.getCurrentTime();
-        }
-        else if(state->dpadDown || state->leftStick.y < 0)
-        {
-            if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
-            {
-                if(!buttonPressed)
-                    buttonPressed = true;
-                downPressed();
-            }
-            prevTime = clock.getCurrentTime();
-        }
+		if(!inSubmenu)
+		{
+			if(state->dpadUp || state->leftStick.y >  0)
+			{
+				if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
+				{
+					if(!buttonPressed)
+						buttonPressed = true;
+					upPressed();
+				}
+				prevTime = clock.getCurrentTime();
+			}
+			else if(state->dpadDown || state->leftStick.y < 0)
+			{
+				if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
+				{
+					if(!buttonPressed)
+						buttonPressed = true;
+					downPressed();
+				}
+				prevTime = clock.getCurrentTime();
+			}
+		}
 		if(state->dpadRight || state->leftStick.x > 0)
         {
             if(clock.getDeltaTime(prevTime) > WAIT_TIME || !buttonPressed)
@@ -476,11 +504,16 @@ void ShopState::rightPressed()
                 switch (currentSelectedCategory)
                 {
                 case 0:     //Ship
-                    ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex;  initializePaintJob(ssi.selectedItemIndex);ssi.newShipTexture=availablePaints[0]->itemIndex;break;
+                    ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex;  
+					initializePaintJob(ssi.selectedItemIndex);
+					ssi.newShipTexture=availablePaints[0]->itemIndex;
+					break;
                 case 1:     //upgrades
-                    ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;break;
+                    ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
+					break;
                 case 2:     //Paint
-                    ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;break;
+                    ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;
+					break;
                 }
             }
 
@@ -506,11 +539,16 @@ void ShopState::leftPressed()
                 switch (currentSelectedCategory)
                 {
                 case 0:     //Ship
-                    ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex;  initializePaintJob(ssi.selectedItemIndex);ssi.newShipTexture=availablePaints[0]->itemIndex;break;
+                    ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex;  
+					initializePaintJob(ssi.selectedItemIndex);
+					ssi.newShipTexture=availablePaints[0]->itemIndex;
+					break;
                 case 1:     //upgrades
-                    ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;break;
+                    ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
+					break;
                 case 2:     //Paint
-                    ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;break;
+                    ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;
+					break;
                 }
             }
 
@@ -520,10 +558,9 @@ void ShopState::leftPressed()
 
 void ShopState::selectPressed()
 {
-    soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
-
 	if(!inSubmenu)
 	{
+		soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
 		switch(currentSelectedCategory)
 		{
 		case 0:
@@ -531,23 +568,18 @@ void ShopState::selectPressed()
 			inSubmenu = true;
             ssi.selectedItemIndex = 0;
             currentSelectedItem = 0;
-            ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex; initializePaintJob(ssi.selectedItemIndex);ssi.newShipTexture=availablePaints[0]->itemIndex;
+            ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex; 
+			initializePaintJob(ssi.selectedItemIndex);
+			ssi.newShipTexture=availablePaints[0]->itemIndex;
             MAX_ITEM_SELECTED = availableShips.size();
             break;
-			//Ships
-			//MAX_ITEMS_SELECTED = # of ships -1
-			break;
 		case 1:
 			printf("Upgrades\n");
 			inSubmenu = true;
             ssi.selectedItemIndex = 0;
             currentSelectedItem = 0;
-            if ((unsigned) currentSelectedItem > availableUpgrades.size() - 1){printf("ShopState: HEY! No items in Upgrade!!!\n");}
-            else
-                ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
+            ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
             MAX_ITEM_SELECTED = availableUpgrades.size();
-			//Upgrades
-			//MAX_ITEMS_SELECTED = # of upgrades -1
 			break;
 		case 2:
 			printf("Paint\n");
@@ -557,8 +589,6 @@ void ShopState::selectPressed()
             initializePaintJob(gameVariables->playerInShop->data.carModel);
             ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;
             MAX_ITEM_SELECTED = availablePaints.size();
-			//Paint
-			//MAX_ITEMS_SELECTED = # of paint styles -1
 			break;
 		case 3:
 			//Done
@@ -574,19 +604,109 @@ void ShopState::selectPressed()
         switch(currentSelectedCategory)
 		{
 		case 0:
-			printf("Buy selected Ship\n");
-            //if hasenough money, buy item, and go back to root
+			if(gameVariables->playerInShop->data.Obs >=  availableShips[currentSelectedItem]->price)
+			{
+				if(gameVariables->playerInShop->data.shipsOwned[currentSelectedItem] == 0)
+				{
+					printf("ship purchased\n");
+					gameVariables->playerInShop->data.Obs -= availableShips[currentSelectedItem]->price;
+					gameVariables->playerInShop->data.shipsOwned[currentSelectedItem] = 1;
+					gameVariables->playerInShop->data.carModel = availableShips[currentSelectedItem]->itemIndex;
+					initializePaintJob(gameVariables->playerInShop->data.carModel);
+					gameVariables->playerInShop->data.carTexture = availablePaints[0]->itemIndex;
+					availableShips[currentSelectedItem]->price = 0;
+				}
+				else
+				{
+					printf("Already owned\n");
+					gameVariables->playerInShop->data.carModel = availableShips[currentSelectedItem]->itemIndex;
+					initializePaintJob(gameVariables->playerInShop->data.carModel);
+					gameVariables->playerInShop->data.carTexture = availablePaints[0]->itemIndex;
+				}
+			}
+			else
+			{
+				// Play cannot afford sound
+				printf("Cannot afford ship\n");
+			}
 			break;
 		case 1:
 			printf("Buy selected Upgrades\n");
+			if(gameVariables->playerInShop->data.Obs >=  availableUpgrades[currentSelectedItem]->price)
+			{
+				switch(currentSelectedItem)
+				{
+				case 0:		// Battery
+					if(gameVariables->playerInShop->data.batteryLevel < 5)
+					{
+						// Play purchace sound
+						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
+						gameVariables->playerInShop->data.batteryLevel += 5;
+						availableUpgrades[currentSelectedItem]->price = 0;
+					}
+					break;
+
+				case 1:		// Strafing
+					if(gameVariables->playerInShop->data.strafeLevel < 5)
+					{
+						// Play purchace sound
+						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
+						gameVariables->playerInShop->data.strafeLevel += 5;
+						availableUpgrades[currentSelectedItem]->price = 0;
+					}
+					break;
+
+				case 2:		// Missle
+					if(gameVariables->playerInShop->data.missileLevel < 5)
+					{
+						// Play purchace sound
+						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
+						gameVariables->playerInShop->data.missileLevel++;
+						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.missileLevel) % (BASE_PICKUP_UPGRADE * 5));
+					}
+					break;
+
+				case 3:		// Barrier
+					if(gameVariables->playerInShop->data.barrierLevel < 5)
+					{
+						// Play purchace sound
+						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
+						gameVariables->playerInShop->data.barrierLevel++;
+						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.barrierLevel) % (BASE_PICKUP_UPGRADE * 5));
+					}
+					break;
+
+				case 4:		// Boost
+					if(gameVariables->playerInShop->data.boostLevel < 5)
+					{
+						// Play purchace sound
+						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
+						gameVariables->playerInShop->data.boostLevel++;
+						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.boostLevel) % (BASE_PICKUP_UPGRADE * 5));
+					}
+					break;
+
+				case 5:		// Shield
+					if(gameVariables->playerInShop->data.shieldLevel < 5)
+					{
+						// Play purchace sound
+						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
+						gameVariables->playerInShop->data.shieldLevel++;
+						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.shieldLevel) % (BASE_PICKUP_UPGRADE * 5));
+					}
+					break;
+				}
+			}
+			else
+			{
+				// Play "can't afford" sound
+			}
 			break;
 		case 2:
 			printf("Buy selected Paint\n");
 			break;
 		}
 	}
-
-
     ssi.inSubmenu = inSubmenu;
 }
 
@@ -604,6 +724,7 @@ void ShopState::backPressed()
 	}
     ssi.inSubmenu = inSubmenu;
 }
+
 ShopState* ShopState::getInstance()
 {    
      printf("Shop state\n");

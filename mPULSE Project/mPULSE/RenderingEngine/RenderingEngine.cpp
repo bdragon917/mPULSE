@@ -2183,6 +2183,9 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     {glUniform1f(locShader_Alpha, 0.432f);}
 
                     drawTrack(track);
+
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[116]);
+                    drawModel(modelManager.getModel("banner.obj"),startModelPos.x,startModelPos.y,startModelPos.z,1);
                     //if (locShader_Alpha != -1)
                     //{glUniform1f(locShader_Alpha, 1.000);}
 					
