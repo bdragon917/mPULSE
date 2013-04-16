@@ -4897,7 +4897,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 {
     //const int FRONT = 1;
     //const int FRONT = 1;
-
+    RenderingEngine* renderingEngine = RenderingEngine::getInstance();
 	// Center the Skybox around the given x,y,z position
 	x = x - width  / 2;
 	y = y - height / 2;
