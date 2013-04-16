@@ -25,6 +25,8 @@ public:
 private:
     ResultState();
 
+	void initialize();
+
     bool lockControls;
     bool endState;
 

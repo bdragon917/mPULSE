@@ -22,6 +22,7 @@ void ShopState::initialize()
     WAIT_TIME = 50;
     MAX_CATEGORY_SELECTED = 4;           
     MAX_ITEM_SELECTED = 4;
+	BASE_PICKUP_UPGRADE = 5000;
 
     buttonPressed = false;
     lockControls = false;
@@ -87,32 +88,32 @@ void ShopState::initializeInventory()
     //TODO: Buyable Upgrades (Index is not bound to anything)
     newItem = new shopItem;
         newItem->itemIndex = 0;     //TODO: IMPULSE BATTERY
-        newItem->price = 10000;
+		newItem->price = ((gameVariables->playerInShop->data.batteryLevel != 0) ? 0:10000);
         availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
-		newItem->itemIndex = 1;		//TODO: SHUNTING
-		newItem->price = 10000;
+		newItem->itemIndex = 1;		//TODO: STRAFE
+		newItem->price = ((gameVariables->playerInShop->data.strafeLevel != 0) ? 0:10000);
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
 		newItem->itemIndex = 2;		//TODO: MISSILE ++
-		newItem->price = 5000 ;
+		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.missileLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
 		newItem->itemIndex = 3;		//TODO: BARRIER ++
-		newItem->price = 5000 ;
+		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.barrierLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
 		newItem->itemIndex = 4;		//TODO: BOOST ++
-		newItem->price = 5000 ;
+		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.boostLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
 		newItem->itemIndex = 5;		//TODO: SHIELD ++
-		newItem->price = 5000 ;
+		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.shieldLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 }
 
@@ -175,22 +176,22 @@ void ShopState::initializePaintJob(int shipModel)
 
                 newItem = new shopItem;
                 newItem->itemIndex = 97;      //Standard
-                newItem->price = 0;
+                newItem->price = 1000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 98;      //Standard
-                newItem->price = 0;
+                newItem->price = 2000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 99;      //Standard
-                newItem->price = 0;
+                newItem->price = 3000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 100;      //Standard
-                newItem->price = 0;
+                newItem->price = 4000;
                 availablePaints.push_back(newItem);
             break;
 
@@ -201,27 +202,27 @@ void ShopState::initializePaintJob(int shipModel)
                 availablePaints.push_back(newItem);
             newItem = new shopItem;
                 newItem->itemIndex = 88;      //Pirate
-                newItem->price = 5000;
+                newItem->price = 2000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 101;      //Pirate
-                newItem->price = 5000;
+                newItem->price = 2000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 102;      //Pirate
-                newItem->price = 5000;
+                newItem->price = 3000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 103;      //Pirate
-                newItem->price = 5000;
+                newItem->price = 3000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 104;      //Pirate
-                newItem->price = 5000;
+                newItem->price = 4000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
@@ -243,32 +244,32 @@ void ShopState::initializePaintJob(int shipModel)
 
                 newItem = new shopItem;
                 newItem->itemIndex = 107;      //Standard
-                newItem->price = 0;
+                newItem->price = 1000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 108;      //Standard
-                newItem->price = 0;
+                newItem->price = 1000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 109;      //Standard
-                newItem->price = 0;
+                newItem->price = 2000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 110;      //Standard
-                newItem->price = 0;
+                newItem->price = 3000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 111;      //Standard
-                newItem->price = 0;
+                newItem->price = 4000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 112;      //Standard
-                newItem->price = 0;
+                newItem->price = 5000;
                 availablePaints.push_back(newItem);
             break;
 
@@ -280,12 +281,12 @@ void ShopState::initializePaintJob(int shipModel)
 
                 newItem = new shopItem;
                 newItem->itemIndex = 113;      //Standard
-                newItem->price = 0;
+                newItem->price = 2000;
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 114;      //Standard
-                newItem->price = 0;
+                newItem->price = 4000;
                 availablePaints.push_back(newItem);
             break;
 
@@ -636,6 +637,7 @@ void ShopState::selectPressed()
 						// Play purchace sound
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.batteryLevel += 5;
+						availableUpgrades[currentSelectedItem]->price = 0;
 					}
 					break;
 
@@ -645,6 +647,7 @@ void ShopState::selectPressed()
 						// Play purchace sound
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.strafeLevel += 5;
+						availableUpgrades[currentSelectedItem]->price = 0;
 					}
 					break;
 
@@ -654,6 +657,7 @@ void ShopState::selectPressed()
 						// Play purchace sound
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.missileLevel++;
+						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.missileLevel) % (BASE_PICKUP_UPGRADE * 5));
 					}
 					break;
 
@@ -663,6 +667,7 @@ void ShopState::selectPressed()
 						// Play purchace sound
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.barrierLevel++;
+						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.barrierLevel) % (BASE_PICKUP_UPGRADE * 5));
 					}
 					break;
 
@@ -672,6 +677,7 @@ void ShopState::selectPressed()
 						// Play purchace sound
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.boostLevel++;
+						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.boostLevel) % (BASE_PICKUP_UPGRADE * 5));
 					}
 					break;
 
@@ -681,6 +687,7 @@ void ShopState::selectPressed()
 						// Play purchace sound
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.shieldLevel++;
+						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.shieldLevel) % (BASE_PICKUP_UPGRADE * 5));
 					}
 					break;
 				}
@@ -695,8 +702,6 @@ void ShopState::selectPressed()
 			break;
 		}
 	}
-
-
     ssi.inSubmenu = inSubmenu;
 }
 
@@ -714,6 +719,7 @@ void ShopState::backPressed()
 	}
     ssi.inSubmenu = inSubmenu;
 }
+
 ShopState* ShopState::getInstance()
 {    
      printf("Shop state\n");

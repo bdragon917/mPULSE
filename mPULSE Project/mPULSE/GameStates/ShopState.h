@@ -82,4 +82,7 @@ private:
     int WAIT_TIME;
     bool buttonPressed;
     unsigned prevTime;
+
+	//Base Prices
+	int BASE_PICKUP_UPGRADE;
 };
