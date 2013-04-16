@@ -58,6 +58,9 @@ std::string AI_Names::getRandomName()
 {
     std::string retVal;
 
+    if (randPPLSeed == 0)
+        randPPLSeed = (rand() % 20) + 1;
+
     //Using a custom hash function to randomize names
     int getIndex = ((curRandomName + 1) * randPPLSeed * randPPLSeed) % randomName.size();
 
@@ -71,6 +74,7 @@ std::string AI_Names::getRandomName()
     
     const char* aVal = randomName[getIndex].c_str();
     retVal = randomName[getIndex];
+    printf(aVal);
     return retVal;
 }
 

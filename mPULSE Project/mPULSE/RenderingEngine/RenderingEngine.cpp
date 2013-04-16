@@ -840,7 +840,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             }
 
         aHUDShader->on();
-        int locHUDShader_Alpha = aHUDShader->getUniLoc("alphaOffset");
+       int locHUDShader_Alpha = aHUDShader->getUniLoc("alphaOffset");
         int locHUDShader_Mode = aHUDShader->getUniLoc("mode");
                 if (locHUDShader_Mode != -1)
                    {glUniform1f(locHUDShader_Mode, 0);}         //for changing modes for later

@@ -768,6 +768,11 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                 {
                     entities.cars.at(0)->getActor()->setLinearVelocity(NxVec3(1000,1000,0));
                 }
+                if (renderingEngine->aConsole.consoleString == "you win")
+                {
+                    CustomData* actingCd = (CustomData*)entities.cars.at(0)->getActor()->userData;
+                    actingCd->laps = gameVariables->numLaps;                                
+                }
 
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")

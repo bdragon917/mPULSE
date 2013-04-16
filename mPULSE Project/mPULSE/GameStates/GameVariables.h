@@ -81,6 +81,7 @@ public:
     int musicIndex;
     int numLaps;
     std::vector<RenderableComponent*> trackRC;
+    std::vector<int> skyboxTextureIndex;
 
     std::vector<Rank> rankings;      //used to display the ranking at results
 
