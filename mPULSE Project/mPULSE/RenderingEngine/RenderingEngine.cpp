@@ -195,8 +195,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[116];
-    glGenTextures(115, textureid_P1);
+    textureid_P1 = new GLuint[117];
+    glGenTextures(117, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -347,9 +347,9 @@ void RenderingEngine::initializeTexture()
 
     bindBMPtoTexture("./Images/Ship/motherShipHullUV_1.bmp", textureid_P1[113]);
     bindBMPtoTexture("./Images/Ship/motherShipHullUV_2.bmp", textureid_P1[114]);
+    bindBMPtoTexture("./Images/ColorRed.bmp", textureid_P1[115]);
 
-	bindBMPtoTexture("./Images/checker.bmp", textureid_P1[115]);
-
+	bindBMPtoTexture("./Images/checker.bmp", textureid_P1[116]);
 
 
 	//"/Images/textureTest.bmp"
@@ -615,21 +615,21 @@ void RenderingEngine::drawModelPosRotationEnhanced(ObjModel* model, Entity* anEn
     steerAngle *= -3 * anEntity->getActor()->getLinearVelocity().magnitude();
     NxQuat q;
 
-
-
-    anEntity->tiltAngle = (anEntity->tiltAngle*0.75f) + (steerAngle*0.25f);
-
-    NxReal ang = anEntity->tiltAngle;        //get angle of rotation
-    //q.fromAngleAxis(ang, zaxis);
-    q.fromAngleAxis(ang, NxVec3(1.0f,0.0f,0.0f));
-
-    orient.fromQuat(q);
-
-    NxMat34 newPose = NxMat34(orient,NxVec3(0,0,0));
-    newPose.getColumnMajor44(mat);
     
-    if (!(anEntity->isShunting()))
+    if (!(anEntity->isShunting()) )
+    {
+        anEntity->tiltAngle = (anEntity->tiltAngle*0.75f) + (steerAngle*0.25f);
+
+        NxReal ang = anEntity->tiltAngle;        //get angle of rotation
+        //q.fromAngleAxis(ang, zaxis);
+        q.fromAngleAxis(ang, NxVec3(1.0f,0.0f,0.0f));
+
+        orient.fromQuat(q);
+
+        NxMat34 newPose = NxMat34(orient,NxVec3(0,0,0));
+        newPose.getColumnMajor44(mat);
         glMultMatrixf(mat);
+    }
 
     //
 
@@ -842,7 +842,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             }
 
         aHUDShader->on();
-        int locHUDShader_Alpha = aHUDShader->getUniLoc("alphaOffset");
+       int locHUDShader_Alpha = aHUDShader->getUniLoc("alphaOffset");
         int locHUDShader_Mode = aHUDShader->getUniLoc("mode");
                 if (locHUDShader_Mode != -1)
                    {glUniform1f(locHUDShader_Mode, 0);}         //for changing modes for later
@@ -2615,7 +2615,7 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
         if (selectY == 3){displayTextTexture = 35;}else{displayTextTexture = 34;}       //Does highlighting
             //glBindTexture(GL_TEXTURE_2D, textureid_P1[displayTextTexture]);
 
-            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*10.0f), dec_height*2.0f, 30, displayTextTexture, title, true);
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*10.0f), dec_height*2.0f, 30, displayTextTexture, "Done", true);
             //drawSquareUVRev(butWidthOffset, titleHeightOffset + (dec_height*8.0f) + dec_height , 0.0f, button_width, dec_height);
             //drawSquareUVRev(butWidthOffset, doneHeightOffset + (dec_height*8.0f), 0.0f, button_width, dec_height);
 
@@ -2643,6 +2643,7 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
 
     
     //Fader
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]);
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
@@ -2908,6 +2909,7 @@ int RenderingEngine::drawStoryScreen(float dt)
 
     
     //Fader
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]);
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
@@ -3016,6 +3018,7 @@ int RenderingEngine::drawLoungeScreen(float dt)
     }
 
     //Fader
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
@@ -3275,6 +3278,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
     //Fader
     //float FadeCtrl = 0.0f;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     glBegin(GL_QUADS);
         glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
@@ -3751,6 +3755,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
     
     //Fader
     //float FadeCtrl = 0.0f;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
             glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
@@ -3964,6 +3969,7 @@ int RenderingEngine::drawStageSelectScreen(float dt, int currentSelected)
     
     //Fader
     //float FadeCtrl = 0.0f;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
             glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
@@ -4134,6 +4140,7 @@ int RenderingEngine::drawLoungeScreen(float dt, int currentSelected)
     
     //Fader
     //float FadeCtrl = 0.0f;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
             glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
@@ -4189,7 +4196,7 @@ int RenderingEngine::drawResultScreen(float dt)
 	
     if (aSkyBoxShader != NULL)
          {
-            glEnable(GL_TEXTURE_2D);
+            //glEnable(GL_TEXTURE_2D);
             aSkyBoxShader->on();
          }
 
@@ -4269,14 +4276,13 @@ int RenderingEngine::drawResultScreen(float dt)
 
 
 
-    if (aShader != NULL)
-    {
-        aShader->off();
-    }
+    glDisable(GL_TEXTURE);
+    aShader->off();
 
 
     
     //Fader
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]);
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
@@ -4627,7 +4633,6 @@ void RenderingEngine::drawTrack(Track* track)
 {
     if (track->getEntity()->rc.size() > 0)
     {
-
         int startingPt = track->getEntity()->rc.size() - 1;
         //for (unsigned r = 0; r < track->getEntity()->rc.size(); ++r)
         for (int r = startingPt; r > -1; --r)
@@ -4900,16 +4905,23 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 {
     //const int FRONT = 1;
     //const int FRONT = 1;
-
+    RenderingEngine* renderingEngine = RenderingEngine::getInstance();
 	// Center the Skybox around the given x,y,z position
 	x = x - width  / 2;
 	y = y - height / 2;
 	z = z - length / 2;
 
+    int sbIndex0 = gameVariables->skyboxTextureIndex[0];
+    int sbIndex1 = gameVariables->skyboxTextureIndex[1];
+    int sbIndex2 = gameVariables->skyboxTextureIndex[2];
+    int sbIndex3 = gameVariables->skyboxTextureIndex[3];
+    int sbIndex4 = gameVariables->skyboxTextureIndex[4];
+    int sbIndex5 = gameVariables->skyboxTextureIndex[5];
+
     glNormal3f(0.0f, 0.0f, 0.0f);
     glColor3f(1.0f,1.0f,1.0f);
 	// Draw Front side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[20]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex0]);
 	glBegin(GL_QUADS);	
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z+length);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height, z+length);
@@ -4918,7 +4930,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Back side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[21]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex1]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y,		z);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x+width, y+height, z); 
@@ -4927,7 +4939,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Left side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[23]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex2]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height,	z);	
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,		  y+height,	z+length); 
@@ -4936,7 +4948,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Right side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[22]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex3]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y,		z);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y,		z+length);
@@ -4945,7 +4957,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Up side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[24]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex4]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x+width, y+height, z);
 		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y+height, z+length); 
@@ -4954,7 +4966,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Down side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[25]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex5]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y,		z+length);

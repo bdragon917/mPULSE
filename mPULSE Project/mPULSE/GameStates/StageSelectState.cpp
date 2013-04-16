@@ -47,8 +47,7 @@ void StageSelectState::render()
 		{
 			PlayState* pStage = PlayState::getInstance();
 			pStage->resetAll();
-			renderingEngine->resetFade();   //In case
-			lockControls = false;
+			renderingEngine->resetFade();   //In case of... don't
 			changeState(PLAY);
 		}
     }

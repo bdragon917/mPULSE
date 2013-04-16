@@ -44,6 +44,7 @@ public:
     void boost();
     PickupType usePickup();
 
+    int test;
     //void setModel(ObjModel* m);
     void setActor(NxActor* a);
     void setModel(ObjModel* m);

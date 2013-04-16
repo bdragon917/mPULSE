@@ -21,6 +21,13 @@ void GameVariables::initialize()
     loadedTracks = new Tracks("tracks.txt");
     isFullScreen = false;
     isLoaded = false;
+    skyboxTextureIndex.clear();
+    skyboxTextureIndex.push_back(20);
+    skyboxTextureIndex.push_back(21);
+    skyboxTextureIndex.push_back(23);
+    skyboxTextureIndex.push_back(22);
+    skyboxTextureIndex.push_back(24);
+    skyboxTextureIndex.push_back(25);
 }
 
 void GameVariables::addRanking(std::string rank,std::string name,std::string time)

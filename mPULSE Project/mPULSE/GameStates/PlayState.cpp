@@ -330,7 +330,6 @@ void PlayState::update(float dt)
                 soundEngine->playSound(4, 8);
 
             renderingEngine->drawText(renderingEngine->FloatToString((timeBeforeRaceStarts - (curTime - initialTime) + 1)),-0.1,0,0.2);
-
             lastSecond = curTime;
         }
     }
@@ -759,10 +758,19 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     CHEAT_InfPowUp = true;
                     renderingEngine->aConsole.propragateMsg("Char Cheat ENABLED!");
                 }
-                if (renderingEngine->aConsole.consoleString == "powerup")
+                if (renderingEngine->aConsole.consoleString == "power up")
                 {
                     CHEAT_InfBoost = true;
                     renderingEngine->aConsole.consoleString == "p-p-p-p-p-POWER UP!";
+                }
+                if (renderingEngine->aConsole.consoleString == "make it so")
+                {
+                    entities.cars.at(0)->getActor()->setLinearVelocity(NxVec3(1000,1000,0));
+                }
+                if (renderingEngine->aConsole.consoleString == "you win")
+                {
+                    CustomData* actingCd = (CustomData*)entities.cars.at(0)->getActor()->userData;
+                    actingCd->laps = gameVariables->numLaps;                                
                 }
 
                 //Num Commands
