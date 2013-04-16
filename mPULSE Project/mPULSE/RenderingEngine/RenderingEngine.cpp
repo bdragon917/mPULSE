@@ -351,13 +351,6 @@ void RenderingEngine::initializeTexture()
 
 	bindBMPtoTexture("./Images/checker.bmp", textureid_P1[116]);
 
-    bindBMPtoTexture("./Images/sb/Weltraum.bmp", textureid_P1[116]);
-    bindBMPtoTexture("./Images/sb/WeltraumH.bmp", textureid_P1[117]);
-    bindBMPtoTexture("./Images/sb/WeltraumL.bmp", textureid_P1[118]);
-    bindBMPtoTexture("./Images/sb/WeltraumR.bmp", textureid_P1[119]);
-    bindBMPtoTexture("./Images/sb/WeltraumO.bmp", textureid_P1[120]);
-    bindBMPtoTexture("./Images/sb/WeltraumU.bmp", textureid_P1[121]);
-
 	//"/Images/textureTest.bmp"
 
 	//int err = aBMPImg.Load("./img/testT.bmp");
@@ -2176,6 +2169,9 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     {glUniform1f(locShader_Alpha, 0.432f);}
 
                     drawTrack(track);
+
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[116]);
+                    drawModel(modelManager.getModel("banner.obj"),startModelPos.x,startModelPos.y,startModelPos.z,1);
                     //if (locShader_Alpha != -1)
                     //{glUniform1f(locShader_Alpha, 1.000);}
 					

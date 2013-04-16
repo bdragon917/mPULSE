@@ -8,26 +8,46 @@ int maxSP;
 PhysicsEngine::PhysicsEngine()
 {
 	sceneSetup();
-    startX = 9;
-    startZ = -3;
-    offset = -6;
-    curSP = 0;
-    maxSP = 8;
-    
-    
-    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset; 
-    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
-    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset; 
-    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
-    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;   startX = 7; startZ+=offset;
-    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset; 
-    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
-    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
-    spawnPoints.push_back(new NxVec3 (startX,3,startZ));      startX+=offset;
-    
 
 }
 
+
+void PhysicsEngine::updateSpawnPoints(Waypoint* wp,vector<Entity*>* cars,vector<Entity*>* AIcars)
+{
+    startX = wp->pos.x + 9;
+    startZ = wp->pos.z - 3;
+    NxReal startY = 5;
+    offset = -6;
+    curSP = 0;
+    maxSP = 8;
+
+    spawnPoints.push_back(new NxVec3 (startX,startY,startZ));      startX+=offset; 
+    spawnPoints.push_back(new NxVec3 (startX,startY,startZ));      startX+=offset;
+    spawnPoints.push_back(new NxVec3 (startX,startY,startZ));      startX+=offset; 
+    spawnPoints.push_back(new NxVec3 (startX,startY,startZ));      startX+=offset;
+    spawnPoints.push_back(new NxVec3 (startX,startY,startZ));      startX+=offset;   startX = 7; startZ+=offset;
+    spawnPoints.push_back(new NxVec3 (startX,startY,startZ));      startX+=offset; 
+    spawnPoints.push_back(new NxVec3 (startX,startY,startZ));      startX+=offset;
+    spawnPoints.push_back(new NxVec3 (startX,startY,startZ));      startX+=offset;
+    spawnPoints.push_back(new NxVec3 (startX,startY,startZ));      startX+=offset;            
+
+    vector<Entity*> allCars = *cars;
+    vector<Entity*> allAiCars = *AIcars;
+
+    for(unsigned i=0;i<allCars.size();i++)
+    {
+        if(curSP>maxSP){curSP=0;}
+        cars->at(i)->getActor()->setGlobalPosition(*spawnPoints[curSP++]);
+        cars->at(i)->aCam->resetCamera();
+    }
+
+    for(unsigned i=0;i<allAiCars.size();i++)
+    {
+        if(curSP>maxSP){curSP=0;}
+        allAiCars.at(i)->getActor()->setGlobalPosition(*spawnPoints[curSP++]);
+        allAiCars.at(i)->aCam->resetCamera();
+    }
+}
 NxVec3 PhysicsEngine::getNewSpawnPoint()
 {
 
@@ -137,12 +157,6 @@ void PhysicsEngine::setupCars(vector<Entity*>* cars)
         {printf("carStartPos is nul\n");}
 
 	    box->setSleepEnergyThreshold(0);
-
-
-        if(curSP>maxSP){curSP=0;}
-
-        entityCar1->getActor()->setGlobalPosition(*spawnPoints[curSP++]);   
-        //entityCar1->getActor()->setGlobalPosition(getNewSpawnPoint());      //new spawnFunction
         
     }
 }
@@ -333,7 +347,7 @@ void PhysicsEngine::createWaypoints(std::vector<Waypoint*>* wps)
 
 		    //The actor has one shape, a box, 1m on a side
 		    NxSphereShapeDesc sphereDesc;
-		    sphereDesc.radius = (NxReal)2.0f;
+		    sphereDesc.radius = (NxReal)4.0f;
 		    sphereDesc.shapeFlags |= NX_TRIGGER_ENABLE;
 
 		    NxActorDesc actorDesc;

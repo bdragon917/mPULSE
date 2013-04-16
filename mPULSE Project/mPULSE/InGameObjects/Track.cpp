@@ -407,7 +407,7 @@ void Track::loadTrackInfo2(std::string filename)
                     else if(type == Waypoint::PICKUP_SPAWN)
                     {
                         std::vector<std::string>* elements = split(charArray,' ');  
-                        if(elements->size() >= 8)
+                        if(elements->size() >= 5)
                         {
                             Waypoint* wp = new Waypoint(elements);
 					        wp->type = type;
