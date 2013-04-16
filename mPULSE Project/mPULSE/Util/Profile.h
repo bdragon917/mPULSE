@@ -18,21 +18,23 @@ public:
 
     struct profileData
     {
-   
         std::string driverName;    
         int carModel;
         int carTexture;
 
         int Obs;
         int maxSpeed;
+		int batteryLevel;
+		int strafeLevel;
         int missileLevel;
         int barrierLevel;
         int shieldLevel;
-        int shuntingLevel;
-        int batteryLevel;
+        int boostLevel;
         drivingStyle style;
 
         int isAI;
+
+		int shipsOwned[5];
     };
 
     Profile();
@@ -43,12 +45,4 @@ public:
     void addData(std::vector<std::string>* newData);    
     profileData data;
 
-private:
-
-    
-    //Driver name
-    //Driver Car (model)
-    //car stats
-    //Obs
-    double Obs;
 };

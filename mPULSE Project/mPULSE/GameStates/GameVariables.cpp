@@ -184,3 +184,45 @@ void GameVariables::finalizeProfiles()
 {
     profiles.shrink_to_fit();
 }
+
+
+void GameVariables::saveProfiles()
+{
+	std::ofstream out;
+    out.open( "./Util/profiles.txt" );
+    if( !out )
+    {
+        printf( "Couldn't open file.\n");
+    }
+    else
+    {
+		for( unsigned i = 0; i < profiles.size(); i++ )
+		{
+			out << "#\n";
+			out << "driveName|" << profiles[i]->data.driverName << "\n";
+			out << "carModel|" << profiles[i]->data.carModel << "\n";
+			out << "carTexture|" << profiles[i]->data.carTexture << "\n";
+			out << "Obs|" << profiles[i]->data.Obs << "\n";
+			out << "isAI|" << profiles[i]->data.isAI << "\n";
+			out << "batteryLevel|" << profiles[i]->data.batteryLevel << "\n";
+			out << "strafeLevel|" << profiles[i]->data.strafeLevel << "\n";
+			out << "boostLevel|" << profiles[i]->data.boostLevel << "\n";
+			out << "maxSpeed|" << profiles[i]->data.maxSpeed << "\n";
+			out << "missileLevel|" << profiles[i]->data.missileLevel << "\n";
+			out << "barrierLevel|" << profiles[i]->data.barrierLevel << "\n";
+			out << "shieldLevel|" << profiles[i]->data.shieldLevel << "\n";
+			out << "smoothness|" << profiles[i]->data.style.smoothness << "\n";
+			out << "wildness|" << profiles[i]->data.style.wildness << "\n";
+			out << "accuracy|" << profiles[i]->data.style.accuracy << "\n";
+			out << "pickupBehavior|" << profiles[i]->data.style.pickupBehavior << "\n";
+			out << "steeringBehavior|" << profiles[i]->data.style.steeringBehavior << "\n";
+			out << "shipsOwned|" << profiles[i]->data.shipsOwned[0] << "|";
+			out << profiles[i]->data.shipsOwned[1] << "|";
+			out << profiles[i]->data.shipsOwned[2] << "|";
+			out << profiles[i]->data.shipsOwned[3] << "|";
+			out << profiles[i]->data.shipsOwned[4] << "\n";
+			out << "#\n";
+		}
+    }
+    out.close();
+}
