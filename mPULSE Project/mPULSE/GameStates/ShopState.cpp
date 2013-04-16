@@ -107,22 +107,22 @@ void ShopState::initializeInventory()
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
-		newItem->itemIndex = 2;		//TODO: MISSILE ++
+		newItem->itemIndex = 4;		//TODO: MISSILE ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.missileLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
-		newItem->itemIndex = 3;		//TODO: BARRIER ++
+		newItem->itemIndex = 5;		//TODO: BARRIER ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.barrierLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
-		newItem->itemIndex = 4;		//TODO: BOOST ++
+		newItem->itemIndex = 2;		//TODO: BOOST ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.boostLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
-		newItem->itemIndex = 5;		//TODO: SHIELD ++
+		newItem->itemIndex = 6;		//TODO: SHIELD ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.shieldLevel) % (BASE_PICKUP_UPGRADE * 5));
 		availableUpgrades.push_back(newItem);
 }

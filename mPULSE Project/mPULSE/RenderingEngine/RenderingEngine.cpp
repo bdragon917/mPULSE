@@ -3889,7 +3889,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
                 break;
 
             case 1:         //Buy Upgrades
-                //displayModelIndex = ssi.selectedItemIndex;        //How to show this??/ TODO:
+                displayModelIndex = ssi.selectedItemIndex;        //How to show this??/ TODO:
                 break;
 
             case 2:         //Buy Paint
@@ -4254,6 +4254,9 @@ int RenderingEngine::drawStageSelectScreen(float dt, int currentSelected)
 
             unsigned found = drawText.find_last_of("/\\");
             drawText = drawText.substr(found+1);
+
+			found = drawText.find_last_of('.');
+            drawText = drawText.substr(0,found);
 
             if ((currentSelected) == items) //this is selected
             //{renderText(x_TrackColumn, but_offset, dec_height*2.0f, (textWidth)/title.size(), 35, drawText, true);}
