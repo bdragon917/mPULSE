@@ -195,8 +195,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[90];
-    glGenTextures(90, textureid_P1);
+    textureid_P1 = new GLuint[115];
+    glGenTextures(115, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -316,6 +316,37 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/Ship/outUVShipBoxerTrue2.bmp", textureid_P1[87]);
     bindBMPtoTexture("./Images/Ship/outUVShipBoxerPirate.bmp", textureid_P1[88]);
     bindBMPtoTexture("./Images/ControlsScreen.bmp", textureid_P1[89]);
+
+    //Texture for ship
+    bindBMPtoTexture("./Images/Ship/saruk_Texture_2.bmp", textureid_P1[90]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texture_3.bmp", textureid_P1[91]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texturev4.bmp", textureid_P1[92]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texturev5.bmp", textureid_P1[93]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texturev6.bmp", textureid_P1[94]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texturev7.bmp", textureid_P1[95]);
+    bindBMPtoTexture("./Images/Ship/saruk_Texturev8.bmp", textureid_P1[96]);
+
+    bindBMPtoTexture("./Images/Ship/outUVClaymore_1.bmp", textureid_P1[97]);
+    bindBMPtoTexture("./Images/Ship/outUVClaymore_2.bmp", textureid_P1[98]);
+    bindBMPtoTexture("./Images/Ship/outUVClaymore_3.bmp", textureid_P1[99]);
+    bindBMPtoTexture("./Images/Ship/outUVClaymore_4.bmp", textureid_P1[100]);
+
+    bindBMPtoTexture("./Images/Ship/UVBoxer1.bmp", textureid_P1[101]);
+    bindBMPtoTexture("./Images/Ship/UVBoxer2.bmp", textureid_P1[102]);
+    bindBMPtoTexture("./Images/Ship/UVBoxer3.bmp", textureid_P1[103]);
+    bindBMPtoTexture("./Images/Ship/UVBoxer4.bmp", textureid_P1[104]);
+    bindBMPtoTexture("./Images/Ship/UVBoxer5.bmp", textureid_P1[105]);
+    bindBMPtoTexture("./Images/Ship/UVBoxer6.bmp", textureid_P1[106]);
+
+    bindBMPtoTexture("./Images/Ship/outUVNogard_1.bmp", textureid_P1[107]);
+    bindBMPtoTexture("./Images/Ship/outUVNogard_2.bmp", textureid_P1[108]);
+    bindBMPtoTexture("./Images/Ship/outUVNogard_3.bmp", textureid_P1[109]);
+    bindBMPtoTexture("./Images/Ship/outUVNogard_4.bmp", textureid_P1[110]);
+    bindBMPtoTexture("./Images/Ship/outUVNogard_5.bmp", textureid_P1[111]);
+    bindBMPtoTexture("./Images/Ship/outUVNogard_6.bmp", textureid_P1[112]);
+
+    bindBMPtoTexture("./Images/Ship/motherShipHullUV_1.bmp", textureid_P1[113]);
+    bindBMPtoTexture("./Images/Ship/motherShipHullUV_2.bmp", textureid_P1[114]);
 
 
 
