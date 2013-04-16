@@ -748,7 +748,7 @@ void RenderingEngine::renderText(float startX, float startY, float fontHeight, f
     switch (gameVariables->curResolution)
     {
         case gameVariables->STANDARD:
-            xResolution = 640.0f; yResolution = 480.0f; break;
+            xResolution = 1064.0f; yResolution = 960.0f; break;
         case gameVariables->LAPTOP:
             xResolution = 1600.0f; yResolution = 900.0f; break;
         case gameVariables->GAMELAB:
@@ -2499,7 +2499,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 void RenderingEngine::initializeMainMenuVariables()
 {
     //mainMenu initialization
-    shipAngle = 40.0f;
+    shipAngle = -40.0f;
     shipRotation = 0.1f;
     particles.clear();
 }
@@ -2591,7 +2591,7 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
         switch (gameVariables->curResolution)
         {
             case gameVariables->STANDARD:
-                curResolutionStr = "640 x 480";break;
+                curResolutionStr = "1048 x 960";break;
             case gameVariables->LAPTOP:
                 curResolutionStr = "1600 x 900";break;
             case gameVariables->GAMELAB:
@@ -3163,10 +3163,10 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 	        0.0,1.0,0.0); 		// "Up" vector
 
 
-        if (shipAngle > 45)
-        {shipRotation = -0.1f;}
-        else if (shipAngle < 20)
+        if (shipAngle < -45)
         {shipRotation = 0.1f;}
+        else if (shipAngle > -20)
+        {shipRotation = -0.1f;}
 
         shipAngle += shipRotation;
 
@@ -3192,13 +3192,16 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
 	    for (int e = 0; e < 50; e++)
 	    {
-		    Particle* newParticle = new Particle(((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX), 0.0f, shipAngle*((float)rand()/(float)RAND_MAX));
-		    newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,1.5));
+		    Particle* newParticle = new Particle(((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
+                                                    0.0f,
+                                                    shipAngle*((float)rand()/(float)RAND_MAX));
+
+		    newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,-1.0f));
 		    newParticle->timeTilDeath = (rand()%20);
 		    particles.push_back(newParticle);
 
 		    Particle* newParticle2 = new Particle( -((float)rand()/(float)RAND_MAX),0.0f,shipAngle * ((float)rand()/(float)RAND_MAX));
-		    newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,1.7f));
+		    newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,-1.0f));
 		    newParticle2->timeTilDeath = (rand()%20);
 		    particles.push_back(newParticle2);
 	    }
@@ -3285,7 +3288,10 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     }
 
 
-
+    if (psi.isActive)
+    {
+        drawProfileOverlay(psi);
+    }
 
 
     
@@ -3643,6 +3649,9 @@ void RenderingEngine::drawProfileOverlay(ProfileScreenInfo psi)
     //const float doneHeightOffset = (3.0f * SCREEN_HEIGHT / 4.0f);// + (SCREEN_HEIGHT / 32.0f) ;
     const float doneHeightOffset = (13.0f * SCREEN_HEIGHT / 16.0f);// + (SCREEN_HEIGHT / 32.0f) ;
 
+    glDisable(GL_TEXTURE_2D);
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black textures
     //draw transparent blackground
         glColor4f(0.0f,0.0f,0.0f, 0.5f);
         drawSquare(half_width, half_height, 0.0f, half_width, half_height);

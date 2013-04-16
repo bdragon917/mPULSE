@@ -49,6 +49,9 @@ void ShopState::initialize()
     mechanicGirl = new DynamicImage(-125,400,0,20,20,42,1);   //will probably be overwritten in reset(), so change the values there
     painterGirl = new DynamicImage(-50,50,0,20,20,43,0);
     subMenu = new DynamicImage(0,0,0,screen_width, screen_height, 123 , 0);
+    ssi.di.push_back(subMenu);
+
+    soundEngine->playSound(5,(rand() % 5) + 27);    //4 is channel, 7 is index for intro
 
 	enterMechanic();
 }
@@ -615,6 +618,7 @@ void ShopState::selectPressed()
 					initializePaintJob(gameVariables->playerInShop->data.carModel);
 					gameVariables->playerInShop->data.carTexture = availablePaints[0]->itemIndex;
 					availableShips[currentSelectedItem]->price = 0;
+                    soundEngine->playSound(5,(rand() % 4) + 41);    //4 is channel, 7 is index for intro
 				}
 				else
 				{
@@ -643,6 +647,7 @@ void ShopState::selectPressed()
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.batteryLevel += 5;
 						availableUpgrades[currentSelectedItem]->price = 0;
+                        soundEngine->playSound(5,(rand() % 6) + 32);    //4 is channel, 7 is index for intro
 					}
 					break;
 
@@ -653,6 +658,7 @@ void ShopState::selectPressed()
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.strafeLevel += 5;
 						availableUpgrades[currentSelectedItem]->price = 0;
+                        soundEngine->playSound(5,(rand() % 6) + 32);    //4 is channel, 7 is index for intro
 					}
 					break;
 
@@ -663,6 +669,7 @@ void ShopState::selectPressed()
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.missileLevel++;
 						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.missileLevel) % (BASE_PICKUP_UPGRADE * 5));
+                        soundEngine->playSound(5,(rand() % 6) + 32);    //4 is channel, 7 is index for intro
 					}
 					break;
 
@@ -673,6 +680,7 @@ void ShopState::selectPressed()
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.barrierLevel++;
 						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.barrierLevel) % (BASE_PICKUP_UPGRADE * 5));
+                        soundEngine->playSound(5,(rand() % 6) + 32);    //4 is channel, 7 is index for intro
 					}
 					break;
 
@@ -683,6 +691,7 @@ void ShopState::selectPressed()
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.boostLevel++;
 						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.boostLevel) % (BASE_PICKUP_UPGRADE * 5));
+                        soundEngine->playSound(5,(rand() % 6) + 32);    //4 is channel, 7 is index for intro
 					}
 					break;
 
@@ -693,6 +702,7 @@ void ShopState::selectPressed()
 						gameVariables->playerInShop->data.Obs -= availableUpgrades[currentSelectedItem]->price;
 						gameVariables->playerInShop->data.shieldLevel++;
 						availableUpgrades[currentSelectedItem]->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.shieldLevel) % (BASE_PICKUP_UPGRADE * 5));
+                        soundEngine->playSound(5,(rand() % 6) + 32);    //4 is channel, 7 is index for intro
 					}
 					break;
 				}
@@ -716,6 +726,7 @@ void ShopState::backPressed()
 	{
 		lockControls = true;
 		renderingEngine->startTransition(RenderingEngine::FADE_OUT);
+        soundEngine->playSound(5,(rand() % 3) + 38);    //4 is channel, 7 is index for intro
 	}
 	else
 	{
