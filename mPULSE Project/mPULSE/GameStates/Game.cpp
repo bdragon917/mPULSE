@@ -72,6 +72,9 @@ void Game::checkStateChange()
         case GameState::STAGE:
             state = StageSelectState::getInstance();                
             break;
+        case GameState::CONTROLS:
+            state = ControlScreenState::getInstance();                
+            break;
         }
     }
 }

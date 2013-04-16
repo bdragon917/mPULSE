@@ -47,8 +47,7 @@ void StageSelectState::render()
 		{
 			PlayState* pStage = PlayState::getInstance();
 			pStage->resetAll();
-			renderingEngine->resetFade();   //In case
-			lockControls = false;
+			renderingEngine->resetFade();   //In case of... don't
 			changeState(PLAY);
 		}
     }
@@ -158,6 +157,13 @@ void StageSelectState::loadTrack()
 
         delete gameVariables->theSelectedTrack;
         gameVariables->theSelectedTrack = tempTrack;
+        gameVariables->skyboxTextureIndex.clear();
+
+        for each (int inSkyboxIndex in tempTrack->infoz.sky)
+        {
+            gameVariables->skyboxTextureIndex.push_back(inSkyboxIndex);
+        }
+
         gameVariables->isLoaded = true;     //should now have a loaded track! 
 
     }

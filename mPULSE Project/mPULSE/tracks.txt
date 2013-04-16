@@ -1,3 +1,5 @@
 .\\InGameObjects\\Race1_Uno.txt
 .\\InGameObjects\\Race_Spiral.txt
 .\\InGameObjects\\Race1_M2.txt
+.\\InGameObjects\\Race1_noodles.txt
+.\\InGameObjects\\Grid.txt

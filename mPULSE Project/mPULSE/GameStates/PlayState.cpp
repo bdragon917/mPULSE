@@ -24,6 +24,7 @@ void PlayState::resetAll()
     rbPressed = false;
 
     CHEAT_InfPowUp = false;
+    CHEAT_InfBoost = false;
 
     gameVariables->resetRace();     //Clears victory flags
     gameVariables->finishTime = NULL;
@@ -329,7 +330,6 @@ void PlayState::update(float dt)
                 soundEngine->playSound(4, 8);
 
             renderingEngine->drawText(renderingEngine->FloatToString((timeBeforeRaceStarts - (curTime - initialTime) + 1)),-0.1,0,0.2);
-
             lastSecond = curTime;
         }
     }
@@ -758,6 +758,20 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     CHEAT_InfPowUp = true;
                     renderingEngine->aConsole.propragateMsg("Char Cheat ENABLED!");
                 }
+                if (renderingEngine->aConsole.consoleString == "power up")
+                {
+                    CHEAT_InfBoost = true;
+                    renderingEngine->aConsole.consoleString == "p-p-p-p-p-POWER UP!";
+                }
+                if (renderingEngine->aConsole.consoleString == "make it so")
+                {
+                    entities.cars.at(0)->getActor()->setLinearVelocity(NxVec3(1000,1000,0));
+                }
+                if (renderingEngine->aConsole.consoleString == "you win")
+                {
+                    CustomData* actingCd = (CustomData*)entities.cars.at(0)->getActor()->userData;
+                    actingCd->laps = gameVariables->numLaps;                                
+                }
 
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")
@@ -1138,6 +1152,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                     else if(type == Entity::BOOST)
                     {
                         car->boost();
+
+                        if (CHEAT_InfBoost)
+                        {car->givePickup(Entity::BOOST);};
                     }
                 }
         

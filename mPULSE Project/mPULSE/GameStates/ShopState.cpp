@@ -130,11 +130,66 @@ void ShopState::initializePaintJob(int shipModel)
                 newItem->itemIndex = 3;      //Standard
                 newItem->price = 0;
                 availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 90;      //Standard
+                newItem->price = 1000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 91;      //Standard
+                newItem->price = 2000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 92;      //Standard
+                newItem->price = 2000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 93;      //Standard
+                newItem->price = 3000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 94;      //Standard
+                newItem->price = 3000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 95;      //Standard
+                newItem->price = 4000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 96;      //Standard
+                newItem->price = 5000;
+                availablePaints.push_back(newItem);
             break;
 
         case 11:     //Claymore
             newItem = new shopItem;
                 newItem->itemIndex = 52;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 97;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 98;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 99;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 100;      //Standard
                 newItem->price = 0;
                 availablePaints.push_back(newItem);
             break;
@@ -148,6 +203,36 @@ void ShopState::initializePaintJob(int shipModel)
                 newItem->itemIndex = 88;      //Pirate
                 newItem->price = 5000;
                 availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 101;      //Pirate
+                newItem->price = 5000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 102;      //Pirate
+                newItem->price = 5000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 103;      //Pirate
+                newItem->price = 5000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 104;      //Pirate
+                newItem->price = 5000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 105;      //Pirate
+                newItem->price = 5000;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 106;      //Pirate
+                newItem->price = 5000;
+                availablePaints.push_back(newItem);
             break;
 
         case 12:     //Nogard
@@ -155,11 +240,51 @@ void ShopState::initializePaintJob(int shipModel)
                 newItem->itemIndex = 50;      //Standard
                 newItem->price = 0;
                 availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 107;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 108;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 109;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 110;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 111;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 112;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
             break;
 
         case 15:     //MiniMothership
             newItem = new shopItem;
                 newItem->itemIndex = 27;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 113;      //Standard
+                newItem->price = 0;
+                availablePaints.push_back(newItem);
+
+                newItem = new shopItem;
+                newItem->itemIndex = 114;      //Standard
                 newItem->price = 0;
                 availablePaints.push_back(newItem);
             break;
