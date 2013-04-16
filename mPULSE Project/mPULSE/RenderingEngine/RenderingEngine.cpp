@@ -2606,7 +2606,7 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
         if (selectY == 3){displayTextTexture = 35;}else{displayTextTexture = 34;}       //Does highlighting
             //glBindTexture(GL_TEXTURE_2D, textureid_P1[displayTextTexture]);
 
-            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*10.0f), dec_height*2.0f, 30, displayTextTexture, title, true);
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*10.0f), dec_height*2.0f, 30, displayTextTexture, "Done", true);
             //drawSquareUVRev(butWidthOffset, titleHeightOffset + (dec_height*8.0f) + dec_height , 0.0f, button_width, dec_height);
             //drawSquareUVRev(butWidthOffset, doneHeightOffset + (dec_height*8.0f), 0.0f, button_width, dec_height);
 
@@ -2634,6 +2634,7 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
 
     
     //Fader
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]);
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
@@ -2899,6 +2900,7 @@ int RenderingEngine::drawStoryScreen(float dt)
 
     
     //Fader
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]);
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
@@ -3007,6 +3009,7 @@ int RenderingEngine::drawLoungeScreen(float dt)
     }
 
     //Fader
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
@@ -3266,6 +3269,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
     //Fader
     //float FadeCtrl = 0.0f;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     glBegin(GL_QUADS);
         glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
@@ -3742,6 +3746,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
     
     //Fader
     //float FadeCtrl = 0.0f;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
             glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
@@ -3955,6 +3960,7 @@ int RenderingEngine::drawStageSelectScreen(float dt, int currentSelected)
     
     //Fader
     //float FadeCtrl = 0.0f;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
             glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
@@ -4125,6 +4131,7 @@ int RenderingEngine::drawLoungeScreen(float dt, int currentSelected)
     
     //Fader
     //float FadeCtrl = 0.0f;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);
             glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
@@ -4180,7 +4187,7 @@ int RenderingEngine::drawResultScreen(float dt)
 	
     if (aSkyBoxShader != NULL)
          {
-            glEnable(GL_TEXTURE_2D);
+            //glEnable(GL_TEXTURE_2D);
             aSkyBoxShader->on();
          }
 
@@ -4260,14 +4267,13 @@ int RenderingEngine::drawResultScreen(float dt)
 
 
 
-    if (aShader != NULL)
-    {
-        aShader->off();
-    }
+    glDisable(GL_TEXTURE);
+    aShader->off();
 
 
     
     //Fader
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]);
     //float FadeCtrl = 0.0f;
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     	glBegin(GL_QUADS);

@@ -759,10 +759,14 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     CHEAT_InfPowUp = true;
                     renderingEngine->aConsole.propragateMsg("Char Cheat ENABLED!");
                 }
-                if (renderingEngine->aConsole.consoleString == "powerup")
+                if (renderingEngine->aConsole.consoleString == "power up")
                 {
                     CHEAT_InfBoost = true;
                     renderingEngine->aConsole.consoleString == "p-p-p-p-p-POWER UP!";
+                }
+                if (renderingEngine->aConsole.consoleString == "make it so")
+                {
+                    entities.cars.at(0)->getActor()->setLinearVelocity(NxVec3(1000,1000,0));
                 }
 
                 //Num Commands

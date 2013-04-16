@@ -69,6 +69,7 @@ std::string AI_Names::getRandomName()
         randPPLSeed = (rand() % 20) + 1;
     }
     
+    const char* aVal = randomName[getIndex].c_str();
     retVal = randomName[getIndex];
     return retVal;
 }
