@@ -142,7 +142,7 @@ shipsOwned|1|0|0|0|0
 driveName|Nolan
 carModel|1
 carTexture|3
-Obs|50000
+Obs|15800
 isAI|0
 batteryLevel|0
 strafeLevel|0

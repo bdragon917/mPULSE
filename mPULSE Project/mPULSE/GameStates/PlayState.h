@@ -68,6 +68,7 @@ private:
 
     bool CHEAT_InfPowUp;
     bool CHEAT_InfBoost;
+    bool CHEAT_EnableDPad;
 
     bool showConsole;
     bool rbPressed;

@@ -25,6 +25,7 @@ void PlayState::resetAll()
 
     CHEAT_InfPowUp = false;
     CHEAT_InfBoost = false;
+    CHEAT_EnableDPad = false;
 
     gameVariables->resetRace();     //Clears victory flags
     gameVariables->finishTime = NULL;
@@ -776,6 +777,11 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     CustomData* actingCd = (CustomData*)entities.cars.at(0)->getActor()->userData;
                     actingCd->laps = gameVariables->numLaps;                                
                 }
+                if (renderingEngine->aConsole.consoleString == "cheaty face")
+                {
+                    CHEAT_EnableDPad = true;
+                    renderingEngine->aConsole.propragateMsg("You cheater...");
+                }
 
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")
@@ -1162,14 +1168,19 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                     }
                 }
         
-                if(state->dpadUp)
-                    car->givePickup(Entity::BARRIER);
-                if(state->dpadRight)
-                    car->givePickup(Entity::SHIELD);
-                if(state->dpadLeft)
-                    car->givePickup(Entity::BOOST);
-                if(state->dpadDown)
-                    car->givePickup(Entity::MISSILE);
+                if (CHEAT_EnableDPad)
+                {
+                    if(state->dpadUp)
+                        car->givePickup(Entity::BARRIER);
+                    if(state->dpadRight)
+                        car->givePickup(Entity::SHIELD);
+                    if(state->dpadLeft)
+                        car->givePickup(Entity::BOOST);
+                    if(state->dpadDown)
+                        car->givePickup(Entity::MISSILE);
+                }
+
+
                 if(state->lb) 
                     car->shuntLeft();
                 if(state->rb)
