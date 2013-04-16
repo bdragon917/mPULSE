@@ -3175,13 +3175,13 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 		//glScalef(0.01f,0.01f,0.01f);
 
 		
-        glPushMatrix();
+        //glPushMatrix();
         glPushAttrib(GL_DEPTH_TEST);
         glDisable(GL_DEPTH_TEST);
 
         //Draw Particles
         Particle* newParticle = new Particle(shipAngle * 0.1f,0.0f,shipAngle * 0.03f + 1.0f);
-        newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,1.5));
+        newParticle->setVelocity(NxVec3(0.0f,0.0f,1.5f));
         newParticle->timeTilDeath = 20;
         particles.push_back(newParticle);
         Particle* newParticle2 = new Particle(shipAngle * -0.1f,0.0f,shipAngle * 0.04f + 1.0f);
@@ -3189,7 +3189,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
         newParticle2->timeTilDeath = 20;
         particles.push_back(newParticle2);
 	    
-
+        /*
 	    for (int e = 0; e < 50; e++)
 	    {
 		    Particle* newParticle = new Particle(((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
@@ -3205,6 +3205,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 		    newParticle2->timeTilDeath = (rand()%20);
 		    particles.push_back(newParticle2);
 	    }
+        */
 
     glBindTexture(GL_TEXTURE_2D, textureid_P1[76]);
     for (unsigned int x=0;x<particles.size();x++)
@@ -3224,7 +3225,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     }
 
     updateParticles();
-    glPopMatrix();
+    //glPopMatrix();
 
 
 
@@ -3235,7 +3236,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
         glEnable(GL_DEPTH_TEST);
         //glClear(GL_DEPTH_BUFFER_BIT);
 
-        glScalef(0.23f,0.23f,0.23f);
+        glScalef(0.21f,0.21f,0.21f);
 
         //draw ship
         glBindTexture(GL_TEXTURE_2D, textureid_P1[27]);
@@ -3306,14 +3307,23 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
 		glEnd();
 
+
+
+
+        if (instantTrans)
+	    {
+		    instantTrans = false;
+		    return 1;
+	    }
+
         if (FadeCtrl >= 1.0f)
-            {
-				startFadeIn();
-                //FadeCtrl=0.0f;fadeMode=0;
-				return 1;
-            }
+        {
+			startFadeIn();
+            //FadeCtrl=0.0f;fadeMode=0;
+		    return 1;
+        }
 
-
+    
 
 
 
