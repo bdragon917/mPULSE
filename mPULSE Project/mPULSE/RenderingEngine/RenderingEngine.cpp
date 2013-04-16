@@ -2535,13 +2535,15 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
         int displayTextTexture = 36;
 
     //Resolution
-        if (selectY == 0){displayTextTexture = 35;}else{displayTextTexture = 36;}       //Does highlighting
+        if (selectY == 0){displayTextTexture = 35;}else{displayTextTexture = 34;}       //Does highlighting
         title = "Resolution:";
         title = title;
         renderText(butWidthOffset-((textWidth)/2),
                                         titleHeightOffset + (dec_height*2.0f),
                                         dec_height*2.0f, 30, displayTextTexture, title, true);
 
+
+        displayTextTexture = 36; 
         string curResolutionStr;
         switch (gameVariables->curResolution)
         {
@@ -2559,7 +2561,7 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
    
 
     //FullScreen
-        if (selectY == 1){displayTextTexture = 35;}else{displayTextTexture = 36;}       //Does highlighting
+        if (selectY == 1){displayTextTexture = 35;}else{displayTextTexture = 34;}       //Does highlighting
         title = "Full Screen:";
         title = title;
         renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*4.0f), dec_height*2.0f, dec_height*2.0f, displayTextTexture, title, true);
@@ -2576,17 +2578,18 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
 
 
     //Controls
-        if (selectY == 2){displayTextTexture = 35;}else{displayTextTexture = 36;}       //Does highlighting
+        if (selectY == 2){displayTextTexture = 35;}else{displayTextTexture = 34;}       //Does highlighting
         title = "See Controls";
         title = title;
         renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*6.0f), dec_height*2.0f, 30, displayTextTexture, title, true);
 
 
     //Done Button
-        if (selectY == 3){displayTextTexture = 38;}else{displayTextTexture = 37;}       //Does highlighting
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[displayTextTexture]);
+        if (selectY == 3){displayTextTexture = 35;}else{displayTextTexture = 34;}       //Does highlighting
+            //glBindTexture(GL_TEXTURE_2D, textureid_P1[displayTextTexture]);
 
-            drawSquareUVRev(butWidthOffset, titleHeightOffset + (dec_height*8.0f) + dec_height , 0.0f, button_width, dec_height);
+            renderText(butWidthOffset-((textWidth)/2), titleHeightOffset + (dec_height*10.0f), dec_height*2.0f, 30, displayTextTexture, title, true);
+            //drawSquareUVRev(butWidthOffset, titleHeightOffset + (dec_height*8.0f) + dec_height , 0.0f, button_width, dec_height);
             //drawSquareUVRev(butWidthOffset, doneHeightOffset + (dec_height*8.0f), 0.0f, button_width, dec_height);
 
         //aHUDShader->off();
@@ -4442,6 +4445,7 @@ void RenderingEngine::drawCars(Entities* entities)
                         drawModelPos(modelManager.getModel("Shield.obj"), aPose );
 
                         glUniform1f(locShader_DiscardBlue, 0.0f);
+                        glUniform1f(locShader_Alpha, 1.00f);
                     }
                     //Particles
                     //Particle* newParticle = new Particle(entities->cars[i]->getActor()->getGlobalPose().t.x, entities->cars[i]->getActor()->getGlobalPose().t.y,entities->cars[i]->getActor()->getGlobalPose().t.z);
