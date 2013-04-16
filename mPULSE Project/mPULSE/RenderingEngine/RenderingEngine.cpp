@@ -4902,10 +4902,17 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	y = y - height / 2;
 	z = z - length / 2;
 
+    int sbIndex0 = gameVariables->skyboxTextureIndex[0];
+    int sbIndex1 = gameVariables->skyboxTextureIndex[1];
+    int sbIndex2 = gameVariables->skyboxTextureIndex[2];
+    int sbIndex3 = gameVariables->skyboxTextureIndex[3];
+    int sbIndex4 = gameVariables->skyboxTextureIndex[4];
+    int sbIndex5 = gameVariables->skyboxTextureIndex[5];
+
     glNormal3f(0.0f, 0.0f, 0.0f);
     glColor3f(1.0f,1.0f,1.0f);
 	// Draw Front side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[20]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex0]);
 	glBegin(GL_QUADS);	
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z+length);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height, z+length);
@@ -4914,7 +4921,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Back side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[21]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex1]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y,		z);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x+width, y+height, z); 
@@ -4923,7 +4930,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Left side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[23]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex2]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y+height,	z);	
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x,		  y+height,	z+length); 
@@ -4932,7 +4939,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Right side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[22]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex3]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y,		z);
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x+width, y,		z+length);
@@ -4941,7 +4948,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Up side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[24]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex4]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(0.0f, 1.0f); glVertex3f(x+width, y+height, z);
 		glTexCoord2f(0.0f, 0.0f); glVertex3f(x+width, y+height, z+length); 
@@ -4950,7 +4957,7 @@ void RenderingEngine::drawSkyBox(float x, float y, float z, float width, float h
 	glEnd();
 
 	// Draw Down side
-	glBindTexture(GL_TEXTURE_2D, textureid_P1[25]);
+	glBindTexture(GL_TEXTURE_2D, textureid_P1[sbIndex5]);
 	glBegin(GL_QUADS);		
 		glTexCoord2f(1.0f, 0.0f); glVertex3f(x,		  y,		z);
 		glTexCoord2f(1.0f, 1.0f); glVertex3f(x,		  y,		z+length);
