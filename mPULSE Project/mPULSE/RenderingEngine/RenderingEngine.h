@@ -200,7 +200,7 @@ private:
 	std::vector<asteroids> asteroidList;
 	void generateAsteroids(int total);
 	void turnAsteroids(int index);
-	#define TOTAL_ASTEROIDS 200
+	#define TOTAL_ASTEROIDS 75
 
     void drawGroundPlane(float xoffset, float yoffset);
     void drawCheckerBoard(float x, float y);

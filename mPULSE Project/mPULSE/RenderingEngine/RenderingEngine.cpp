@@ -53,33 +53,33 @@ void RenderingEngine::generateAsteroids(int total)
 	{
 		if (rand()%2 == 0)
 		{
-			a.x = (rand()% 1000);
+			a.x = (rand()% 1500);
 			a.xVec = (rand()% RAND_MAX);
 		}
 		else
 		{
-			a.x = -(rand()%1000);
+			a.x = -(rand()%1500);
 			a.xVec = -(rand()% RAND_MAX);
 		}
 
 		if (rand()%2 == 0)
 		{
-			a.y = (rand()% 1000);
+			a.y = (rand()% 1500);
 			a.yVec = (rand()% RAND_MAX);
 		}
 		else
 		{
-			a.y = -(rand()% 1000);
+			a.y = -(rand()% 350);
 			a.yVec = -(rand()% RAND_MAX);
 		}
 		if (rand()%2 == 0)
 		{
-			a.z = (rand()% 1000);
+			a.z = (rand()% 1500);
 			a.zVec = (rand()% RAND_MAX);
 		}
 		else
 		{
-			a.z = -(rand()% 1000);
+			a.z = -(rand()% 1500);
 			a.xVec = (rand()% RAND_MAX);
 		}
 

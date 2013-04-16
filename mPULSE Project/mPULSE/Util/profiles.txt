@@ -2,7 +2,7 @@
 driveName|Player1
 carModel|1
 carTexture|3
-Obs|50000
+Obs|4600
 isAI|0
 batteryLevel|0
 strafeLevel|0
