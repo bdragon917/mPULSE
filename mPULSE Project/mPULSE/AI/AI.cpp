@@ -107,7 +107,7 @@ void AI::update(std::vector<Entity*> players, std::vector<Entity*> AIs)
         else if (angleToTarget < 0.75f)
             xController->rTrigger = 75;
         else
-            xController->rTrigger = 35;
+            xController->rTrigger = 135;
         
 
     }
