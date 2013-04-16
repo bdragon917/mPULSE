@@ -195,7 +195,7 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[115];
+    textureid_P1 = new GLuint[116];
     glGenTextures(115, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
@@ -347,6 +347,8 @@ void RenderingEngine::initializeTexture()
 
     bindBMPtoTexture("./Images/Ship/motherShipHullUV_1.bmp", textureid_P1[113]);
     bindBMPtoTexture("./Images/Ship/motherShipHullUV_2.bmp", textureid_P1[114]);
+
+	bindBMPtoTexture("./Images/checker.bmp", textureid_P1[115]);
 
 
 
@@ -2170,6 +2172,13 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     drawTrack(track);
                     //if (locShader_Alpha != -1)
                     //{glUniform1f(locShader_Alpha, 1.000);}
+					
+					//banner
+					glBindTexture(GL_TEXTURE_2D, textureid_P1[116]);
+					drawModel(modelManager.getModel(26), 0, 0, 0, 1.0f);
+					//banner rockets.
+					glBindTexture(GL_TEXTURE_2D, textureid_P1[7]);
+					drawModel(modelManager.getModel(25), 0, 0, 0, 1.0f);
 
 
                     if (locShader_Alpha != -1)
