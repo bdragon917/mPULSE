@@ -2611,9 +2611,10 @@ int RenderingEngine::drawSettingScreen(float dt, int selectX, int selectY)
 
         if (FadeCtrl >= 1.0f)
             {
-                FadeCtrl=0.0f;fadeMode=0;return 1;
+                startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+                return 1;
             }
-
 
             
     if (aShader != NULL)

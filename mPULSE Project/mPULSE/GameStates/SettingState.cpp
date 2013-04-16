@@ -246,7 +246,8 @@ void SettingState::keySelectTarget()
 
 void SettingState::backPressed()
 {
-    changeState(MAIN_MENU);
+    renderingEngine->startTransition(RenderingEngine::FADE_OUT);
+    curSelectedY = 3;
 }
 SettingState* SettingState::getInstance()
 {    

@@ -32,7 +32,7 @@ void ControlScreenState::render()
 
     if (retMenuVal == 1)
     {
-        changeState(MAIN_MENU);
+        changeState(SETTING);
     }
 
 
