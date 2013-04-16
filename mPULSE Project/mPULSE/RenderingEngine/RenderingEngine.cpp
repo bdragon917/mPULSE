@@ -962,13 +962,13 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         if (locHUDShader_Alpha != -1)
                     {glUniform1f(locHUDShader_Alpha, -0.333f);}
         glBindTexture(GL_TEXTURE_2D, textureid_P1[72]);
-        drawSquareUVRev(0.720f,0.6,0,0.295f,-0.3f);     //0.7m 0.575
+       // drawSquareUVRev(0.720f,0.6,0,0.295f,-0.3f);     //0.7m 0.575
         if (locHUDShader_Alpha != -1)
                     {glUniform1f(locHUDShader_Alpha, 0.0f);}
 
         //Map
         glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
-        drawSquareUVRev(xOffset,yOffset,0,0.5f,0.5f);
+       // drawSquareUVRev(xOffset,yOffset,0,0.5f,0.5f);
 
 
 
@@ -1000,13 +1000,13 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             glRotatef(-90,0,0,1);
             glTranslatef(-(xOffset+x),-(yOffset+0.05f-z),0);
 
-            drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.02f,-0.03f);
+           // drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.02f,-0.03f);
             debugFloat = debugFloat + 1;
             glPopMatrix();
 
             //Draw the Label
             glBindTexture(GL_TEXTURE_2D, textureid_P1[67]);     //display a COM symbol for COM drivers
-            drawSquareUVRev(xOffset+x,yOffset-z,0,0.03f,-0.03f);
+           // drawSquareUVRev(xOffset+x,yOffset-z,0,0.03f,-0.03f);
         }
         
         for(unsigned i=0;i<entities->cars.size();i++)
@@ -1036,7 +1036,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             glRotatef(-90,0,0,1);
             glTranslatef(-(xOffset+x),-(yOffset+0.05f-z),0);
 
-            drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.02f,-0.03f);
+           // drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.02f,-0.03f);
             debugFloat = debugFloat + 1;
             glPopMatrix();
 
@@ -1048,7 +1048,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
 
             
 
-            drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.03f,-0.03f);
+           // drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.03f,-0.03f);
         }
         
         //Draw pickup
@@ -1083,8 +1083,8 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             renderText(-0.1,0.7,0.03,0.03,35,"Battery Empty",false);
 
         renderText(-0.1,0.80,0.03,0.03,35,"Obs "+FloatToString(cd->entity->obs),false);
-        renderText(0.65,0.1,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/"+FloatToString(gameVariables->numberOfAIs + gameVariables->getNumPlayers()),false);       
-        renderText(0.65,0.2,0.03,0.03,35,"Lap   "+FloatToString(cd->laps)+"/"+FloatToString(gameVariables->numLaps),false);
+        renderText(0.65,0.8,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/"+FloatToString(gameVariables->numberOfAIs + gameVariables->getNumPlayers()),false);       
+        renderText(0.65,0.7,0.03,0.03,35,"Lap   "+FloatToString(cd->laps)+"/"+FloatToString(gameVariables->numLaps),false);
 
 
         for(unsigned i=0;i<textQueue.size();i++)
