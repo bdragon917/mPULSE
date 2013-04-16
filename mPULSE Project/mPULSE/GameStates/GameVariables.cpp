@@ -13,6 +13,7 @@ void GameVariables::initialize()
 	players.push_back(new Profile());
 	players.push_back(new Profile());
 
+    curResolution = LAPTOP;
 	finishTime = NULL;
     numLaps = 3;
     numberOfAIs = 6;

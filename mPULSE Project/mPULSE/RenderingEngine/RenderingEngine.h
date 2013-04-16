@@ -87,7 +87,7 @@ public:
 
     void drawProfileOverlay(ProfileScreenInfo psi);
 
-    void RenderingEngine::renderText(float startX, float startY, float fontHeight, float FontWidth, int fontTexture, string str, bool invert);
+    void RenderingEngine::renderText(float startX, float startY, float fontHeight, float fontWidth, int fontTexture, string str, bool invert);
 
     void drawActor(NxActor* actor);
     void drawActor_Safe(NxActor* actor);

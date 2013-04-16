@@ -723,8 +723,26 @@ void RenderingEngine::drawModelShadow(ObjModel* model, NxMat34* aPose)
 
 
 
-void RenderingEngine::renderText(float startX, float startY, float fontHeight, float FontWidth, int fontTexture, string str, bool invert)
+void RenderingEngine::renderText(float startX, float startY, float fontHeight, float fontWidth, int fontTexture, string str, bool invert)
 {
+
+
+    float xResolution;
+    float yResolution;
+
+    switch (gameVariables->curResolution)
+    {
+        case gameVariables->STANDARD:
+            xResolution = 640.0f; yResolution = 480.0f; break;
+        case gameVariables->LAPTOP:
+            xResolution = 1600.0f; yResolution = 900.0f; break;
+        case gameVariables->GAMELAB:
+            xResolution = 1920.0f; yResolution = 1200.0f; break;
+    }
+    
+    fontWidth = (xResolution*fontWidth) / 1600.0f;
+    fontHeight = (yResolution*fontHeight) / 900.0f;
+
     glBindTexture(GL_TEXTURE_2D, textureid_P1[fontTexture]);
 
     float curXOffset = 0;
@@ -746,19 +764,19 @@ void RenderingEngine::renderText(float startX, float startY, float fontHeight, f
         {
 		    glTexCoord2d(x,y);                              glVertex3f(   (startX)       + curXOffset,          (startY+fontHeight),    (0)   );        //upperleft
 		    glTexCoord2d(x,y+gridSpacing);                  glVertex3f(   (startX)       + curXOffset,          (startY),               (0)   );        //lowerleft
-		    glTexCoord2d(x+gridSpacing,y+gridSpacing);      glVertex3f(   (startX+FontWidth) + curXOffset,      (startY),               (0)   );        //lowerright
-		    glTexCoord2d(x+gridSpacing,y);                  glVertex3f(   (startX+FontWidth) + curXOffset,      (startY+fontHeight),    (0)   );        //upperright
+		    glTexCoord2d(x+gridSpacing,y+gridSpacing);      glVertex3f(   (startX+fontWidth) + curXOffset,      (startY),               (0)   );        //lowerright
+		    glTexCoord2d(x+gridSpacing,y);                  glVertex3f(   (startX+fontWidth) + curXOffset,      (startY+fontHeight),    (0)   );        //upperright
         }
         else
         {
 		    glTexCoord2d(x,y);                              glVertex3f(   (startX)       + curXOffset,          (startY),               (0)   );        //lowerleft
 		    glTexCoord2d(x,y+gridSpacing);                  glVertex3f(   (startX)       + curXOffset,          (startY+fontHeight),    (0)   );        //upperleft
-		    glTexCoord2d(x+gridSpacing,y+gridSpacing);      glVertex3f(   (startX+FontWidth) + curXOffset,      (startY+fontHeight),    (0)   );        //upperright
-		    glTexCoord2d(x+gridSpacing,y);                  glVertex3f(   (startX+FontWidth) + curXOffset,      (startY),               (0)   );        //lowerright
+		    glTexCoord2d(x+gridSpacing,y+gridSpacing);      glVertex3f(   (startX+fontWidth) + curXOffset,      (startY+fontHeight),    (0)   );        //upperright
+		    glTexCoord2d(x+gridSpacing,y);                  glVertex3f(   (startX+fontWidth) + curXOffset,      (startY),               (0)   );        //lowerright
         }
         glEnd();
 
-        curXOffset = curXOffset + FontWidth;
+        curXOffset = curXOffset + fontWidth;
     }
 
 
@@ -1058,9 +1076,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         {
             drawableText words = textQueue[i];
             renderText(words.x,words.y,words.size,words.size,35,words.text,false);
-        }
-
-        textQueue.clear();
+        }        
     }
 
     glPopAttrib();
@@ -1680,6 +1696,8 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
     {
         drawScene_ForPlayer(scene, track, entities, 0, false, true, entities->cars);
     }
+
+    textQueue.clear();
     //drawScene_ForPlayer(scene, entities, 1);        
 }
 
