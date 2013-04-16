@@ -20,8 +20,8 @@ shipsOwned|1|0|0|0|0
 #
 #
 driveName|Ben
-carModel|14
-carTexture|0
+carModel|1
+carTexture|3
 Obs|0
 isAI|0
 batteryLevel|0
@@ -102,7 +102,7 @@ shipsOwned|1|0|0|0|0
 driveName|Charles
 carModel|12
 carTexture|50
-Obs|0
+Obs|2145883647
 isAI|0
 batteryLevel|0
 strafeLevel|0
@@ -116,7 +116,7 @@ wildness|0
 accuracy|0
 pickupBehavior|0
 steeringBehavior|0
-shipsOwned|1|0|0|0|0
+shipsOwned|1|0|1|1|1
 #
 #
 driveName|Lee

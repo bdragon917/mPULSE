@@ -14,6 +14,8 @@ public:
     float getX();
     float getY();
     float getZ();
+    float getHeight();
+    float getWidth();
 
     NxVec3 getCurPos();
 

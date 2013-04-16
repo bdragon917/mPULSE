@@ -106,3 +106,13 @@
     {
         return curPos;
     }
+
+    float DynamicImage::getHeight()
+    {
+        return height;
+    }
+
+    float DynamicImage::getWidth()
+    {
+        return width;
+    }

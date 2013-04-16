@@ -32,6 +32,7 @@ void ShopState::initialize()
 
     //ssi = new ssi???
     ssi.di.clear();
+    ssi.obsCost = 0;
     //ssi.playerName;       //Rendering will use Profile:playerInShop to display this info
     //ssi.playerObs;
 
@@ -47,13 +48,14 @@ void ShopState::initialize()
 
     //texture 42 is mechanic =)
     mechanicGirl = new DynamicImage(-125,400,0,20,20,42,1);   //will probably be overwritten in reset(), so change the values there
-    painterGirl = new DynamicImage(-50,50,0,20,20,43,0);
-    subMenu = new DynamicImage(0,0,0,screen_width, screen_height, 123 , 0);
+    painterGirl = new DynamicImage(-50,50,0,20,20,43,1);
+    subMenu = new DynamicImage(screen_width / 2,0,0,screen_width * 4, screen_height, 123 , 1);
     ssi.di.push_back(subMenu);
 
     soundEngine->playSound(5,(rand() % 5) + 27);    //4 is channel, 7 is index for intro
 
 	enterMechanic();
+    enterPainter();
 }
 
 
@@ -318,15 +320,15 @@ void ShopState::initializePaintJob(int shipModel)
 
 void ShopState::enterMechanic()
 {
-    mechanicGirl->setLocation(-125,600,0);
+    mechanicGirl->setLocation(-175,600,0);
     mechanicGirl->setTargetLocation(200,600,0);
     ssi.di.push_back(mechanicGirl);
 }
 
 void ShopState::enterPainter()
 {
-    painterGirl->setLocation(-385.5f,96,0);
-    painterGirl->setTargetLocation(200.5f,600,0);
+    painterGirl->setLocation(-175,600,0);
+    painterGirl->setTargetLocation(-125,600,0);
     ssi.di.push_back(painterGirl);
 }
 
@@ -508,14 +510,17 @@ void ShopState::rightPressed()
                 {
                 case 0:     //Ship
                     ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex;  
+                    ssi.obsCost = availableShips.at(currentSelectedItem)->price;
 					initializePaintJob(ssi.selectedItemIndex);
 					ssi.newShipTexture=availablePaints[0]->itemIndex;
 					break;
                 case 1:     //upgrades
                     ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
+                    ssi.obsCost = availableUpgrades.at(currentSelectedItem)->price;
 					break;
                 case 2:     //Paint
                     ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;
+                    ssi.obsCost = availablePaints.at(currentSelectedItem)->price;
 					break;
                 }
             }
@@ -543,14 +548,17 @@ void ShopState::leftPressed()
                 {
                 case 0:     //Ship
                     ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex;  
+                    ssi.obsCost = availableShips.at(currentSelectedItem)->price;
 					initializePaintJob(ssi.selectedItemIndex);
 					ssi.newShipTexture=availablePaints[0]->itemIndex;
 					break;
                 case 1:     //upgrades
                     ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
+                    ssi.obsCost = availableUpgrades.at(currentSelectedItem)->price;
 					break;
                 case 2:     //Paint
                     ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;
+                    ssi.obsCost = availablePaints.at(currentSelectedItem)->price;
 					break;
                 }
             }
@@ -563,6 +571,7 @@ void ShopState::selectPressed()
 {
 	if(!inSubmenu)
 	{
+        subMenu->setTargetLocation((renderingEngine->SCREEN_WIDTH / 2),(renderingEngine->SCREEN_HEIGHT / 3),0);    //come down to visible
 		soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
 		switch(currentSelectedCategory)
 		{
@@ -575,6 +584,7 @@ void ShopState::selectPressed()
 			initializePaintJob(ssi.selectedItemIndex);
 			ssi.newShipTexture=availablePaints[0]->itemIndex;
             MAX_ITEM_SELECTED = availableShips.size();
+            soundEngine->playSound(5,(rand() % 4) + 41);    //anything you like?
             break;
 		case 1:
 			printf("Upgrades\n");
@@ -583,10 +593,13 @@ void ShopState::selectPressed()
             currentSelectedItem = 0;
             ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
             MAX_ITEM_SELECTED = availableUpgrades.size();
+            soundEngine->playSound(5,(rand() % 4) + 41);    //anything you like?
 			break;
 		case 2:
 			printf("Paint\n");
 			inSubmenu = true;
+            painterGirl->setTargetLocation(200,600,0); //show
+            mechanicGirl->setTargetLocation(-175,600,0); //Hide
             ssi.selectedItemIndex = 0;
             currentSelectedItem = 0;
             initializePaintJob(gameVariables->playerInShop->data.carModel);
@@ -618,7 +631,7 @@ void ShopState::selectPressed()
 					initializePaintJob(gameVariables->playerInShop->data.carModel);
 					gameVariables->playerInShop->data.carTexture = availablePaints[0]->itemIndex;
 					availableShips[currentSelectedItem]->price = 0;
-                    soundEngine->playSound(5,(rand() % 4) + 41);    //4 is channel, 7 is index for intro
+                    soundEngine->playSound(5,(rand() % 6) + 32);    //installed
 				}
 				else
 				{
@@ -722,14 +735,18 @@ void ShopState::selectPressed()
 
 void ShopState::backPressed()
 {
+    mechanicGirl->setTargetLocation(200,600,0); //show
+    painterGirl->setTargetLocation(-175,600,0); //Hide
+
 	if(!inSubmenu)
 	{
+        soundEngine->playSound(5,(rand() % 3) + 38);    //4 is channel, 7 is index for intro
 		lockControls = true;
 		renderingEngine->startTransition(RenderingEngine::FADE_OUT);
-        soundEngine->playSound(5,(rand() % 3) + 38);    //4 is channel, 7 is index for intro
 	}
 	else
 	{
+        subMenu->setTargetLocation(renderingEngine->SCREEN_WIDTH / 2,0,0);    //come up to hide
 		// Play some sort of cancel noise
 		inSubmenu = false;
 	}
