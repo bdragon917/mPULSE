@@ -195,8 +195,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[117];
-    glGenTextures(117, textureid_P1);
+    textureid_P1 = new GLuint[122];
+    glGenTextures(122, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -351,6 +351,12 @@ void RenderingEngine::initializeTexture()
 
 	bindBMPtoTexture("./Images/checker.bmp", textureid_P1[116]);
 
+    bindBMPtoTexture("./Images/sb/Weltraum.bmp", textureid_P1[116]);
+    bindBMPtoTexture("./Images/sb/WeltraumH.bmp", textureid_P1[117]);
+    bindBMPtoTexture("./Images/sb/WeltraumL.bmp", textureid_P1[118]);
+    bindBMPtoTexture("./Images/sb/WeltraumR.bmp", textureid_P1[119]);
+    bindBMPtoTexture("./Images/sb/WeltraumO.bmp", textureid_P1[120]);
+    bindBMPtoTexture("./Images/sb/WeltraumU.bmp", textureid_P1[121]);
 
 	//"/Images/textureTest.bmp"
 

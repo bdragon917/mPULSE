@@ -208,11 +208,11 @@ void Track::loadTrackInfo(std::string filename)
 
 void Track::parseHead(std::vector<std::string>* newData)
 {
-        if(newData->size() > 1)
+    if(newData->size() > 1)
     {
         if(newData->at(0).compare("MusicIndex:") == 0)
             infoz.music = atoi(newData->at(1).c_str());
-        else if(newData->at(0).compare("SkyBox:") == 0)
+        else if(newData->at(0).compare("Skybox:") == 0)
         {
             if (newData->size() > 6)
             {
