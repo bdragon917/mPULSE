@@ -24,12 +24,8 @@ unsigned Clock::getCurrentTime()
 float Clock::getDeltaTime()
 {	
     float dt = (float)(SDL_GetTicks()-time);
-    if(milliSecPerFrame > dt)//Cap the clock at 60FPS
-    {        
-        SDL_Delay((unsigned)(milliSecPerFrame-dt)); //Wait for the difference
-        dt = milliSecPerFrame;   //Calculate new dt
-    }
-	else if(2.0f*milliSecPerFrame > dt)
+
+	if(2.0f*milliSecPerFrame > dt)
 	{
 		SDL_Delay((unsigned)((2.0f*milliSecPerFrame)-dt)); //Wait for the difference
         dt = 2.0f*milliSecPerFrame;   //Calculate new dt
