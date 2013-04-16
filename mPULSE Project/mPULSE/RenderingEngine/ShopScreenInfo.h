@@ -26,6 +26,8 @@ public:
     int selectedMenuIndex;
     int selectedItemIndex;
 
+    float obsCost;
+
     int newShipTexture;     //Need to tell which texture to use for new models;
 
 

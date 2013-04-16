@@ -3152,6 +3152,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
         aSkyBoxShader->off();
         aShader->on();
+        locShader_Alpha = aShader->getUniLoc("alpha");
 
                     //Draw the rotating Track
         glPushMatrix();
@@ -3180,13 +3181,26 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
         glDisable(GL_DEPTH_TEST);
 
         //Draw Particles
-        Particle* newParticle = new Particle(shipAngle * 0.1f,0.0f,shipAngle * 0.03f + 1.0f);
-        newParticle->setVelocity(NxVec3(0.0f,0.0f,1.5f));
-        newParticle->timeTilDeath = 20;
+        //Particle* newParticle = new Particle(shipAngle * 0.1f,0.0f,shipAngle * 0.03f + 1.0f);
+        Particle* newParticle = new Particle(
+                                            //1.0f,
+                                            //((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
+                                            ((rand() % 100) * 0.01f),
+                                            0.0f,
+                                            shipAngle * 0.03f + 1.0f);
+        newParticle->setVelocity(NxVec3(0,0.0f,1.5f));
+        newParticle->timeTilDeath = rand()%40;
         particles.push_back(newParticle);
-        Particle* newParticle2 = new Particle(shipAngle * -0.1f,0.0f,shipAngle * 0.04f + 1.0f);
-        newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,1.7f));
-        newParticle2->timeTilDeath = 20;
+
+        //Particle* newParticle2 = new Particle(shipAngle * -0.1f,0.0f,shipAngle * 0.04f + 1.0f);
+        Particle* newParticle2 = new Particle(
+                                                //-1.0f,
+                                                //-((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
+                                                ((rand() % 100) * -0.01f),
+                                                0.0f,
+                                                shipAngle * 0.04f + 1.0f);
+        newParticle2->setVelocity(NxVec3(0,0.0f,1.7f));
+        newParticle2->timeTilDeath = rand()%40;
         particles.push_back(newParticle2);
 	    
         /*
@@ -3220,7 +3234,12 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
         //glTranslatef(-particles[x]->getLocation().x,-particles[x]->getLocation().y,-particles[x]->getLocation().z);
         modelManager;
 
+        //20 is the max death til time
+        glUniform1f(locShader_Alpha, ((particles[x]->timeTilDeath / 20) + 0.5f));
+
             drawModel(modelManager.getModel(22),0,0,0,1.0f);
+
+        glUniform1f(locShader_Alpha, 1.000f);
         glPopMatrix();
     }
 
@@ -3294,7 +3313,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
         drawProfileOverlay(psi);
     }
 
-
+    glDisable(GL_TEXTURE_2D);
     
     //Fader
     //float FadeCtrl = 0.0f;
@@ -3916,15 +3935,16 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 
 
 
+
      //Title
-        string title = "Hi! This is shop Mode!";
-        renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
+        //string title = "Hi! This is shop Mode!";
+       // renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
         //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
 
+        string title = FloatToString(gameVariables->playerInShop->data.Obs) + " Obs";
+        renderText(SCREEN_WIDTH - (title.size() * 30), SCREEN_HEIGHT * 0.80f, dec_height*2.0f, 30, 36, FloatToString(gameVariables->playerInShop->data.Obs) + " Obs", true);
 
-        renderText(butWidthOffset-((textWidth)/2), SCREEN_HEIGHT * 0.80f, dec_height*2.0f, 30, 36, FloatToString(gameVariables->playerInShop->data.Obs) + " Obs", true);
-
-        renderText(SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT * 0.80f, dec_height*2.0f, 30, 36, gameVariables->playerInShop->data.driverName, true);
+        renderText(SCREEN_WIDTH - (gameVariables->playerInShop->data.driverName.size() * 30), (SCREEN_HEIGHT * 0.80f)-(dec_height*2.0f), dec_height*2.0f, 30, 36, gameVariables->playerInShop->data.driverName, true);
    
 
 
@@ -3997,7 +4017,11 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 
 
 
-
+         ///*
+         // the texture wraps over at the edges (repeat)
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+        //*/
 
 
     //draw di's here!
@@ -4005,9 +4029,22 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
         {
             DynamicImage* aDynamicImage = ssi.di[di];
             NxVec3 imgPos = aDynamicImage->getCurPos();
-            title = "Hi! This is a Mechanic";
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[aDynamicImage->getTextureIndex()]);
-            drawSquareUVRev(imgPos.x, imgPos.y,0, 200.0f, 300.0f);
+
+            if (di == 0)    //Hack for subMenu
+            {
+                title = "Cost:" + FloatToString(ssi.obsCost) + " obs";
+
+                //renderText(aDynamicImage->getX()-(aDynamicImage->getWidth()/2), (aDynamicImage->getY()-aDynamicImage->getHeight()/2), dec_height*2.0f, 30, 36, title, true);
+                
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[aDynamicImage->getTextureIndex()]);
+                drawSquareUVRev(imgPos.x, imgPos.y,0, 1000, 300.0f);
+                renderText(aDynamicImage->getX()-(title.size()*15), (aDynamicImage->getY()-(60)), dec_height*2.0f, 30, 36, title, true);
+            }
+            else
+            {
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[aDynamicImage->getTextureIndex()]);
+                drawSquareUVRev(imgPos.x, imgPos.y,0, 200.0f, 300.0f);
+            }
             //renderText(imgPos.x, imgPos.y, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
             ssi.di[di]->update();
         }
@@ -4015,7 +4052,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 
 
     //Draw subMenu if needed
-
+         /*
         if (ssi.inSubmenu)
         {
             //draw the submenu
@@ -4035,6 +4072,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 
             }
         }
+        */
 
 
 

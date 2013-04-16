@@ -47,7 +47,8 @@ std::string AI_Names::getAngryName()
             angryPPLSeed = (rand() % 20) + 1;
         }
 
-    retVal = angryName[getIndex];
+    //retVal = angryName[getIndex];
+        retVal = angryName[getIndex];
 
     return retVal; 
 
@@ -65,6 +66,7 @@ std::string AI_Names::getRandomName()
     int getIndex = ((curRandomName + 1) * randPPLSeed * randPPLSeed) % randomName.size();
 
 
+    curRandomName ++;
 
     if (curRandomName >= randomName.size())
     {
@@ -73,7 +75,9 @@ std::string AI_Names::getRandomName()
     }
     
     const char* aVal = randomName[getIndex].c_str();
+    //retVal = randomName[getIndex];
     retVal = randomName[getIndex];
+    
     printf(aVal);
     return retVal;
 }

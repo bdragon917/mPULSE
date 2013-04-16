@@ -116,7 +116,7 @@ wildness|0
 accuracy|0
 pickupBehavior|0
 steeringBehavior|0
-shipsOwned|1|0|0|0|0
+shipsOwned|1|0|1|1|1
 #
 #
 driveName|Lee
