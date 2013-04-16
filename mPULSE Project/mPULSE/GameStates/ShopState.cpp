@@ -40,9 +40,14 @@ void ShopState::initialize()
     ssi.selectedItemIndex = currentSelectedItem;
     //end ssi initialization
 
+    int screen_width = renderingEngine->SCREEN_WIDTH;
+    int screen_height = renderingEngine->SCREEN_HEIGHT;
+
+
     //texture 42 is mechanic =)
     mechanicGirl = new DynamicImage(-125,400,0,20,20,42,1);   //will probably be overwritten in reset(), so change the values there
     painterGirl = new DynamicImage(-50,50,0,20,20,43,0);
+    subMenu = new DynamicImage(0,0,0,screen_width, screen_height, 123 , 0);
 
 	enterMechanic();
 }

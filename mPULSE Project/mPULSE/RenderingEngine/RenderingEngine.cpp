@@ -195,8 +195,8 @@ void RenderingEngine::initializeTexture()
 	unsigned char *data = 0;
 	BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[117];
-    glGenTextures(117, textureid_P1);
+    textureid_P1 = new GLuint[124];
+    glGenTextures(124, textureid_P1);
 
     bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
     bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
@@ -350,6 +350,19 @@ void RenderingEngine::initializeTexture()
     bindBMPtoTexture("./Images/ColorRed.bmp", textureid_P1[115]);
 
 	bindBMPtoTexture("./Images/checker.bmp", textureid_P1[116]);
+
+    //Hack for mainmenu
+    bindBMPtoTexture("./Images/Menu/Main/none.bmp", textureid_P1[117]);
+    bindBMPtoTexture("./Images/Menu/Main/single.bmp", textureid_P1[118]);
+    bindBMPtoTexture("./Images/Menu/Main/versus.bmp", textureid_P1[119]);
+    bindBMPtoTexture("./Images/Menu/Main/story.bmp", textureid_P1[120]);
+    bindBMPtoTexture("./Images/Menu/Main/settings.bmp", textureid_P1[121]);
+    bindBMPtoTexture("./Images/Menu/Main/quit.bmp", textureid_P1[122]);
+
+    //submenu
+    bindBMPtoTexture("./Images/Menu/Shop/Submenu.bmp", textureid_P1[123]);
+    //bindBMPtoTexture("./Images/Menu/Shop/SubmenuL.bmp", textureid_P1[124]);
+    //bindBMPtoTexture("./Images/Menu/Shop/SubmenuR.bmp", textureid_P1[125]);
 
 
 	//"/Images/textureTest.bmp"
@@ -3049,7 +3062,265 @@ int RenderingEngine::drawLoungeScreen(float dt)
 
 int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float dt, ProfileScreenInfo psi)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    int currentSelected = curMenuButton;
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix ();
+	glLoadIdentity ();
+	
+    gluLookAt(0, 0, -2,  // Eye/camera position
+	0 ,0, 0,		// Look-at position 
+	0.0,1.0,0.0); 		// "Up" vector
+	
+	//set view
+	setUpPerpView();
+    //glEnable(GL_LIGHTING);
+    //glDisable(GL_NORMALIZE);
+    //glDisable(GL_TEXTURE);
+	
+    if (aSkyBoxShader != NULL)
+    {
+		glEnable(GL_TEXTURE_2D);
+		aSkyBoxShader->on();
+    }
+
+	//Initialize a new coordinate system
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    //glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1.0f, 1.0f);
+    glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    //clear depth buffer
+    glPushAttrib(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    //declare some common variables
+    const float half_height = SCREEN_HEIGHT / 2.0f;
+    const float half_width = SCREEN_WIDTH / 2.0f;
+
+    const float button_width = SCREEN_WIDTH / 6.0f;     //button width is /3, but also /2 as drawSquare uses half
+    float const textWidth = button_width * 1.4f;
+
+    const float dec_height = SCREEN_HEIGHT / 40.0f;
+    //const float butWidthOffset = half_width + (SCREEN_WIDTH / 96.0f);  //128 64
+    const float butWidthOffset = half_width + (half_width / 2.0f);  //128 64
+    const float butHeightOffset = (SCREEN_HEIGHT / 4.0f);
+
+    const float titleHeightOffset = (SCREEN_HEIGHT / 32.0f);
+    //const float doneHeightOffset = (3.0f * SCREEN_HEIGHT / 4.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+    const float doneHeightOffset = (13.0f * SCREEN_HEIGHT / 16.0f);// + (SCREEN_HEIGHT / 32.0f) ;
+
+    /*
+    //draw transparent blackground
+        glColor4f(0.0f,0.0f,0.0f, 0.5f);
+        drawSquare(half_width, half_height, 0.0f, half_width, half_height);
+    */    
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    //draw background
+
+        //bindBMPtoTexture("./Images/Menu/Main/settings.bmp", textureid_P1[116]);
+    int bgTexture = 117;
+        if (curMenuButton == 0)
+            bgTexture = 118;
+        else if (curMenuButton == 1)
+            bgTexture = 119;
+        else if (curMenuButton == 2)
+            bgTexture = 120;
+        else if (curMenuButton == 3)
+            bgTexture = 121;
+        else if (curMenuButton == 4)
+            bgTexture = 122;
+
+
+
+
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[bgTexture]);
+        glColor4f(0.0f,0.0f,0.0f, 1.0f);
+        drawSquareUVRev(half_width, half_height, 0.0f, half_width, half_height);
+
+
+
+        aSkyBoxShader->off();
+        aShader->on();
+
+                    //Draw the rotating Track
+        glPushMatrix();
+        glClear(GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
+        setUpPerpView();
+		gluLookAt(10, 0, 0,  // Eye/camera position
+	        0 ,0, 0,		// Look-at position 
+	        0.0,1.0,0.0); 		// "Up" vector
+
+
+        if (shipAngle > 45)
+        {shipRotation = -0.1f;}
+        else if (shipAngle < 20)
+        {shipRotation = 0.1f;}
+
+        shipAngle += shipRotation;
+
+
+		glRotatef(shipAngle,0,0,1);
+		//glScalef(0.01f,0.01f,0.01f);
+
+		
+        glPushMatrix();
+        glPushAttrib(GL_DEPTH_TEST);
+        glDisable(GL_DEPTH_TEST);
+
+        //Draw Particles
+        Particle* newParticle = new Particle(shipAngle * 0.1f,0.0f,shipAngle * 0.03f + 1.0f);
+        newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,1.5));
+        newParticle->timeTilDeath = 20;
+        particles.push_back(newParticle);
+        Particle* newParticle2 = new Particle(shipAngle * -0.1f,0.0f,shipAngle * 0.04f + 1.0f);
+        newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,1.7f));
+        newParticle2->timeTilDeath = 20;
+        particles.push_back(newParticle2);
+	    
+
+	    for (int e = 0; e < 50; e++)
+	    {
+		    Particle* newParticle = new Particle(((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX), 0.0f, shipAngle*((float)rand()/(float)RAND_MAX));
+		    newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,1.5));
+		    newParticle->timeTilDeath = (rand()%20);
+		    particles.push_back(newParticle);
+
+		    Particle* newParticle2 = new Particle( -((float)rand()/(float)RAND_MAX),0.0f,shipAngle * ((float)rand()/(float)RAND_MAX));
+		    newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,1.7f));
+		    newParticle2->timeTilDeath = (rand()%20);
+		    particles.push_back(newParticle2);
+	    }
+
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[76]);
+    for (unsigned int x=0;x<particles.size();x++)
+    {
+        glPushMatrix();
+        glScalef(0.1f,0.1f,0.1f);
+        glTranslatef(particles[x]->getLocation().x,particles[x]->getLocation().y,particles[x]->getLocation().z);
+        
+        //glRotatef(75.0f,0.0f,1.0f,0.0f);
+        //glRotatef(shipAngle,0.0f,0.0f,1.0f);
+        //glScalef(0.0725f,0.0725f,0.0725f);
+        //glTranslatef(-particles[x]->getLocation().x,-particles[x]->getLocation().y,-particles[x]->getLocation().z);
+        modelManager;
+
+            drawModel(modelManager.getModel(22),0,0,0,1.0f);
+        glPopMatrix();
+    }
+
+    updateParticles();
+    glPopMatrix();
+
+
+
+
+
+        //draw mothership
+        //Depth buffer to allow the ship to be dfisplayed correctly
+        glEnable(GL_DEPTH_TEST);
+        //glClear(GL_DEPTH_BUFFER_BIT);
+
+        glScalef(0.23f,0.23f,0.23f);
+
+        //draw ship
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[27]);
+        drawModel(modelManager.getModel(7),0,0,0,1.0f);     //hull
+        glBindTexture(GL_TEXTURE_2D, textureid_P1[28]);
+        drawModel(modelManager.getModel(8),0,0,0,1.0f);     //engine
+
+        glDisable(GL_DEPTH_TEST);
+
+        //glEnable(GL_LIGHTING);
+
+        //glPopAttrib();
+    //glPopMatrix();
+
+
+
+
+		glClear(GL_DEPTH_BUFFER_BIT); 
+		glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1.0f, 1.0f);
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix();
+
+        //setUpOrthoView();
+        //glLoadIdentity();
+
+
+        aShader->off();
+
+
+
+
+    //reset to previous state
+    glPopAttrib();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
+     glEnable(GL_LIGHTING);
+
+
+
+
+
+    if (aShader != NULL)
+    {
+        aShader->off();
+    }
+
+
+
+
+
+    
+    //Fader
+    //float FadeCtrl = 0.0f;
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
+    glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
+    	glBegin(GL_QUADS);
+            glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (+half_height),    (-0.02f)   );
+		    glVertex3f(   (+half_width),    (-half_height),    (-0.02f)   );
+		    glVertex3f(   (-half_width),    (-half_height),    (-0.02f)   );
+		glEnd();
+
+        if (FadeCtrl >= 1.0f)
+            {
+				startFadeIn();
+                //FadeCtrl=0.0f;fadeMode=0;
+				return 1;
+            }
+
+
+
+
+
+
+            
+    if (aShader != NULL)
+    {
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
+	glPopMatrix();
+
+    return 0;
+    /*
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glPushMatrix ();
 	glLoadIdentity ();
@@ -3061,7 +3332,38 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 	0.0,1.0,0.0); 		// "Up" vector
 	
 	//set view
-	setUpPerpView();
+    //Custom Perp hack
+		glMatrixMode (GL_PROJECTION);
+	glLoadIdentity ();
+
+	int w = 1048;
+	int h = 960;
+
+	//int w = 640;
+	//int h = 480;
+
+	// Set drawing to take up the entire window
+	glViewport (0, 0, w, h);
+
+	if (w > h) {
+		// In this case the w/h ratio is > 1
+		    float ratio = (float)w/(float)h;
+			//gluPerspective(60.0, ratio, 0.01, 800.0);
+			//gluPerspective(60.0, ratio, 1.0f, 10000.0f);
+            setPerspective( 60.0, ratio, 1.0f, 10000.0f, 1.0f, 1.0f );
+			//glOrtho (-ratio, ratio, -1, 1, -10, 10);
+	}
+	else {
+		// In this case the h/w ratio is > 1
+		    float ratio = (float)h/(float)w;
+			//gluPerspective(60.0, 1.0/ratio, 0.01, 800.0);
+			//gluPerspective(60.0, ratio, 1.0/ratio, 10000.0f);
+            setPerspective( 60.0, ratio, 1.0f, 10000.0f, 1.0f, 1.0f );
+			//glOrtho (-ratio, ratio, -1, 1, -10, 10);
+	}
+
+	//Switch back to modelview matrix
+	glMatrixMode (GL_MODELVIEW);
 
     //glEnable(GL_LIGHTING);
     //glDisable(GL_NORMALIZE);
@@ -3078,7 +3380,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     //Draw Background
     glColor4f(1.0f,1.0f,1.0f, 1.0f);
     float half_width = 1.0f * 1.54f;     //1.5f is compensation for the perpective mode
-    float half_height = ((float)SCREEN_HEIGHT / (float)SCREEN_WIDTH) * 1.54f;
+    float half_height = ((float)h / (float)w) * 1.54f;
     glBindTexture(GL_TEXTURE_2D, textureid_P1[8]);
     drawSquare(0, 0, 0.01f, half_width, half_height);
     
@@ -3122,7 +3424,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     
 
     aSkyBoxShader->off();
-    aHUDShader->on();
+    aShader->on();
         //if (testRTShader != NULL)
          //{
          //   glEnable(GL_TEXTURE_2D);
@@ -3166,7 +3468,6 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     //glLoadIdentity();
     //glOrtho(-1, 1, -1, 1, -10.0f, 1000.0f);
     //setUpPerpView();
-	/*
     Particle* newParticle = new Particle(shipAngle * 0.1f,0.0f,shipAngle * 0.03f + 1.0f);
     newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,1.5));
     newParticle->timeTilDeath = 20;
@@ -3175,22 +3476,8 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,1.7f));
     newParticle2->timeTilDeath = 20;
     particles.push_back(newParticle2);
-	*/
 
-	for (int e = 0; e < 100; e++)
-	{
-		Particle* newParticle = new Particle(((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX), 0.0f, shipAngle*((float)rand()/(float)RAND_MAX));
-		newParticle->setVelocity(NxVec3(0.0f,shipAngle * 0.001f,1.5));
-		newParticle->timeTilDeath = (rand()%20);
-		particles.push_back(newParticle);
-
-		Particle* newParticle2 = new Particle( -((float)rand()/(float)RAND_MAX),0.0f,shipAngle * ((float)rand()/(float)RAND_MAX));
-		newParticle2->setVelocity(NxVec3(0.0f,(shipAngle * -0.01f)+0.2f,1.7f));
-		newParticle2->timeTilDeath = (rand()%20);
-		particles.push_back(newParticle2);
-	}
-
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[76]);
+    glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
     for (unsigned int x=0;x<particles.size();x++)
     {
         glPushMatrix();
@@ -3203,7 +3490,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
         //glTranslatef(-particles[x]->getLocation().x,-particles[x]->getLocation().y,-particles[x]->getLocation().z);
         modelManager;
 
-            drawModel(modelManager.getModel(22),0,0,0,1.0f);
+            drawModel(modelManager.getModel(0),0,0,0,1.0f);
         glPopMatrix();
     }
 
@@ -3222,8 +3509,8 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
     
 
-    aHUDShader->off();
-    aShader->on();
+    
+
     /*
     glTranslatef(0,-newY,5.0f);
     glRotatef(75.0f,0.0f,1.0f,0.0f);
@@ -3231,6 +3518,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
     glScalef(0.0925f,0.0925f,0.0925f);
     glTranslatef(0,newY,-5.0f);
     */
+/*
 
     //Depth buffer to allow the ship to be dfisplayed correctly
     glEnable(GL_DEPTH_TEST);
@@ -3278,7 +3566,6 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
     //Fader
     //float FadeCtrl = 0.0f;
-    glBindTexture(GL_TEXTURE_2D, textureid_P1[51]); //black texture for hack
     glColor4f(0.0f,0.0f,0.0f, updateFade(dt));
     glBegin(GL_QUADS);
         glVertex3f(   (-half_width),    (+half_height),    (-0.02f)   );
@@ -3311,6 +3598,7 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 	glPopMatrix();
 
     return 0;
+    */
 }
 
 

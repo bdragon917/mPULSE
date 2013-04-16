@@ -46,6 +46,7 @@ private:
     ShopScreenInfo ssi;
     DynamicImage* mechanicGirl;
     DynamicImage* painterGirl;
+    DynamicImage* subMenu;
 
     bool lockControls;
     bool goBack;

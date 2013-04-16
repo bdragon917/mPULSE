@@ -64,12 +64,11 @@ bool StageSelectState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             {
             SDLKey keyPressed = KeyboardMouseEvents.key.keysym.sym;
 
-            if ((keyPressed == SDLK_LEFT) || (keyPressed == SDLK_a))
+            if ((keyPressed == SDLK_LEFT) || (keyPressed == SDLK_a) || (keyPressed == SDLK_UP))
             {
                 keySelectLeft();
-                
             }
-            else if ((keyPressed == SDLK_RIGHT) || (keyPressed == SDLK_d))
+            else if ((keyPressed == SDLK_RIGHT) || (keyPressed == SDLK_d) || (keyPressed == SDLK_DOWN))
             {
                 keySelectRight();
             }

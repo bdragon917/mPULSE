@@ -278,7 +278,8 @@ void SettingState::reinitializeWindow()
     switch (gameVariables->curResolution)
     {
         case gameVariables->STANDARD:
-            xResolution = 640; yResolution = 480;renderingEngine->ChangeResolution(640, 480);break;
+            //xResolution = 640; yResolution = 480;renderingEngine->ChangeResolution(640, 480);break;
+            xResolution = 1280; yResolution = 960;renderingEngine->ChangeResolution(1280, 960);break;
         case gameVariables->LAPTOP:
             xResolution = 1600; yResolution = 900;renderingEngine->ChangeResolution(1600, 900);break;
         case gameVariables->GAMELAB:
