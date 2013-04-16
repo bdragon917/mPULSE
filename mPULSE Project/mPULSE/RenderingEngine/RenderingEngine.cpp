@@ -4242,7 +4242,10 @@ int RenderingEngine::drawResultScreen(float dt)
 
 
 
-    glDisable(GL_TEXTURE_2D);
+    if (aShader != NULL)
+    {
+        aShader->off();
+    }
 
 
     

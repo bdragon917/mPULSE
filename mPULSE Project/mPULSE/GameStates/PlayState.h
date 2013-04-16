@@ -66,6 +66,7 @@ private:
     bool paused;
 
     bool CHEAT_InfPowUp;
+    bool CHEAT_InfBoost;
 
     bool showConsole;
     bool rbPressed;

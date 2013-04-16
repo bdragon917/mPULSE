@@ -24,6 +24,7 @@ void PlayState::resetAll()
     rbPressed = false;
 
     CHEAT_InfPowUp = false;
+    CHEAT_InfBoost = false;
 
     gameVariables->resetRace();     //Clears victory flags
     gameVariables->finishTime = NULL;
@@ -758,6 +759,11 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
                     CHEAT_InfPowUp = true;
                     renderingEngine->aConsole.propragateMsg("Char Cheat ENABLED!");
                 }
+                if (renderingEngine->aConsole.consoleString == "powerup")
+                {
+                    CHEAT_InfBoost = true;
+                    renderingEngine->aConsole.consoleString == "p-p-p-p-p-POWER UP!";
+                }
 
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")
@@ -1138,6 +1144,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                     else if(type == Entity::BOOST)
                     {
                         car->boost();
+
+                        if (CHEAT_InfBoost)
+                        {car->givePickup(Entity::BOOST);};
                     }
                 }
         
