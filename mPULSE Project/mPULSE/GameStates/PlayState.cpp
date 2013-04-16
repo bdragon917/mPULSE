@@ -330,7 +330,6 @@ void PlayState::update(float dt)
                 soundEngine->playSound(4, 8);
 
             renderingEngine->drawText(renderingEngine->FloatToString((timeBeforeRaceStarts - (curTime - initialTime) + 1)),-0.1,0,0.2);
-
             lastSecond = curTime;
         }
     }

@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
         
 		game.update();  //physics simulations
 		game.render();  //openGL calls  
+
         if(gameRunning)
             gameRunning = !game.quit; //Check if game should quit
         //Display to screen
