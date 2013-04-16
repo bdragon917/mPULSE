@@ -57,7 +57,8 @@ public:
     PhysicsEngine();
 
     NxVec3 PhysicsEngine::getNewSpawnPoint();
-
+    void generateSpawnPoints(Waypoint* wp);
+    void updateSpawnPoints(Waypoint* wp,vector<Entity*>* cars,vector<Entity*>* AIcars);
 	static PhysicsEngine* getInstance();
 	void sceneSetup();
     void step(float deltaTime);//float dt, Physics* physData);

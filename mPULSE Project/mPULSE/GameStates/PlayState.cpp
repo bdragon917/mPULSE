@@ -7,7 +7,7 @@ PlayState::PlayState()
 }
 
 void PlayState::resetAll()
-{
+{    
     raceStartTime = 0;
     pauseTime = 0; 
     maxPauseTime = 300;
@@ -197,7 +197,7 @@ void PlayState::resetAll()
                 track->setEntity(aTrack);
 	            physicsEngine->createWaypoints(track->getWaypoints());
     }
-
+    physicsEngine->updateSpawnPoints(gameVariables->theSelectedTrack->getFirst(),&entities.cars,&entities.AIcars);
     /*
     switch (gameVariables->selectedTrack)
     {
@@ -273,7 +273,6 @@ void PlayState::resetAll()
         CustomData* customData = new CustomData(CustomData::CAR,-1,0,track->getFirst());
         entities.cars.at(a)->setCustomData(customData);
     }
-
     //*/
 
     physicsEngine->createBoxes(-103.811f, 0.403f, -292.283f, 5, 2.5f, &entities.Obstacles);

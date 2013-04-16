@@ -16,7 +16,7 @@ void GameVariables::initialize()
     curResolution = LAPTOP;
 	finishTime = NULL;
     numLaps = 3;
-    numberOfAIs = 6;
+    numberOfAIs = 25;
     selectedTrack = 0;
     loadedTracks = new Tracks("tracks.txt");
     isFullScreen = false;
