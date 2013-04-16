@@ -2,6 +2,7 @@
 
 Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
 {
+    test=0;
     finishTime = 0;
     rank = 0;
     alive = true;
@@ -121,6 +122,8 @@ void Entity::applyBoost()
 
 void Entity::update()
 {
+    if(shunting && clock.getCurrentTime() - shuntStartTime > maxShuntTime)
+        deshunt();
     if(boosting)        
         applyBoost();
     if(batteryCharging)
@@ -328,7 +331,16 @@ void Entity::deshunt()
     steering = true;
     shunting = false;
 
-    for(unsigned i = 0;i<getPassiveWheels()->size();i++)
+    unsigned size = getDriveWheels()->size();
+    for(unsigned i = 0;i<size;i++)
+        getDriveWheels()->at(i)->setSteerAngle(0);
+
+    size = getSteerWheels()->size();
+    for(unsigned i = 0;i<size;i++)
+        getSteerWheels()->at(i)->setSteerAngle(0);
+
+    size = getPassiveWheels()->size();
+    for(unsigned i = 0;i<size;i++)
         getPassiveWheels()->at(i)->setSteerAngle(0);
 }
 
@@ -391,9 +403,6 @@ float Entity::convertVel(float vel)
 
 void Entity::setSteeringAngle(float percent)
 {
-    if(shunting && clock.getCurrentTime() - shuntStartTime > maxShuntTime)
-        deshunt();
-
     if(steering)
     {
         float maxDeltaAngle = 0;
