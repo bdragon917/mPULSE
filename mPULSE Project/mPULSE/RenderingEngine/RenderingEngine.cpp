@@ -1076,9 +1076,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         {
             drawableText words = textQueue[i];
             renderText(words.x,words.y,words.size,words.size,35,words.text,false);
-        }
-
-        textQueue.clear();
+        }        
     }
 
     glPopAttrib();
@@ -1698,6 +1696,8 @@ void RenderingEngine::drawScene(NxScene* scene,Track* track, Entities* entities)
     {
         drawScene_ForPlayer(scene, track, entities, 0, false, true, entities->cars);
     }
+
+    textQueue.clear();
     //drawScene_ForPlayer(scene, entities, 1);        
 }
 
@@ -4260,7 +4260,10 @@ int RenderingEngine::drawResultScreen(float dt)
 
 
 
-    glDisable(GL_TEXTURE_2D);
+    if (aShader != NULL)
+    {
+        aShader->off();
+    }
 
 
     

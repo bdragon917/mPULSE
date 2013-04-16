@@ -35,6 +35,8 @@ AI_Names::AI_Names(void)
 
 std::string AI_Names::getAngryName()
 {
+    std::string retVal;
+
         //Using a custom hash function to randomize names
         int getIndex = ((curAngryName + 1) * angryPPLSeed * angryPPLSeed) % angryName.size();
         curAngryName++;
@@ -45,13 +47,17 @@ std::string AI_Names::getAngryName()
             angryPPLSeed = (rand() % 20) + 1;
         }
 
-        return angryName[curAngryName];
+    retVal = angryName[getIndex];
+
+    return retVal; 
 
 }
 
 
 std::string AI_Names::getRandomName()
 {
+    std::string retVal;
+
     //Using a custom hash function to randomize names
     int getIndex = ((curRandomName + 1) * randPPLSeed * randPPLSeed) % randomName.size();
 
@@ -63,7 +69,8 @@ std::string AI_Names::getRandomName()
         randPPLSeed = (rand() % 20) + 1;
     }
     
-    return randomName[curRandomName];
+    retVal = randomName[getIndex];
+    return retVal;
 }
 
 AI_Names* AI_Names::getInstance()
