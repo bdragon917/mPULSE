@@ -311,6 +311,9 @@ void PlayState::resetAll()
     initialTime = time.getCurrentTime()/1000;
     timeBeforeRaceStarts = 5;
     countdownTime = 2;
+
+    renderingEngine->startModelPos = gameVariables->theSelectedTrack->getFirst()->pos;
+//    renderingEngine->startModelOri = gameVariables->theSelectedTrack->getFirst()->ori;
 }
 
 void PlayState::update(float dt)

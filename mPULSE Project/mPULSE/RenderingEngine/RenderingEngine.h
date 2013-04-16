@@ -153,7 +153,8 @@ public:
     bool debugCam;
 
     float debugFloat;
-
+    NxMat34 startModelOri;
+    NxVec3 startModelPos;
 private:
     
     struct drawableText {

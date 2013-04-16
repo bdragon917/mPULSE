@@ -54,7 +54,8 @@ public:
     void calculateRankings();
     std::vector<Entity*>* getPlayersOnLap(int lap);
     void sortPlayersByWaypoint(std::vector<Entity*>* players);
-
+    NxMat33 ori;
+    NxVec3 pos;
 
 private:
 
