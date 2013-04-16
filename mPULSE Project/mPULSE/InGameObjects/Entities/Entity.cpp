@@ -2,6 +2,8 @@
 
 Entity::Entity(int tmpTimeToLive, NxActor* a, ObjModel* tmpModel)
 {
+	gameVariables = GameVariables::getInstance();
+
     test=0;
     finishTime = 0;
     rank = 0;
@@ -240,40 +242,43 @@ void Entity::shuntRight()
     NxWheelContactData nxwcd; 
     driveWheels[0]->getContact(nxwcd); //get contact data
 
-    //Check if already shunting or if off the ground
-    if(!shunting && (driveWheels[0]->getContact(nxwcd) != NULL) && (clock.getCurrentTime() - shuntStartTime > shuntReloadTime))
-    {
-        shuntStartTime = clock.getCurrentTime();
-        shunting=true;
-        steering = false;
+	if(gameVariables->getPlayerProfile(playerNum)->data.strafeLevel != 0)
+	{
+		//Check if already shunting or if off the ground
+		if(!shunting && (driveWheels[0]->getContact(nxwcd) != NULL) && (clock.getCurrentTime() - shuntStartTime > shuntReloadTime))
+		{
+			shuntStartTime = clock.getCurrentTime();
+			shunting=true;
+			steering = false;
 
-        NxReal angle = 0;
-        NxVec3 newDir(0,0,0);
-        NxVec3 shuntValue = actor->getGlobalOrientation()*NxVec3(0,0,shuntPower);
-        NxVec3 carDir;
+			NxReal angle = 0;
+			NxVec3 newDir(0,0,0);
+			NxVec3 shuntValue = actor->getGlobalOrientation()*NxVec3(0,0,shuntPower);
+			NxVec3 carDir;
 
-        if(actor->getLinearVelocity().magnitude() < 1)
-            carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
-        else
-            carDir = actor->getLinearVelocity();
+			if(actor->getLinearVelocity().magnitude() < 1)
+				carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
+			else
+				carDir = actor->getLinearVelocity();
 
-        newDir.add(carDir,shuntValue);
-        angle = -acos(newDir.dot(carDir) / (newDir.magnitude()*carDir.magnitude()));
+			newDir.add(carDir,shuntValue);
+			angle = -acos(newDir.dot(carDir) / (newDir.magnitude()*carDir.magnitude()));
         
-        unsigned size = getDriveWheels()->size();
-        for(unsigned i = 0;i<size;i++)
-            getDriveWheels()->at(i)->setSteerAngle(angle);
+			unsigned size = getDriveWheels()->size();
+			for(unsigned i = 0;i<size;i++)
+				getDriveWheels()->at(i)->setSteerAngle(angle);
 
-        size = getSteerWheels()->size();
-        for(unsigned i = 0;i<size;i++)
-            getSteerWheels()->at(i)->setSteerAngle(angle);
+			size = getSteerWheels()->size();
+			for(unsigned i = 0;i<size;i++)
+				getSteerWheels()->at(i)->setSteerAngle(angle);
 
-        size = getPassiveWheels()->size();
-        for(unsigned i = 0;i<size;i++)
-            getPassiveWheels()->at(i)->setSteerAngle(angle);
+			size = getPassiveWheels()->size();
+			for(unsigned i = 0;i<size;i++)
+				getPassiveWheels()->at(i)->setSteerAngle(angle);
 
-        actor->setLinearVelocity(newDir);
-    }    
+			actor->setLinearVelocity(newDir);
+		}   
+	}
 }
 
 void Entity::shuntLeft()
@@ -281,40 +286,43 @@ void Entity::shuntLeft()
     NxWheelContactData nxwcd; 
     driveWheels[0]->getContact(nxwcd); //get contact data
 
-    //Check if already shunting or if off the ground
-    if(!shunting && (driveWheels[0]->getContact(nxwcd) != NULL) && (clock.getCurrentTime() - shuntStartTime > shuntReloadTime))
-    {
-        shuntStartTime = clock.getCurrentTime();
-        shunting=true;
-        steering = false;
+	if(gameVariables->getPlayerProfile(playerNum)->data.strafeLevel != 0)
+	{
+		//Check if already shunting or if off the ground
+		if(!shunting && (driveWheels[0]->getContact(nxwcd) != NULL) && (clock.getCurrentTime() - shuntStartTime > shuntReloadTime))
+		{
+			shuntStartTime = clock.getCurrentTime();
+			shunting=true;
+			steering = false;
 
-        NxReal angle = 0;
-        NxVec3 newDir(0,0,0);
-        NxVec3 shuntValue = actor->getGlobalOrientation()*NxVec3(0,0,-shuntPower);
-        NxVec3 carDir;
+			NxReal angle = 0;
+			NxVec3 newDir(0,0,0);
+			NxVec3 shuntValue = actor->getGlobalOrientation()*NxVec3(0,0,-shuntPower);
+			NxVec3 carDir;
 
-        if(actor->getLinearVelocity().magnitude() < 1)
-            carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
-        else
-            carDir = actor->getLinearVelocity();
+			if(actor->getLinearVelocity().magnitude() < 1)
+				carDir = actor->getGlobalOrientation()*NxVec3(1,0,0);
+			else
+				carDir = actor->getLinearVelocity();
 
-        newDir.add(carDir,shuntValue);
-        angle = acos(newDir.dot(carDir) / (newDir.magnitude()*carDir.magnitude()));
+			newDir.add(carDir,shuntValue);
+			angle = acos(newDir.dot(carDir) / (newDir.magnitude()*carDir.magnitude()));
         
-        unsigned size = getDriveWheels()->size();
-        for(unsigned i = 0;i<size;i++)
-            getDriveWheels()->at(i)->setSteerAngle(angle);
+			unsigned size = getDriveWheels()->size();
+			for(unsigned i = 0;i<size;i++)
+				getDriveWheels()->at(i)->setSteerAngle(angle);
 
-        size = getSteerWheels()->size();
-        for(unsigned i = 0;i<size;i++)
-            getSteerWheels()->at(i)->setSteerAngle(angle);
+			size = getSteerWheels()->size();
+			for(unsigned i = 0;i<size;i++)
+				getSteerWheels()->at(i)->setSteerAngle(angle);
 
-        size = getPassiveWheels()->size();
-        for(unsigned i = 0;i<size;i++)
-            getPassiveWheels()->at(i)->setSteerAngle(angle);
+			size = getPassiveWheels()->size();
+			for(unsigned i = 0;i<size;i++)
+				getPassiveWheels()->at(i)->setSteerAngle(angle);
 
-        actor->setLinearVelocity(newDir);
-    }
+			actor->setLinearVelocity(newDir);
+		}
+	}
 }
 
 void Entity::deshunt()
@@ -450,6 +458,17 @@ void Entity::missleCash()
 	obs = obs + 500;
 }
 
+void Entity::rewardObs()
+{
+	if(rank < 5) {
+		gameVariables->getPlayerProfile(playerNum)->data.Obs = (obs + (12000 / rank));
+	}
+	else
+	{
+		gameVariables->getPlayerProfile(playerNum)->data.Obs = obs;
+	}
+}
+
 void Entity::collide(Entity* e)
 {
     CustomData* cd = (CustomData*) e->getActor()->userData;
@@ -502,26 +521,32 @@ bool Entity::getBatteryCharged()
 
 void Entity::chargeBattery()
 {
-	if(!batteryCharged && !shunting && !batteryCharging)
+	if(gameVariables->getPlayerProfile(playerNum)->data.batteryLevel != 0)
 	{
-        chargeStartTime = clock.getCurrentTime();
-        batteryCharging = true;
+		if(!batteryCharged && !shunting && !batteryCharging)
+		{
+			chargeStartTime = clock.getCurrentTime();
+			batteryCharging = true;
 
-		NxVec3 lin_vel = actor->getLinearVelocity();
-		NxReal speed = lin_vel.magnitude();
-        chargeAmount = speed/2.0f;
-        charge = chargeAmount;
+			NxVec3 lin_vel = actor->getLinearVelocity();
+			NxReal speed = lin_vel.magnitude();
+			chargeAmount = speed/2.0f;
+			charge = chargeAmount;
+		}
 	}
 }
 
 void Entity::dischargeBattery()
 {
-	if(batteryCharged && !shunting && !batteryCharging && !batteryDischarging)
-	{                
-        dischargeStartTime = clock.getCurrentTime();
-        batteryDischarging = true; 
-        chargeAmount = charge;
-        charge = 0;
+	if(gameVariables->getPlayerProfile(playerNum)->data.batteryLevel != 0)
+	{
+		if(batteryCharged && !shunting && !batteryCharging && !batteryDischarging)
+		{                
+			dischargeStartTime = clock.getCurrentTime();
+			batteryDischarging = true; 
+			chargeAmount = charge;
+			charge = 0;
+		}
 	}
 }
 

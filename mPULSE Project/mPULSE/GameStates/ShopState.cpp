@@ -73,7 +73,7 @@ void ShopState::initializeInventory()
 
     newItem = new shopItem;
         newItem->itemIndex = 11;      //Claymore
-        newItem->price = ((gameVariables->playerInShop->data.shipsOwned[1]) ? 0:100000);
+        newItem->price = ((gameVariables->playerInShop->data.shipsOwned[1]) ? 0:60000);
         availableShips.push_back(newItem);
 
     newItem = new shopItem;
@@ -83,12 +83,12 @@ void ShopState::initializeInventory()
 
     newItem = new shopItem;
         newItem->itemIndex = 12;      //Nogard
-        newItem->price = ((gameVariables->playerInShop->data.shipsOwned[3]==1) ? 0:500000);
+        newItem->price = ((gameVariables->playerInShop->data.shipsOwned[3]==1) ? 0:150000);
         availableShips.push_back(newItem);
 
     newItem = new shopItem;
         newItem->itemIndex = 15;      //MiniMothership
-        newItem->price = ((gameVariables->playerInShop->data.shipsOwned[4]==1) ? 0:1000000);
+        newItem->price = ((gameVariables->playerInShop->data.shipsOwned[4]==1) ? 0:200000);
         availableShips.push_back(newItem);
 
 
@@ -713,7 +713,18 @@ void ShopState::selectPressed()
 			}
 			break;
 		case 2:
-			printf("Buy selected Paint\n");
+			if(gameVariables->playerInShop->data.Obs >=  availablePaints[currentSelectedItem]->price)
+			{
+				printf("paint purchased\n");
+				gameVariables->playerInShop->data.Obs -= availablePaints[currentSelectedItem]->price;
+				gameVariables->playerInShop->data.carTexture = availablePaints[currentSelectedItem]->itemIndex;
+                soundEngine->playSound(5,(rand() % 4) + 41);    //4 is channel, 7 is index for intro
+			}
+			else
+			{
+				// Play cannot afford sound
+				printf("Cannot afford ship\n");
+			}
 			break;
 		}
 	}

@@ -41,6 +41,7 @@ void PlayState::resetAll()
     {
         Entity* playerCar = new Entity();
         playerCar->rankingName = gameVariables->getPlayerProfile(i)->data.driverName;
+		playerCar->playerNum = i;
         playerCar->aAI = new AI();
         rankings->push_back(playerCar);
         entities.cars.push_back(playerCar);
@@ -362,6 +363,7 @@ void PlayState::update(float dt)
         {
             entities.cars[playa]->finishTime = time.getDeltaTime(raceStartTime);
             gameVariables->becomeFinished(playa);
+			entities.cars[playa]->rewardObs();
             entities.cars[playa]->aCam->setMode(6);
         }
 
