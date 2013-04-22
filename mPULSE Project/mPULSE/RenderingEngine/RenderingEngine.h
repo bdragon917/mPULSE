@@ -127,6 +127,9 @@ public:
     bool showScene;
     bool debugCamera;
 
+    bool showMiniMap;
+    bool showAsteroids;
+
     //Texture Stuff
     GLuint* textureid_P1;
 
@@ -237,6 +240,7 @@ private:
     //used to control the main texture alpha
     GLint locShader_Alpha;
     GLint locShader_DiscardBlue;
+    GLint locShader_sensentiveOffset;
 
 	//Transition Stuff
     //Used for Fade In and Out

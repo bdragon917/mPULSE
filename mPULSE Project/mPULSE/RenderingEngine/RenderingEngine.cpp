@@ -954,102 +954,123 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             glTexCoord2f(displaceHundred, 0.0f);glVertex2f(0.75f, -0.90);
         glEnd();
 
+
+
+
+
+
+
+
+
+
+
+        float posYPlace = 0.8f;    //position of Place
+        float posYLap = 0.7f;       //position of Lap
+
         //Draw the minimap
         float xOffset = 0.9;
         float yOffset = 0.65;
-
-        //BG
-        if (locHUDShader_Alpha != -1)
-                    {glUniform1f(locHUDShader_Alpha, -0.333f);}
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[72]);
-       // drawSquareUVRev(0.720f,0.6,0,0.295f,-0.3f);     //0.7m 0.575
-        if (locHUDShader_Alpha != -1)
-                    {glUniform1f(locHUDShader_Alpha, 0.0f);}
-
-        //Map
-        glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
-       // drawSquareUVRev(xOffset,yOffset,0,0.5f,0.5f);
-
-
-
-        float x = 0;
-        float z = 0;
-
-        for(unsigned i=0;i<entities->AIcars.size();i++)
+        if (showMiniMap)
         {
-            x = entities->AIcars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
-            z = entities->AIcars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
+            posYPlace = 0.2f;    //position of Place
+            posYLap =   0.1f;       //position of Lap
 
-            //Draw a direction Indicator
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[70]);
+            //BG
+            if (locHUDShader_Alpha != -1)
+                        {glUniform1f(locHUDShader_Alpha, -0.333f);}
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[72]);
+            drawSquareUVRev(0.720f,0.6,0,0.295f,-0.3f);     //0.7m 0.575
+            if (locHUDShader_Alpha != -1)
+                        {glUniform1f(locHUDShader_Alpha, 0.0f);}
 
-            glPushMatrix();
+            //Map
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
+            drawSquareUVRev(xOffset,yOffset,0,0.5f,0.5f);
 
-            NxVec3 vA = entities->AIcars.at(i)->getActor()->getGlobalOrientation() * NxVec3(0,0,1);//entities->cars.at(i)->getActor()->getLinearVelocity();
-            vA.y = 0;
-            vA.normalize();
-            NxVec3 vB = NxVec3(0,0,1);
 
-            float cosAngle = vA.dot(vB);
 
-            float angle = acos(cosAngle) * (180.0f / 3.14159265f);
-            if (vA.x > 0) {angle = 180 + (180-angle);}
+            float x = 0;
+            float z = 0;
 
-            glTranslatef((xOffset+x),(yOffset+0.05f-z),0);
-            glRotatef(-angle,0,0,1);
-            glRotatef(-90,0,0,1);
-            glTranslatef(-(xOffset+x),-(yOffset+0.05f-z),0);
+            for(unsigned i=0;i<entities->AIcars.size();i++)
+            {
+                x = entities->AIcars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
+                z = entities->AIcars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
 
-           // drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.02f,-0.03f);
-            debugFloat = debugFloat + 1;
-            glPopMatrix();
+                //Draw a direction Indicator
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[70]);
 
-            //Draw the Label
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[67]);     //display a COM symbol for COM drivers
-           // drawSquareUVRev(xOffset+x,yOffset-z,0,0.03f,-0.03f);
-        }
+                glPushMatrix();
+
+                NxVec3 vA = entities->AIcars.at(i)->getActor()->getGlobalOrientation() * NxVec3(0,0,1);//entities->cars.at(i)->getActor()->getLinearVelocity();
+                vA.y = 0;
+                vA.normalize();
+                NxVec3 vB = NxVec3(0,0,1);
+
+                float cosAngle = vA.dot(vB);
+
+                float angle = acos(cosAngle) * (180.0f / 3.14159265f);
+                if (vA.x > 0) {angle = 180 + (180-angle);}
+
+                glTranslatef((xOffset+x),(yOffset+0.05f-z),0);
+                glRotatef(-angle,0,0,1);
+                glRotatef(-90,0,0,1);
+                glTranslatef(-(xOffset+x),-(yOffset+0.05f-z),0);
+
+                drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.02f,-0.03f);
+                debugFloat = debugFloat + 1;
+                glPopMatrix();
+
+                //Draw the Label
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[67]);     //display a COM symbol for COM drivers
+                drawSquareUVRev(xOffset+x,yOffset-z,0,0.03f,-0.03f);
+            }
         
-        for(unsigned i=0;i<entities->cars.size();i++)
-        {
+            for(unsigned i=0;i<entities->cars.size();i++)
+            {
             
-            x = entities->cars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
-            z = entities->cars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
+                x = entities->cars.at(i)->getActor()->getGlobalPosition().x/3000.0f;
+                z = entities->cars.at(i)->getActor()->getGlobalPosition().z/2700.0f;
             
-            //Draw a direction Indicator
-            //Use this texture: 69
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[69]);
+                //Draw a direction Indicator
+                //Use this texture: 69
+                glBindTexture(GL_TEXTURE_2D, textureid_P1[69]);
 
-            glPushMatrix();
+                glPushMatrix();
 
-            NxVec3 vA = entities->cars.at(i)->getActor()->getGlobalOrientation() * NxVec3(0,0,1);//entities->cars.at(i)->getActor()->getLinearVelocity();
-            vA.y = 0;
-            vA.normalize();
-            NxVec3 vB = NxVec3(0,0,1);
+                NxVec3 vA = entities->cars.at(i)->getActor()->getGlobalOrientation() * NxVec3(0,0,1);//entities->cars.at(i)->getActor()->getLinearVelocity();
+                vA.y = 0;
+                vA.normalize();
+                NxVec3 vB = NxVec3(0,0,1);
 
-            float cosAngle = vA.dot(vB);
+                float cosAngle = vA.dot(vB);
 
-            float angle = acos(cosAngle) * (180.0f / 3.14159265f);
-            if (vA.x > 0) {angle = 180 + (180-angle);}
+                float angle = acos(cosAngle) * (180.0f / 3.14159265f);
+                if (vA.x > 0) {angle = 180 + (180-angle);}
 
-            glTranslatef((xOffset+x),(yOffset+0.05f-z),0);
-            glRotatef(-angle,0,0,1);
-            glRotatef(-90,0,0,1);
-            glTranslatef(-(xOffset+x),-(yOffset+0.05f-z),0);
+                glTranslatef((xOffset+x),(yOffset+0.05f-z),0);
+                glRotatef(-angle,0,0,1);
+                glRotatef(-90,0,0,1);
+                glTranslatef(-(xOffset+x),-(yOffset+0.05f-z),0);
 
-           // drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.02f,-0.03f);
-            debugFloat = debugFloat + 1;
-            glPopMatrix();
+                drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.02f,-0.03f);
+                debugFloat = debugFloat + 1;
+                glPopMatrix();
 
 
-            //Draws the labels
-            if (i == 0){glBindTexture(GL_TEXTURE_2D, textureid_P1[65]);}        //Display P1 for player 1
-            else if (i == 1){glBindTexture(GL_TEXTURE_2D, textureid_P1[66]);}   //Display P2 for Player 2
-            else {glBindTexture(GL_TEXTURE_2D, textureid_P1[68]);}              //Display GUY if something is wrong
+                //Draws the labels
+                if (i == 0){glBindTexture(GL_TEXTURE_2D, textureid_P1[65]);}        //Display P1 for player 1
+                else if (i == 1){glBindTexture(GL_TEXTURE_2D, textureid_P1[66]);}   //Display P2 for Player 2
+                else {glBindTexture(GL_TEXTURE_2D, textureid_P1[68]);}              //Display GUY if something is wrong
 
             
 
-           // drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.03f,-0.03f);
+                drawSquareUVRev(xOffset+x,yOffset+0.05f-z,0,0.03f,-0.03f);
+            }
         }
+
+
+
         
         //Draw pickup
         xOffset = -0.85;
@@ -1083,8 +1104,8 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             renderText(-0.1,0.7,0.03,0.03,35,"Battery Empty",false);
 
         renderText(-0.1,0.80,0.03,0.03,35,"Obs "+FloatToString(cd->entity->obs),false);
-        renderText(0.65,0.8,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/"+FloatToString(gameVariables->numberOfAIs + gameVariables->getNumPlayers()),false);       
-        renderText(0.65,0.7,0.03,0.03,35,"Lap   "+FloatToString(cd->laps)+"/"+FloatToString(gameVariables->numLaps),false);
+        renderText(0.65,posYPlace,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/"+FloatToString(gameVariables->numberOfAIs + gameVariables->getNumPlayers()),false);       
+        renderText(0.65,posYLap,0.03,0.03,35,"Lap   "+FloatToString(cd->laps)+"/"+FloatToString(gameVariables->numLaps),false);
 
 
         for(unsigned i=0;i<textQueue.size();i++)
@@ -1293,6 +1314,8 @@ void RenderingEngine::initializeGL()
     printf("INITAL");
 
     debugCam = false;
+    showMiniMap = true;
+    showAsteroids = true;
 
 
     initializeMainMenuVariables();
@@ -2135,22 +2158,25 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                      }
 
 
-					//Draw asteroids
-					for (int i = 0; i < TOTAL_ASTEROIDS; i++)
-					{
-						glPushMatrix();
-						turnAsteroids(i);
-						//glRotatef(asteroidList.at(i).angle, asteroidList.at(i).xVec, asteroidList.at(i).yVec, asteroidList.at(i).zVec);
-						glTranslatef(asteroidList.at(i).x,asteroidList.at(i).y,asteroidList.at(i).z);
-						//glRotatef(asteroidList.at(i).angle, 0, 1, 0);
-						glRotatef(asteroidList.at(i).angle, asteroidList.at(i).xVec, asteroidList.at(i).yVec, asteroidList.at(i).zVec);
-						glTranslatef(-asteroidList.at(i).x,-asteroidList.at(i).y,-asteroidList.at(i).z);
-						//drawModel(modelManager.getModel(7), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z ,1.0f);
-						//drawModel(modelManager.getModel(21), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z ,10.0f);
-						glBindTexture(GL_TEXTURE_2D, textureid_P1[asteroidList.at(i).texture]);
-						drawModel(modelManager.getModel(21), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z, asteroidList.at(i).scale);
-						glPopMatrix();
-					}
+                    if (showAsteroids)
+                    {
+					    //Draw asteroids
+					    for (int i = 0; i < TOTAL_ASTEROIDS; i++)
+					    {
+						    glPushMatrix();
+						    turnAsteroids(i);
+						    //glRotatef(asteroidList.at(i).angle, asteroidList.at(i).xVec, asteroidList.at(i).yVec, asteroidList.at(i).zVec);
+						    glTranslatef(asteroidList.at(i).x,asteroidList.at(i).y,asteroidList.at(i).z);
+						    //glRotatef(asteroidList.at(i).angle, 0, 1, 0);
+						    glRotatef(asteroidList.at(i).angle, asteroidList.at(i).xVec, asteroidList.at(i).yVec, asteroidList.at(i).zVec);
+						    glTranslatef(-asteroidList.at(i).x,-asteroidList.at(i).y,-asteroidList.at(i).z);
+						    //drawModel(modelManager.getModel(7), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z ,1.0f);
+						    //drawModel(modelManager.getModel(21), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z ,10.0f);
+						    glBindTexture(GL_TEXTURE_2D, textureid_P1[asteroidList.at(i).texture]);
+						    drawModel(modelManager.getModel(21), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z, asteroidList.at(i).scale);
+						    glPopMatrix();
+					    }
+                    }
 
 
 
@@ -3933,8 +3959,9 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
         aShader->off();
         aHUDShader->on();
 
+        locShader_sensentiveOffset = aHUDShader->getUniLoc("sensentiveOffset");
 
-
+        
 
      //Title
         //string title = "Hi! This is shop Mode!";
@@ -4024,6 +4051,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
         //*/
 
 
+
     //draw di's here!
          for (unsigned di=0; di<ssi.di.size();di++)
         {
@@ -4032,16 +4060,22 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
 
             if (di == 0)    //Hack for subMenu
             {
-                title = "Cost:" + FloatToString(ssi.obsCost) + " obs";
+                if (locShader_sensentiveOffset != -1)
+                    {glUniform1f(locShader_sensentiveOffset, 0.25f);}   //Cuz artifact with submenu
 
                 //renderText(aDynamicImage->getX()-(aDynamicImage->getWidth()/2), (aDynamicImage->getY()-aDynamicImage->getHeight()/2), dec_height*2.0f, 30, 36, title, true);
                 
                 glBindTexture(GL_TEXTURE_2D, textureid_P1[aDynamicImage->getTextureIndex()]);
                 drawSquareUVRev(imgPos.x, imgPos.y,0, 1000, 300.0f);
-                renderText(aDynamicImage->getX()-(title.size()*15), (aDynamicImage->getY()-(60)), dec_height*2.0f, 30, 36, title, true);
+                title = "Cost:" + FloatToString(ssi.obsCost) + " obs";
+                renderText(aDynamicImage->getX()-(title.size()*15), (aDynamicImage->getY()-(120)), dec_height*2.0f, 30, 36, title, true);
+                title = ssi.selectedItemName;
+                renderText(aDynamicImage->getX()-(title.size()*15), (aDynamicImage->getY()-(80)), dec_height*2.0f, 30, 36, title, true);
             }
             else
             {
+                if (locShader_sensentiveOffset != -1)
+                    {glUniform1f(locShader_sensentiveOffset, 0.00f);} 
                 glBindTexture(GL_TEXTURE_2D, textureid_P1[aDynamicImage->getTextureIndex()]);
                 drawSquareUVRev(imgPos.x, imgPos.y,0, 200.0f, 300.0f);
             }
@@ -4049,6 +4083,8 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
             ssi.di[di]->update();
         }
 
+         if (locShader_sensentiveOffset != -1)          //reset back
+                    {glUniform1f(locShader_sensentiveOffset, 0.00f);}
 
 
     //Draw subMenu if needed

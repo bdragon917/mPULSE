@@ -21,6 +21,7 @@ class ShopState : public GameState
 	{
 		int itemIndex;
 		int price;
+        std::string name;
 	};
 
 

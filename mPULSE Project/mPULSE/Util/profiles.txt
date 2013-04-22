@@ -1,8 +1,8 @@
 #
 driveName|Player1
 carModel|1
-carTexture|3
-Obs|4600
+carTexture|92
+Obs|2600
 isAI|0
 batteryLevel|0
 strafeLevel|0
@@ -22,7 +22,7 @@ shipsOwned|1|0|0|0|0
 driveName|Ben
 carModel|1
 carTexture|3
-Obs|50000
+Obs|2300
 isAI|0
 batteryLevel|0
 strafeLevel|0

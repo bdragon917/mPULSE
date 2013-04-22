@@ -19,6 +19,7 @@ public:
     } StateType;
 
     std::string playerName;
+    std::string selectedItemName;
     int playerObs;
 
     bool inSubmenu;

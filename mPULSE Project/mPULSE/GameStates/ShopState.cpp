@@ -36,6 +36,8 @@ void ShopState::initialize()
     //ssi.playerName;       //Rendering will use Profile:playerInShop to display this info
     //ssi.playerObs;
 
+    ssi.selectedItemName = "";
+
     ssi.inSubmenu = false;
 
     ssi.selectedMenuIndex = currentSelectedCategory;
@@ -71,26 +73,31 @@ void ShopState::initializeInventory()
     newItem = new shopItem;
         newItem->itemIndex = 1;      //saruk
         newItem->price = 0; 
+        newItem->name = "Saruk";
         availableShips.push_back(newItem);
 
     newItem = new shopItem;
         newItem->itemIndex = 11;      //Claymore
         newItem->price = ((gameVariables->playerInShop->data.shipsOwned[1]) ? 0:60000);
+        newItem->name = "Claymore";
         availableShips.push_back(newItem);
 
     newItem = new shopItem;
         newItem->itemIndex = 14;      //Boxer
         newItem->price = ((gameVariables->playerInShop->data.shipsOwned[2]==1) ? 0:100000);
+        newItem->name = "Boxer";
         availableShips.push_back(newItem);
 
     newItem = new shopItem;
         newItem->itemIndex = 12;      //Nogard
         newItem->price = ((gameVariables->playerInShop->data.shipsOwned[3]==1) ? 0:150000);
+        newItem->name = "Nogard";
         availableShips.push_back(newItem);
 
     newItem = new shopItem;
         newItem->itemIndex = 15;      //MiniMothership
         newItem->price = ((gameVariables->playerInShop->data.shipsOwned[4]==1) ? 0:200000);
+        newItem->name = "M.M.";
         availableShips.push_back(newItem);
 
 
@@ -99,31 +106,37 @@ void ShopState::initializeInventory()
     newItem = new shopItem;
         newItem->itemIndex = 30;     //TODO: IMPULSE BATTERY
 		newItem->price = ((gameVariables->playerInShop->data.batteryLevel != 0) ? 0:10000);
+        newItem->name = "Impluse Battery";
         availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
 		newItem->itemIndex = 31;		//TODO: STRAFE
 		newItem->price = ((gameVariables->playerInShop->data.strafeLevel != 0) ? 0:10000);
+        newItem->name = "Strafe Thursters";
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
 		newItem->itemIndex = 32;		//TODO: MISSILE ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.missileLevel) % (BASE_PICKUP_UPGRADE * 5));
+        newItem->name = "Upgrade Missiles";
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
 		newItem->itemIndex = 33;		//TODO: BARRIER ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.barrierLevel) % (BASE_PICKUP_UPGRADE * 5));
+        newItem->name = "Upgrade Barriers";
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
 		newItem->itemIndex = 34;		//TODO: BOOST ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.boostLevel) % (BASE_PICKUP_UPGRADE * 5));
+        newItem->name = "Upgrade Boost";
 		availableUpgrades.push_back(newItem);
 
 	newItem = new shopItem;
 		newItem->itemIndex = 35;		//TODO: SHIELD ++
 		newItem->price = BASE_PICKUP_UPGRADE + ((BASE_PICKUP_UPGRADE * gameVariables->playerInShop->data.shieldLevel) % (BASE_PICKUP_UPGRADE * 5));
+        newItem->name = "Upgrade Shield";
 		availableUpgrades.push_back(newItem);
 }
 
@@ -140,41 +153,49 @@ void ShopState::initializePaintJob(int shipModel)
             newItem = new shopItem;
                 newItem->itemIndex = 3;      //Standard
                 newItem->price = 0;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 90;      //Standard
                 newItem->price = 1000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 91;      //Standard
                 newItem->price = 2000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 92;      //Standard
                 newItem->price = 2000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 93;      //Standard
                 newItem->price = 3000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 94;      //Standard
                 newItem->price = 3000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 95;      //Standard
                 newItem->price = 4000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 96;      //Standard
                 newItem->price = 5000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
             break;
 
@@ -182,26 +203,31 @@ void ShopState::initializePaintJob(int shipModel)
             newItem = new shopItem;
                 newItem->itemIndex = 52;      //Standard
                 newItem->price = 0;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 97;      //Standard
                 newItem->price = 1000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 98;      //Standard
                 newItem->price = 2000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 99;      //Standard
                 newItem->price = 3000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 100;      //Standard
                 newItem->price = 4000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
             break;
 
@@ -209,40 +235,48 @@ void ShopState::initializePaintJob(int shipModel)
             newItem = new shopItem;
                 newItem->itemIndex = 87;      //Standard
                 newItem->price = 0;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
             newItem = new shopItem;
                 newItem->itemIndex = 88;      //Pirate
                 newItem->price = 2000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 101;      //Pirate
                 newItem->price = 2000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 102;      //Pirate
                 newItem->price = 3000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 103;      //Pirate
                 newItem->price = 3000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 104;      //Pirate
                 newItem->price = 4000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 105;      //Pirate
                 newItem->price = 5000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 106;      //Pirate
                 newItem->price = 5000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
             break;
 
@@ -250,36 +284,43 @@ void ShopState::initializePaintJob(int shipModel)
             newItem = new shopItem;
                 newItem->itemIndex = 50;      //Standard
                 newItem->price = 0;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 107;      //Standard
                 newItem->price = 1000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 108;      //Standard
                 newItem->price = 1000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 109;      //Standard
                 newItem->price = 2000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 110;      //Standard
                 newItem->price = 3000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 111;      //Standard
                 newItem->price = 4000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 112;      //Standard
                 newItem->price = 5000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
             break;
 
@@ -287,16 +328,19 @@ void ShopState::initializePaintJob(int shipModel)
             newItem = new shopItem;
                 newItem->itemIndex = 27;      //Standard
                 newItem->price = 0;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 113;      //Standard
                 newItem->price = 2000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
                 newItem = new shopItem;
                 newItem->itemIndex = 114;      //Standard
                 newItem->price = 4000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
             break;
 
@@ -309,11 +353,13 @@ void ShopState::initializePaintJob(int shipModel)
     newItem = new shopItem;
                 newItem->itemIndex = 0;      //Test Texture
                 newItem->price = 1000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 
     newItem = new shopItem;
                 newItem->itemIndex = 51;      //Black
                 newItem->price = 5000;
+                newItem->name = "";
                 availablePaints.push_back(newItem);
 }
 
@@ -327,8 +373,8 @@ void ShopState::enterMechanic()
 
 void ShopState::enterPainter()
 {
-    painterGirl->setLocation(-175,600,0);
-    painterGirl->setTargetLocation(-125,600,0);
+    painterGirl->setLocation(-200,600,0);
+    painterGirl->setTargetLocation(-200,600,0);
     ssi.di.push_back(painterGirl);
 }
 
@@ -513,14 +559,17 @@ void ShopState::rightPressed()
                     ssi.obsCost = availableShips.at(currentSelectedItem)->price;
 					initializePaintJob(ssi.selectedItemIndex);
 					ssi.newShipTexture=availablePaints[0]->itemIndex;
+                    ssi.selectedItemName = availableShips.at(currentSelectedItem)->name;
 					break;
                 case 1:     //upgrades
                     ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
                     ssi.obsCost = availableUpgrades.at(currentSelectedItem)->price;
+                    ssi.selectedItemName = availableUpgrades.at(currentSelectedItem)->name;
 					break;
                 case 2:     //Paint
                     ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;
                     ssi.obsCost = availablePaints.at(currentSelectedItem)->price;
+                    ssi.selectedItemName = availablePaints.at(currentSelectedItem)->name;
 					break;
                 }
             }
@@ -551,14 +600,17 @@ void ShopState::leftPressed()
                     ssi.obsCost = availableShips.at(currentSelectedItem)->price;
 					initializePaintJob(ssi.selectedItemIndex);
 					ssi.newShipTexture=availablePaints[0]->itemIndex;
+                    ssi.selectedItemName = availableShips.at(currentSelectedItem)->name;
 					break;
                 case 1:     //upgrades
                     ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
                     ssi.obsCost = availableUpgrades.at(currentSelectedItem)->price;
+                    ssi.selectedItemName = availableUpgrades.at(currentSelectedItem)->name;
 					break;
                 case 2:     //Paint
                     ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;
                     ssi.obsCost = availablePaints.at(currentSelectedItem)->price;
+                    ssi.selectedItemName = availablePaints.at(currentSelectedItem)->name;
 					break;
                 }
             }
@@ -571,6 +623,8 @@ void ShopState::selectPressed()
 {
 	if(!inSubmenu)
 	{
+        ssi.selectedItemName = "";
+
         subMenu->setTargetLocation((renderingEngine->SCREEN_WIDTH / 2),(renderingEngine->SCREEN_HEIGHT / 3),0);    //come down to visible
 		soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
 		switch(currentSelectedCategory)
@@ -583,6 +637,7 @@ void ShopState::selectPressed()
             ssi.selectedItemIndex = availableShips.at(currentSelectedItem)->itemIndex; 
 			initializePaintJob(ssi.selectedItemIndex);
 			ssi.newShipTexture=availablePaints[0]->itemIndex;
+            ssi.selectedItemName = availableShips.at(currentSelectedItem)->name;
             MAX_ITEM_SELECTED = availableShips.size();
             soundEngine->playSound(5,(rand() % 4) + 41);    //anything you like?
             break;
@@ -592,6 +647,7 @@ void ShopState::selectPressed()
             ssi.selectedItemIndex = 0;
             currentSelectedItem = 0;
             ssi.selectedItemIndex = availableUpgrades.at(currentSelectedItem)->itemIndex;
+            ssi.selectedItemName = availableUpgrades.at(currentSelectedItem)->name;
             MAX_ITEM_SELECTED = availableUpgrades.size();
             soundEngine->playSound(5,(rand() % 4) + 41);    //anything you like?
 			break;
@@ -599,17 +655,20 @@ void ShopState::selectPressed()
 			printf("Paint\n");
 			inSubmenu = true;
             painterGirl->setTargetLocation(200,600,0); //show
-            mechanicGirl->setTargetLocation(-175,600,0); //Hide
+            mechanicGirl->setTargetLocation(-200,600,0); //Hide
             ssi.selectedItemIndex = 0;
             currentSelectedItem = 0;
             initializePaintJob(gameVariables->playerInShop->data.carModel);
             ssi.selectedItemIndex = availablePaints.at(currentSelectedItem)->itemIndex;
+            ssi.selectedItemName = availablePaints.at(currentSelectedItem)->name;
             MAX_ITEM_SELECTED = availablePaints.size();
+            soundEngine->playSound(5,(rand() % 3) + 49);    //anything you like? Painter
 			break;
 		case 3:
 			//Done
 			printf("Done\n");
 			renderingEngine->startTransition(RenderingEngine::FADE_OUT);
+            soundEngine->playSound(5,(rand() % 3) + 38);    //bibi
 			lockControls = true;
 			break;
 		}
@@ -631,7 +690,7 @@ void ShopState::selectPressed()
 					initializePaintJob(gameVariables->playerInShop->data.carModel);
 					gameVariables->playerInShop->data.carTexture = availablePaints[0]->itemIndex;
 					availableShips[currentSelectedItem]->price = 0;
-                    soundEngine->playSound(5,(rand() % 6) + 32);    //installed
+                    soundEngine->playSound(5,(rand() % 6) + 41);    //installed
 				}
 				else
 				{
@@ -731,7 +790,7 @@ void ShopState::selectPressed()
 				printf("paint purchased\n");
 				gameVariables->playerInShop->data.Obs -= availablePaints[currentSelectedItem]->price;
 				gameVariables->playerInShop->data.carTexture = availablePaints[currentSelectedItem]->itemIndex;
-                soundEngine->playSound(5,(rand() % 4) + 41);    //4 is channel, 7 is index for intro
+                soundEngine->playSound(5,(rand() % 4) + 45);    //4 is channel, 7 is index for intro
 			}
 			else
 			{
@@ -747,7 +806,9 @@ void ShopState::selectPressed()
 void ShopState::backPressed()
 {
     mechanicGirl->setTargetLocation(200,600,0); //show
-    painterGirl->setTargetLocation(-175,600,0); //Hide
+    painterGirl->setTargetLocation(-200,600,0); //Hide
+
+    ssi.selectedItemName = "";
 
 	if(!inSubmenu)
 	{
