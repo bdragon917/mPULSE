@@ -80,7 +80,18 @@ bool LoungeState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             else if ((keyPressed == SDLK_DOWN) || (keyPressed == SDLK_s))
                 downPressed();
             else if ((keyPressed == SDLK_RETURN) || (keyPressed == SDLK_SPACE))
+            {
+                actingPlayer = 0;
                 selectPressed();
+            }
+            else if ((keyPressed == SDLK_KP_ENTER))
+            {
+                if (gameVariables->getNumPlayers() > 1)
+                    {
+                        actingPlayer = 1;
+                        selectPressed();
+                    }
+            }
             else if ((keyPressed == SDLK_ESCAPE))
                 backPressed();
         }

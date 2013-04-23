@@ -1564,6 +1564,8 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             }
             else if (state->back)
             {
+                soundEngine->FadeOutMusic(4000);
+                soundEngine->fadeOutAllSound(4000);
                 changeState(RESULT);
             }
         }
