@@ -28,6 +28,7 @@ void GameVariables::initialize()
     skyboxTextureIndex.push_back(22);
     skyboxTextureIndex.push_back(24);
     skyboxTextureIndex.push_back(25);
+    miniMapIndex = -1;
 }
 
 void GameVariables::addRanking(std::string rank,std::string name,std::string time)

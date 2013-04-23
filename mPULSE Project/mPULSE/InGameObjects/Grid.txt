@@ -1,6 +1,7 @@
 MusicIndex:|2
 Skybox:|20|21|23|22|24|25
 PhysXModel:|23
+Minimap:|126
 RC:|24|115
 RC:|25|7
 %

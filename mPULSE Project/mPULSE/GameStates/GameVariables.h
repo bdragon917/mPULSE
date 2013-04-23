@@ -81,6 +81,7 @@ public:
     int physXTrackModel;
     int musicIndex;
     int numLaps;
+    int miniMapIndex;
     std::vector<RenderableComponent*> trackRC;
     std::vector<int> skyboxTextureIndex;
 

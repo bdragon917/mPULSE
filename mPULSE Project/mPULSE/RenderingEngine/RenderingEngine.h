@@ -133,6 +133,9 @@ public:
     //Texture Stuff
     GLuint* textureid_P1;
 
+    bool texturesLoaded;
+    bool shadersLoaded;
+
     //Transition stuff
 	void startTransition(int type);
 
@@ -158,6 +161,10 @@ public:
     float debugFloat;
     NxMat34 startModelOri;
     NxVec3 startModelPos;
+
+
+
+
 private:
     
     struct drawableText {

@@ -60,10 +60,28 @@ public:
 private:
 
     //Custom Keyboard Variables for keyboard Controls
+    //Player1
     bool keyAPressed;
     bool keyDPressed;
     bool keyWPressed;
     bool keySPressed;
+    bool keyQPressed;
+    bool keyEPressed;
+    bool keyRPressed;
+    bool keyTPressed;       //Batt.
+    bool keySpacePressed;
+
+    //Player2
+    bool keyLeftPressed;
+    bool keyRightPressed;
+    bool keyUpPressed;
+    bool keyDownPressed;
+    bool key4Pressed;
+    bool key6Pressed;
+    bool keyMinusPressed;
+    bool keyPlusPressed;       //Batt.
+    bool keyEntPressed;
+
     bool paused;
 
     bool CHEAT_InfPowUp;

@@ -25,6 +25,9 @@ RenderingEngine::RenderingEngine()
 
     debugFloat = 0.0f;
 
+    texturesLoaded = false;
+    shadersLoaded = false;
+
 	generateAsteroids(TOTAL_ASTEROIDS);
 }
 
@@ -190,225 +193,234 @@ void RenderingEngine::bindBMPtoTexture(char* filename, GLuint textures)
 
 void RenderingEngine::initializeTexture()
 {
-	//bindBMPtoTexture("./img/textureTest.bmp", textureid_P1);
-	///**
-	unsigned char *data = 0;
-	BMPImg  aBMPImg;
+    if (!texturesLoaded)
+    {
+	    //bindBMPtoTexture("./img/textureTest.bmp", textureid_P1);
+	    ///**
+	    unsigned char *data = 0;
+	    BMPImg  aBMPImg;
 
-    textureid_P1 = new GLuint[124];
-    glGenTextures(124, textureid_P1);
+        textureid_P1 = new GLuint[127];
+        glGenTextures(127, textureid_P1);
 
-    bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
-    bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
-    bindBMPtoTexture("./Images/hello.bmp", textureid_P1[2]);
-    bindBMPtoTexture("./Images/Saruk.bmp", textureid_P1[3]);
-    bindBMPtoTexture("./Images/Box.bmp", textureid_P1[4]);
-    bindBMPtoTexture("./Images/Box2.bmp", textureid_P1[5]);
-    bindBMPtoTexture("./Images/Box3.bmp", textureid_P1[6]);
-    bindBMPtoTexture("./Images/white.bmp", textureid_P1[7]);
-    bindBMPtoTexture("./Images/Menu/MenuBG2.bmp", textureid_P1[8]);
-    bindBMPtoTexture("./Images/Menu/single.bmp", textureid_P1[9]);
-    bindBMPtoTexture("./Images/Menu/singleS.bmp", textureid_P1[10]);
-    bindBMPtoTexture("./Images/Menu/versus.bmp", textureid_P1[11]);
-    bindBMPtoTexture("./Images/Menu/versusS.bmp", textureid_P1[12]);
-    bindBMPtoTexture("./Images/Menu/story.bmp", textureid_P1[13]);
-    bindBMPtoTexture("./Images/Menu/storyS.bmp", textureid_P1[14]);
-    bindBMPtoTexture("./Images/Menu/setting.bmp", textureid_P1[15]);
-    bindBMPtoTexture("./Images/Menu/settingS.bmp", textureid_P1[16]);
-    bindBMPtoTexture("./Images/Menu/quit.bmp", textureid_P1[17]);
-    bindBMPtoTexture("./Images/Menu/quitS.bmp", textureid_P1[18]);
+        bindBMPtoTexture("./Images/testT.bmp", textureid_P1[0]);
+        bindBMPtoTexture("./Images/loadScreen.bmp", textureid_P1[1]);
+        bindBMPtoTexture("./Images/hello.bmp", textureid_P1[2]);
+        bindBMPtoTexture("./Images/Saruk.bmp", textureid_P1[3]);
+        bindBMPtoTexture("./Images/Box.bmp", textureid_P1[4]);
+        bindBMPtoTexture("./Images/Box2.bmp", textureid_P1[5]);
+        bindBMPtoTexture("./Images/Box3.bmp", textureid_P1[6]);
+        bindBMPtoTexture("./Images/white.bmp", textureid_P1[7]);
+        bindBMPtoTexture("./Images/Menu/MenuBG2.bmp", textureid_P1[8]);
+        bindBMPtoTexture("./Images/Menu/single.bmp", textureid_P1[9]);
+        bindBMPtoTexture("./Images/Menu/singleS.bmp", textureid_P1[10]);
+        bindBMPtoTexture("./Images/Menu/versus.bmp", textureid_P1[11]);
+        bindBMPtoTexture("./Images/Menu/versusS.bmp", textureid_P1[12]);
+        bindBMPtoTexture("./Images/Menu/story.bmp", textureid_P1[13]);
+        bindBMPtoTexture("./Images/Menu/storyS.bmp", textureid_P1[14]);
+        bindBMPtoTexture("./Images/Menu/setting.bmp", textureid_P1[15]);
+        bindBMPtoTexture("./Images/Menu/settingS.bmp", textureid_P1[16]);
+        bindBMPtoTexture("./Images/Menu/quit.bmp", textureid_P1[17]);
+        bindBMPtoTexture("./Images/Menu/quitS.bmp", textureid_P1[18]);
 
-    bindBMPtoTexture("./Images/HUD.bmp", textureid_P1[19]);
+        bindBMPtoTexture("./Images/HUD.bmp", textureid_P1[19]);
 
-    //Skybox texture
-    bindBMPtoTexture("./Images/sb/ss_front5.bmp", textureid_P1[20]);
-    bindBMPtoTexture("./Images/sb/ss_back6.bmp", textureid_P1[21]);
-    bindBMPtoTexture("./Images/sb/ss_left2.bmp", textureid_P1[22]);
-    bindBMPtoTexture("./Images/sb/ss_right1.bmp", textureid_P1[23]);
-    bindBMPtoTexture("./Images/sb/ss_top3.bmp", textureid_P1[24]);
-    bindBMPtoTexture("./Images/sb/ss_bottom4.bmp", textureid_P1[25]);
+        //Skybox texture
+        bindBMPtoTexture("./Images/sb/ss_front5.bmp", textureid_P1[20]);
+        bindBMPtoTexture("./Images/sb/ss_back6.bmp", textureid_P1[21]);
+        bindBMPtoTexture("./Images/sb/ss_left2.bmp", textureid_P1[22]);
+        bindBMPtoTexture("./Images/sb/ss_right1.bmp", textureid_P1[23]);
+        bindBMPtoTexture("./Images/sb/ss_top3.bmp", textureid_P1[24]);
+        bindBMPtoTexture("./Images/sb/ss_bottom4.bmp", textureid_P1[25]);
 
-    bindBMPtoTexture("./Images/Menu/RaceOverlays/EndMsgFinish.bmp", textureid_P1[26]);
+        bindBMPtoTexture("./Images/Menu/RaceOverlays/EndMsgFinish.bmp", textureid_P1[26]);
 
-    bindBMPtoTexture("./Images/motherShipHullUV.bmp", textureid_P1[27]);
-    bindBMPtoTexture("./Images/motherShipEngineUV.bmp", textureid_P1[28]);
+        bindBMPtoTexture("./Images/motherShipHullUV.bmp", textureid_P1[27]);
+        bindBMPtoTexture("./Images/motherShipEngineUV.bmp", textureid_P1[28]);
 
-    bindBMPtoTexture("./Images/SpdNumber.bmp", textureid_P1[29]);
-
-
-    /////
-    bindBMPtoTexture("./Images/outUVBarrierDisc.bmp", textureid_P1[30]);
-    bindBMPtoTexture("./Images/outUVBarrierScreen.bmp", textureid_P1[31]);
-    bindBMPtoTexture("./Images/outUVMissile.bmp", textureid_P1[32]);
-
-    bindBMPtoTexture("./Images/Menu/Profiles/LoadProfile.bmp", textureid_P1[33]);
-
-    bindBMPtoTexture("./Images/FontTexture.bmp", textureid_P1[34]);
-    bindBMPtoTexture("./Images/FontSelectedTexture.bmp", textureid_P1[35]);
-    bindBMPtoTexture("./Images/FontTitleTexture.bmp", textureid_P1[36]);
-
-    bindBMPtoTexture("./Images/Menu/Done.bmp", textureid_P1[37]);
-    bindBMPtoTexture("./Images/Menu/DoneS.bmp", textureid_P1[38]);
-
-    bindBMPtoTexture("./Images/Menu/Story/Story.bmp", textureid_P1[39]);
-    bindBMPtoTexture("./Images/Menu/Settings/Settings.bmp", textureid_P1[40]);
-    bindBMPtoTexture("./Images/Menu/Shop/Shop.bmp", textureid_P1[41]);
-    bindBMPtoTexture("./Images/Menu/Shop/Mechanic1.bmp", textureid_P1[42]);
-    bindBMPtoTexture("./Images/Menu/Shop/Mechanic2.bmp", textureid_P1[43]);
-    bindBMPtoTexture("./Images/Menu/Shop/InvAmt.bmp", textureid_P1[44]);
-    bindBMPtoTexture("./Images/Menu/Shop/ArrowButton.bmp", textureid_P1[45]);
-    bindBMPtoTexture("./Images/Menu/Shop/ShopBG.bmp", textureid_P1[46]);
-
-    bindBMPtoTexture("./Images/Menu/Result/ResultBG.bmp", textureid_P1[47]);
-
-    bindBMPtoTexture("./Images/Menu/StageSelect/StageBG.bmp", textureid_P1[48]);
-
-    bindBMPtoTexture("./Images/Minimap.bmp", textureid_P1[49]);
-
-    bindBMPtoTexture("./Images/outUVNogard.bmp", textureid_P1[50]);
-
-    bindBMPtoTexture("./Images/black.bmp", textureid_P1[51]);
-
-    bindBMPtoTexture("./Images/outUVClaymore.bmp", textureid_P1[52]);
-    bindBMPtoTexture("./Images/Pickups/Boost.bmp", textureid_P1[53]);
-    bindBMPtoTexture("./Images/Pickups/Missile.bmp", textureid_P1[54]);
-    bindBMPtoTexture("./Images/Pickups/Shield.bmp", textureid_P1[55]);
-    bindBMPtoTexture("./Images/Pickups/Barrier.bmp", textureid_P1[56]);
-    bindBMPtoTexture("./Images/Pickups/Empty.bmp", textureid_P1[57]);
-	bindBMPtoTexture("./Images/planet.bmp", textureid_P1[58]);
-    bindBMPtoTexture("./Images/shield.bmp", textureid_P1[59]);
-    bindBMPtoTexture("./Images/ColorWhite.bmp", textureid_P1[60]);
-
-    //Asteroids
-    bindBMPtoTexture("./Images/Asteroids/meteorite0.bmp", textureid_P1[61]);
-    bindBMPtoTexture("./Images/Asteroids/meteorite1.bmp", textureid_P1[62]);
-    bindBMPtoTexture("./Images/Asteroids/meteorite2.bmp", textureid_P1[63]);
-    bindBMPtoTexture("./Images/Asteroids/meteorite3.bmp", textureid_P1[64]);
-
-    //MiniMap pieces
-    bindBMPtoTexture("./Images/MiniMap/P1.bmp", textureid_P1[65]);
-    bindBMPtoTexture("./Images/MiniMap/P2.bmp", textureid_P1[66]);
-    bindBMPtoTexture("./Images/MiniMap/COM.bmp", textureid_P1[67]);
-    bindBMPtoTexture("./Images/MiniMap/GUY.bmp", textureid_P1[68]);
-    bindBMPtoTexture("./Images/MiniMap/ShipIconPLY.bmp", textureid_P1[69]);
-    bindBMPtoTexture("./Images/MiniMap/ShipIconCOM.bmp", textureid_P1[70]);
-
-    bindBMPtoTexture("./Images/BG/Generic.bmp", textureid_P1[71]);
-    bindBMPtoTexture("./Images/BG/PowUp.bmp", textureid_P1[72]);
-    bindBMPtoTexture("./Images/BG/Spd.bmp", textureid_P1[73]);
-
-    bindBMPtoTexture("./Images/Menu/Lounge/Lounge.bmp", textureid_P1[74]);
-    bindBMPtoTexture("./Images/Particles/ParticleBlue.bmp", textureid_P1[75]);
-    bindBMPtoTexture("./Images/Particles/ParticleTwin.bmp", textureid_P1[76]);
-
-    bindBMPtoTexture("./Images/Track/TrackTexture2.bmp", textureid_P1[77]);
-    bindBMPtoTexture("./Images/Track/TrackTexture3.bmp", textureid_P1[78]);
-    bindBMPtoTexture("./Images/Track/TrackTexture4.bmp", textureid_P1[79]);
-    bindBMPtoTexture("./Images/Track/TrackTexture5.bmp", textureid_P1[80]);
-    bindBMPtoTexture("./Images/Track/TrackTexture6.bmp", textureid_P1[81]);
-    bindBMPtoTexture("./Images/Track/TrackTexture7.bmp", textureid_P1[82]);
-
-    bindBMPtoTexture("./Images/Barriers/BarrierTexture0.bmp", textureid_P1[83]);
-    bindBMPtoTexture("./Images/Barriers/BarrierTexture1.bmp", textureid_P1[84]);
-    bindBMPtoTexture("./Images/Barriers/BarrierTexture2.bmp", textureid_P1[85]);
-    bindBMPtoTexture("./Images/Barriers/BarrierTexture3.bmp", textureid_P1[86]);
-
-    bindBMPtoTexture("./Images/Ship/outUVShipBoxerTrue2.bmp", textureid_P1[87]);
-    bindBMPtoTexture("./Images/Ship/outUVShipBoxerPirate.bmp", textureid_P1[88]);
-    bindBMPtoTexture("./Images/ControlsScreen.bmp", textureid_P1[89]);
-
-    //Texture for ship
-    bindBMPtoTexture("./Images/Ship/saruk_Texture_2.bmp", textureid_P1[90]);
-    bindBMPtoTexture("./Images/Ship/saruk_Texture_3.bmp", textureid_P1[91]);
-    bindBMPtoTexture("./Images/Ship/saruk_Texturev4.bmp", textureid_P1[92]);
-    bindBMPtoTexture("./Images/Ship/saruk_Texturev5.bmp", textureid_P1[93]);
-    bindBMPtoTexture("./Images/Ship/saruk_Texturev6.bmp", textureid_P1[94]);
-    bindBMPtoTexture("./Images/Ship/saruk_Texturev7.bmp", textureid_P1[95]);
-    bindBMPtoTexture("./Images/Ship/saruk_Texturev8.bmp", textureid_P1[96]);
-
-    bindBMPtoTexture("./Images/Ship/outUVClaymore_1.bmp", textureid_P1[97]);
-    bindBMPtoTexture("./Images/Ship/outUVClaymore_2.bmp", textureid_P1[98]);
-    bindBMPtoTexture("./Images/Ship/outUVClaymore_3.bmp", textureid_P1[99]);
-    bindBMPtoTexture("./Images/Ship/outUVClaymore_4.bmp", textureid_P1[100]);
-
-    bindBMPtoTexture("./Images/Ship/UVBoxer1.bmp", textureid_P1[101]);
-    bindBMPtoTexture("./Images/Ship/UVBoxer2.bmp", textureid_P1[102]);
-    bindBMPtoTexture("./Images/Ship/UVBoxer3.bmp", textureid_P1[103]);
-    bindBMPtoTexture("./Images/Ship/UVBoxer4.bmp", textureid_P1[104]);
-    bindBMPtoTexture("./Images/Ship/UVBoxer5.bmp", textureid_P1[105]);
-    bindBMPtoTexture("./Images/Ship/UVBoxer6.bmp", textureid_P1[106]);
-
-    bindBMPtoTexture("./Images/Ship/outUVNogard_1.bmp", textureid_P1[107]);
-    bindBMPtoTexture("./Images/Ship/outUVNogard_2.bmp", textureid_P1[108]);
-    bindBMPtoTexture("./Images/Ship/outUVNogard_3.bmp", textureid_P1[109]);
-    bindBMPtoTexture("./Images/Ship/outUVNogard_4.bmp", textureid_P1[110]);
-    bindBMPtoTexture("./Images/Ship/outUVNogard_5.bmp", textureid_P1[111]);
-    bindBMPtoTexture("./Images/Ship/outUVNogard_6.bmp", textureid_P1[112]);
-
-    bindBMPtoTexture("./Images/Ship/motherShipHullUV_1.bmp", textureid_P1[113]);
-    bindBMPtoTexture("./Images/Ship/motherShipHullUV_2.bmp", textureid_P1[114]);
-    bindBMPtoTexture("./Images/ColorRed.bmp", textureid_P1[115]);
-
-	bindBMPtoTexture("./Images/checker.bmp", textureid_P1[116]);
-
-    //Hack for mainmenu
-    bindBMPtoTexture("./Images/Menu/Main/none.bmp", textureid_P1[117]);
-    bindBMPtoTexture("./Images/Menu/Main/single.bmp", textureid_P1[118]);
-    bindBMPtoTexture("./Images/Menu/Main/versus.bmp", textureid_P1[119]);
-    bindBMPtoTexture("./Images/Menu/Main/story.bmp", textureid_P1[120]);
-    bindBMPtoTexture("./Images/Menu/Main/settings.bmp", textureid_P1[121]);
-    bindBMPtoTexture("./Images/Menu/Main/quit.bmp", textureid_P1[122]);
-
-    //submenu
-    bindBMPtoTexture("./Images/Menu/Shop/Submenu.bmp", textureid_P1[123]);
-    //bindBMPtoTexture("./Images/Menu/Shop/SubmenuL.bmp", textureid_P1[124]);
-    //bindBMPtoTexture("./Images/Menu/Shop/SubmenuR.bmp", textureid_P1[125]);
+        bindBMPtoTexture("./Images/SpdNumber.bmp", textureid_P1[29]);
 
 
-	//"/Images/textureTest.bmp"
+        /////
+        bindBMPtoTexture("./Images/outUVBarrierDisc.bmp", textureid_P1[30]);
+        bindBMPtoTexture("./Images/outUVBarrierScreen.bmp", textureid_P1[31]);
+        bindBMPtoTexture("./Images/outUVMissile.bmp", textureid_P1[32]);
 
-	//int err = aBMPImg.Load("./img/testT.bmp");
-	//if (!(err == 1))
-	//{printf("Error: Loading Texture: %i\n", err);}
-	//data = aBMPImg.GetImg();
-	//width = aBMPImg.GetWidth();
-	//height = aBMPImg.GetHeight();
-	////aBMPImg.GetImg
-	////LoadPicture(data);
+        bindBMPtoTexture("./Images/Menu/Profiles/LoadProfile.bmp", textureid_P1[33]);
 
-	////glEnable (GL_TEXTURE_2D);		//Don't need this, since shader programs will control texture usage
-	//glGenTextures(1, &textureid_P1);
+        bindBMPtoTexture("./Images/FontTexture.bmp", textureid_P1[34]);
+        bindBMPtoTexture("./Images/FontSelectedTexture.bmp", textureid_P1[35]);
+        bindBMPtoTexture("./Images/FontTitleTexture.bmp", textureid_P1[36]);
 
-	//glBindTexture(GL_TEXTURE_2D, textureid_P1);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	//glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
-	//**/
+        bindBMPtoTexture("./Images/Menu/Done.bmp", textureid_P1[37]);
+        bindBMPtoTexture("./Images/Menu/DoneS.bmp", textureid_P1[38]);
+
+        bindBMPtoTexture("./Images/Menu/Story/Story.bmp", textureid_P1[39]);
+        bindBMPtoTexture("./Images/Menu/Settings/Settings.bmp", textureid_P1[40]);
+        bindBMPtoTexture("./Images/Menu/Shop/Shop.bmp", textureid_P1[41]);
+        bindBMPtoTexture("./Images/Menu/Shop/Mechanic1.bmp", textureid_P1[42]);
+        bindBMPtoTexture("./Images/Menu/Shop/Mechanic2.bmp", textureid_P1[43]);
+        bindBMPtoTexture("./Images/Menu/Shop/InvAmt.bmp", textureid_P1[44]);
+        bindBMPtoTexture("./Images/Menu/Shop/ArrowButton.bmp", textureid_P1[45]);
+        bindBMPtoTexture("./Images/Menu/Shop/ShopBG.bmp", textureid_P1[46]);
+
+        bindBMPtoTexture("./Images/Menu/Result/ResultBG.bmp", textureid_P1[47]);
+
+        bindBMPtoTexture("./Images/Menu/StageSelect/StageBG.bmp", textureid_P1[48]);
+
+        bindBMPtoTexture("./Images/Minimap.bmp", textureid_P1[49]);
+
+        bindBMPtoTexture("./Images/outUVNogard.bmp", textureid_P1[50]);
+
+        bindBMPtoTexture("./Images/black.bmp", textureid_P1[51]);
+
+        bindBMPtoTexture("./Images/outUVClaymore.bmp", textureid_P1[52]);
+        bindBMPtoTexture("./Images/Pickups/Boost.bmp", textureid_P1[53]);
+        bindBMPtoTexture("./Images/Pickups/Missile.bmp", textureid_P1[54]);
+        bindBMPtoTexture("./Images/Pickups/Shield.bmp", textureid_P1[55]);
+        bindBMPtoTexture("./Images/Pickups/Barrier.bmp", textureid_P1[56]);
+        bindBMPtoTexture("./Images/Pickups/Empty.bmp", textureid_P1[57]);
+	    bindBMPtoTexture("./Images/planet.bmp", textureid_P1[58]);
+        bindBMPtoTexture("./Images/shield.bmp", textureid_P1[59]);
+        bindBMPtoTexture("./Images/ColorWhite.bmp", textureid_P1[60]);
+
+        //Asteroids
+        bindBMPtoTexture("./Images/Asteroids/meteorite0.bmp", textureid_P1[61]);
+        bindBMPtoTexture("./Images/Asteroids/meteorite1.bmp", textureid_P1[62]);
+        bindBMPtoTexture("./Images/Asteroids/meteorite2.bmp", textureid_P1[63]);
+        bindBMPtoTexture("./Images/Asteroids/meteorite3.bmp", textureid_P1[64]);
+
+        //MiniMap pieces
+        bindBMPtoTexture("./Images/MiniMap/P1.bmp", textureid_P1[65]);
+        bindBMPtoTexture("./Images/MiniMap/P2.bmp", textureid_P1[66]);
+        bindBMPtoTexture("./Images/MiniMap/COM.bmp", textureid_P1[67]);
+        bindBMPtoTexture("./Images/MiniMap/GUY.bmp", textureid_P1[68]);
+        bindBMPtoTexture("./Images/MiniMap/ShipIconPLY.bmp", textureid_P1[69]);
+        bindBMPtoTexture("./Images/MiniMap/ShipIconCOM.bmp", textureid_P1[70]);
+
+        bindBMPtoTexture("./Images/BG/Generic.bmp", textureid_P1[71]);
+        bindBMPtoTexture("./Images/BG/PowUp.bmp", textureid_P1[72]);
+        bindBMPtoTexture("./Images/BG/Spd.bmp", textureid_P1[73]);
+
+        bindBMPtoTexture("./Images/Menu/Lounge/Lounge.bmp", textureid_P1[74]);
+        bindBMPtoTexture("./Images/Particles/ParticleBlue.bmp", textureid_P1[75]);
+        bindBMPtoTexture("./Images/Particles/ParticleTwin.bmp", textureid_P1[76]);
+
+        bindBMPtoTexture("./Images/Track/TrackTexture2.bmp", textureid_P1[77]);
+        bindBMPtoTexture("./Images/Track/TrackTexture3.bmp", textureid_P1[78]);
+        bindBMPtoTexture("./Images/Track/TrackTexture4.bmp", textureid_P1[79]);
+        bindBMPtoTexture("./Images/Track/TrackTexture5.bmp", textureid_P1[80]);
+        bindBMPtoTexture("./Images/Track/TrackTexture6.bmp", textureid_P1[81]);
+        bindBMPtoTexture("./Images/Track/TrackTexture7.bmp", textureid_P1[82]);
+
+        bindBMPtoTexture("./Images/Barriers/BarrierTexture0.bmp", textureid_P1[83]);
+        bindBMPtoTexture("./Images/Barriers/BarrierTexture1.bmp", textureid_P1[84]);
+        bindBMPtoTexture("./Images/Barriers/BarrierTexture2.bmp", textureid_P1[85]);
+        bindBMPtoTexture("./Images/Barriers/BarrierTexture3.bmp", textureid_P1[86]);
+
+        bindBMPtoTexture("./Images/Ship/outUVShipBoxerTrue2.bmp", textureid_P1[87]);
+        bindBMPtoTexture("./Images/Ship/outUVShipBoxerPirate.bmp", textureid_P1[88]);
+        bindBMPtoTexture("./Images/ControlsScreen.bmp", textureid_P1[89]);
+
+        //Texture for ship
+        bindBMPtoTexture("./Images/Ship/saruk_Texture_2.bmp", textureid_P1[90]);
+        bindBMPtoTexture("./Images/Ship/saruk_Texture_3.bmp", textureid_P1[91]);
+        bindBMPtoTexture("./Images/Ship/saruk_Texturev4.bmp", textureid_P1[92]);
+        bindBMPtoTexture("./Images/Ship/saruk_Texturev5.bmp", textureid_P1[93]);
+        bindBMPtoTexture("./Images/Ship/saruk_Texturev6.bmp", textureid_P1[94]);
+        bindBMPtoTexture("./Images/Ship/saruk_Texturev7.bmp", textureid_P1[95]);
+        bindBMPtoTexture("./Images/Ship/saruk_Texturev8.bmp", textureid_P1[96]);
+
+        bindBMPtoTexture("./Images/Ship/outUVClaymore_1.bmp", textureid_P1[97]);
+        bindBMPtoTexture("./Images/Ship/outUVClaymore_2.bmp", textureid_P1[98]);
+        bindBMPtoTexture("./Images/Ship/outUVClaymore_3.bmp", textureid_P1[99]);
+        bindBMPtoTexture("./Images/Ship/outUVClaymore_4.bmp", textureid_P1[100]);
+
+        bindBMPtoTexture("./Images/Ship/UVBoxer1.bmp", textureid_P1[101]);
+        bindBMPtoTexture("./Images/Ship/UVBoxer2.bmp", textureid_P1[102]);
+        bindBMPtoTexture("./Images/Ship/UVBoxer3.bmp", textureid_P1[103]);
+        bindBMPtoTexture("./Images/Ship/UVBoxer4.bmp", textureid_P1[104]);
+        bindBMPtoTexture("./Images/Ship/UVBoxer5.bmp", textureid_P1[105]);
+        bindBMPtoTexture("./Images/Ship/UVBoxer6.bmp", textureid_P1[106]);
+
+        bindBMPtoTexture("./Images/Ship/outUVNogard_1.bmp", textureid_P1[107]);
+        bindBMPtoTexture("./Images/Ship/outUVNogard_2.bmp", textureid_P1[108]);
+        bindBMPtoTexture("./Images/Ship/outUVNogard_3.bmp", textureid_P1[109]);
+        bindBMPtoTexture("./Images/Ship/outUVNogard_4.bmp", textureid_P1[110]);
+        bindBMPtoTexture("./Images/Ship/outUVNogard_5.bmp", textureid_P1[111]);
+        bindBMPtoTexture("./Images/Ship/outUVNogard_6.bmp", textureid_P1[112]);
+
+        bindBMPtoTexture("./Images/Ship/motherShipHullUV_1.bmp", textureid_P1[113]);
+        bindBMPtoTexture("./Images/Ship/motherShipHullUV_2.bmp", textureid_P1[114]);
+        bindBMPtoTexture("./Images/ColorRed.bmp", textureid_P1[115]);
+
+	    bindBMPtoTexture("./Images/checker.bmp", textureid_P1[116]);
+
+        //Hack for mainmenu
+        bindBMPtoTexture("./Images/Menu/Main/none.bmp", textureid_P1[117]);
+        bindBMPtoTexture("./Images/Menu/Main/single.bmp", textureid_P1[118]);
+        bindBMPtoTexture("./Images/Menu/Main/versus.bmp", textureid_P1[119]);
+        bindBMPtoTexture("./Images/Menu/Main/story.bmp", textureid_P1[120]);
+        bindBMPtoTexture("./Images/Menu/Main/settings.bmp", textureid_P1[121]);
+        bindBMPtoTexture("./Images/Menu/Main/quit.bmp", textureid_P1[122]);
+
+        //submenu
+        bindBMPtoTexture("./Images/Menu/Shop/Submenu.bmp", textureid_P1[123]);
+
+        //Minimaps
+        bindBMPtoTexture("./Images/mmM2.bmp", textureid_P1[124]);
+        bindBMPtoTexture("./Images/mmNoodle.bmp", textureid_P1[125]);
+        bindBMPtoTexture("./Images/mmGrid.bmp", textureid_P1[126]);
+
+        //bindBMPtoTexture("./Images/Menu/Shop/SubmenuL.bmp", textureid_P1[124]);
+        //bindBMPtoTexture("./Images/Menu/Shop/SubmenuR.bmp", textureid_P1[125]);
 
 
-	//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	    //"/Images/textureTest.bmp"
 
-        // when texture area is large, bilinear filter the original
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	    //int err = aBMPImg.Load("./img/testT.bmp");
+	    //if (!(err == 1))
+	    //{printf("Error: Loading Texture: %i\n", err);}
+	    //data = aBMPImg.GetImg();
+	    //width = aBMPImg.GetWidth();
+	    //height = aBMPImg.GetHeight();
+	    ////aBMPImg.GetImg
+	    ////LoadPicture(data);
 
-    // the texture wraps over at the edges (repeat)
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-	//Unallocation data
+	    ////glEnable (GL_TEXTURE_2D);		//Don't need this, since shader programs will control texture usage
+	    //glGenTextures(1, &textureid_P1);
+
+	    //glBindTexture(GL_TEXTURE_2D, textureid_P1);
+	    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	    //glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+	    //**/
 
 
-	// select modulate to mix texture with color for shading
-	//glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+	    //glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	// when texture area is small, bilinear filter the closest mipmap
-	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-	//				 GL_LINEAR_MIPMAP_NEAREST );
-	// when texture area is large, bilinear filter the original
-	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+            // when texture area is large, bilinear filter the original
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
-	// the texture wraps over at the edges (repeat)
-	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	//glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+        // the texture wraps over at the edges (repeat)
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	    //Unallocation data
 
+
+	    // select modulate to mix texture with color for shading
+	    //glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+
+	    // when texture area is small, bilinear filter the closest mipmap
+	    //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	    //				 GL_LINEAR_MIPMAP_NEAREST );
+	    // when texture area is large, bilinear filter the original
+	    //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+	    // the texture wraps over at the edges (repeat)
+	    //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	    //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+        texturesLoaded = true;
+    }
 }
 
 
@@ -970,6 +982,10 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         //Draw the minimap
         float xOffset = 0.9;
         float yOffset = 0.65;
+
+        if (gameVariables->miniMapIndex == -1)
+        {showMiniMap = false;}
+
         if (showMiniMap)
         {
             posYPlace = 0.2f;    //position of Place
@@ -984,7 +1000,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
                         {glUniform1f(locHUDShader_Alpha, 0.0f);}
 
             //Map
-            glBindTexture(GL_TEXTURE_2D, textureid_P1[49]);
+            glBindTexture(GL_TEXTURE_2D, textureid_P1[gameVariables->miniMapIndex]);
             drawSquareUVRev(xOffset,yOffset,0,0.5f,0.5f);
 
 
@@ -1353,13 +1369,18 @@ void RenderingEngine::initializeGL()
    if (err == GLEW_OK)
 		{
             printf("glewInit is successful!\n");
-            aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");
-            aShinyShader = new Shader("shaders/Shiny2.frag", "shaders/Shiny2.vert");
-            aSkyBoxShader = new Shader("shaders/skybox.frag", "shaders/texture.vert");
-            aShadowShader = new Shader("shaders/shadow.frag", "shaders/shadow.vert");
-            aHUDShader = new Shader("shaders/BlueColorKey.frag", "shaders/BlueColorKey.vert");
-			flatten = new Shader("shaders/flatten.frag", "shaders/flatten.vert");
-            testRTShader = new Shader("shaders/UnderWater.frag", "shaders/texture.vert");
+
+            //if (!shadersLoaded)   //Shaders needs to be reinitialized i think
+            {
+                aShader = new Shader("shaders/texture.frag", "shaders/texture.vert");
+                aShinyShader = new Shader("shaders/Shiny2.frag", "shaders/Shiny2.vert");
+                aSkyBoxShader = new Shader("shaders/skybox.frag", "shaders/texture.vert");
+                aShadowShader = new Shader("shaders/shadow.frag", "shaders/shadow.vert");
+                aHUDShader = new Shader("shaders/BlueColorKey.frag", "shaders/BlueColorKey.vert");
+			    flatten = new Shader("shaders/flatten.frag", "shaders/flatten.vert");
+                testRTShader = new Shader("shaders/UnderWater.frag", "shaders/texture.vert");
+                //shadersLoaded = true;
+            }
         }
     else
     {fprintf(stderr, "Error: %s\n", glewGetErrorString(err));//printf("%i\n",err);
@@ -1390,7 +1411,7 @@ void RenderingEngine::initializeGL()
     //Light mouvement circle radius
     light_mvnt = 30.0f;
 
-    generateShadowFBO();
+    //generateShadowFBO();
 
 }
 

@@ -13,10 +13,29 @@ void PlayState::resetAll()
     maxPauseTime = 300;
     eventManager = EventManager::getInstance();
     gameVariables = GameVariables::getInstance();
+
+    //Player1
     keyAPressed = false;
     keyDPressed = false;
     keyWPressed = false;
     keySPressed = false;
+    keyQPressed = false;
+    keyEPressed = false;
+    keyRPressed = false;
+    keyTPressed = false;
+    keySpacePressed = false;
+
+    //Player2
+    keyLeftPressed = false;
+    keyRightPressed = false;
+    keyUpPressed = false;
+    keyDownPressed = false;
+    key4Pressed = false;
+    key6Pressed = false;
+    keyMinusPressed = false;
+    keyPlusPressed = false;
+    keyEntPressed = false;
+
     paused = false;
 
     id = 0;
@@ -405,6 +424,7 @@ void PlayState::update(float dt)
                 gameVariables->addRanking(renderingEngine->FloatToString(rankings->at(e)->rank),rankings->at(e)->rankingName,renderingEngine->FloatToString(rankings->at(e)->finishTime));
             }
 
+            paused = false;
             changeState(RESULT);
         }
     }
@@ -456,6 +476,231 @@ void PlayState::update(float dt)
                 car->addTorque(255);
                 car->addTorque(255);
                 car->addTorque(255);
+            }
+
+
+            if(keyQPressed) 
+            {
+                Entity* car = entities.cars[0];
+                car->shuntLeft();
+            }
+            if(keyEPressed) 
+            {
+                Entity* car = entities.cars[0];
+                car->shuntRight();
+            }
+            if(keyRPressed)
+            {
+                Entity* car = entities.cars[0];
+			    CustomData* cd = (CustomData*)car->getActor()->userData;
+
+                NxVec3 respawnPt = cd->wp->pos;
+
+                car->getActor()->setGlobalPosition(respawnPt);
+			    NxMat33 orient(cd->wp->ori);
+
+                car->getActor()->setGlobalOrientation(orient);
+                car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+                car->aCam->resetCamera();
+	        }
+
+            if (keyTPressed)
+            {
+                Entity* car = entities.cars[0];
+
+                if (car->getBatteryCharged())
+                    car->dischargeBattery();
+                else
+                	car->chargeBattery();  
+            }
+
+            if(keySpacePressed)
+            {
+                Entity* car = entities.cars[0];
+                 Entity::PickupType type = car->usePickup();
+                    if(type == Entity::MISSILE)
+                    {
+                        int numCars = gameVariables->numberOfAIs + gameVariables->getNumPlayers();
+                        int victimIndex = car->rank - 2;   //offset from current rank to get the person infront of you                 
+                        soundEngine->playSound(-1, 8);       //play missile, on channel 4
+                        Entity* e = new Entity(20000,
+                            physicsEngine->createMissile(car->getActor()),
+                            renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 20000 ms.
+                        e->rc.push_back(new RenderableComponent(4,32));      //Missile                    
+				        e->parent = car;
+                        e->initDir = car->getActor()->getGlobalOrientation()*NxVec3(1,0,0);
+
+                        if(victimIndex >= 0) //Fly straight if player is in first place
+                        {
+                            e->tracking = rankings->at(victimIndex);
+                            rankings->at(victimIndex)->tracker = e;
+                        }
+
+                        entities.DynamicObjs.push_back(e);
+
+                        if (CHEAT_InfPowUp)
+                        {car->givePickup(Entity::MISSILE);}
+                    }
+                    else if(type == Entity::SHIELD)
+                    {
+                        soundEngine->playSound(4, 9);       //play missile, on channel 4
+                        car->setShield(true);
+                    }
+                    else if(type == Entity::BARRIER)
+                    {
+                        soundEngine->playSound(4, 10);       //play missile, on channel 4
+                        Entity* e = new Entity(-1,
+                            physicsEngine->createBarrier(car->getActor()),
+                            renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live forever       
+				        e->parent = car;                
+                        e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
+                        int barrierTexture = 83;
+                        if (rand() % 10 == 0){barrierTexture = 83 + rand() % 4;}
+                        e->rc.push_back(new RenderableComponent(10,barrierTexture));     //BarrierScreen
+                        entities.DynamicObjs.push_back(e);
+
+                        if (CHEAT_InfPowUp)
+                        {car->givePickup(Entity::BARRIER);}
+                    }
+                    else if(type == Entity::BOOST)
+                    {
+                        car->boost();
+
+                        if (CHEAT_InfBoost)
+                        {car->givePickup(Entity::BOOST);};
+                    }
+            }
+
+
+
+
+            if (gameVariables->getNumPlayers() > 1)
+            {
+                //Ya, its a HORRIBLE hack, but it should work =)
+
+                if (keyLeftPressed)
+                {
+                    Entity* car = entities.cars[1];
+                    car->setSteeringAngle(1.0f);
+                }
+                else if (keyRightPressed)
+                {
+                    Entity* car = entities.cars[1];
+                    car->setSteeringAngle(-1.0f);
+                }
+                if (keyDownPressed)
+                {
+                    Entity* car = entities.cars[1];
+                    car->addTorque(-255);
+                    car->addTorque(-255);
+                    car->addTorque(-255);
+                    car->addTorque(-255);
+                    car->addTorque(-255);
+                }
+                else if (keyUpPressed)
+                {
+                    Entity* car = entities.cars[1];
+                    car->addTorque(255);
+                    car->addTorque(255);
+                    car->addTorque(255);
+                    car->addTorque(255);
+                    car->addTorque(255);
+                }
+
+
+                if(key4Pressed) 
+                {
+                    Entity* car = entities.cars[1];
+                    car->shuntLeft();
+                }
+                if(key6Pressed) 
+                {
+                    Entity* car = entities.cars[1];
+                    car->shuntRight();
+                }
+                if(keyMinusPressed)
+                {
+                    Entity* car = entities.cars[1];
+			        CustomData* cd = (CustomData*)car->getActor()->userData;
+
+                    NxVec3 respawnPt = cd->wp->pos;
+
+                    car->getActor()->setGlobalPosition(respawnPt);
+			        NxMat33 orient(cd->wp->ori);
+
+                    car->getActor()->setGlobalOrientation(orient);
+                    car->getActor()->setLinearVelocity(NxVec3(0,0,0));
+                    car->aCam->resetCamera();
+	            }
+
+                if (keyPlusPressed)
+                {
+                    Entity* car = entities.cars[1];
+
+                    if (car->getBatteryCharged())
+                        car->dischargeBattery();
+                    else
+                	    car->chargeBattery();  
+                }
+
+                if(keyEntPressed)
+                {
+                    Entity* car = entities.cars[1];
+                     Entity::PickupType type = car->usePickup();
+                        if(type == Entity::MISSILE)
+                        {
+                            int numCars = gameVariables->numberOfAIs + gameVariables->getNumPlayers();
+                            int victimIndex = car->rank - 2;   //offset from current rank to get the person infront of you                 
+                            soundEngine->playSound(-1, 8);       //play missile, on channel 4
+                            Entity* e = new Entity(20000,
+                                physicsEngine->createMissile(car->getActor()),
+                                renderingEngine->getModelManger().getModel("Missile.obj")); //Missile will live for 20000 ms.
+                            e->rc.push_back(new RenderableComponent(4,32));      //Missile                    
+				            e->parent = car;
+                            e->initDir = car->getActor()->getGlobalOrientation()*NxVec3(1,0,0);
+
+                            if(victimIndex >= 0) //Fly straight if player is in first place
+                            {
+                                e->tracking = rankings->at(victimIndex);
+                                rankings->at(victimIndex)->tracker = e;
+                            }
+
+                            entities.DynamicObjs.push_back(e);
+
+                            if (CHEAT_InfPowUp)
+                            {car->givePickup(Entity::MISSILE);}
+                        }
+                        else if(type == Entity::SHIELD)
+                        {
+                            soundEngine->playSound(4, 9);       //play missile, on channel 4
+                            car->setShield(true);
+                        }
+                        else if(type == Entity::BARRIER)
+                        {
+                            soundEngine->playSound(4, 10);       //play missile, on channel 4
+                            Entity* e = new Entity(-1,
+                                physicsEngine->createBarrier(car->getActor()),
+                                renderingEngine->getModelManger().getModel("BarrierDisc.obj")); //Barrier will live forever       
+				            e->parent = car;                
+                            e->rc.push_back(new RenderableComponent(9,30));      //BarrierDisc
+                            int barrierTexture = 83;
+                            if (rand() % 10 == 0){barrierTexture = 83 + rand() % 4;}
+                            e->rc.push_back(new RenderableComponent(10,barrierTexture));     //BarrierScreen
+                            entities.DynamicObjs.push_back(e);
+
+                            if (CHEAT_InfPowUp)
+                            {car->givePickup(Entity::BARRIER);}
+                        }
+                        else if(type == Entity::BOOST)
+                        {
+                            car->boost();
+
+                            if (CHEAT_InfBoost)
+                            {car->givePickup(Entity::BOOST);};
+                        }
+                }
+
+
             }
 
             //printf("KeyA: %i\n", keyAPressed);
@@ -996,7 +1241,8 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             {
                 keyDPressed = true;
             }
-            else if (keyPressed == SDLK_w)
+            
+            if (keyPressed == SDLK_w)
             {
                 keyWPressed = true;
             }
@@ -1004,7 +1250,48 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             {
                 keySPressed = true;      
             }
-            else if (keyPressed == SDLK_INSERT)         //insert logs a waypoint
+            
+            if (keyPressed == SDLK_q)
+                keyQPressed = true;
+
+            if (keyPressed == SDLK_e)
+                keyEPressed = true;
+            
+            if (keyPressed == SDLK_r)
+                keyRPressed = true;
+
+            if (keyPressed == SDLK_t)
+                keyTPressed = true;
+
+            if (keyPressed == SDLK_SPACE)
+                keySpacePressed = true;
+    
+            
+            //Player 2
+            if (keyPressed == SDLK_UP)
+                keyUpPressed = true;
+            else if (keyPressed == SDLK_DOWN)
+                keyDownPressed = true;
+            
+            if (keyPressed == SDLK_LEFT)
+                keyLeftPressed = true;
+            else if (keyPressed == SDLK_RIGHT)
+                keyRightPressed = true;      
+            
+            if (keyPressed == SDLK_KP4)
+                key4Pressed = true;
+            if (keyPressed == SDLK_KP6)
+                key6Pressed = true;            
+            if (keyPressed == SDLK_KP_MINUS)
+                keyMinusPressed = true;
+            if (keyPressed == SDLK_KP_PLUS)
+                keyPlusPressed = true;
+            if (keyPressed == SDLK_KP_ENTER)
+                keyEntPressed = true;
+
+
+            
+            if (keyPressed == SDLK_INSERT)         //insert logs a waypoint
             {
                 logWayPoint(0);
             }
@@ -1030,6 +1317,44 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             {
                 keySPressed = false;      
             }
+
+            if (keyPressed == SDLK_q)
+                keyQPressed = false;
+
+            if (keyPressed == SDLK_e)
+                keyEPressed = false;
+            
+            if (keyPressed == SDLK_r)
+                keyRPressed = false;
+
+            if (keyPressed == SDLK_t)
+                keyTPressed = false;
+
+            if (keyPressed == SDLK_SPACE)
+                keySpacePressed = false;
+    
+            
+            //Player 2
+            if (keyPressed == SDLK_UP)
+                keyUpPressed = false;
+            else if (keyPressed == SDLK_DOWN)
+                keyDownPressed = false;
+            
+            if (keyPressed == SDLK_LEFT)
+                keyLeftPressed = false;
+            else if (keyPressed == SDLK_RIGHT)
+                keyRightPressed = false;      
+            
+            if (keyPressed == SDLK_KP4)
+                key4Pressed = false;
+            if (keyPressed == SDLK_KP6)
+                key6Pressed = false;
+            if (keyPressed == SDLK_KP_PLUS)
+                keyPlusPressed = false;
+            if (keyPressed == SDLK_KP_MINUS)
+                keyMinusPressed = false;
+            if (keyPressed == SDLK_KP_ENTER)
+                keyEntPressed = false;
         }
     }
 
@@ -1187,6 +1512,8 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                     car->shuntRight();
                 if(state->back)
                 {
+                    
+
 			        CustomData* cd = (CustomData*)car->getActor()->userData;
 
                     NxVec3 respawnPt = cd->wp->pos;
@@ -1234,6 +1561,10 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
             {
                 pauseTime = time.getCurrentTime();
                 pause();
+            }
+            else if (state->back)
+            {
+                changeState(RESULT);
             }
         }
     }

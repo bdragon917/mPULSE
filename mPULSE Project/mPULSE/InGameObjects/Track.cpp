@@ -35,6 +35,8 @@ std::string Track::removeFilePath(std::string line)
 
 void Track::loadTrackInfo(std::string filename)
 {            
+    
+
     std::string tmpLine = "";
     std::ifstream file;
     trackName = removeFilePath(filename);
@@ -208,6 +210,7 @@ void Track::loadTrackInfo(std::string filename)
 
 void Track::parseHead(std::vector<std::string>* newData)
 {
+
     if(newData->size() > 1)
     {
         if(newData->at(0).compare("MusicIndex:") == 0)
@@ -238,12 +241,21 @@ void Track::parseHead(std::vector<std::string>* newData)
 
             infoz.pairs.push_back( new RenderableComponent(atoi(newData->at(1).c_str()), atoi(newData->at(2).c_str())) );
         }
+        else if(newData->at(0).compare("Minimap:") == 0)
+        {
+            infoz.miniMapTexture = atoi(newData->at(1).c_str());
+        }
 
     }
 }
 
 void Track::loadTrackInfo2(std::string filename)
 {
+
+    //initialize
+    infoz.miniMapTexture = -1;
+
+
 	/*
 	format:
 	<music index>

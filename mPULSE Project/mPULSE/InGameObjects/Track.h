@@ -24,6 +24,7 @@ class Track
 		int music;
 		std::vector<int> sky;
 		int physics;
+        int miniMapTexture;
 		std::vector<RenderableComponent*> pairs;
 	};
 

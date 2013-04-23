@@ -64,11 +64,11 @@ bool StageSelectState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
             {
             SDLKey keyPressed = KeyboardMouseEvents.key.keysym.sym;
 
-            if ((keyPressed == SDLK_LEFT) || (keyPressed == SDLK_a) || (keyPressed == SDLK_UP))
+            if ((keyPressed == SDLK_LEFT) || (keyPressed == SDLK_a) || (keyPressed == SDLK_UP) || (keyPressed == SDLK_w))
             {
                 keySelectLeft();
             }
-            else if ((keyPressed == SDLK_RIGHT) || (keyPressed == SDLK_d) || (keyPressed == SDLK_DOWN))
+            else if ((keyPressed == SDLK_RIGHT) || (keyPressed == SDLK_d) || (keyPressed == SDLK_DOWN) || (keyPressed == SDLK_s))
             {
                 keySelectRight();
             }
@@ -163,6 +163,13 @@ void StageSelectState::loadTrack()
             gameVariables->skyboxTextureIndex.push_back(inSkyboxIndex);
         }
 
+        //debug
+        int mm = gameVariables->miniMapIndex;
+        int mm2 = tempTrack->infoz.miniMapTexture;
+
+        int mm3 = (mm + mm2) * 50;
+
+        gameVariables->miniMapIndex = tempTrack->infoz.miniMapTexture;   //default
         gameVariables->isLoaded = true;     //should now have a loaded track! 
 
     }
@@ -180,6 +187,7 @@ void StageSelectState::loadTrack()
         
         delete gameVariables->theSelectedTrack;
         gameVariables->theSelectedTrack = new Track(".\\InGameObjects\\Race1.txt");
+        gameVariables->miniMapIndex = 49;   //default
         gameVariables->isLoaded = false;
         //Use default track
     }
