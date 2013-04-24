@@ -28,6 +28,12 @@ RenderingEngine::RenderingEngine()
     texturesLoaded = false;
     shadersLoaded = false;
 
+    showParticles = true;
+
+    //particle
+    playerIsAccelerating[0] = false;
+    playerIsAccelerating[1] = false;
+
 	generateAsteroids(TOTAL_ASTEROIDS);
 }
 
@@ -436,7 +442,7 @@ string RenderingEngine::FloatToString(float input)
 	return stream.str();
 }
 
-void RenderingEngine::drawModel(ObjModel* model,int x,int y, int z, int scale)
+void RenderingEngine::drawModel(ObjModel* model,int x,int y, int z, float scale)
 {
     //Sanity Check
     if (model == NULL)
@@ -2124,6 +2130,9 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                      {
                         aShader->off();
                      }
+
+                     //asumed to be old shadow map stuff
+                     /*
                     glPushMatrix();
 
                  	glDisable(GL_TEXTURE_2D);
@@ -2156,6 +2165,9 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 
                     glEnable(GL_TEXTURE_2D);
 		            glPopMatrix();
+                    */
+
+
 
                 //drawShadow2(entities, scene);
                 //flatten->on();
@@ -2261,7 +2273,43 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     if (locShader_Alpha != -1)
                     {glUniform1f(locShader_Alpha, 1.00f);}
 
+
+
+                    glUniform1f(locShader_DiscardBlue, 3.0f);
+
+                    /////////////draw particles
+                    glPushAttrib(GL_DEPTH_TEST);
+                    glDisable(GL_DEPTH_TEST);
+                    glBindTexture(GL_TEXTURE_2D, textureid_P1[75]);
+                    for (unsigned int x=0;x<particles.size();x++)
+                    {
+                        glPushMatrix();
+                        glTranslatef(particles[x]->getLocation().x,particles[x]->getLocation().y,particles[x]->getLocation().z);
+        
+                        //20 is the max death til time
+                        glUniform1f(locShader_Alpha, (((float)(particles[x]->timeTilDeath / 80.0f))));
+
+                            drawModel(modelManager.getModel(36),0,0,0,0.35f);
+
+                        glUniform1f(locShader_Alpha, 1.000f);
+                        glPopMatrix();
+                    }
+
+                    updateParticles();
+                    if (locShader_Alpha != -1)
+                    {glUniform1f(locShader_DiscardBlue, 0.00f);}
+                    glEnable(GL_DEPTH_TEST);
+                    glPopAttrib();
+                    //////////////////
+
+
+
                     drawDynamicObjects(&entities->DynamicObjs);
+
+
+
+
+
                 //float blur = (entities->cars[0]->getActor()->getLinearVelocity().magnitude() / 150.0f); //blur = (blur * 0.7) + (0.3 * newblur)
 
                 //glAccum(GL_MULT, blur);
@@ -3229,27 +3277,31 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
 
         //Draw Particles
         //Particle* newParticle = new Particle(shipAngle * 0.1f,0.0f,shipAngle * 0.03f + 1.0f);
-        Particle* newParticle = new Particle(
-                                            //1.0f,
-                                            //((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
-                                            ((rand() % 100) * 0.01f),
-                                            0.0f,
-                                            shipAngle * 0.03f + 1.0f);
-        newParticle->setVelocity(NxVec3(0,0.0f,1.5f));
-        newParticle->timeTilDeath = rand()%40;
-        particles.push_back(newParticle);
-
-        //Particle* newParticle2 = new Particle(shipAngle * -0.1f,0.0f,shipAngle * 0.04f + 1.0f);
-        Particle* newParticle2 = new Particle(
-                                                //-1.0f,
-                                                //-((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
-                                                ((rand() % 100) * -0.01f),
+        for (int e = 0; e < 2; e++)
+        {
+            Particle* newParticle = new Particle(
+                                                //1.0f,
+                                                //((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
+                                                ((rand() % 600) * 0.01f),
                                                 0.0f,
-                                                shipAngle * 0.04f + 1.0f);
-        newParticle2->setVelocity(NxVec3(0,0.0f,1.7f));
-        newParticle2->timeTilDeath = rand()%40;
-        particles.push_back(newParticle2);
-	    
+                                                shipAngle * 0.03f + 1.0f);
+            //newParticle->setVelocity(NxVec3(0,0.0f,1.5f));
+            newParticle->setVelocity(NxVec3(0,0.0f,0.85f));
+            newParticle->timeTilDeath = rand()%60;
+            particles.push_back(newParticle);
+
+            //Particle* newParticle2 = new Particle(shipAngle * -0.1f,0.0f,shipAngle * 0.04f + 1.0f);
+            Particle* newParticle2 = new Particle(
+                                                    //-1.0f,
+                                                    //-((float)rand()/(float)RAND_MAX - 1) * ((float)rand()/(float)RAND_MAX),
+                                                    ((rand() % 600) * -0.01f),
+                                                    0.0f,
+                                                    shipAngle * 0.04f + 1.0f);
+            //newParticle2->setVelocity(NxVec3(0,0.0f,1.7f));
+            newParticle2->setVelocity(NxVec3(0,0.0f,0.85f));
+            newParticle2->timeTilDeath = rand()%60;
+            particles.push_back(newParticle2);
+        }
         /*
 	    for (int e = 0; e < 50; e++)
 	    {
@@ -3279,10 +3331,10 @@ int RenderingEngine::drawMainMenuScreen(int curMenuButton, bool clicked, float d
         //glRotatef(shipAngle,0.0f,0.0f,1.0f);
         //glScalef(0.0725f,0.0725f,0.0725f);
         //glTranslatef(-particles[x]->getLocation().x,-particles[x]->getLocation().y,-particles[x]->getLocation().z);
-        modelManager;
+        //modelManager;
 
         //20 is the max death til time
-        glUniform1f(locShader_Alpha, ((particles[x]->timeTilDeath / 20) + 0.5f));
+        glUniform1f(locShader_Alpha, (((float)(particles[x]->timeTilDeath / 20.0f))));
 
             drawModel(modelManager.getModel(22),0,0,0,1.0f);
 
@@ -4908,8 +4960,39 @@ void RenderingEngine::drawCars(Entities* entities)
                 glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
                 drawActor(entities->cars[i]->getActor());
             }
+
+
+            //Create Particles
+            //if (entities->cars[i]->getSteerWheels()->at(0)->getAxleSpeed() > 10.0f)
+            if (playerIsAccelerating[i])
+            {
+                NxVec3 carLoc = entities->cars[i]->getActor()->getGlobalPose().t;
+                NxVec3 carVec = entities->cars[i]->getActor()->getLinearVelocity();
+                NxVec3 carBack = entities->cars[i]->getActor()->getLinearVelocity();
+                carBack.normalize();
+                carBack = carBack * -3.0f;
+                Particle* newParticle = new Particle(
+                                                    carLoc.x + carBack.x,
+                                                    carLoc.y + 1.0f,
+                                                    carLoc.z + carBack.z);
+                carVec *= 0.00000001f;
+                carVec *= 0.00000001f;
+                carVec *= 0.00000001f;
+                carVec *= 0.00000001f;
+                carVec *= 0.00000001f;
+                newParticle->setVelocity(carVec * -0.0000001f);
+                newParticle->timeTilDeath = 20;
+                particles.push_back(newParticle);
+            }
+
+
         }
     }
+
+
+
+
+
 }
 void RenderingEngine::drawDynamicObjects(std::vector<Entity*>* dObjs)
 {
@@ -4977,6 +5060,28 @@ void RenderingEngine::drawAICars(Entities* entities)
                 glBindTexture(GL_TEXTURE_2D, textureid_P1[6]);
                 drawActor(entities->AIcars[i]->getActor());
             }
+
+
+
+            
+            //Create Particles
+            if (entities->AIcars[i]->getSteerWheels()->at(0)->getAxleSpeed() > 10.0f)
+            {
+                NxVec3 carLoc = entities->AIcars[i]->getActor()->getGlobalPose().t;
+                NxVec3 carVec = entities->AIcars[i]->getActor()->getLinearVelocity();
+                NxVec3 carBack = entities->AIcars[i]->getActor()->getLinearVelocity();
+                carBack.normalize();
+                carBack = carBack * -3.0f;
+                Particle* newParticle = new Particle(
+                                                    carLoc.x + carBack.x,
+                                                    carLoc.y + 1.0f,
+                                                    carLoc.z + carBack.z);
+                newParticle->setVelocity(carVec * -0.0000001f);
+                newParticle->timeTilDeath = 20;
+                particles.push_back(newParticle);
+            }
+            
+
         }
     }
 }

@@ -51,13 +51,26 @@ void main (void)
 		if (ct == vec3(0.0,0.0,1.0))
 			discard;
 	}
-	else
+	else if (discard_blue < 2.5)	//Basically if = 2
 	{
 		if (ct == vec3(0.0,0.0,1.0))
 			discard;
 		else
 			{
 				final_color.w = 0.5 + ((1.0 - ct.z) * 0.5);
+			}
+	}
+	else
+	{
+			final_color.x = ct.x;
+			final_color.y = ct.y;
+			final_color.z = ct.z;
+			if ((ct.x < 0.4) && (ct.y < 0.4))
+			{
+				final_color.w = (final_color.w * 0.5) - ((ct.z));
+				
+				if (final_color.w < 0)
+					{final_color.w = 0;}
 			}
 	}
   

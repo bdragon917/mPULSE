@@ -34,3 +34,5 @@ ModelLoader\\Models\\MissilePlus.obj
 ModelLoader\\Models\\BarrierPlus.obj
 ModelLoader\\Models\\BoostPlus.obj
 ModelLoader\\Models\\ShieldPlus.obj
+ModelLoader\\Models\\particle2.obj
+ModelLoader\\Models\\Trickish.obj

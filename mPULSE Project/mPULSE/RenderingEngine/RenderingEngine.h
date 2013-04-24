@@ -96,7 +96,7 @@ public:
     void drawBox_Generic(float size);
     void drawSquare(float x, float y, float z, float half_width, float half_height);
     void drawSquareUVRev(float x, float y, float z, float half_width, float half_height);
-    void drawModel(ObjModel* model,int x,int y, int z, int scale);
+    void drawModel(ObjModel* model,int x,int y, int z, float scale);
     void drawModelPosRotationEnhanced(ObjModel* model, Entity* anEntity);
     void drawScaledModelPos(ObjModel* model, NxMat34* aPose, NxVec3 scale);
     void drawModel(ObjModel* model,int x,int y, int z, NxVec3 scale);
@@ -129,6 +129,10 @@ public:
 
     bool showMiniMap;
     bool showAsteroids;
+    bool showParticles;
+
+    //particle
+    bool playerIsAccelerating[4];
 
     //Texture Stuff
     GLuint* textureid_P1;

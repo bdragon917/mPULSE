@@ -1390,6 +1390,19 @@ void PlayState::handleXboxEvents(int player,XboxController* state)
 void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,XboxController* state, bool isHuman)
 {
 
+        if (isHuman)
+        {
+            if ((state->rTrigger > 25))
+                {
+                    renderingEngine->playerIsAccelerating[player] = true;
+                }
+                else
+                {
+                    renderingEngine->playerIsAccelerating[player] = false;
+                }
+        }
+
+
     //logReplay(player, state, 0);      Used to log replay!
 
     //if (state->back)
@@ -1425,7 +1438,9 @@ void PlayState::handleXboxController(int player, std::vector<Entity*> cars ,Xbox
                 int lTriggMag = state->lTrigger;    
                 static int count = 0;
 
-                car->addTorque(rTriggMag - lTriggMag);        
+                car->addTorque(rTriggMag - lTriggMag);
+                
+
                 car->setSteeringAngle((state->leftStick.magnitude) * -state->leftStick.x / 24000.0f);
 
 		        if(state->x)

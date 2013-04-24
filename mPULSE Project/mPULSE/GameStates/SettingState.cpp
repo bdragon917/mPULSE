@@ -262,7 +262,7 @@ SettingState* SettingState::getInstance()
 
 void SettingState::reinitializeWindow()
 {
-        SDL_Init( SDL_INIT_EVERYTHING );
+        //SDL_Init( SDL_INIT_EVERYTHING );
 
 	//Initalization for motion blur
     SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 8);

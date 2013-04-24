@@ -3,3 +3,4 @@
 .\\InGameObjects\\Race1_M2.txt
 .\\InGameObjects\\Race1_noodles.txt
 .\\InGameObjects\\Grid.txt
+.\\InGameObjects\\Trickish.txt
