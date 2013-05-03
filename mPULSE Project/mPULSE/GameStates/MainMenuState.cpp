@@ -88,7 +88,8 @@ void MainMenuState::render()
             changeState(SETTING); 
             break;
         case 4:
-            quit = true;
+            //quit = true;
+            changeState(CREDITS); 
             break;
         }
     }
@@ -193,6 +194,12 @@ void MainMenuState::keySelectTarget()
     else if (curSelected == 1)
     {
         endState = true;
+    }
+    else if (curSelected == 4)  //quit
+    {
+        soundEngine->FadeOutMusic(1000);
+        renderingEngine->startTransition(RenderingEngine::FADE_OUT);
+        lockControls = true;
     }
     else
     {

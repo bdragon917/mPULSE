@@ -16,6 +16,7 @@
 #include <GameStates/ResultState.h>
 #include <GameStates/StageSelectState.h>
 #include <GameStates/ControlScreenState.h>
+#include <GameStates\CreditState.h>
 #include <Util/Clock.h>
 
 class Game

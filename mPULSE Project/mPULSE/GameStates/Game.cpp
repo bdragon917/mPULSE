@@ -75,6 +75,9 @@ void Game::checkStateChange()
         case GameState::CONTROLS:
             state = ControlScreenState::getInstance();                
             break;
+        case GameState::CREDITS:
+            state = CreditState::getInstance();                
+            break;
         }
     }
 }

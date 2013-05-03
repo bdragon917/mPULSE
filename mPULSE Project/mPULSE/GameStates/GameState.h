@@ -20,7 +20,8 @@ public:
         PLAY,
         RESULT,
         PAUSE,
-        GAMEOVER
+        GAMEOVER,
+        CREDITS
     } StateType;
 
     GameState();

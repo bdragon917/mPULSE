@@ -110,6 +110,8 @@ public:
 	void drawShadow(Entities* entities, NxScene* scene);
     void RenderingEngine::drawShadow2(Entities* entities, NxScene* scene);
 
+    int RenderingEngine::drawCreditsScreen(float dt);
+
     Console aConsole;    
     Shader* aShader;
     Shader* aShinyShader;
