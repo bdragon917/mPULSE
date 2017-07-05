@@ -7,10 +7,11 @@
 #include <math.h>
 #include <sstream>	//String stream //for float convertion
 
-#include <gl/glew.h>	//DONT MESS THIS ORDER!!!!
+#include "C:/CPSC585/glew-1.9.0/include/GL/glew.h"	//DONT MESS THIS ORDER!!!!
+//#include <gl/glew.h>	//DONT MESS THIS ORDER!!!!
 #include <gl/GLU.h>
 #include <gl/GL.h>
-#include <GL/glut.h>	//For text
+//#include <GL/glut.h>	//For text
 
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -103,8 +104,8 @@ public:
     void drawModelPos(ObjModel* model, NxMat34* aMatrix);
     void drawModelShadow(ObjModel* model, NxMat34* aPose);
     void drawDynamicObjects(std::vector<Entity*>* dObjs);
-    GLuint generateDisplayList(std::string modelName,int x,int y,int z,int scale);
-    GLuint generateDisplayList(ObjModel* model,int x,int y,int z,int scale);
+    GLuint generateDisplayList(std::string modelName, int x, int y,int z, float scale);
+    GLuint generateDisplayList(ObjModel* model, int x, int y, int z, float scale);
     void deleteDisplayList(GLuint index);
     void drawDisplayList(int index);
 	void drawShadow(Entities* entities, NxScene* scene);
@@ -123,6 +124,7 @@ public:
     Shader* testRTShader;
 
     string FloatToString(float input);
+	string IntToString(int input);
 
     //used for scene display
     bool debugPhysX;
@@ -277,8 +279,8 @@ private:
     void setTextureMatrix(void);
     void setupMatrices(float position_x,float position_y,float position_z,float lookAt_x,float lookAt_y,float lookAt_z);
 
-    #define RENDER_WIDTH 640.0
-    #define RENDER_HEIGHT 480.0
+    #define RENDER_WIDTH 640
+    #define RENDER_HEIGHT 480
     #define SHADOW_MAP_RATIO 2
 
     #define M_PI 3.14159265358979323846

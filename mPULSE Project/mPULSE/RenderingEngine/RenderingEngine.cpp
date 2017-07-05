@@ -62,41 +62,41 @@ void RenderingEngine::generateAsteroids(int total)
 	{
 		if (rand()%2 == 0)
 		{
-			a.x = (rand()% 1500);
-			a.xVec = (rand()% RAND_MAX);
+			a.x = (float) (rand() % 1500);
+			a.xVec = (float) (rand()% RAND_MAX);
 		}
 		else
 		{
-			a.x = -(rand()%1500);
-			a.xVec = -(rand()% RAND_MAX);
+			a.x = (float)-(rand()%1500);
+			a.xVec = (float)-(rand()% RAND_MAX);
 		}
 
 		if (rand()%2 == 0)
 		{
-			a.y = (rand()% 1500);
-			a.yVec = (rand()% RAND_MAX);
+			a.y = (float)(rand()% 1500);
+			a.yVec = (float)(rand()% RAND_MAX);
 		}
 		else
 		{
-			a.y = -(rand()% 350);
-			a.yVec = -(rand()% RAND_MAX);
+			a.y = (float)-(rand()% 350);
+			a.yVec = (float)-(rand()% RAND_MAX);
 		}
 		if (rand()%2 == 0)
 		{
-			a.z = (rand()% 1500);
-			a.zVec = (rand()% RAND_MAX);
+			a.z = (float)(rand()% 1500);
+			a.zVec = (float)(rand()% RAND_MAX);
 		}
 		else
 		{
-			a.z = -(rand()% 1500);
-			a.xVec = (rand()% RAND_MAX);
+			a.z = (float)-(rand() % 1500);
+			a.xVec = (float)(rand()% RAND_MAX);
 		}
 
-		a.rotateRate = rand()%90 + 30;
+		a.rotateRate = rand()%90 + 30.f;
 
 		a.angle = 0;
 
-		a.scale = rand()%25 + 1;
+		a.scale = rand()%25 + 1.f;
 
 		a.texture = rand()%4 + 61;
 
@@ -112,7 +112,7 @@ void RenderingEngine::turnAsteroids(int index)
 		asteroidList.at(index).angle -= 360;
 }
 
-GLuint RenderingEngine::generateDisplayList(std::string modelName,int x,int y,int z,int scale)
+GLuint RenderingEngine::generateDisplayList(std::string modelName,int x,int y,int z,float scale)
 {
     ObjModel* model = modelManager.getModel(modelName);
     GLuint index = -1;
@@ -131,7 +131,7 @@ GLuint RenderingEngine::generateDisplayList(std::string modelName,int x,int y,in
 }
 
 
-GLuint RenderingEngine::generateDisplayList(ObjModel* model,int x,int y,int z,int scale)
+GLuint RenderingEngine::generateDisplayList(ObjModel* model,int x,int y,int z, float scale)
 {
     GLuint index = -1;
     if(model != NULL)
@@ -435,9 +435,14 @@ void RenderingEngine::initializeTexture()
 
 ///Custom Draw Functions
 
-
-//This function converts an int into a string
 string RenderingEngine::FloatToString(float input)
+{
+	stringstream stream;
+	stream << input;
+	return stream.str();
+}
+
+string RenderingEngine::IntToString(int input)
 {
 	stringstream stream;
 	stream << input;
@@ -917,11 +922,11 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         if (locHUDShader_Alpha != -1)
                     {glUniform1f(locHUDShader_Alpha, 0.0f);}
 
-        int curSpd = (carActor->getLinearVelocity().magnitude());
+        int curSpd = (int) carActor->getLinearVelocity().magnitude();
         int hundreds = (curSpd/100);
         int tens = (curSpd-(hundreds*100)) /10;
         int ones = (curSpd-((hundreds*100)+(tens*10)));
-        int tenth = ((carActor->getLinearVelocity().magnitude()*10)-((hundreds*1000)+(tens*100)+(ones*10)));
+        int tenth = (int) (carActor->getLinearVelocity().magnitude()*10)-((hundreds*1000)+(tens*100)+(ones*10));
         CustomData* cd = (CustomData*) carActor->userData;
         
         //drawText(50,-75, "Place: " + FloatToString(carEntity->rank));
@@ -971,7 +976,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             glTexCoord2f(displaceHundred+0.1f, 0.0f);glVertex2f(0.8f, -0.90f);
             glTexCoord2f(displaceHundred+0.1f, 1.0f);glVertex2f(0.8f, -0.75f);
             glTexCoord2f(displaceHundred, 1.0f);glVertex2f(0.75f, -0.75f);
-            glTexCoord2f(displaceHundred, 0.0f);glVertex2f(0.75f, -0.90);
+            glTexCoord2f(displaceHundred, 0.0f);glVertex2f(0.75f, -0.90f);
         glEnd();
 
 
@@ -988,8 +993,8 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
         float posYLap = 0.7f;       //position of Lap
 
         //Draw the minimap
-        float xOffset = 0.9;
-        float yOffset = 0.65;
+        float xOffset = 0.9f;
+        float yOffset = 0.65f;
 
         if (gameVariables->miniMapIndex == -1)
         {showMiniMap = false;}
@@ -1003,7 +1008,7 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
             if (locHUDShader_Alpha != -1)
                         {glUniform1f(locHUDShader_Alpha, -0.333f);}
             glBindTexture(GL_TEXTURE_2D, textureid_P1[72]);
-            drawSquareUVRev(0.720f,0.6,0,0.295f,-0.3f);     //0.7m 0.575
+            drawSquareUVRev(0.720f,0.6f,0.f,0.295f,-0.3f);     //0.7m 0.575
             if (locHUDShader_Alpha != -1)
                         {glUniform1f(locHUDShader_Alpha, 0.0f);}
 
@@ -1097,8 +1102,8 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
 
         
         //Draw pickup
-        xOffset = -0.85;
-        yOffset = 0.70;
+        xOffset = -0.85f;
+        yOffset = 0.70f;
 
         if (locHUDShader_Alpha != -1)
                     {glUniform1f(locHUDShader_Alpha, -0.333f);}
@@ -1123,13 +1128,13 @@ void RenderingEngine::drawHUD(Entity* carEntity, bool hasWon)
 
         //Draw text on screen        
         if(carEntity->getBatteryCharged())
-            renderText(-0.1,0.7,0.03,0.03,35,"Battery Full",false);        
+            renderText(-0.1f,0.7f,0.03f,0.03f,35,"Battery Full",false);        
         else 
-            renderText(-0.1,0.7,0.03,0.03,35,"Battery Empty",false);
+            renderText(-0.1f,0.7f,0.03f,0.03f,35,"Battery Empty",false);
 
-        renderText(-0.1,0.80,0.03,0.03,35,"Obs "+FloatToString(cd->entity->obs),false);
-        renderText(0.65,posYPlace,0.03,0.03,35,"Place "+FloatToString(cd->entity->rank)+"/"+FloatToString(gameVariables->numberOfAIs + gameVariables->getNumPlayers()),false);       
-        renderText(0.65,posYLap,0.03,0.03,35,"Lap   "+FloatToString(cd->laps)+"/"+FloatToString(gameVariables->numLaps),false);
+        renderText(-0.1f,0.80f,0.03f,0.03f,35,"Obs " + IntToString(cd->entity->obs), false);
+        renderText(0.65f,posYPlace,0.03f,0.03f,35,"Place "+ IntToString(cd->entity->rank)+"/"+IntToString(gameVariables->numberOfAIs + gameVariables->getNumPlayers()),false);       
+        renderText(0.65f,posYLap,0.03f,0.03f,35,"Lap   "+ IntToString(cd->laps)+"/"+IntToString(gameVariables->numLaps),false);
 
 
         for(unsigned i=0;i<textQueue.size();i++)
@@ -1160,10 +1165,10 @@ void RenderingEngine::drawGroundPlane(float xoffset, float yoffset)
 	//Draws a checkboard Ground
     int size = 200;
     glBegin(GL_QUADS);	
-    glTexCoord2d(-1,-1);    glNormal3d(0,1,0);      glVertex3f(-1*size,0,-1*size);
-    glTexCoord2d(-1, 1);    glNormal3d(0,1,0);      glVertex3f(-1*size,0,size);
-    glTexCoord2d(1, 1);     glNormal3d(0,1,0);      glVertex3f(size,0,size);
-    glTexCoord2d(1,-1);     glNormal3d(0,1,0);      glVertex3f(size,0,-1*size);
+    glTexCoord2i(-1,-1);    glNormal3i(0,1,0);      glVertex3i(-1*size,0,-1*size);
+    glTexCoord2i(-1, 1);    glNormal3i(0,1,0);      glVertex3i(-1*size,0,size);
+    glTexCoord2i(1, 1);     glNormal3i(0,1,0);      glVertex3i(size,0,size);
+    glTexCoord2i(1,-1);     glNormal3i(0,1,0);      glVertex3i(size,0,-1*size);
     glEnd();
 
     /*int size = 50;  //size of the ground, or at least half of the length of the plane
@@ -1180,29 +1185,29 @@ void RenderingEngine::drawCheckerBoard(float x, float y)
     float gz = 0.0f;
 
 	 glBegin(GL_QUADS);	
-		glColor3f(0.0f, 1.0f, 0.0f);
-		glVertex3f(x-1.0,gz,y+-1.0);
-		glVertex3f(x+0.0,gz,y+-1.0);
-		glVertex3f(x+0.0,gz,y+0.0);
-		glVertex3f(x+-1.0,gz,y+0.0);
+		glColor3f(0.f, 1.f, 0.f);
+		glVertex3f(x-1.f, gz, y-1.f);
+		glVertex3f(x, gz, y-1.f);
+		glVertex3f(x, gz, y);
+		glVertex3f(x-1.f, gz, y);
 
-		glColor3f(0.0f, 0.5f, 0.0f);
-		glVertex3f(x+0.0,gz,y+-1.0);
-		glVertex3f(x+1.0,gz,y+-1.0);
-		glVertex3f(x+1.0,gz,y+0.0);
-		glVertex3f(x+0.0,gz,y+0.0);
+		glColor3f(0.f, 0.5f, 0.f);
+		glVertex3f(x, gz, y-1.f);
+		glVertex3f(x+1.f, gz, y-1.f);
+		glVertex3f(x+1.f, gz, y);
+		glVertex3f(x, gz, y);
 
-		glColor3f(0.0f, 0.5f, 0.0f);
-		glVertex3f(x+-1.0,gz,y+0.0);
-		glVertex3f(x+0.0,gz,y+0.0);
-		glVertex3f(x+0.0,gz,y+1.0);
-		glVertex3f(x+-1.0,gz,y+1.0);
+		glColor3f(0.f, 0.5f, 0.f);
+		glVertex3f(x-1.f, gz, y);
+		glVertex3f(x, gz, y);
+		glVertex3f(x, gz, y+1.f);
+		glVertex3f(x-1.f, gz, y+1.f);
 
-		glColor3f(0.0f, 1.0f, 0.0f);
-		glVertex3f(x+0.0,gz,y+0.0);
-		glVertex3f(x+1.0,gz,y+0.0);
-		glVertex3f(x+1.0,gz,y+1.0);
-		glVertex3f(x+0.0,gz,y+1.0);
+		glColor3f(0.f, 1.f, 0.f);
+		glVertex3f(x, gz, y);
+		glVertex3f(x+1.f, gz, y);
+		glVertex3f(x+1.f, gz, y+1.f);
+		glVertex3f(x, gz, y+1.f);
 	 glEnd();
      //*/
 }
@@ -1234,13 +1239,12 @@ void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
         while (nLines--)
         {
             int color = nxDebugLines->color;
-            float blue = color & 255;
-            float green = (color >> 8) & 255;
-            float red = (color >> 16) & 255;
+            int blue = color & 255;
+            int green = (color >> 8) & 255;
+            int red = (color >> 16) & 255;
 
             glBegin(GL_LINES);
-            glColor3f(red, green, blue);
-            //glColor3f(1.0f, 1.0f, 1.0f);
+            glColor3i(red, green, blue);
             glVertex3f(nxDebugLines->p0.x, nxDebugLines->p0.y, nxDebugLines->p0.z);
             glVertex3f(nxDebugLines->p1.x, nxDebugLines->p1.y, nxDebugLines->p1.z);
             glEnd();
@@ -1254,12 +1258,12 @@ void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
         while (nTriangles--)
         {
             int color = nxDebugTris->color;
-            float blue = color & 255;
-            float green = (color >> 8) & 255;
-            float red = (color >> 16) & 255;
+            int blue = color & 255;
+            int green = (color >> 8) & 255;
+            int red = (color >> 16) & 255;
 
             glBegin(GL_TRIANGLES);
-            glColor3f(red, green, blue);
+            glColor3i(red, green, blue);
             glVertex3f(nxDebugTris->p0.x, nxDebugTris->p0.y, nxDebugTris->p0.z);
             glVertex3f(nxDebugTris->p1.x, nxDebugTris->p1.y, nxDebugTris->p1.z);
             glVertex3f(nxDebugTris->p2.x, nxDebugTris->p2.y, nxDebugTris->p2.z);
@@ -1274,12 +1278,12 @@ void RenderingEngine::RenderDebugPhysic(const NxDebugRenderable* ndr)
         while (nLines--)
         {
             int color = nxDebugPts->color;
-            float blue = color & 255;
-            float green = (color >> 8) & 255;
-            float red = (color >> 16) & 255;
+            int blue = color & 255;
+            int green = (color >> 8) & 255;
+            int red = (color >> 16) & 255;
 
             glBegin(GL_LINE);
-            glColor3f(red, green, blue);
+            glColor3i(red, green, blue);
             glVertex3f(nxDebugPts->p.x, nxDebugPts->p.y, nxDebugPts->p.z);
             glEnd();
             nxDebugPts++;
@@ -1297,12 +1301,12 @@ void RenderingEngine::displayConsole()
 
      glColor3f(1.0f,1.0f,1.0f);
      
-     drawText(aConsole.consoleOut[4],-0.95,  0.5);
-     drawText(aConsole.consoleOut[3],-0.95,  0.4);
-     drawText(aConsole.consoleOut[2],-0.95,  0.3);
-     drawText(aConsole.consoleOut[1],-0.95,  0.2);
-     drawText(aConsole.consoleOut[0],-0.95,  0.1);
-     drawText(aConsole.consoleString,-0.95,  0.0);
+     drawText(aConsole.consoleOut[4],-0.95f,  0.5f);
+     drawText(aConsole.consoleOut[3],-0.95f,  0.4f);
+     drawText(aConsole.consoleOut[2],-0.95f,  0.3f);
+     drawText(aConsole.consoleOut[1],-0.95f,  0.2f);
+     drawText(aConsole.consoleOut[0],-0.95f,  0.1f);
+     drawText(aConsole.consoleString,-0.95f,  0.0f);
      //drawText(0,  -200,   debugOut);
 
 }
@@ -1524,22 +1528,17 @@ void RenderingEngine::setupMatrices(float position_x,float position_y,float posi
 
 void RenderingEngine::createLight()
 {
-    GLfloat mat_ambient[] = { 0.4, 0.4, 0.4, 1.0};
-	GLfloat mat_specular[] = { 0.6, 0.6, 0.6, 1.0};
-	GLfloat mat_shininess[] = {35.0};
-	GLfloat light_position[] = {1.0,1.0,1.0,0.0};
-	//GLfloat light_ambient[] = {0.0,0.0,0.0,0.1};
-	//GLfloat light_diffuse[] = {0.0,0.0,0.0,1.0};
-	//GLfloat light_specular[] = {0.0,0.0,0.0,1.0};
-	glClearColor(0.0,0.0,0.0,0.0);
+    GLfloat mat_ambient[] = { 0.4f, 0.4f, 0.4f, 1.0f};
+	GLfloat mat_specular[] = { 0.6f, 0.6f, 0.6f, 1.0f};
+	GLfloat mat_shininess[] = {35.0f};
+	GLfloat light_position[] = {1.0f, 1.0f, 1.0f, 0.0f};
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glShadeModel (GL_SMOOTH);
 	
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_position);
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light_position);
-	//glLightfv(GL_LIGHT0, GL_SPECULAR, light_position);
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 		
 	glEnable(GL_LIGHTING);
@@ -1554,13 +1553,13 @@ void RenderingEngine::createLight()
 
 void RenderingEngine::createLight_MainMenu()
 {
-	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0};
-	GLfloat mat_shininess[] = {50.0};
-	GLfloat light_position[] = {0.0,0.0,-1.0,0.0};
-	GLfloat light_ambient[] = {1.0,1.0,1.0,0.1};
+	GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f};
+	GLfloat mat_shininess[] = {50.0f};
+	GLfloat light_position[] = {0.0f,0.0f,-1.0f,0.0f};
+	GLfloat light_ambient[] = {1.0f,1.0f,1.0f,0.1f};
 	//GLfloat light_diffuse[] = {0.0,0.0,0.0,1.0};
 	//GLfloat light_specular[] = {0.0,0.0,0.0,1.0};
-	glClearColor(0.0,0.0,0.0,0.0);
+	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glShadeModel (GL_SMOOTH);
 		
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
@@ -2208,7 +2207,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
 						    //drawModel(modelManager.getModel(7), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z ,1.0f);
 						    //drawModel(modelManager.getModel(21), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z ,10.0f);
 						    glBindTexture(GL_TEXTURE_2D, textureid_P1[asteroidList.at(i).texture]);
-						    drawModel(modelManager.getModel(21), (float)asteroidList.at(i).x, (float)asteroidList.at(i).y, (float)asteroidList.at(i).z, asteroidList.at(i).scale);
+						    drawModel(modelManager.getModel(21), (int)asteroidList.at(i).x, (int)asteroidList.at(i).y, (int)asteroidList.at(i).z, asteroidList.at(i).scale);
 						    glPopMatrix();
 					    }
                     }
@@ -2246,7 +2245,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                     drawTrack(track);
 
                     glBindTexture(GL_TEXTURE_2D, textureid_P1[116]);
-                    drawModel(modelManager.getModel("banner.obj"),startModelPos.x,startModelPos.y,startModelPos.z,1);
+                    drawModel(modelManager.getModel("banner.obj"), (int)startModelPos.x, (int)startModelPos.y, (int)startModelPos.z, 1.f);
                     //if (locShader_Alpha != -1)
                     //{glUniform1f(locShader_Alpha, 1.000);}
 					
@@ -2291,7 +2290,7 @@ void RenderingEngine::drawScene_ForPlayer(NxScene* scene, Track* track, Entities
                         //20 is the max death til time
                         glUniform1f(locShader_Alpha, (((float)(particles[x]->timeTilDeath / 80.0f))));
 
-                            drawModel(modelManager.getModel(36),0,0,0,0.35f);
+                            drawModel(modelManager.getModel(35),0,0,0,0.35f);
 
                         glUniform1f(locShader_Alpha, 1.000f);
                         glPopMatrix();
@@ -4161,38 +4160,17 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
         glMatrixMode(GL_MODELVIEW);
         glPopMatrix();
 
-        //setUpOrthoView();
-        //glLoadIdentity();
-
 
         aShader->off();
         aHUDShader->on();
 
         locShader_sensentiveOffset = aHUDShader->getUniLoc("sensentiveOffset");
 
-        
+        string title = IntToString(gameVariables->playerInShop->data.Obs) + " Obs";
+        renderText(SCREEN_WIDTH - (title.size() * 30.f), SCREEN_HEIGHT * 0.80f, dec_height*2.0f, 30.f, 36, IntToString(gameVariables->playerInShop->data.Obs) + " Obs", true);
+        renderText(SCREEN_WIDTH - (gameVariables->playerInShop->data.driverName.size() * 30.f), (SCREEN_HEIGHT * 0.80f)-(dec_height*2.0f), dec_height*2.0f, 30.f, 36, gameVariables->playerInShop->data.driverName, true);
 
-     //Title
-        //string title = "Hi! This is shop Mode!";
-       // renderText(butWidthOffset-((textWidth)/2), titleHeightOffset, dec_height*2.0f, (textWidth)/title.size(), 36, title, true);
-        //drawSquareUVRev(butWidthOffset, titleHeightOffset, 0.0f, button_width, dec_height);
-
-        string title = FloatToString(gameVariables->playerInShop->data.Obs) + " Obs";
-        renderText(SCREEN_WIDTH - (title.size() * 30), SCREEN_HEIGHT * 0.80f, dec_height*2.0f, 30, 36, FloatToString(gameVariables->playerInShop->data.Obs) + " Obs", true);
-
-        renderText(SCREEN_WIDTH - (gameVariables->playerInShop->data.driverName.size() * 30), (SCREEN_HEIGHT * 0.80f)-(dec_height*2.0f), dec_height*2.0f, 30, 36, gameVariables->playerInShop->data.driverName, true);
-   
-
-
-    //Menu Buttons
-        //Atempt to use a different Cooridinate system
          glPushMatrix();
-        
-        //glOrtho(-1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f);
-       // glLoadIdentity();
-       // glMatrixMode(GL_MODELVIEW);
-       // glPushMatrix();
-       // glLoadIdentity();
 
          NxVec3 drawPos = NxVec3(
                                     (0.25f * half_width) + half_width,
@@ -4276,7 +4254,7 @@ int RenderingEngine::drawShopScreen(float dt, ShopScreenInfo ssi)
                 
                 glBindTexture(GL_TEXTURE_2D, textureid_P1[aDynamicImage->getTextureIndex()]);
                 drawSquareUVRev(imgPos.x, imgPos.y,0, 1000, 300.0f);
-                title = "Cost:" + FloatToString(ssi.obsCost) + " obs";
+                title = "Cost:" + IntToString(ssi.obsCost) + " obs";
                 renderText(aDynamicImage->getX()-(title.size()*15), (aDynamicImage->getY()-(120)), dec_height*2.0f, 30, 36, title, true);
                 title = ssi.selectedItemName;
                 renderText(aDynamicImage->getX()-(title.size()*15), (aDynamicImage->getY()-(80)), dec_height*2.0f, 30, 36, title, true);
@@ -4983,9 +4961,7 @@ void RenderingEngine::drawShadow2(Entities* entities, NxScene* scene)
                     
 
 					for (unsigned x = 0; x < entities->cars[i]->rc.size();x++)
-                    {
-                        drawModel(modelManager.getModel(entities->cars[i]->rc.at(x)->modelID), 0.0f, 0, 0, NxVec3(1.0f, 0.0f, 1.0f));       //draw model with a flatten scale
-                    }
+                        drawModel(modelManager.getModel(entities->cars[i]->rc.at(x)->modelID), 0, 0, 0, NxVec3(1.0f, 0.0f, 1.0f));       //draw model with a flatten scale                    
                     glPopMatrix();
 
                 }
@@ -5041,7 +5017,9 @@ void RenderingEngine::drawShadow(Entities* entities, NxScene* scene)
 
 					for (unsigned x = 0; x < entities->cars[i]->rc.size();x++)
 					//{drawModel(modelManager.getModel(entities->cars[i]->rc[x]->modelID), 0.0f, 0, 0, 1.0f );}
-                    {drawModel(modelManager.getModel(0), 0.0f, 0, 0, 1.0f );}
+                    {
+						drawModel(modelManager.getModel(0), 0, 0, 0, 1.0f );
+					}
                     glPopMatrix();
 
                 }
@@ -5332,7 +5310,7 @@ void RenderingEngine::drawTrack(Track* track)
 
 
                 if(model != NULL)
-                    drawModel(model,wps->at(i)->pos.x,wps->at(i)->pos.y+2,wps->at(i)->pos.z,1);
+                    drawModel(model, (int)wps->at(i)->pos.x, (int)wps->at(i)->pos.y+2, (int)wps->at(i)->pos.z,1);
             }
             /*else if(wps->at(i)->type == Waypoint::WAYPOINT)
                 model = modelManager.getModel("box.obj");*/

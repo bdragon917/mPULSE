@@ -148,17 +148,17 @@ inline int BMPImg::GetFile(char* szFilename)
  {
   using namespace std;
   ifstream fIn;
-  unsigned long ulSize;
+  std::basic_istream<char, std::char_traits<char>>::pos_type ulSize;
 
   // Open the specified file
-  fIn.open(szFilename,ios::binary);
+  fIn.open(szFilename, ios::binary);
     
    if(fIn==NULL)
     return IMG_ERR_NO_FILE;
 
   // Get file size
   fIn.seekg(0,ios_base::end);
-  ulSize=fIn.tellg();
+  ulSize = fIn.tellg();
   fIn.seekg(0,ios_base::beg);
 
   // Allocate some space
@@ -169,7 +169,7 @@ inline int BMPImg::GetFile(char* szFilename)
      pData=NULL;
     }
 
-  pData=new unsigned char[ulSize];
+  pData = new unsigned char[(unsigned) ulSize];
 
    if(pData==NULL)
     {

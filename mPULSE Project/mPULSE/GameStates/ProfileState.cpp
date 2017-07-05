@@ -20,7 +20,7 @@ void ProfileState::initialize()
 
 	//Construct ProfileScreenInfo (Using this to tell renderingHowTo draw profile)
 	psi.isActive = true;
-    psi.title = "Player " + renderingEngine->FloatToString(gameVariables->getProfileCurrentPlayer()) + " Profile";
+    psi.title = "Player " + renderingEngine->IntToString(gameVariables->getProfileCurrentPlayer()) + " Profile";
 
 	currentFrame = 0;
 	currentSelected = 0;

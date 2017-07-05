@@ -352,7 +352,7 @@ void PlayState::update(float dt)
             if(curTime != lastSecond)
                 soundEngine->playSound(4, 8);
 
-            renderingEngine->drawText(renderingEngine->FloatToString((timeBeforeRaceStarts - (curTime - initialTime) + 1)),-0.1,0,0.2);
+            renderingEngine->drawText(renderingEngine->FloatToString((timeBeforeRaceStarts - (curTime - initialTime) + 1.f)), -0.1f, 0.f, 0.2f);
             lastSecond = curTime;
         }
     }
@@ -361,7 +361,7 @@ void PlayState::update(float dt)
         if(curTime != lastSecond)
             soundEngine->playSound(4, 10);
 
-        renderingEngine->drawText("GO!",-0.2,0,0.2);
+        renderingEngine->drawText("GO!",-0.2f, 0.f, 0.2f);
 
         lastSecond = curTime;
     }
@@ -419,10 +419,11 @@ void PlayState::update(float dt)
             soundEngine->fadeOutAllSound(10); //make sure they really are off
 
             gameVariables->rankings.clear();
-            for (unsigned e=0;e<rankings->size();e++)
-            {
-                gameVariables->addRanking(renderingEngine->FloatToString(rankings->at(e)->rank),rankings->at(e)->rankingName,renderingEngine->FloatToString(rankings->at(e)->finishTime));
-            }
+            for (unsigned e = 0; e < rankings->size(); e++)
+                gameVariables->addRanking(
+					renderingEngine->IntToString(rankings->at(e)->rank), 
+					rankings->at(e)->rankingName,
+					renderingEngine->IntToString(rankings->at(e)->finishTime));
 
             paused = false;
             changeState(RESULT);
@@ -714,30 +715,33 @@ void PlayState::update(float dt)
     //soundengine p1
     float AxleSpeed = entities.cars.at(0)->getDriveWheels()->at(0)->getAxleSpeed();
     float vol = AxleSpeed * 0.75f;
-    if (vol > 128){vol=128.0f;}
-    soundEngine->engineVol(1, vol);
-    if (AxleSpeed < 10)
-        soundEngine->playSound(0,13);
-    else if (AxleSpeed < 40)
-        soundEngine->playSound(0,14);
-    else if (AxleSpeed < 80)
-        soundEngine->playSound(0,15);
-    else if (AxleSpeed < 120)
-        soundEngine->playSound(0,16);
-    else if (AxleSpeed < 160)
-        soundEngine->playSound(0,17);
-    else if (AxleSpeed < 200)
-        soundEngine->playSound(0,18);
-    else if (AxleSpeed < 240)
-        soundEngine->playSound(0,19);
-    else if (AxleSpeed < 280)
-        soundEngine->playSound(0,20);
-    else if (AxleSpeed < 320)
-        soundEngine->playSound(0,21);
-    else if (AxleSpeed < 360)
-        soundEngine->playSound(0,22);
+    if (vol > 128.f)
+		vol = 128.f;
+
+    soundEngine->engineVol(1, (int) vol);
+
+    if (AxleSpeed < 10.f)
+        soundEngine->playSound(0, 13);
+    else if (AxleSpeed < 40.f)
+        soundEngine->playSound(0, 14);
+    else if (AxleSpeed < 80.f)
+        soundEngine->playSound(0, 15);
+    else if (AxleSpeed < 120.f)
+        soundEngine->playSound(0, 16);
+    else if (AxleSpeed < 160.f)
+        soundEngine->playSound(0, 17);
+    else if (AxleSpeed < 200.f)
+        soundEngine->playSound(0, 18);
+    else if (AxleSpeed < 240.f)
+        soundEngine->playSound(0, 19);
+    else if (AxleSpeed < 280.f)
+        soundEngine->playSound(0, 20);
+    else if (AxleSpeed < 320.f)
+        soundEngine->playSound(0, 21);
+    else if (AxleSpeed < 360.f)
+        soundEngine->playSound(0, 22);
     else
-        soundEngine->playSound(0,23);
+        soundEngine->playSound(0, 23);
 
     entities.cars[0]->aCam->updateCamera(dt);
     if (entities.cars.size() > 1)
@@ -883,7 +887,7 @@ void PlayState::update(float dt)
     if(!paused)
 	    physicsEngine->step(dt/1000.0f);
     else
-        renderingEngine->drawText("PAUSED",-0.1,0);
+        renderingEngine->drawText("PAUSED", -0.1f, 0.f);
 
 	
 	for (unsigned c = 0; c < entities.cars.size(); ++c)
@@ -908,10 +912,10 @@ void PlayState::update(float dt)
 				double angle = acos(oldVelUnit.dot(normal));
 
 				double scale = car->getOldVelocity().magnitude() * cos(angle);
-				NxVec3 scaledNormal = scale * normal;
+				NxVec3 scaledNormal = (NxReal)scale * normal;
 				NxVec3 newVelVec = car->getOldVelocity() + (2.0f * scaledNormal);
 				
-				car->getActor()->setLinearVelocity(newVelVec*0.3); 
+				car->getActor()->setLinearVelocity(newVelVec* (NxReal) 0.3); 
 				newVelVec.normalize();
 				NxVec3 newPos = car->getImpactPoint() + (newVelVec * 5.0f);
 				car->getActor()->setGlobalPosition(newPos);
@@ -943,12 +947,12 @@ void PlayState::update(float dt)
 				double angle = acos(oldVelUnit.dot(normal));
 
 				double scale = car->getOldVelocity().magnitude() * cos(angle);
-				NxVec3 scaledNormal = scale * normal;
-				NxVec3 newVelVec = car->getOldVelocity() + (2.0f * scaledNormal);
+				NxVec3 scaledNormal = (NxReal)scale * normal;
+				NxVec3 newVelVec = car->getOldVelocity() + ((NxReal)2.f * scaledNormal);
 				
-				car->getActor()->setLinearVelocity(newVelVec*0.3); 
+				car->getActor()->setLinearVelocity(newVelVec*(NxReal)0.3f); 
 				newVelVec.normalize();
-				NxVec3 newPos = car->getImpactPoint() + (newVelVec * 5.0f);
+				NxVec3 newPos = car->getImpactPoint() + (newVelVec * 5.f);
 				car->getActor()->setGlobalPosition(newPos);
 
 				printf("AI definitely went through a wall.\n");
@@ -1030,25 +1034,25 @@ bool PlayState::handleKeyboardMouseEvents(SDL_Event &KeyboardMouseEvents)
 
                 //Num Commands
                 if (renderingEngine->aConsole.consoleString == "num cars")
-                {renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->FloatToString(entities.cars.size()));}
+					renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->IntToString(entities.cars.size()));
 
                 if (renderingEngine->aConsole.consoleString == "num entities")
                 {
-                    renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->FloatToString(entities.cars.size()));
-                    renderingEngine->aConsole.propragateMsg("Number of elements in AIcars: " + renderingEngine->FloatToString(entities.AIcars.size()));
-                    renderingEngine->aConsole.propragateMsg("Number of elements in Obstacles: " + renderingEngine->FloatToString(entities.Obstacles.size()));
-                    renderingEngine->aConsole.propragateMsg("Number of elements in StaticObj: " + renderingEngine->FloatToString(entities.StaticObjs.size()));
-                    renderingEngine->aConsole.propragateMsg("Number of elements in Track: " + renderingEngine->FloatToString(entities.Track.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in cars: " + renderingEngine->IntToString(entities.cars.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in AIcars: " + renderingEngine->IntToString(entities.AIcars.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in Obstacles: " + renderingEngine->IntToString(entities.Obstacles.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in StaticObj: " + renderingEngine->IntToString(entities.StaticObjs.size()));
+                    renderingEngine->aConsole.propragateMsg("Number of elements in Track: " + renderingEngine->IntToString(entities.Track.size()));
                 }
 
                 if (renderingEngine->aConsole.consoleString == "num actors")
-                {renderingEngine->aConsole.propragateMsg("Number of actors in scene: " + renderingEngine->FloatToString(physicsEngine->getScene()->getNbActors()));}
+					renderingEngine->aConsole.propragateMsg("Number of actors in scene: " + renderingEngine->FloatToString((float)physicsEngine->getScene()->getNbActors()));
 
                 if (renderingEngine->aConsole.consoleString == "num debugphysic")
                 {
-                    renderingEngine->aConsole.propragateMsg("Number of Lines in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbLines()));
-                    renderingEngine->aConsole.propragateMsg("Number of Points in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbPoints()));
-                    renderingEngine->aConsole.propragateMsg("Number of Triangles in debug physic: " + renderingEngine->FloatToString(physicsEngine->getScene()->getDebugRenderable()->getNbTriangles()));
+                    renderingEngine->aConsole.propragateMsg("Number of Lines in debug physic: " + renderingEngine->FloatToString((float)physicsEngine->getScene()->getDebugRenderable()->getNbLines()));
+                    renderingEngine->aConsole.propragateMsg("Number of Points in debug physic: " + renderingEngine->FloatToString((float)physicsEngine->getScene()->getDebugRenderable()->getNbPoints()));
+                    renderingEngine->aConsole.propragateMsg("Number of Triangles in debug physic: " + renderingEngine->FloatToString((float)physicsEngine->getScene()->getDebugRenderable()->getNbTriangles()));
                 }
                 
                 //Get Commands
@@ -1685,9 +1689,9 @@ void PlayState::logReplay(int player, XboxController* state, float dt)
         {
            out << "dt " + renderingEngine->FloatToString(dt) + char(10) + char(13);
            out << "----------------------------------------------------------------" + char(10) + char(13);
-           out << "PLAYER: " + renderingEngine->FloatToString(player) + char(10) + char(13);
-           out << "rTigMag " + renderingEngine->FloatToString(rTriggMag) + char(10) + char(13);
-           out << "lTigMag " + renderingEngine->FloatToString(lTriggMag) + char(10) + char(13);
+           out << "PLAYER: " + renderingEngine->IntToString(player) + char(10) + char(13);
+           out << "rTigMag " + renderingEngine->IntToString(rTriggMag) + char(10) + char(13);
+           out << "lTigMag " + renderingEngine->IntToString(lTriggMag) + char(10) + char(13);
            out << "lStickMag " + renderingEngine->FloatToString(leftStickMag) + char(10) + char(13);
            out << "lStickX " + renderingEngine->FloatToString(LeftStickX) + char(10) + char(13);
            out << "lStickY " + renderingEngine->FloatToString(LeftStickY) + char(10) + char(13);

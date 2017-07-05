@@ -24,3 +24,7 @@ replay.txt
 /mPULSE Project/mPULSE/Debug/*.idb
 /mPULSE Project/mPULSE/Debug/*.pdb
 /mPULSE Project/mPULSE/Images/Thumbs.db
+mPULSE Project/.vs/
+mPULSE Project/mPULSE/Release/
+mPULSE Project/Release/mPULSE.pdb
+mPULSE Project/Release/stdout.txt

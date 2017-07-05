@@ -51,7 +51,7 @@ void ShopState::initialize()
     //texture 42 is mechanic =)
     mechanicGirl = new DynamicImage(-125,400,0,20,20,42,1);   //will probably be overwritten in reset(), so change the values there
     painterGirl = new DynamicImage(-50,50,0,20,20,43,1);
-    subMenu = new DynamicImage(screen_width / 2,0,0,screen_width * 4, screen_height, 123 , 1);
+    subMenu = new DynamicImage(screen_width / 2.f, 0.f ,0.f, screen_width * 4.f, (float) screen_height, 123 , 1);
     ssi.di.push_back(subMenu);
 
     soundEngine->playSound(5,(rand() % 5) + 27);    //4 is channel, 7 is index for intro
@@ -625,7 +625,11 @@ void ShopState::selectPressed()
 	{
         ssi.selectedItemName = "";
 
-        subMenu->setTargetLocation((renderingEngine->SCREEN_WIDTH / 2),(renderingEngine->SCREEN_HEIGHT / 3),0);    //come down to visible
+        subMenu->setTargetLocation(
+			renderingEngine->SCREEN_WIDTH / 2.f,
+			renderingEngine->SCREEN_HEIGHT / 3.f,
+			0.f);    //come down to visible
+
 		soundEngine->playSound(3,11);    //3 is channel, 7 is index for MenuPress
 		switch(currentSelectedCategory)
 		{
@@ -818,7 +822,7 @@ void ShopState::backPressed()
 	}
 	else
 	{
-        subMenu->setTargetLocation(renderingEngine->SCREEN_WIDTH / 2,0,0);    //come up to hide
+        subMenu->setTargetLocation(renderingEngine->SCREEN_WIDTH / 2.f, 0.f, 0.f);    //come up to hide
 		// Play some sort of cancel noise
 		inSubmenu = false;
 	}
